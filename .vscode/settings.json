@@ -1,0 +1,8 @@
+{
+  "html.format.wrapAttributes": "force-expand-multiline",
+  "cSpell.words": [
+    "pinia",
+    "tailwindcss",
+    "vueuse"
+  ]
+}
