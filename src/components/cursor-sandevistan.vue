@@ -58,7 +58,7 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
 }>();
 
-const cursorUrl = computed(() => props.img ?? defaultCursor);
+const cursorUrl = computed(() => props.img ? props.img : defaultCursor);
 
 const mouse = useMouse();
 watchThrottled(() => mouse, ({ x, y }) => {
