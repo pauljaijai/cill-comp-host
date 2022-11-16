@@ -1,0 +1,51 @@
+<template>
+  <q-list class="text-[#3F3F3F]">
+    <!-- 頑皮的按鈕 -->
+    <menu-drawer-btn
+      :to="getRoute('home')"
+      icon="home"
+      label="首頁"
+    />
+    <q-separator />
+
+    <!-- 頑皮的按鈕 -->
+    <menu-drawer-btn
+      :to="getRoute('btn-naughty')"
+      icon="inbox"
+      label="頑皮的按鈕"
+    />
+
+
+    <!-- 頑皮的按鈕 -->
+    <menu-drawer-btn
+      :to="getRoute('cursor-sandevistan')"
+      icon="inbox"
+      label="神機改造鼠標"
+    />
+  </q-list>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { RouteName } from '../router/router';
+
+import MenuDrawerBtn from './menu-drawer-btn.vue';
+
+interface Props {
+  label?: string;
+}
+const props = withDefaults(defineProps<Props>(), {
+  label: '',
+});
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void;
+}>();
+
+function getRoute(name: `${RouteName}`) {
+  return { name }
+}
+</script>
+
+<style scoped lang="sass">
+</style>

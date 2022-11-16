@@ -6,6 +6,10 @@ export interface RouteMeta {
 
 export enum RouteName {
   HOME = 'home',
+
+  BTN_NAUGHTY = 'btn-naughty',
+
+  CURSOR_SANDEVISTAN = 'cursor-sandevistan',
 }
 
 const routes: Array<RouteRecordRaw> = [
@@ -20,6 +24,18 @@ const routes: Array<RouteRecordRaw> = [
     path: `/home`,
     name: RouteName.HOME,
     component: () => import('../views/the-home.vue')
+  },
+
+  {
+    path: `/btn-naughty`,
+    name: RouteName.BTN_NAUGHTY,
+    component: () => import('../views/the-btn-naughty.vue')
+  },
+
+  {
+    path: `/cursor-sandevistan`,
+    name: RouteName.CURSOR_SANDEVISTAN,
+    component: () => import('../views/the-cursor-sandevistan.vue')
   },
 
   {

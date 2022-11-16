@@ -1,6 +1,6 @@
 <template>
-  <div class="flex">
-    我是 Home
+  <div class="flex flex-col justify-center items-center gap-6 p-10">
+    我是首頁
   </div>
 </template>
 
@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
 }>();
+
 </script>
 
 <style scoped lang="sass">
