@@ -32,7 +32,7 @@
  * https://www.cursor.cc/cursor3d/120677.png
  */
 
-import { computed, onUnmounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { nanoid } from 'nanoid';
 import { remove } from 'lodash-es';
 import { hslToHex } from '../common/utils';
