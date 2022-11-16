@@ -4,16 +4,16 @@
     :style="frameStyle"
   >
     <div
-      v-for="afterimage, i in afterimages"
+      v-for="afterimage in afterimages"
       :key="afterimage.id"
-      :style="afterimage"
+      :style="{ top: afterimage.top, left: afterimage.left }"
       class="cursor afterimage fixed select-none pointer-events-none"
       @animationend="deleteAfterimage(afterimage.id)"
     >
       <img
         :src="cursorUrl"
         class=" h-full"
-        :style="getAfterimageColorStyle(i)"
+        :style="{ filter: afterimage.filter }"
       >
     </div>
 
@@ -28,18 +28,24 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * https://www.cursor.cc/cursor3d/120677.png
+ */
+
 import { computed, onUnmounted, ref, watch } from 'vue';
 import { nanoid } from 'nanoid';
-import { clamp, remove } from 'lodash-es';
+import { remove } from 'lodash-es';
+import { hslToHex } from '../common/utils';
 
 import defaultCursor from '../assets/cursors-cyberpunk.png'
 
-import { useMouse, watchThrottled, useInterval } from '@vueuse/core';
+import { useMouse, watchThrottled } from '@vueuse/core';
 
 interface Afterimage {
   id: string;
   top: string;
   left: string;
+  filter: string;
 }
 
 interface Props {
@@ -47,11 +53,14 @@ interface Props {
   size?: string;
   /** 殘影數量 */
   quantity?: number;
+  /** 每次色相變化度數 */
+  hueStep?: number;
 }
 const props = withDefaults(defineProps<Props>(), {
   img: undefined,
-  size: '5rem',
+  size: '8rem',
   quantity: 10,
+  hueStep: 10,
 });
 
 const emit = defineEmits<{
@@ -73,13 +82,24 @@ const frameStyle = computed(() => ({
   left: `${mouse.x.value}px`,
 }));
 
+const hue = ref(100);
 const afterimages = ref<Afterimage[]>([]);
+watch(afterimages, (images) => {
+  if (images.length > 2) return;
+
+  hue.value = 100;
+});
 
 function createAfterimage(top: string, left: string) {
+  const color = hslToHex(hue.value, 100, 80);
+
+  hue.value += props.hueStep;
+
   afterimages.value.unshift({
     id: nanoid(),
     top,
-    left
+    left,
+    filter: `opacity(0.4) drop-shadow(0 0 0 ${color})`,
   });
 
   if (afterimages.value.length > props.quantity) {
@@ -88,30 +108,6 @@ function createAfterimage(top: string, left: string) {
 }
 function deleteAfterimage(id: string) {
   remove(afterimages.value, { id });
-}
-function getAfterimageColorStyle(index: number) {
-  const h = mapNumber(index, 0, props.quantity, 100, 280);
-  const color = hslToHex(h, 100, 80);
-
-  return {
-    filter: `opacity(0.4) drop-shadow(0 0 0 ${color})`,
-  };
-}
-
-function mapNumber(current: number, inMin: number, inMax: number, outMin: number, outMax: number) {
-  const mapped: number = ((current - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
-  return clamp(mapped, outMin, outMax);
-}
-
-function hslToHex(h: number, s: number, l: number) {
-  l /= 100;
-  const a = s * Math.min(l, 1 - l) / 100;
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12;
-    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-    return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
-  };
-  return `#${f(0)}${f(8)}${f(4)}`;
 }
 </script>
 
