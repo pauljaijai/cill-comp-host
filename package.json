@@ -13,6 +13,7 @@
     "lodash-es": "^4.17.21",
     "nanoid": "^4.0.0",
     "pinia": "^2.0.12",
+    "pixi.js": "^7.0.4",
     "quasar": "^2.8.2",
     "vite-plugin-package-version": "^1.0.2",
     "vue": "^3.2.16",
