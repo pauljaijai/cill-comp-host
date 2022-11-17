@@ -14,6 +14,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+import cursor from '../assets/cursors-digital.png'
+
 import CursorSandevistan from '../components/cursor-sandevistan.vue';
 
 const imgUrl = ref<string>();

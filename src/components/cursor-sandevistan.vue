@@ -1,30 +1,8 @@
 <template>
-  <div
-    class="frame"
-    :style="frameStyle"
-  >
-    <div
-      v-for="afterimage in afterimages"
-      :key="afterimage.id"
-      :style="{ top: afterimage.top, left: afterimage.left }"
-      class="cursor afterimage fixed select-none pointer-events-none"
-      @animationend="deleteAfterimage(afterimage.id)"
-    >
-      <img
-        :src="cursorUrl"
-        class=" h-full"
-        :style="{ filter: afterimage.filter }"
-      >
-    </div>
-
-    <div class="cursor">
-      <img
-        :src="cursorUrl"
-        alt="cursor"
-        class="h-full"
-      >
-    </div>
-  </div>
+  <canvas
+    ref="view"
+    class="view"
+  />
 </template>
 
 <script setup lang="ts">
@@ -32,99 +10,126 @@
  * https://www.cursor.cc/cursor3d/120677.png
  */
 
-import { computed, ref, watch } from 'vue';
+import { Application, Sprite } from 'pixi.js';
+import { computed, onMounted, ref, watch } from 'vue';
 import { nanoid } from 'nanoid';
 import { remove } from 'lodash-es';
 import { hslToHex } from '../common/utils';
 
 import defaultCursor from '../assets/cursors-cyberpunk.png'
 
-import { useMouse, watchThrottled } from '@vueuse/core';
-
-interface Afterimage {
-  id: string;
-  top: string;
-  left: string;
-  filter: string;
-}
+import { useMouse, useElementBounding, watchThrottled } from '@vueuse/core';
 
 interface Props {
   img?: string;
-  size?: string;
+  size?: number;
   /** 殘影數量 */
   quantity?: number;
   /** 每次色相變化度數 */
   hueStep?: number;
+  zIndex?: number;
+  /** 殘影存活時間 */
+  survivalMillisecond?: number;
+  intervalMillisecond?: number,
 }
 const props = withDefaults(defineProps<Props>(), {
   img: undefined,
-  size: '8rem',
-  quantity: 10,
+  size: 130,
+  quantity: 100,
   hueStep: 10,
+  zIndex: 99999,
+  survivalMillisecond: 1000,
+  intervalMillisecond: 50,
 });
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void;
-}>();
 
-const cursorUrl = computed(() => props.img ? props.img : defaultCursor);
-
+const view = ref<HTMLCanvasElement>();
 const mouse = useMouse();
-watchThrottled(() => mouse, ({ x, y }) => {
-  const top = `${y.value}px`;
-  const left = `${x.value}px`;
+const canvasBounding = useElementBounding(view);
 
-  createAfterimage(top, left);
-}, { throttle: 100, deep: true, })
+const imgUrl = computed(() => props.img ? props.img : defaultCursor);
 
-const frameStyle = computed(() => ({
-  top: `${mouse.y.value}px`,
-  left: `${mouse.x.value}px`,
-}));
-
-const hue = ref(100);
-const afterimages = ref<Afterimage[]>([]);
-watch(afterimages, (images) => {
-  if (images.length > 2) return;
-
-  hue.value = 100;
-});
-
-function createAfterimage(top: string, left: string) {
-  const color = hslToHex(hue.value, 100, 80);
-
-  hue.value += props.hueStep;
-
-  afterimages.value.unshift({
-    id: nanoid(),
-    top,
-    left,
-    filter: `opacity(0.4) drop-shadow(0 0 0 ${color})`,
+const app = ref<Application>();
+function createApplication(el: HTMLCanvasElement) {
+  const app = new Application({
+    view: el,
+    backgroundAlpha: 0,
+    width: canvasBounding.width.value,
+    height: canvasBounding.height.value,
+    resizeTo: view.value,
   });
 
-  if (afterimages.value.length > props.quantity) {
-    afterimages.value.pop();
-  }
+  return app;
 }
-function deleteAfterimage(id: string) {
-  remove(afterimages.value, { id });
+
+
+const cursor = ref<Sprite>();
+function createCursor(app: Application) {
+  const sprite = Sprite.from(imgUrl.value);
+  sprite.width = props.size;
+  sprite.height = props.size;
+
+  app.stage.addChild(sprite);
+  return sprite;
 }
+watch(() => mouse, ({ x, y }) => {
+  if (!cursor.value) return;
+
+  cursor.value.position.set(x.value, y.value);
+}, { deep: true });
+
+const hue = ref(160);
+const afterimages = ref<Sprite[]>([]);
+function createAfterimage(app: Application, x: number, y: number) {
+  const sprite = createCursor(app);
+
+  sprite.name = nanoid();
+  sprite.tint = parseInt(hslToHex(hue.value, 100, 80), 16);
+  sprite.position.set(x, y);
+
+  hue.value = (hue.value + props.hueStep) % 360;
+
+  app.stage.addChildAt(sprite, 0);
+
+  setTimeout(() => {
+    sprite.destroy();
+  }, props.survivalMillisecond);
+
+  return sprite;
+}
+watchThrottled(() => mouse, ({ x, y }) => {
+  if (!app.value) return;
+
+  const afterimage = createAfterimage(app.value, x.value, y.value);
+  afterimages.value.unshift(afterimage);
+
+  if (afterimages.value.length < props.quantity) return;
+
+  const target = afterimages.value.pop();
+  if (!target) return;
+
+  const child = app.value.stage.getChildByName(target.name);
+  app.value.stage.removeChild(child);
+
+}, { throttle: props.intervalMillisecond, deep: true });
+
+
+onMounted(() => {
+  if (!view.value) return;
+
+  app.value = createApplication(view.value);
+  cursor.value = createCursor(app.value);
+});
+
 </script>
 
 <style scoped lang="sass">
-.frame
+.view
   position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
   pointer-events: none
-
-.cursor
-  width: v-bind('props.size')
-  height: v-bind('props.size')
-
-.afterimage
-  animation: afterimage 1s forwards
-  z-index: -1
-
-@keyframes afterimage
-  0%, 100%
-    opacity: 1
+  z-index: v-bind('props.zIndex')
 </style>
