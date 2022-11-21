@@ -5,6 +5,7 @@
     </div>
 
     <q-input
+      v-model="text"
       outlined
       label="輸入框"
     />
@@ -33,6 +34,8 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
 }>();
 
+
+const text = ref('');
 </script>
 
 <style scoped lang="sass">
