@@ -45,20 +45,22 @@
 </template>
 
 <script setup lang="ts">
-import { random } from 'lodash-es';
+import { inRange, random, throttle } from 'lodash-es';
 import { computed, ref, useAttrs, useSlots } from 'vue';
 
-import { useElementBounding, useIntersectionObserver, useElementVisibility } from '@vueuse/core';
+import { useElementBounding, useIntersectionObserver, useElementVisibility, useElementHover } from '@vueuse/core';
 
 interface Props {
   label?: string;
   disable?: boolean;
   zIndex?: number | string;
+  maxMultiple?: number;
 }
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   disable: false,
   zIndex: undefined,
+  maxMultiple: 1.5,
 });
 
 const emit = defineEmits<{
@@ -123,16 +125,27 @@ const isRunning = ref(false);
 function setRunning(value: boolean) {
   isRunning.value = value;
 }
-async function run() {
+const run = throttle(() => {
   setRunning(true);
 
-  offset.value.x = getRandomNumber(width.value, width.value * 2);
-  offset.value.y = getRandomNumber(height.value, height.value * 2);
+  let ok = false,newX = 0, newY = 0;
+  do {
+    newX = offset.value.x + getRandomNumber(width.value, width.value * props.maxMultiple);
+    newY = offset.value.y + getRandomNumber(height.value, height.value * props.maxMultiple);
+
+    ok = inRange(newX, -width.value * props.maxMultiple, width.value * props.maxMultiple) &&
+      inRange(newY, -height.value * props.maxMultiple, height.value * props.maxMultiple);
+  } while (!ok);
+
+  offset.value.x = newX;
+  offset.value.y = newY;
+
   counter.value += 1;
 
   btn.value?.blur();
   emit('run');
-}
+}, 100, { trailing: false });
+
 function getRandomNumber(min: number, max: number, mirror = true) {
   const result = random(min, max, true);
 
