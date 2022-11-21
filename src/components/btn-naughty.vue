@@ -1,14 +1,27 @@
 <template>
   <!-- 外框 -->
   <div class="relative">
-    <!-- 按鈕印 -->
-    <div class="btn-rubbing absolute inset-0 rounded pointer-events-none" />
+    <!-- 拓印容器 -->
+    <div class=" absolute inset-0 pointer-events-none">
+      <!-- 拓印 -->
+      <div
+        v-if="!slots.rubbing"
+        class="btn-rubbing w-full h-full rounded"
+      />
+      <slot name="rubbing" />
+    </div>
+
 
     <!-- 按鈕移動容器 -->
     <div
       ref="btn"
       class="content relative"
       :style="moveStyle"
+      tabindex="0"
+      @transitionend="setRunning(false)"
+      @click="handleClick"
+      @keydown.enter="handleClick"
+      @mouseenter="handleMouseEnter"
     >
       <!-- 彈跳容器 -->
       <div
@@ -18,32 +31,34 @@
       >
         <!-- 本體 -->
         <div
+          v-if="!slots.default"
           class="btn p-3 px-6 select-none rounded"
           v-bind="attrs"
-          tabindex="0"
-          @click="handleClick"
-          @keydown.enter="handleClick"
-          @mouseenter="handleMouseEnter"
         >
           {{ props.label }}
         </div>
+
+        <slot v-bind="attrs" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useElementBounding, useIntersectionObserver } from '@vueuse/core';
 import { random } from 'lodash-es';
-import { computed, ref, useAttrs } from 'vue';
+import { computed, ref, useAttrs, useSlots } from 'vue';
+
+import { useElementBounding, useIntersectionObserver, useElementVisibility } from '@vueuse/core';
 
 interface Props {
   label?: string;
   disable?: boolean;
+  zIndex?: number | string;
 }
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   disable: false,
+  zIndex: undefined,
 });
 
 const emit = defineEmits<{
@@ -52,6 +67,7 @@ const emit = defineEmits<{
 }>();
 
 const attrs = useAttrs();
+const slots = useSlots();
 
 const btn = ref<HTMLDivElement>();
 const { width, height } = useElementBounding(btn);
@@ -62,7 +78,6 @@ useIntersectionObserver(
     back();
   },
 );
-
 
 function handleClick() {
   emit('click');
@@ -103,7 +118,14 @@ function back() {
   offset.value.y = 0;
   counter.value = 0;
 }
-function run() {
+
+const isRunning = ref(false);
+function setRunning(value: boolean) {
+  isRunning.value = value;
+}
+async function run() {
+  setRunning(true);
+
   offset.value.x = getRandomNumber(width.value, width.value * 2);
   offset.value.y = getRandomNumber(height.value, height.value * 2);
   counter.value += 1;
@@ -126,6 +148,8 @@ defineExpose({
   run,
   /** 返回原點 */
   back,
+
+  isRunning,
 });
 </script>
 
@@ -133,6 +157,7 @@ defineExpose({
 .content
   transition-duration: 0.6s
   transition-timing-function: cubic-bezier(0.170, 1.415, 0.525, 0.935)
+  z-index: v-bind('props.zIndex')
 
 .jelly-bounce
   animation: jelly-bounce 0.6s forwards
