@@ -128,7 +128,7 @@ function setRunning(value: boolean) {
 const run = throttle(() => {
   setRunning(true);
 
-  let ok = false,newX = 0, newY = 0;
+  let ok = false, newX = 0, newY = 0;
   do {
     newX = offset.value.x + getRandomNumber(width.value, width.value * props.maxMultiple);
     newY = offset.value.y + getRandomNumber(height.value, height.value * props.maxMultiple);
