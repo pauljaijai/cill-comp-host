@@ -6,12 +6,18 @@
         description="說明文字"
       >
         <template #content>
-          <btn-naughty
-            label="調皮的按鈕"
-            class=" font-bold"
-            disable
-            z-index="9999"
-          />
+          <div class="flex flex-col gap-4">
+            <q-toggle
+              v-model="disable"
+              label="停用按鈕"
+            />
+            <btn-naughty
+              label="調皮的按鈕"
+              class=" font-bold"
+              :disable="disable"
+              z-index="9999"
+            />
+          </div>
         </template>
       </feature-section>
 
@@ -41,8 +47,8 @@
             z-index="9999"
           >
             <template #rubbing>
-              <div class="text-x bg-lime-100 text-lime-500 font-black p-4 rounded-full">
-                啪！沒了！
+              <div class="text-x bg-lime-100 text-lime-500 text-center font-black p-4 rounded-full">
+                啪！跑了
               </div>
             </template>
 
@@ -55,7 +61,6 @@
           </btn-naughty>
         </template>
       </feature-section>
-
     </div>
   </div>
 </template>
@@ -66,19 +71,7 @@ import { ref } from 'vue';
 import BtnNaughty from '../components/btn-naughty.vue';
 import FeatureSection from '../components/feature-section.vue';
 
-interface Props {
-  label?: string;
-}
-const props = withDefaults(defineProps<Props>(), {
-  label: '',
-});
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void;
-}>();
-
-
-const text = ref('');
+const disable = ref(true);
 </script>
 
 <style scoped lang="sass">

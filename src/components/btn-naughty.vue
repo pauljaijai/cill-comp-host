@@ -46,9 +46,9 @@
 
 <script setup lang="ts">
 import { inRange, random, throttle } from 'lodash-es';
-import { computed, ref, useAttrs, useSlots } from 'vue';
+import { computed, ref, useAttrs, useSlots, watch } from 'vue';
 
-import { useElementBounding, useIntersectionObserver, useElementVisibility, useElementHover } from '@vueuse/core';
+import { useElementBounding, useIntersectionObserver } from '@vueuse/core';
 
 interface Props {
   label?: string;
@@ -114,7 +114,10 @@ const bounceStyle = computed(() => ({
   animationPlayState: counter.value === 0 ? 'paused' : 'running',
 }));
 
-
+watch(() => props.disable, (value) => {
+  if (value) return;
+  back();
+});
 function back() {
   offset.value.x = 0;
   offset.value.y = 0;
