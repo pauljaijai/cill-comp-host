@@ -33,6 +33,9 @@ export default defineConfig(({ command, mode }) => {
       legacy({
         targets: legacyTargets
       })
-    ]
+    ],
+    test: {
+      environment: 'happy-dom'
+    },
   }
 })
