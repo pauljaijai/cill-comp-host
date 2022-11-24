@@ -14,6 +14,7 @@
                 label="停用按鈕"
               />
               <q-input
+                v-model="text"
                 outlined
                 placeholder="focus 在此並使用 tab 將焦點轉移至按鈕後，按下 Enter 看看"
                 class=" w-full"
@@ -164,6 +165,7 @@ import { computed, ref } from 'vue';
 import BtnNaughty from '../components/btn-naughty.vue';
 import FeatureSection from '../components/feature-section.vue';
 
+const text = ref('');
 const disable = ref(true);
 const maxMultiple = ref(1.5);
 
