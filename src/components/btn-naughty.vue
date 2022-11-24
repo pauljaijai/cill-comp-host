@@ -4,11 +4,13 @@
     <!-- 拓印容器 -->
     <div class=" absolute inset-0 pointer-events-none">
       <!-- 拓印 -->
-      <div
-        v-if="!slots.rubbing"
-        class="btn-rubbing w-full h-full rounded"
-      />
-      <slot name="rubbing" />
+
+      <slot
+        name="rubbing"
+        :is-running="isRunning"
+      >
+        <div class="btn-rubbing w-full h-full rounded" />
+      </slot>
     </div>
 
 
@@ -30,15 +32,16 @@
         class="jelly-bounce"
       >
         <!-- 本體 -->
-        <div
-          v-if="!slots.default"
-          class="btn p-3 px-6 select-none rounded"
-          v-bind="attrs"
-        >
-          {{ props.label }}
-        </div>
 
-        <slot v-bind="attrs" />
+
+        <slot
+          v-bind="attrs"
+          :is-running="isRunning"
+        >
+          <div class="btn p-3 px-6 select-none rounded">
+            {{ props.label }}
+          </div>
+        </slot>
       </div>
     </div>
   </div>
@@ -54,7 +57,7 @@ interface Props {
   label?: string;
   disable?: boolean;
   zIndex?: number | string;
-  maxMultiple?: number;
+  maxMultiple?: number | string;
 }
 const props = withDefaults(defineProps<Props>(), {
   label: '',
@@ -131,13 +134,15 @@ function setRunning(value: boolean) {
 const run = throttle(() => {
   setRunning(true);
 
+  const maxMultiple = props.maxMultiple ? Number(props.maxMultiple) : 1.5;
+
   let ok = false, newX = 0, newY = 0;
   do {
-    newX = offset.value.x + getRandomNumber(width.value, width.value * props.maxMultiple);
-    newY = offset.value.y + getRandomNumber(height.value, height.value * props.maxMultiple);
+    newX = offset.value.x + getRandomNumber(width.value, width.value * maxMultiple);
+    newY = offset.value.y + getRandomNumber(height.value, height.value * maxMultiple);
 
-    ok = inRange(newX, -width.value * props.maxMultiple, width.value * props.maxMultiple) &&
-      inRange(newY, -height.value * props.maxMultiple, height.value * props.maxMultiple);
+    ok = inRange(newX, -width.value * maxMultiple, width.value * maxMultiple) &&
+      inRange(newY, -height.value * maxMultiple, height.value * maxMultiple);
   } while (!ok);
 
   offset.value.x = newX;

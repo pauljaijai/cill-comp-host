@@ -1,6 +1,6 @@
 <template>
   <q-list class="text-[#3F3F3F]">
-    <!-- 頑皮的按鈕 -->
+    <!-- 調皮的按鈕 -->
     <menu-drawer-btn
       :to="getRoute('home')"
       icon="home"
@@ -8,19 +8,17 @@
     />
     <q-separator />
 
-    <!-- 頑皮的按鈕 -->
+    <!-- 調皮的按鈕 -->
     <menu-drawer-btn
       :to="getRoute('btn-naughty')"
-      icon="inbox"
-      label="頑皮的按鈕"
+      label="調皮的按鈕"
     />
 
 
-    <!-- 頑皮的按鈕 -->
+    <!-- 調皮的按鈕 -->
     <menu-drawer-btn
       :to="getRoute('cursor-sandevistan')"
-      icon="inbox"
-      label="神機改造鼠標"
+      label="安裝沙德威斯坦的鼠標"
     />
   </q-list>
 </template>
