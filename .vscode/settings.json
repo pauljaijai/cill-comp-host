@@ -1,8 +1,11 @@
 {
   "html.format.wrapAttributes": "force-expand-multiline",
   "cSpell.words": [
+    "nord",
     "pinia",
+    "pixi",
     "SANDEVISTAN",
+    "shiki",
     "tailwindcss",
     "vueuse"
   ]
