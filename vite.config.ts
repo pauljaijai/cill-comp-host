@@ -35,7 +35,10 @@ export default defineConfig(({ command, mode }) => {
       })
     ],
     test: {
-      environment: 'happy-dom'
+      environment: 'happy-dom',
+      coverage: {
+        reporter: ['html'],
+      },
     },
   }
 })
