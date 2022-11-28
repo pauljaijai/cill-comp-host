@@ -17,7 +17,7 @@
       <menu-drawer />
     </q-drawer>
 
-    <q-page-container class="w-full h-full">
+    <q-page-container class="w-full overflow-auto">
       <router-view />
     </q-page-container>
   </q-layout>

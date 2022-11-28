@@ -1,41 +1,13 @@
 <template>
   <div class="w-full flex justify-center">
     <div class="w-3/5 flex flex-col items-start gap-6 p-10">
-      <feature-example file="btn-naughty/basic-usage" />
-
       <feature-section
         title="基本用法"
         description="當按鈕狀態為 disable 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑"
-        code="123"
-      >
-        <template #content>
-          <div class="flex flex-col gap-4 w-full">
-            <div class="flex gap-4">
-              <q-toggle
-                v-model="disable"
-                label="停用按鈕"
-              />
-              <q-input
-                v-model="text"
-                outlined
-                placeholder="focus 在此並使用 tab 將焦點轉移至按鈕後，按下 Enter 看看"
-                class=" w-full"
-              />
-            </div>
+        code-file-path="btn-naughty/basic-usage"
+      />
 
-            <div class="flex">
-              <btn-naughty
-                label="調皮的按鈕"
-                class=" font-bold"
-                :disable="disable"
-                z-index="9999"
-              />
-            </div>
-          </div>
-        </template>
-      </feature-section>
-
-      <feature-section
+      <!-- <feature-section
         title="移動距離"
         description="
         指定 maxMultiple 可以設定最大移動距離（以寬高倍數），
@@ -156,7 +128,7 @@
             </template>
           </btn-naughty>
         </template>
-      </feature-section>
+      </feature-section> -->
     </div>
   </div>
 </template>

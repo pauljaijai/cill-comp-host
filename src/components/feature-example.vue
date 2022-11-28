@@ -1,4 +1,3 @@
-<!-- eslint-disable no-undef -->
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <section class="w-full mb-4">
@@ -30,7 +29,6 @@
           <div v-show="codeVisible">
             <pre>
               <code
-              class="language-js"
               v-html="codeHtml"
               />
             </pre>
@@ -50,14 +48,14 @@
 
 <script setup lang="ts">
 import Prism from 'prismjs';
-import 'prismjs/themes/prism-coy.min.css'
+import 'prismjs/themes/prism.min.css'
 import { computed, markRaw, onMounted, ref } from 'vue';
 
 const exampleComponentMap = import.meta.glob('/public/examples/**/*.vue');
 
 interface Props {
   title?: string;
-  file: string;
+  path: string;
 }
 const props = withDefaults(defineProps<Props>(), {
   title: undefined,
@@ -67,7 +65,7 @@ const props = withDefaults(defineProps<Props>(), {
 const component = ref();
 const isLoadingComponent = ref(true);
 
-const codeVisible = ref(true);
+const codeVisible = ref(false);
 const code = ref<string>();
 
 const codeHtml = computed(() => {
@@ -75,7 +73,7 @@ const codeHtml = computed(() => {
     return '';
   }
 
-  return Prism.highlight(
+  return '\n' + Prism.highlight(
     code.value,
     Prism.languages['js'],
     'js'
@@ -88,14 +86,14 @@ function toggleCodeVisible() {
 }
 
 onMounted(() => {
-  exampleComponentMap['/public/examples/' + props.file + '.vue']()
+  exampleComponentMap['/public/examples/' + props.path + '.vue']()
     .then((comp: any) => {
       component.value = markRaw(comp.default);
       isLoadingComponent.value = false;
     })
 
 
-  fetch(`/examples/${props.file}.vue`)
+  fetch(`/examples/${props.path}.vue`)
     .then((response) => response.text())
     .then((content) => {
       code.value = content;

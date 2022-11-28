@@ -32,6 +32,3 @@ import BtnNaughty from '@/components/btn-naughty.vue';
 const text = ref('');
 const disable = ref(true);
 </script>
-
-<style scoped lang="sass">
-</style>
