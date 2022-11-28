@@ -49,7 +49,6 @@
             <code
               v-if="codeVisible"
               class="language-js"
-              v-html="codeHtml"
             />
           </q-slide-transition>
         </q-card-section>
@@ -71,7 +70,6 @@
 
 <script setup lang="ts">
 import { computedAsync } from '@vueuse/core';
-import * as shiki from 'shiki';
 import { ref, useSlots } from 'vue';
 
 const slots = useSlots();
@@ -101,12 +99,6 @@ const codeVisible = ref(false);
 function toggleCodeVisible() {
   codeVisible.value = !codeVisible.value;
 }
-
-const codeHtml = computedAsync(async () => {
-  const highlighter = await shiki.getHighlighter({ theme: 'nord' });
-
-  return highlighter.codeToHtml(props.code, { lang: props.codeLang });
-}, '');
 </script>
 
 <style scoped lang="sass">

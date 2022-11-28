@@ -49,8 +49,8 @@
 </template>
 
 <script setup lang="ts">
-import 'prismjs';
 import Prism from 'prismjs';
+import 'prismjs/themes/prism-coy.min.css'
 import { computed, markRaw, onMounted, ref } from 'vue';
 
 const exampleComponentMap = import.meta.glob('/public/examples/**/*.vue');
@@ -67,10 +67,14 @@ const props = withDefaults(defineProps<Props>(), {
 const component = ref();
 const isLoadingComponent = ref(true);
 
-const codeVisible = ref(false);
+const codeVisible = ref(true);
 const code = ref<string>();
 
 const codeHtml = computed(() => {
+  if (!code.value) {
+    return '';
+  }
+
   return Prism.highlight(
     code.value,
     Prism.languages['js'],
