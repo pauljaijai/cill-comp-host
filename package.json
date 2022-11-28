@@ -16,8 +16,8 @@
     "nanoid": "^4.0.0",
     "pinia": "^2.0.12",
     "pixi.js": "^7.0.4",
+    "prismjs": "^1.29.0",
     "quasar": "^2.8.2",
-    "shiki": "^0.11.1",
     "vite-plugin-package-version": "^1.0.2",
     "vue": "^3.2.16",
     "vue-router": "^4.0.14"

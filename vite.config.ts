@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 import loadVersion from 'vite-plugin-package-version';
+import path from 'path';
 
 import legacy from '@vitejs/plugin-legacy';
 
@@ -19,6 +20,11 @@ export default defineConfig(({ command, mode }) => {
   ] : undefined;
 
   return {
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src')
+      },
+    },
     plugins: [
       vue({
         template: { transformAssetUrls }

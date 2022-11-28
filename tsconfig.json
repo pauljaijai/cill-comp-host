@@ -12,12 +12,18 @@
     "lib": [
       "esnext",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "public/examples/**/*.vue"
   ]
 }

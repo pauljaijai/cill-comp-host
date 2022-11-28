@@ -1,6 +1,8 @@
 <template>
   <div class="w-full flex justify-center">
     <div class="w-3/5 flex flex-col items-start gap-6 p-10">
+      <feature-example file="btn-naughty/basic-usage" />
+
       <feature-section
         title="基本用法"
         description="當按鈕狀態為 disable 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑"
@@ -164,6 +166,8 @@ import { computed, ref } from 'vue';
 
 import BtnNaughty from '../components/btn-naughty.vue';
 import FeatureSection from '../components/feature-section.vue';
+import FeatureExample from '@/components/feature-example.vue';
+
 
 const text = ref('');
 const disable = ref(true);
