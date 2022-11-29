@@ -18,27 +18,24 @@
     </slot>
 
     <!-- 內容展示 -->
-    <feature-example :path="props.codeFilePath" />
+    <div class="flex flex-col">
+      <slot name="default" />
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import FeatureExample from './feature-example.vue';
-
 interface Props {
   title?: string;
   titleAnchor?: string;
   description?: string;
-  cardClass?: string;
-  codeFilePath: string;
 }
 const props = withDefaults(defineProps<Props>(), {
   title: undefined,
   titleAnchor: undefined,
   description: undefined,
-  cardClass: undefined,
 });
 </script>
 

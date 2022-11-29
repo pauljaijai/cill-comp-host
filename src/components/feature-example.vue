@@ -7,7 +7,11 @@
       bordered
     >
       <q-card-section class="flex py-2">
-        <div class="flex">
+        <div class="w-full flex items-center">
+          <div class=" text-lg font-bold text-gray-500">
+            {{ props.title }}
+          </div>
+          <q-space />
           <q-btn
             icon="code"
             flat
