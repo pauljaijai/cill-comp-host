@@ -10,6 +10,8 @@ export enum RouteName {
   BTN_NAUGHTY = 'btn-naughty',
 
   CURSOR_SANDEVISTAN = 'cursor-sandevistan',
+
+  WRAPPER_3D_LIKE = 'wrapper-3d-like',
 }
 
 const routes: Array<RouteRecordRaw> = [
@@ -36,6 +38,12 @@ const routes: Array<RouteRecordRaw> = [
     path: `/cursor-sandevistan`,
     name: RouteName.CURSOR_SANDEVISTAN,
     component: () => import('../views/the-cursor-sandevistan.vue')
+  },
+
+  {
+    path: `/wrapper-3d-like`,
+    name: RouteName.WRAPPER_3D_LIKE,
+    component: () => import('../views/the-wrapper-3d-like.vue')
   },
 
   {

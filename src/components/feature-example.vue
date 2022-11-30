@@ -91,6 +91,7 @@ function toggleCodeVisible() {
 
 onMounted(() => {
   exampleComponentMap['/public/examples/' + props.path + '.vue']()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .then((comp: any) => {
       component.value = markRaw(comp.default);
       isLoadingComponent.value = false;
