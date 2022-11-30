@@ -1,5 +1,9 @@
 <template>
-  <div ref="wrapper">
+  <div
+    ref="wrapper"
+    :style="style"
+    class="wrapper-3d-like"
+  >
     <slot />
   </div>
 </template>
@@ -7,13 +11,16 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import { useElementBounding, useMouse } from '@vueuse/core';
+import { useElementBounding, useMouse, watchThrottled } from '@vueuse/core';
+import { mapNumber } from '@/common/utils';
 
 interface Props {
-  label?: string;
+  xMaxAngle?: number;
+  yMaxAngle?: number;
 }
 const props = withDefaults(defineProps<Props>(), {
-  label: '',
+  xMaxAngle: 15,
+  yMaxAngle: 15,
 });
 
 const emit = defineEmits<{
@@ -34,10 +41,23 @@ const coordinate = computed(() => {
   }
 });
 
-const style = computed(() => {
-
+const style = ref({
+  transform: `rotateX(0deg) rotateY(0deg)`,
 });
+
+watchThrottled(coordinate, ({ x, y }) => {
+  const { xMaxAngle, yMaxAngle } = props;
+
+  const yAngle = mapNumber(x, -200, 200, -xMaxAngle, xMaxAngle);
+  const xAngle = mapNumber(y, -200, 200, -yMaxAngle, yMaxAngle);
+
+  style.value.transform = `rotateX(${xAngle}deg) rotateY(${-yAngle}deg)`;
+},
+  { throttle: 15 },
+)
 </script>
 
 <style scoped lang="sass">
+.wrapper-3d-like
+  transform-style: 3d
 </style>
