@@ -16,8 +16,8 @@
       label="安裝沙德威斯坦的鼠標"
     />
     <menu-drawer-btn
-      :to="getRoute('wrapper-3d-like')"
-      label="類 3D 包裝器"
+      :to="getRoute('wrapper-stereoscopic')"
+      label="立體感包裝器"
     />
   </q-list>
 </template>

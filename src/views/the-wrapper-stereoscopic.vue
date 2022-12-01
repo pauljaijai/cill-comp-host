@@ -27,7 +27,16 @@ const sections = [
     description: '可以讓元素有 3D 偏轉效果',
     examples: [
       {
-        path: 'wrapper-3d-like/basic-usage',
+        path: 'wrapper-stereoscopic/basic-usage',
+      }
+    ]
+  },
+  {
+    title: '多層視差',
+    description: '利用 layer 可以達成多層視差效果',
+    examples: [
+      {
+        path: 'wrapper-stereoscopic/multi-layer',
       }
     ]
   },

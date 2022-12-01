@@ -11,7 +11,7 @@ export enum RouteName {
 
   CURSOR_SANDEVISTAN = 'cursor-sandevistan',
 
-  WRAPPER_3D_LIKE = 'wrapper-3d-like',
+  WRAPPER_STEREOSCOPIC = 'wrapper-stereoscopic',
 }
 
 const routes: Array<RouteRecordRaw> = [
@@ -41,9 +41,9 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
-    path: `/wrapper-3d-like`,
-    name: RouteName.WRAPPER_3D_LIKE,
-    component: () => import('../views/the-wrapper-3d-like.vue')
+    path: `/wrapper-stereoscopic`,
+    name: RouteName.WRAPPER_STEREOSCOPIC,
+    component: () => import('../views/the-wrapper-stereoscopic.vue')
   },
 
   {

@@ -2,25 +2,43 @@
   <div
     ref="wrapper"
     :style="style"
-    class="wrapper-3d-like"
+    class="wrapper-stereoscopic"
   >
-    <slot />
+    <slot :style="slotStyle" />
   </div>
 </template>
 
+<script lang="ts">
+export const PROVIDE_KEY = 'wrapper-stereoscopic';
+
+export interface ProvideContent {
+  bindLayer: (layer: Layer) => void;
+  unbindLayer: (id: string) => void;
+  zOffset: number;
+}
+
+export interface Layer {
+  id: string;
+}
+</script>
+
+
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, provide, ref, StyleValue } from 'vue';
 import { mapNumber } from '@/common/utils';
 
 import { useElementBounding, useMouse, watchThrottled } from '@vueuse/core';
+import { nanoid } from 'nanoid';
 
 interface Props {
   xMaxAngle?: number;
   yMaxAngle?: number;
+  zOffset?: number;
 }
 const props = withDefaults(defineProps<Props>(), {
   xMaxAngle: 15,
   yMaxAngle: 15,
+  zOffset: 100,
 });
 
 const emit = defineEmits<{
@@ -44,7 +62,6 @@ const coordinate = computed(() => {
 const style = ref({
   transform: `rotateX(0deg) rotateY(0deg)`,
 });
-
 watchThrottled(coordinate, ({ x, y }) => {
   const { xMaxAngle, yMaxAngle } = props;
 
@@ -52,12 +69,28 @@ watchThrottled(coordinate, ({ x, y }) => {
   const xAngle = mapNumber(y, -200, 200, -yMaxAngle, yMaxAngle);
 
   style.value.transform = `rotateX(${xAngle}deg) rotateY(${-yAngle}deg)`;
-},
-  { throttle: 15 },
-)
+}, { throttle: 15 });
+
+const slotStyle = computed<StyleValue>(() => ({
+  transformStyle: 'preserve-3d',
+}));
+
+const componentMap = new Map<string, Layer>();
+
+function bindLayer(item: Layer) {
+  componentMap.set(item.id, item);
+}
+function unbindLayer(id: string) {
+  componentMap.delete(id);
+}
+provide(PROVIDE_KEY, {
+  bindLayer,
+  unbindLayer,
+  zOffset: props.zOffset,
+});
 </script>
 
 <style scoped lang="sass">
-.wrapper-3d-like
-  transform-style: 3d
+.wrapper-stereoscopic
+  transform-style: preserve-3d
 </style>
