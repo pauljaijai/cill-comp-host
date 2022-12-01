@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import BtnNaughty from '@/components/btn-naughty.vue';
+import BtnNaughty from '@/components/btn-naughty/btn-naughty.vue';
 
 const btn = ref<InstanceType<typeof BtnNaughty>>();
 function run() {

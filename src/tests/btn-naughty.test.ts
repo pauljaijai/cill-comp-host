@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { mount } from '@vue/test-utils';
 
-import BtnNaughty from '../components/btn-naughty.vue'
+import BtnNaughty from '../components/btn-naughty/btn-naughty.vue'
 
 describe('測試按鈕 prop', () => {
   it('指定 label', () => {

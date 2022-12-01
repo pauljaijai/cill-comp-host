@@ -14,9 +14,9 @@ import { Application, Sprite } from 'pixi.js';
 import { computed, onMounted, ref, watch } from 'vue';
 import { nanoid } from 'nanoid';
 import { remove } from 'lodash-es';
-import { hslToHex } from '../common/utils';
+import { hslToHex } from '../../common/utils';
 
-import defaultCursor from '../assets/cursors-cyberpunk.png'
+import defaultCursor from '../../assets/cursors-cyberpunk.png'
 
 import { useMouse, useElementBounding, watchThrottled } from '@vueuse/core';
 

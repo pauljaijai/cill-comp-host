@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import BtnNaughty from '@/components/btn-naughty.vue';
+import BtnNaughty from '@/components/btn-naughty/btn-naughty.vue';
 
 const text = ref('');
 const disable = ref(true);
