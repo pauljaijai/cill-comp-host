@@ -24,7 +24,7 @@ import FeatureExample from '@/components/feature-example.vue';
 const sections = [
   {
     title: '基本用法',
-    description: '可以讓內部元素有 3D 懸浮效果',
+    description: '可以讓元素有 3D 偏轉效果',
     examples: [
       {
         path: 'wrapper-3d-like/basic-usage',

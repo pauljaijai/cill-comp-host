@@ -10,9 +10,9 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { mapNumber } from '@/common/utils';
 
 import { useElementBounding, useMouse, watchThrottled } from '@vueuse/core';
-import { mapNumber } from '@/common/utils';
 
 interface Props {
   xMaxAngle?: number;
