@@ -18,7 +18,7 @@ import { hslToHex } from '../../common/utils';
 
 import defaultCursor from '../../assets/cursors-cyberpunk.png'
 
-import { useMouse, useElementBounding, watchThrottled } from '@vueuse/core';
+import { useMouse, useElementBounding, watchThrottled, useWindowScroll } from '@vueuse/core';
 
 interface Props {
   img?: string;
@@ -46,6 +46,7 @@ const props = withDefaults(defineProps<Props>(), {
 const view = ref<HTMLCanvasElement>();
 const mouse = useMouse();
 const canvasBounding = useElementBounding(view);
+const { y: scrollY } = useWindowScroll();
 
 const imgUrl = computed(() => props.img ? props.img : defaultCursor);
 
@@ -75,7 +76,7 @@ function createCursor(app: Application) {
 watch(() => mouse, ({ x, y }) => {
   if (!cursor.value) return;
 
-  cursor.value.position.set(x.value, y.value);
+  cursor.value.position.set(x.value, (y.value - scrollY.value));
 }, { deep: true });
 
 const hue = ref(160);
@@ -100,7 +101,7 @@ function createAfterimage(app: Application, x: number, y: number) {
 watchThrottled(() => mouse, ({ x, y }) => {
   if (!app.value) return;
 
-  const afterimage = createAfterimage(app.value, x.value, y.value);
+  const afterimage = createAfterimage(app.value, x.value, y.value - scrollY.value);
   afterimages.value.unshift(afterimage);
 
   if (afterimages.value.length < props.quantity) return;

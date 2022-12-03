@@ -27,7 +27,7 @@ export interface Layer {
 import { computed, provide, ref, StyleValue } from 'vue';
 import { mapNumber } from '@/common/utils';
 
-import { useElementBounding, useMouse, watchThrottled } from '@vueuse/core';
+import { useElementBounding, useMouse, useWindowScroll, watchThrottled } from '@vueuse/core';
 import { nanoid } from 'nanoid';
 
 interface Props {
@@ -48,11 +48,12 @@ const emit = defineEmits<{
 const wrapper = ref();
 const { x: elX, y: elY, width, height } = useElementBounding(wrapper);
 const mouse = useMouse();
+const { y: scrollY } = useWindowScroll();
 
 /** 計算滑鼠與物體的中心距離 */
 const coordinate = computed(() => {
   const x = elX.value + width.value / 2 - mouse.x.value;
-  const y = elY.value + height.value / 2 - mouse.y.value;
+  const y = elY.value + height.value / 2 - (mouse.y.value - scrollY.value);
 
   return {
     x, y
