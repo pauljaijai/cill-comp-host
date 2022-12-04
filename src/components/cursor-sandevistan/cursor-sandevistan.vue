@@ -44,9 +44,18 @@ const props = withDefaults(defineProps<Props>(), {
 
 
 const view = ref<HTMLCanvasElement>();
-const mouse = useMouse();
 const canvasBounding = useElementBounding(view);
-const { y: scrollY } = useWindowScroll();
+const { x: mouseX, y: mouseY } = useMouse();
+const { x: scrollX, y: scrollY } = useWindowScroll();
+
+const mouse = computed(() => {
+  const x = mouseX.value - scrollX.value;
+  const y = mouseY.value - scrollY.value;
+
+  return {
+    x, y
+  }
+});
 
 const imgUrl = computed(() => props.img ? props.img : defaultCursor);
 
@@ -73,10 +82,10 @@ function createCursor(app: Application) {
   app.stage.addChild(sprite);
   return sprite;
 }
-watch(() => mouse, ({ x, y }) => {
+watch(mouse, ({ x, y }) => {
   if (!cursor.value) return;
 
-  cursor.value.position.set(x.value, (y.value - scrollY.value));
+  cursor.value.position.set(x, y);
 }, { deep: true });
 
 const hue = ref(160);
@@ -98,10 +107,10 @@ function createAfterimage(app: Application, x: number, y: number) {
 
   return sprite;
 }
-watchThrottled(() => mouse, ({ x, y }) => {
+watchThrottled(mouse, ({ x, y }) => {
   if (!app.value) return;
 
-  const afterimage = createAfterimage(app.value, x.value, y.value - scrollY.value);
+  const afterimage = createAfterimage(app.value, x, y);
   afterimages.value.unshift(afterimage);
 
   if (afterimages.value.length < props.quantity) return;

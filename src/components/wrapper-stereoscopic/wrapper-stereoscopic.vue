@@ -47,13 +47,22 @@ const emit = defineEmits<{
 
 const wrapper = ref();
 const { x: elX, y: elY, width, height } = useElementBounding(wrapper);
-const mouse = useMouse();
-const { y: scrollY } = useWindowScroll();
+const { x: mouseX, y: mouseY } = useMouse();
+const { x: scrollX, y: scrollY } = useWindowScroll();
+
+const mouse = computed(() => {
+  const x = mouseX.value - scrollX.value;
+  const y = mouseY.value - scrollY.value;
+
+  return {
+    x, y
+  }
+});
 
 /** 計算滑鼠與物體的中心距離 */
 const coordinate = computed(() => {
-  const x = elX.value + width.value / 2 - mouse.x.value;
-  const y = elY.value + height.value / 2 - (mouse.y.value - scrollY.value);
+  const x = elX.value + width.value / 2 - mouse.value.x;
+  const y = elY.value + height.value / 2 - mouse.value.y;
 
   return {
     x, y
