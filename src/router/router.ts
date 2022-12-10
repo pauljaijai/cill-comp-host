@@ -10,6 +10,7 @@ export enum RouteName {
   BTN_NAUGHTY = 'btn-naughty',
 
   CURSOR_SANDEVISTAN = 'cursor-sandevistan',
+  CURSOR_THUNDER_BREATHING = 'cursor-thunder-breathing',
 
   WRAPPER_STEREOSCOPIC = 'wrapper-stereoscopic',
 }
