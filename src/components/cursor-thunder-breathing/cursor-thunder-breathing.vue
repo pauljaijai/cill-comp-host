@@ -10,10 +10,8 @@
  * https://www.cursor.cc/cursor3d/120677.png
  */
 
-import { Application, Sprite } from 'pixi.js';
+import { Application, Graphics } from 'pixi.js';
 import { computed, onMounted, ref, watch } from 'vue';
-
-import defaultCursor from '../../assets/cursors-cyberpunk.png'
 
 import { useMouse, useElementBounding, useWindowScroll } from '@vueuse/core';
 
@@ -64,7 +62,6 @@ watch(mouse, (pPos, nPos) => {
   if (!app.value) return;
 
   const distance = getDistance(pPos, nPos);
-  console.log("🚀 ~ file: cursor-thunder-breathing.vue:67 ~ watch ~ distance", distance)
 });
 
 function getDistance(start: Position, end: Position) {

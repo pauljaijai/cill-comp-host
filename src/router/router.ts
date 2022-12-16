@@ -40,6 +40,11 @@ const routes: Array<RouteRecordRaw> = [
     name: RouteName.CURSOR_SANDEVISTAN,
     component: () => import('../views/the-cursor-sandevistan.vue')
   },
+  {
+    path: `/cursor-thunder-breathing`,
+    name: RouteName.CURSOR_THUNDER_BREATHING,
+    component: () => import('../views/the-cursor-thunder-breathing.vue')
+  },
 
   {
     path: `/wrapper-stereoscopic`,

@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-4 w-full">
-    <cursor-thunder-breathing></cursor-thunder-breathing>
+    <cursor-thunder-breathing />
   </div>
 </template>
 

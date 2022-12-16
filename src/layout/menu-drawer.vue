@@ -19,6 +19,10 @@
       :to="getRoute('wrapper-stereoscopic')"
       label="立體感包裝器"
     />
+    <menu-drawer-btn
+      :to="getRoute('cursor-thunder-breathing')"
+      label="雷之呼吸滑鼠"
+    />
   </q-list>
 </template>
 
