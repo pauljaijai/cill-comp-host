@@ -103,4 +103,5 @@ provide(PROVIDE_KEY, {
 <style scoped lang="sass">
 .wrapper-stereoscopic
   transform-style: preserve-3d
+  transform-origin: 50% 50% -50px
 </style>
