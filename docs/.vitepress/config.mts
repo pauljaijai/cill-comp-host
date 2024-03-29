@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "鱈魚的酷酷元件",
+  title: "🐟 鱈魚的酷酷元件",
   description: "設計各類惡搞、有趣的特殊元件",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
