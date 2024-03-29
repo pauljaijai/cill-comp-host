@@ -4,14 +4,14 @@ layout: home
 
 hero:
   name: "鱈魚的酷酷元件"
-  text: "設計各類惡搞、有趣的特殊元件"
-  tagline: My great project tagline
+  tagline: 各類「實用」的有趣元件
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: 前言
+      link: /preface
+
     - theme: alt
-      text: API Examples
+      text: 元件清單
       link: /api-examples
 
 features:
