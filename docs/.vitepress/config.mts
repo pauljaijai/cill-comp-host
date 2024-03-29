@@ -15,13 +15,17 @@ export default defineConfig({
       {
         text: '前言',
         items: [
-          { text: '這是甚麼鬼東西', link: '/1.preface' },
+          { text: '這是甚麼鬼東西', link: '/preface' },
         ]
       }
     ],
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
+    ],
+
+    search: {
+      provider: 'local'
+    }
   }
 })
