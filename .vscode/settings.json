@@ -9,6 +9,7 @@
     "shiki",
     "tailwindcss",
     "vitepress",
-    "vueuse"
+    "vueuse",
+    "webp"
   ]
 }

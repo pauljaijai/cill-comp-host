@@ -6,6 +6,7 @@ export default defineConfig({
   description: "設計各類惡搞、有趣的特殊元件",
   head: [
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/tailwindcss@2.0.4/dist/tailwind.min.css' }],
+    ['link', { rel: 'icon', href: '/logo.webp' }],
   ],
   markdown: {
     lineNumbers: true
