@@ -21,20 +21,21 @@ export default defineConfig({
     },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      // { text: 'Home', link: '/1.index' },
-      // { text: 'Examples', link: '/markdown-examples' }
+      { text: '緣起', link: '/origin' },
+      { text: '元件清單', link: '/components/' },
     ],
 
     sidebar: [
       {
         text: '前言',
         items: [
-          { text: '這是甚麼鬼東西', link: '/origin' },
+          { text: '緣起', link: '/origin' },
           { text: '設計概念', link: '/concept' },
         ]
       },
       {
         text: '元件',
+        link: '/components/',
         items: [
           { text: '調皮的按鈕', link: '/components/btn-naughty/' },
         ]

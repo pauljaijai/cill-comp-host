@@ -13,9 +13,9 @@ hero:
       text: 前言
       link: /origin
 
-    # - theme: alt
-    #   text: 元件清單
-    #   link: /components/
+    - theme: alt
+      text: 元件清單
+      link: /components/
 
 features:
   - title: 為甚麼要做這個？
