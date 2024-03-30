@@ -2,7 +2,7 @@
   <div class="flex">
     <btn-naughty
       disable
-      z-index="10"
+      z-index="30"
     >
       <div class="custom-button">
         自定義按鈕

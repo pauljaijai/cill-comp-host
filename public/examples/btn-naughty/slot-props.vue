@@ -1,7 +1,7 @@
 <template>
   <btn-naughty
     disable
-    z-index="10"
+    z-index="30"
   >
     <template #rubbing="{ isRunning }">
       <div class="text-xl bg-lime-100 text-lime-500 text-center font-black p-4 rounded-full">

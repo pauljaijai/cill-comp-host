@@ -18,7 +18,7 @@
         label="調皮的按鈕"
         class=" font-bold"
         :disable="disable"
-        z-index="10"
+        z-index="30"
       />
     </div>
   </div>

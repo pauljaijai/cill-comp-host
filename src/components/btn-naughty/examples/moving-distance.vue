@@ -13,7 +13,7 @@
       class=" font-bold"
       disable
       :max-multiple="maxMultiple"
-      z-index="10"
+      z-index="30"
     />
   </div>
 </template>

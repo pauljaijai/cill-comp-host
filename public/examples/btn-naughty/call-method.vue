@@ -17,7 +17,7 @@
     <btn-naughty
       ref="btn"
       label="按鈕"
-      z-index="10"
+      z-index="30"
     />
   </div>
 </template>

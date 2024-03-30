@@ -2,7 +2,7 @@
   <div class="flex">
     <btn-naughty
       disable
-      z-index="10"
+      z-index="30"
     >
       <template #rubbing>
         <div class="rubbing ">

@@ -179,7 +179,7 @@ defineExpose({
 <style scoped lang="sass">
 .content
   transition-duration: 0.6s
-  transition-timing-function: cubic-bezier(0.170, 1.415, 0.525, 0.935)
+  transition-timing-function: cubic-bezier(0.040, 0.430, 0.025, 1.070)
   z-index: v-bind('props.zIndex')
 
 .jelly-bounce
@@ -189,13 +189,10 @@ defineExpose({
   0%, 100%
     transform: scale(1, 1)
   50%
-    transform: scale(1.3, 0.7)
-  70%
-    transform: scale(0.85, 1.15)
-  85%
-    transform: scale(1.05, 0.95)
-  95%
-    transform: scale(0.98, 1.02)
+    transform: scale(1.2, 0.8)
+  80%
+    transform: scale(0.9, 1.1)
+
 
 .btn-rubbing
   border: 1px dashed rgba(black, 0.2)

@@ -1,7 +1,7 @@
 <template>
   <btn-naughty
     disable
-    z-index="10"
+    z-index="30"
   >
     <div class="text-x bg-orange-500 text-white p-4 rounded">
       自定義按鈕
