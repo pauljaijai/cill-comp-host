@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "🐟 的酷酷元件"
+  name: "🐟 鱈魚的酷酷元件"
   tagline: 各類「實用？」的有趣元件
   image:
     src: /logo.webp
