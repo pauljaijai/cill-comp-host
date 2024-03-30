@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-start gap-4 w-full">
+  <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
     <base-input
       v-model="maxMultiple"
       type="number"

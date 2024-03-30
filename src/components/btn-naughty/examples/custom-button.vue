@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex border border-gray-300 p-6">
     <btn-naughty
       disable
       z-index="30"
