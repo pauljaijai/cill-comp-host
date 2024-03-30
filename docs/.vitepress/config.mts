@@ -2,11 +2,11 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "🐟 鱈魚的酷酷元件",
+  title: "鱈魚的酷酷元件",
   description: "設計各類惡搞、有趣的特殊元件",
   head: [
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/tailwindcss@2.0.4/dist/tailwind.min.css' }],
-    ['link', { rel: 'icon', href: '/logo.webp' }],
+    ['link', { rel: 'icon', href: '/favicon.webp' }],
   ],
   markdown: {
     lineNumbers: true
@@ -14,6 +14,7 @@ export default defineConfig({
   appearance: false,
 
   themeConfig: {
+    siteTitle: '🐟 鱈魚的酷酷元件',
     outline: {
       label: '目錄',
       level: 'deep',
@@ -28,7 +29,7 @@ export default defineConfig({
       {
         text: '前言',
         items: [
-          { text: '這是甚麼鬼東西', link: '/preface' },
+          { text: '這是甚麼鬼東西', link: '/origin' },
           { text: '設計概念', link: '/concept' },
         ]
       },
