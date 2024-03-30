@@ -12,6 +12,7 @@
       <input
         v-model="modelValue"
         class="base-input w-full"
+        v-bind="$attrs"
         :class="props.inputClass"
         :placeholder="props.placeholder"
       >
