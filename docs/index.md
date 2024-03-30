@@ -12,7 +12,7 @@ hero:
 
     - theme: alt
       text: 元件清單
-      link: /api-examples
+      link: /components/
 
 features:
   - title: Feature A

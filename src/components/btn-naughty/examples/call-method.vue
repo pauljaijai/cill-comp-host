@@ -1,19 +1,16 @@
 <template>
   <div class="flex flex-col items-start gap-4 w-full">
-    <div class="flex gap-4">
-      <q-btn
+    <div class="flex gap-4 border p-4 rounded">
+      <base-btn
         label="移動"
-        color="cyan"
-        unelevated
         @click="run"
       />
-      <q-btn
+      <base-btn
         label="返回"
-        color="teal"
-        unelevated
         @click="back"
       />
     </div>
+
     <btn-naughty
       ref="btn"
       label="按鈕"
@@ -25,7 +22,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import BtnNaughty from '@/components/btn-naughty/btn-naughty.vue';
+import BaseBtn from '../../base-btn.vue';
+import BtnNaughty from '../btn-naughty.vue';
 
 const btn = ref<InstanceType<typeof BtnNaughty>>();
 function run() {
