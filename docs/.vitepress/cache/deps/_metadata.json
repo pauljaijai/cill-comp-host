@@ -1,49 +1,55 @@
 {
-  "hash": "c5c1dcc6",
+  "hash": "cd55a5ed",
   "configHash": "cb36669a",
-  "lockfileHash": "b5b493bf",
-  "browserHash": "e0b96d22",
+  "lockfileHash": "c7204c1e",
+  "browserHash": "47cd639c",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "820aff9f",
+      "fileHash": "36b450d0",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/vitepress/node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "35b6034b",
+      "fileHash": "91e2dfb8",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "6fab3abf",
+      "fileHash": "22b2183e",
       "needsInterop": false
     },
     "vitepress > @vueuse/integrations/useFocusTrap": {
       "src": "../../../../node_modules/@vueuse/integrations/useFocusTrap.mjs",
       "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
-      "fileHash": "661949ed",
+      "fileHash": "c33557e1",
       "needsInterop": false
     },
     "vitepress > mark.js/src/vanilla.js": {
       "src": "../../../../node_modules/mark.js/src/vanilla.js",
       "file": "vitepress___mark__js_src_vanilla__js.js",
-      "fileHash": "36ec071b",
+      "fileHash": "c8d1e9b9",
       "needsInterop": false
     },
     "vitepress > minisearch": {
       "src": "../../../../node_modules/minisearch/dist/es/index.js",
       "file": "vitepress___minisearch.js",
-      "fileHash": "9e1dd1a2",
+      "fileHash": "321aafe5",
       "needsInterop": false
     },
     "lodash-es": {
       "src": "../../../../node_modules/lodash-es/lodash.js",
       "file": "lodash-es.js",
-      "fileHash": "0ca2ddb0",
+      "fileHash": "be896bac",
+      "needsInterop": false
+    },
+    "nanoid": {
+      "src": "../../../../node_modules/nanoid/index.browser.js",
+      "file": "nanoid.js",
+      "fileHash": "2814e9ef",
       "needsInterop": false
     }
   },

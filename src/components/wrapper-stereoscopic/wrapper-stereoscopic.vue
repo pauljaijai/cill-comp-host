@@ -9,12 +9,12 @@
 </template>
 
 <script lang="ts">
-export const PROVIDE_KEY = 'wrapper-stereoscopic';
+export const PROVIDE_KEY = Symbol('wrapper-stereoscopic') as InjectionKey<ProvideContent>;
 
 export interface ProvideContent {
   bindLayer: (layer: Layer) => void;
   unbindLayer: (id: string) => void;
-  zOffset: number;
+  zOffset: ComputedRef<number>;
 }
 
 export interface Layer {
@@ -24,26 +24,26 @@ export interface Layer {
 
 
 <script setup lang="ts">
-import { computed, provide, ref, StyleValue } from 'vue';
-import { mapNumber } from '@/common/utils';
+import { computed, ComputedRef, CSSProperties, HTMLAttributes, InjectionKey, provide, ref, StyleValue, watch } from 'vue';
+import { mapNumber } from '../../common/utils';
 
-import { useElementBounding, useMouse, useWindowScroll, watchThrottled } from '@vueuse/core';
-import { nanoid } from 'nanoid';
+import {
+  useElementBounding, useMouse,
+  useWindowScroll, watchThrottled
+} from '@vueuse/core';
 
 interface Props {
+  enable?: boolean;
   xMaxAngle?: number;
   yMaxAngle?: number;
   zOffset?: number;
 }
 const props = withDefaults(defineProps<Props>(), {
+  enable: true,
   xMaxAngle: 15,
   yMaxAngle: 15,
   zOffset: 100,
 });
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void;
-}>();
 
 const wrapper = ref();
 const { x: elX, y: elY, width, height } = useElementBounding(wrapper);
@@ -69,10 +69,21 @@ const coordinate = computed(() => {
   }
 });
 
-const style = ref({
+const style = ref<CSSProperties>({
   transform: `rotateX(0deg) rotateY(0deg)`,
+  transitionDuration: undefined,
+});
+watch(() => props.enable, (value) => {
+  if (value) {
+    style.value.transitionDuration = undefined;
+  } else {
+    style.value.transitionDuration = '0.4s';
+  }
+  style.value.transform = `rotateX(0deg) rotateY(0deg)`;
 });
 watchThrottled(coordinate, ({ x, y }) => {
+  if (!props.enable) return;
+
   const { xMaxAngle, yMaxAngle } = props;
 
   const yAngle = mapNumber(x, -200, 200, -xMaxAngle, xMaxAngle);
@@ -96,7 +107,7 @@ function unbindLayer(id: string) {
 provide(PROVIDE_KEY, {
   bindLayer,
   unbindLayer,
-  zOffset: props.zOffset,
+  zOffset: computed(() => props.zOffset),
 });
 </script>
 

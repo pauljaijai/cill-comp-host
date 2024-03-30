@@ -15,6 +15,7 @@
         v-bind="$attrs"
         :class="props.inputClass"
         :placeholder="props.placeholder"
+        :type="props.type"
       >
     </div>
   </div>
@@ -22,7 +23,7 @@
 
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core';
-import { ref } from 'vue';
+import { InputTypeHTMLAttribute, ref } from 'vue';
 
 interface Props {
   modelValue?: string | number;
@@ -30,6 +31,7 @@ interface Props {
   labelClass?: string;
   inputClass?: string;
   placeholder?: string;
+  type?: InputTypeHTMLAttribute;
 }
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
@@ -37,6 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
   labelClass: '',
   inputClass: '',
   placeholder: undefined,
+  type: 'text',
 });
 
 const emit = defineEmits<{

@@ -23,7 +23,7 @@ const id = nanoid();
 
 const style = computed<StyleValue>(() => {
   return {
-    transform: `translateZ(${wrapper?.zOffset}px)`,
+    transform: `translateZ(${wrapper?.zOffset.value}px)`,
     transformStyle: 'preserve-3d',
   }
 });
