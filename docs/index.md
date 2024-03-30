@@ -8,18 +8,18 @@ hero:
   actions:
     - theme: brand
       text: 前言
-      link: /preface
+      link: /origin
 
     - theme: alt
       text: 元件清單
       link: /components/
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 為甚麼要做這個？
+    details: 因為有趣啊 (´,,•ω•,,)
+  - title: 真的實用嗎？
+    details: 娛樂實用 ᕕ( ﾟ ∀。)ᕗ 
+  - title: 湊數用
+    details: 想不到第三點 (´・ω・`)
 ---
 

@@ -10,8 +10,13 @@ export default defineConfig({
   markdown: {
     lineNumbers: true
   },
+  appearance: false,
 
   themeConfig: {
+    outline: {
+      label: '目錄',
+      level: 'deep',
+    },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       // { text: 'Home', link: '/1.index' },
@@ -23,6 +28,7 @@ export default defineConfig({
         text: '前言',
         items: [
           { text: '這是甚麼鬼東西', link: '/preface' },
+          { text: '設計概念', link: '/concept' },
         ]
       },
       {

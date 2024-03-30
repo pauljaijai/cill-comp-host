@@ -58,12 +58,14 @@ interface Props {
   disable?: boolean;
   zIndex?: number | string;
   maxMultiple?: number | string;
+  tabindex?: number | string;
 }
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   disable: false,
   zIndex: undefined,
   maxMultiple: 1.5,
+  tabindex: undefined,
 });
 
 const emit = defineEmits<{

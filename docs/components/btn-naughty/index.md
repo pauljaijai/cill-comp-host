@@ -1,7 +1,3 @@
----
-outline: true
----
-
 <script setup>
 import BasicUsage from '../../../src/components/btn-naughty/examples/basic-usage.vue'
 import MovingDistance from '../../../src/components/btn-naughty/examples/moving-distance.vue'
