@@ -28,9 +28,10 @@ import { computed, ComputedRef, CSSProperties, HTMLAttributes, InjectionKey, pro
 import { mapNumber } from '../../common/utils';
 
 import {
-  useElementBounding, useMouse,
+  useElementBounding, useIntervalFn, useMouse,
   useWindowScroll, watchThrottled
 } from '@vueuse/core';
+import { pipe } from 'remeda';
 
 interface Props {
   enable?: boolean;
@@ -69,18 +70,8 @@ const coordinate = computed(() => {
   }
 });
 
-const style = ref<CSSProperties>({
-  transform: `rotateX(0deg) rotateY(0deg)`,
-  transitionDuration: undefined,
-});
-watch(() => props.enable, (value) => {
-  if (value) {
-    style.value.transitionDuration = undefined;
-  } else {
-    style.value.transitionDuration = '0.4s';
-  }
-  style.value.transform = `rotateX(0deg) rotateY(0deg)`;
-});
+const currentAngle = ref({ x: 0, y: 0 });
+const targetAngle = ref({ x: 0, y: 0 });
 watchThrottled(coordinate, ({ x, y }) => {
   if (!props.enable) return;
 
@@ -89,8 +80,30 @@ watchThrottled(coordinate, ({ x, y }) => {
   const yAngle = mapNumber(x, -200, 200, -xMaxAngle, xMaxAngle);
   const xAngle = mapNumber(y, -200, 200, -yMaxAngle, yMaxAngle);
 
-  style.value.transform = `rotateX(${xAngle}deg) rotateY(${-yAngle}deg)`;
+  targetAngle.value = {
+    x: xAngle,
+    y: yAngle,
+  };
 }, { throttle: 15 });
+
+const style = computed<CSSProperties>(() => ({
+  transform: `rotateX(${currentAngle.value.x}deg) rotateY(${-currentAngle.value.y}deg)`,
+}));
+useIntervalFn(() => {
+  const target = pipe(props.enable,
+    (enable) => {
+      if (!enable) return { x: 0, y: 0 };
+      return targetAngle.value;
+    },
+  );
+
+  currentAngle.value = {
+    x: currentAngle.value.x + (target.x - currentAngle.value.x) * 0.2,
+    y: currentAngle.value.y + (target.y - currentAngle.value.y) * 0.2,
+  };
+}, 15);
+
+
 
 const slotStyle = computed<StyleValue>(() => ({
   transformStyle: 'preserve-3d',
