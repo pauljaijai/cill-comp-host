@@ -1,61 +1,49 @@
 {
-  "hash": "cd55a5ed",
-  "configHash": "cb36669a",
+  "hash": "c38e9d07",
+  "configHash": "91e292fb",
   "lockfileHash": "c7204c1e",
-  "browserHash": "64be6eb7",
+  "browserHash": "612d827d",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "9acde1fe",
+      "fileHash": "b3c1e860",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/vitepress/node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "07cd0841",
+      "fileHash": "396c236f",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "1801ed18",
+      "fileHash": "8563cd3d",
       "needsInterop": false
     },
     "vitepress > @vueuse/integrations/useFocusTrap": {
       "src": "../../../../node_modules/@vueuse/integrations/useFocusTrap.mjs",
       "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
-      "fileHash": "60e16d97",
+      "fileHash": "da0d5751",
       "needsInterop": false
     },
     "vitepress > mark.js/src/vanilla.js": {
       "src": "../../../../node_modules/mark.js/src/vanilla.js",
       "file": "vitepress___mark__js_src_vanilla__js.js",
-      "fileHash": "c8d1e9b9",
+      "fileHash": "c5154619",
       "needsInterop": false
     },
     "vitepress > minisearch": {
       "src": "../../../../node_modules/minisearch/dist/es/index.js",
       "file": "vitepress___minisearch.js",
-      "fileHash": "321aafe5",
+      "fileHash": "18ee8964",
       "needsInterop": false
     },
     "lodash-es": {
       "src": "../../../../node_modules/lodash-es/lodash.js",
       "file": "lodash-es.js",
-      "fileHash": "be896bac",
-      "needsInterop": false
-    },
-    "nanoid": {
-      "src": "../../../../node_modules/nanoid/index.browser.js",
-      "file": "nanoid.js",
-      "fileHash": "2814e9ef",
-      "needsInterop": false
-    },
-    "remeda": {
-      "src": "../../../../node_modules/remeda/dist/es/index.js",
-      "file": "remeda.js",
-      "fileHash": "923ea55d",
+      "fileHash": "2bb306a6",
       "needsInterop": false
     }
   },
