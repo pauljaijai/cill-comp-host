@@ -7,7 +7,9 @@ export default defineConfig({
   head: [
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/tailwindcss@2.0.4/dist/tailwind.min.css' }],
     ['link', { rel: 'icon', href: '/favicon.webp' }],
-    ['meta', { name: 'og:image', content: '/logo.webp' }],
+    ['meta', { name: 'og:title', content: '🐟 鱈魚的酷酷元件' }],
+    ['meta', { name: 'og:description', content: '設計各類惡搞、有趣的特殊元件' }],
+    ['meta', { name: 'og:image', content: 'https://cod-chill-component.pages.dev/logo.webp' }],
   ],
   markdown: {
     lineNumbers: true
