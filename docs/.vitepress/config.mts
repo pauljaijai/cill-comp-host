@@ -9,7 +9,7 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.webp' }],
     ['meta', { name: 'og:title', content: '🐟 鱈魚的酷酷元件' }],
     ['meta', { name: 'og:description', content: '設計各類惡搞、有趣的特殊元件' }],
-    ['meta', { name: 'og:image', content: 'https://cod-chill-component.pages.dev/logo.webp' }],
+    ['meta', { name: 'og:image', content: '/og.jpg' }],
   ],
   markdown: {
     lineNumbers: true
