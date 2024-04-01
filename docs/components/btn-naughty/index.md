@@ -11,6 +11,14 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 一個會亂跑的按鈕，和你家的貓一樣欠揍。ᕕ( ﾟ ∀。)ᕗ
 
+Props：
+
+<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Props
+
+Emits：
+
+<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Emits
+
 ## 基本用法
 
 當按鈕狀態為 disable 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑

@@ -53,13 +53,20 @@ import { computed, ref, useAttrs, useSlots, watch } from 'vue';
 
 import { useElementBounding, useIntersectionObserver } from '@vueuse/core';
 
+// #region Props
 interface Props {
+  /** 按鈕內文字 */
   label?: string;
+  /** 是否停用 */
   disable?: boolean;
+  /** 同 CSS z-index */
   zIndex?: number | string;
+  /** 最大移動距離，以本身尺寸為倍數 */
   maxMultiple?: number | string;
+  /** 同 html tabindex */
   tabindex?: number | string;
 }
+// #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   disable: false,
@@ -68,10 +75,13 @@ const props = withDefaults(defineProps<Props>(), {
   tabindex: undefined,
 });
 
+// #region Emits
 const emit = defineEmits<{
   (e: 'click'): void;
+  /** 按鈕移動 */
   (e: 'run'): void;
 }>();
+// #endregion Emits
 
 const attrs = useAttrs();
 const slots = useSlots();
