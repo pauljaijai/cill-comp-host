@@ -7,6 +7,7 @@ export default defineConfig({
   head: [
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/tailwindcss@2.0.4/dist/tailwind.min.css' }],
     ['link', { rel: 'icon', href: '/favicon.webp' }],
+    ['meta', { name: 'og:image', content: '/logo.webp' }],
   ],
   markdown: {
     lineNumbers: true
