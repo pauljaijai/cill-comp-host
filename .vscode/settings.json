@@ -1,10 +1,12 @@
 {
   "html.format.wrapAttributes": "force-expand-multiline",
   "cSpell.words": [
+    "endregion",
     "nord",
     "pinia",
     "pixi",
     "prismjs",
+    "remeda",
     "SANDEVISTAN",
     "shiki",
     "tailwindcss",

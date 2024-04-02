@@ -77,9 +77,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 // #region Emits
 const emit = defineEmits<{
-  'click': []
-  /** 按鈕移動 */
-  'run': []
+  (e: 'click'): void;
+  (e: 'run'): void;
 }>();
 // #endregion Emits
 

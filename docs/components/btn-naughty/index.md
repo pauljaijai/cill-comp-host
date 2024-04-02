@@ -11,11 +11,11 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 一個會亂跑的按鈕，和你家的貓一樣欠揍。ᕕ( ﾟ ∀。)ᕗ
 
-## 概念
+## 原理
 
 設計說明
 
-## 功能
+## API
 
 ### Props
 
@@ -29,7 +29,9 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 <<< ../../../src/components/btn-naughty/btn-naughty.vue/#Methods
 
-## 基本用法
+## 使用範例
+
+### 基本用法
 
 當按鈕狀態為 disable 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
 
@@ -39,7 +41,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 <<< ../../../src/components/btn-naughty/examples/basic-usage.vue
 :::
 
-## 移動距離
+### 移動距離
 
 指定 maxMultiple 可以設定最大移動距離（以寬高倍數）， 若按鈕跑出畫面範圍，會自動回歸原點
 
@@ -49,7 +51,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 <<< ../../../src/components/btn-naughty/examples/moving-distance.vue
 :::
 
-## 呼叫 method
+### 呼叫 method
 
 除了元件自身行為外，也可以直接呼叫 method 產生動作
 
@@ -59,7 +61,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 <<< ../../../src/components/btn-naughty/examples/call-method.vue
 :::
 
-## 自訂按鈕
+### 自訂按鈕
 
 可以使用 default slot 自定義按鈕外觀
 
@@ -69,7 +71,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 <<< ../../../src/components/btn-naughty/examples/custom-button.vue
 :::
 
-## 自訂拓印
+### 自訂拓印
 
 拓印當然也可以自定義。
 
@@ -81,7 +83,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 <<< ../../../src/components/btn-naughty/examples/custom-rubbing.vue
 :::
 
-## Slot Props
+### Slot Props
 
 使用 slot prop 可以玩出更多花樣
 
