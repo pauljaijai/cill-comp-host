@@ -15,3 +15,23 @@ export function hslToHex(h: number, s: number, l: number) {
   };
   return `${f(0)}${f(8)}${f(4)}`;
 }
+
+/** 計算向量長度 */
+export function getVectorLength(
+  { x, y, z = 0 }: { x: number; y: number; z?: number }
+) {
+  return Math.sqrt(x * x + y * y + z * z);
+}
+
+/** 將向量轉換成單位向量 */
+export function getUnitVector(
+  { x, y, z = 0 }: { x: number; y: number; z?: number }
+) {
+  const magnitude = getVectorLength({ x, y, z });
+
+  return {
+    x: x / magnitude,
+    y: y / magnitude,
+    z: z / magnitude,
+  };
+}
