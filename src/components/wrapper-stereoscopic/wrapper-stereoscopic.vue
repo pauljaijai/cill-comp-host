@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="wrapper"
+    ref="wrapperRef"
     :style="style"
     class="wrapper-stereoscopic"
   >
@@ -23,12 +23,16 @@ export interface Layer {
 </script>
 
 <script setup lang="ts">
-import { computed, ComputedRef, CSSProperties, HTMLAttributes, InjectionKey, provide, ref, StyleValue, watch } from 'vue';
+import {
+  computed, ComputedRef, CSSProperties,
+  InjectionKey, provide, ref, StyleValue
+} from 'vue';
 import { mapNumber } from '../../common/utils';
 
 import {
-  useElementBounding, useIntervalFn, useMouse,
-  useWindowScroll, watchThrottled
+  useIntersectionObserver, useIntervalFn,
+  useMouseInElement,
+  watchThrottled
 } from '@vueuse/core';
 import { pipe } from 'remeda';
 
@@ -51,24 +55,27 @@ const props = withDefaults(defineProps<Props>(), {
   zOffset: 100,
 });
 
-const wrapper = ref();
-const { x: elX, y: elY, width, height } = useElementBounding(wrapper);
-const { x: mouseX, y: mouseY } = useMouse();
-const { x: scrollX, y: scrollY } = useWindowScroll();
+const wrapperRef = ref();
+const {
+  elementX: mouseX, elementY: mouseY,
+  elementWidth: width, elementHeight: height,
+} = useMouseInElement(wrapperRef);
 
-const mouse = computed(() => {
-  const x = mouseX.value - scrollX.value;
-  const y = mouseY.value - scrollY.value;
+const isVisible = ref(false)
+useIntersectionObserver(
+  wrapperRef,
+  ([{ isIntersecting }]) => {
+    isVisible.value = isIntersecting
+  },
+)
 
-  return {
-    x, y
-  }
-});
+/** 畫面外自動停用 */
+const enable = computed(() => props.enable && isVisible.value);
 
-/** 計算滑鼠與物體的中心距離 */
+/** 計算滑鼠到與物體的中心距離 */
 const coordinate = computed(() => {
-  const x = elX.value + width.value / 2 - mouse.value.x;
-  const y = elY.value + height.value / 2 - mouse.value.y;
+  const x = width.value / 2 - mouseX.value;
+  const y = height.value / 2 - mouseY.value;
 
   return {
     x, y
@@ -78,7 +85,7 @@ const coordinate = computed(() => {
 const currentAngle = ref({ x: 0, y: 0 });
 const targetAngle = ref({ x: 0, y: 0 });
 watchThrottled(coordinate, ({ x, y }) => {
-  if (!props.enable) return;
+  if (!enable.value) return;
 
   const { xMaxAngle, yMaxAngle } = props;
 
@@ -95,9 +102,9 @@ const style = computed<CSSProperties>(() => ({
   transform: `rotateX(${currentAngle.value.x}deg) rotateY(${-currentAngle.value.y}deg)`,
 }));
 useIntervalFn(() => {
-  const target = pipe(props.enable,
-    (enable) => {
-      if (!enable) return { x: 0, y: 0 };
+  const target = pipe(enable.value,
+    (value) => {
+      if (!value) return { x: 0, y: 0 };
       return targetAngle.value;
     },
   );

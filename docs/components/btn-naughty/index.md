@@ -19,7 +19,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
 
-[關於 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
+- [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
 
 ::: danger 注意！Σ(ˊДˋ;)
 請不要將 overflow 設定為 hidden，否則按鈕會被隱藏。

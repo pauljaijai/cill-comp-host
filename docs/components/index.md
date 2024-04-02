@@ -8,10 +8,10 @@ import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/
 
 ## [調皮的按鈕](./btn-naughty/)
 
-一個會亂跑的按鈕，和你家的貓一樣欠揍。ᕕ( ﾟ ∀。)ᕗ
+一個越跑越遠的按鈕，像極了無緣的愛情。(._.`)
 
 <div class="flex">
-  <btn-naughty label="哈哈抓我啊" z-index="99" disable/>
+  <btn-naughty label="你是好人" z-index="99" disable/>
 </div>
 
 ## [立體包裝器](./wrapper-stereoscopic/)
@@ -31,7 +31,7 @@ import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/
       >
         <wrapper-stereoscopic-layer v-slot="layer02">
           <div class="text-xl font-bold">
-            (๑•̀ㅂ•́)و✧
+            ( ﾟ ∀。) 好暈好暈啊
           </div>
         </wrapper-stereoscopic-layer>
       </div>
