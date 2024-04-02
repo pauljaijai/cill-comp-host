@@ -9,6 +9,16 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 
 可以讓元素有酷酷的 3D 偏轉效果
 
+## 概念
+
+利用 CSS 的 perspective 與 transform，產生 3D 旋轉與透視變形效果。
+
+## 功能
+
+### Props
+
+<<< ../../../src/components/wrapper-stereoscopic/wrapper-stereoscopic.vue/#Props
+
 ## 基本用法
 
 可以隨手關閉，不過沒辦法省電。乁( ◔ ௰◔)「

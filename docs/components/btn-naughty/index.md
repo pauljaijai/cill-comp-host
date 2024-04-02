@@ -11,13 +11,23 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 一個會亂跑的按鈕，和你家的貓一樣欠揍。ᕕ( ﾟ ∀。)ᕗ
 
-Props：
+## 概念
+
+設計說明
+
+## 功能
+
+### Props
 
 <<< ../../../src/components/btn-naughty/btn-naughty.vue/#Props
 
-Emits：
+### Emits
 
 <<< ../../../src/components/btn-naughty/btn-naughty.vue/#Emits
+
+### Methods
+
+<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Methods
 
 ## 基本用法
 
