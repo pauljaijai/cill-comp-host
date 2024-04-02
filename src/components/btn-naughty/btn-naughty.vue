@@ -16,11 +16,11 @@
 
     <!-- 按鈕移動容器 -->
     <div
-      ref="btn"
+      ref="carrierRef"
       class="content relative"
       :style="moveStyle"
       tabindex="0"
-      @transitionend="setRunning(false)"
+      @transitionend="toggleRunning(false)"
       @click="handleClick"
       @keydown.enter="handleClick"
       @mouseenter="handleMouseEnter"
@@ -33,14 +33,13 @@
       >
         <!-- 本體 -->
 
-
         <slot
           v-bind="attrs"
           :is-running="isRunning"
         >
-          <div class="btn p-3 px-6 select-none rounded">
+          <button class="btn p-3 px-6 select-none rounded">
             {{ props.label }}
-          </div>
+          </button>
         </slot>
       </div>
     </div>
@@ -51,7 +50,9 @@
 import { inRange, random, throttle } from 'lodash-es';
 import { computed, ref, useAttrs, useSlots, watch } from 'vue';
 
-import { useElementBounding, useIntersectionObserver } from '@vueuse/core';
+import { useElementBounding, useIntersectionObserver, useMouse, useMouseInElement, useToggle } from '@vueuse/core';
+import { getUnitVector, getVectorLength } from '../../common/utils';
+import { pipe } from 'remeda';
 
 // #region Props
 interface Props {
@@ -61,8 +62,8 @@ interface Props {
   disable?: boolean;
   /** 同 CSS z-index */
   zIndex?: number | string;
-  /** 最大移動距離，以本身尺寸為倍數 */
-  maxMultiple?: number | string;
+  /** 最大移動距離，為按鈕尺寸倍數 */
+  maxDistanceMultiple?: number;
   /** 同 html tabindex */
   tabindex?: number | string;
 }
@@ -71,7 +72,7 @@ const props = withDefaults(defineProps<Props>(), {
   label: '',
   disable: false,
   zIndex: undefined,
-  maxMultiple: 1.5,
+  maxDistanceMultiple: 5,
   tabindex: undefined,
 });
 
@@ -79,16 +80,21 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: 'click'): void;
   (e: 'run'): void;
+  (e: 'back'): void;
 }>();
 // #endregion Emits
 
 const attrs = useAttrs();
 const slots = useSlots();
 
-const btn = ref<HTMLDivElement>();
-const { width, height } = useElementBounding(btn);
+const carrierRef = ref<HTMLDivElement>();
+const {
+  elementX, elementY,
+  elementWidth, elementHeight,
+  isOutside
+} = useMouseInElement(carrierRef);
 useIntersectionObserver(
-  btn,
+  carrierRef,
   ([{ isIntersecting }]) => {
     if (isIntersecting) return;
     back();
@@ -105,7 +111,10 @@ function handleMouseEnter() {
   if (!props.disable) return;
   run();
 }
-
+watch(isOutside, (value) => {
+  if (value || props.disable) return;
+  run();
+});
 
 const offset = ref({
   x: 0,
@@ -136,44 +145,49 @@ function back() {
   offset.value.x = 0;
   offset.value.y = 0;
   counter.value = 0;
+
+  emit('back');
 }
 
-const isRunning = ref(false);
-function setRunning(value: boolean) {
-  isRunning.value = value;
-}
+const [isRunning, toggleRunning] = useToggle(false);
+
 const run = throttle(() => {
-  setRunning(true);
+  toggleRunning(true);
 
-  const maxMultiple = props.maxMultiple ? Number(props.maxMultiple) : 1.5;
+  /** 計算滑鼠位置到按鈕中心的方向單位向量 */
+  const direction = getUnitVector({
+    x: elementWidth.value / 2 - elementX.value,
+    y: elementHeight.value / 2 - elementY.value,
+  });
 
-  let ok = false, newX = 0, newY = 0;
-  do {
-    newX = offset.value.x + getRandomNumber(width.value, width.value * maxMultiple);
-    newY = offset.value.y + getRandomNumber(height.value, height.value * maxMultiple);
-
-    ok = inRange(newX, -width.value * maxMultiple, width.value * maxMultiple) &&
-      inRange(newY, -height.value * maxMultiple, height.value * maxMultiple);
-  } while (!ok);
-
-  offset.value.x = newX;
-  offset.value.y = newY;
+  /** 往遠離滑鼠的方向移動 */
+  offset.value.x += direction.x * elementWidth.value;
+  offset.value.y += direction.y * elementHeight.value;
 
   counter.value += 1;
 
-  btn.value?.blur();
-  emit('run');
-}, 100, { trailing: false });
+  carrierRef.value?.blur();
 
-function getRandomNumber(min: number, max: number, mirror = true) {
-  const result = random(min, max, true);
+  /** 判斷是否超出限制距離 */
+  const outOfRange = pipe(undefined,
+    () => {
+      const maxDistance = getVectorLength({
+        x: elementWidth.value * Number(props.maxDistanceMultiple),
+        y: elementHeight.value * Number(props.maxDistanceMultiple),
+      });
 
-  if (mirror) {
-    return Math.random() >= 0.5 ? result * -1 : result;
+      const distance = getVectorLength(offset.value);
+
+      return distance > maxDistance;
+    },
+  );
+
+  if (outOfRange) {
+    back();
+  } else {
+    emit('run');
   }
-
-  return result;
-}
+}, 10, { trailing: false });
 
 // #region Methods
 defineExpose({
