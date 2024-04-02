@@ -11,7 +11,7 @@
       label="按鈕"
       class=" font-bold"
       disable
-      :max-multiple="maxMultiple"
+      :max-distance-multiple="maxMultiple"
       z-index="30"
     />
   </div>

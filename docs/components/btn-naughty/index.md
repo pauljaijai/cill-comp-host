@@ -9,11 +9,21 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 # 調皮的按鈕
 
-一個會亂跑的按鈕，和你家的貓一樣欠揍。ᕕ( ﾟ ∀。)ᕗ
+一個 disable 狀態時，會亂跑的按鈕。ᕕ( ﾟ ∀。)ᕗ
+
+越是要嚕他，就跑得越遠，和你家的貓一樣。(._.`)
 
 ## 原理
 
-設計說明
+滑鼠碰觸按鈕的瞬間，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕的距離。
+
+如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
+
+[關於 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
+
+::: danger 注意！Σ(ˊДˋ;)
+請不要將 overflow 設定為 hidden，否則按鈕會被隱藏。
+:::
 
 ## API
 
@@ -43,7 +53,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 ### 移動距離
 
-指定 maxMultiple 可以設定最大移動距離（以寬高倍數）， 若按鈕跑出畫面範圍，會自動回歸原點
+指定 maxDistanceMultiple 可以設定最大移動距離倍數（自身寬高倍數），若按鈕跑出指定範圍或超出畫面，都會自動回歸原點
 
 <moving-distance/>
 
