@@ -22,7 +22,6 @@ export interface Layer {
 }
 </script>
 
-
 <script setup lang="ts">
 import { computed, ComputedRef, CSSProperties, HTMLAttributes, InjectionKey, provide, ref, StyleValue, watch } from 'vue';
 import { mapNumber } from '../../common/utils';
@@ -33,12 +32,18 @@ import {
 } from '@vueuse/core';
 import { pipe } from 'remeda';
 
+// #region Props
 interface Props {
+  /** 是否開啟 */
   enable?: boolean;
+  /** x 最大偏轉角度 */
   xMaxAngle?: number;
+  /** y 最大偏轉角度 */
   yMaxAngle?: number;
+  /** 懸浮高度 */
   zOffset?: number;
 }
+// #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   enable: true,
   xMaxAngle: 15,
@@ -102,7 +107,6 @@ useIntervalFn(() => {
     y: currentAngle.value.y + (target.y - currentAngle.value.y) * 0.2,
   };
 }, 15);
-
 
 
 const slotStyle = computed<StyleValue>(() => ({

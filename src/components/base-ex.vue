@@ -4,14 +4,14 @@
 import { ref } from 'vue';
 
 interface Props {
-  label?: string;
+  modelValue?: string;
 }
 const props = withDefaults(defineProps<Props>(), {
-  label: '',
+  modelValue: '',
 });
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void;
+  'update:modelValue': [value: Props['modelValue']]
 }>();
 </script>
 

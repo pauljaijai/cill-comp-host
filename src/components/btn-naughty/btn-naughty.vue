@@ -77,9 +77,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 // #region Emits
 const emit = defineEmits<{
-  (e: 'click'): void;
+  'click': []
   /** 按鈕移動 */
-  (e: 'run'): void;
+  'run': []
 }>();
 // #endregion Emits
 
@@ -176,14 +176,16 @@ function getRandomNumber(min: number, max: number, mirror = true) {
   return result;
 }
 
+// #region Methods
 defineExpose({
   /** 移動 */
   run,
   /** 返回原點 */
   back,
-
+  /** 是否正在移動 */
   isRunning,
 });
+// #endregion Methods
 </script>
 
 <style scoped lang="sass">
