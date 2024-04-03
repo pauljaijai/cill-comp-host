@@ -8,7 +8,7 @@ import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/
 
 ## [調皮的按鈕](./btn-naughty/)
 
-一個越跑越遠的按鈕，像極了無緣的愛情。(._.`)
+一個停用時會越跑越遠的按鈕，像極了無緣的愛情。(._.`)
 
 <div class="flex">
   <btn-naughty label="你是好人" z-index="99" disable/>

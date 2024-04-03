@@ -13,7 +13,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 # 調皮的按鈕
 
-一個在停用狀態會亂跑的按鈕。ᕕ( ﾟ ∀。)ᕗ
+停用時會越跑越遠的按鈕。ᕕ( ﾟ ∀。)ᕗ
 
 越想嚕他，就跑得越遠，和你家的貓一樣。(._.`)
 
