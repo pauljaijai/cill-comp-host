@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig, HeadConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -7,8 +7,12 @@ export default defineConfig({
   head: [
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/tailwindcss@2.0.4/dist/tailwind.min.css' }],
     ['link', { rel: 'icon', href: '/favicon.webp' }],
-    ['meta', { property: 'og:image', content: '/og.jpg' }],
+    ['meta', { property: 'og:image', content: 'https://cod-chill-component.pages.dev/og.jpg' }],
   ],
+  transformPageData(pageData) {
+    pageData.frontmatter.head ??= []
+    pageData.frontmatter.head.push(['meta', { property: 'og:description', content: pageData.frontmatter.description }])
+  },
   markdown: {
     lineNumbers: true
   },
