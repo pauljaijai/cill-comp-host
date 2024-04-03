@@ -47,10 +47,10 @@
 </template>
 
 <script setup lang="ts">
-import { inRange, random, throttle } from 'lodash-es';
-import { computed, ref, useAttrs, useSlots, watch } from 'vue';
+import { throttle } from 'lodash-es';
+import { computed, ref, useAttrs, watch } from 'vue';
 
-import { useElementBounding, useIntersectionObserver, useMouse, useMouseInElement, useToggle } from '@vueuse/core';
+import { useIntersectionObserver, useMouseInElement, useToggle } from '@vueuse/core';
 import { getUnitVector, getVectorLength } from '../../common/utils';
 import { pipe } from 'remeda';
 
@@ -86,8 +86,16 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
+// #region Slots
+defineSlots<{
+  /** 按鈕 */
+  default?: () => any
+  /** 拓印 */
+  rubbing?: (props: { isRunning: boolean }) => any
+}>();
+// #endregion Slots
+
 const attrs = useAttrs();
-const slots = useSlots();
 
 const carrierRef = ref<HTMLDivElement>();
 const {

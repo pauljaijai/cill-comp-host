@@ -43,6 +43,10 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 <<< ../../../src/components/btn-naughty/btn-naughty.vue/#Methods
 
+### Slots
+
+<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Slots
+
 ## 使用範例
 
 ### 基本用法

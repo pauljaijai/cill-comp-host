@@ -13,6 +13,11 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: 'update:modelValue', value: Props['modelValue']): void;
 }>();
+
+defineSlots<{
+  default?: () => any
+  item?: (props: { id: number }) => any
+}>();
 </script>
 
 <style scoped lang="sass">
