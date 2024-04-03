@@ -87,7 +87,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 ### 自訂拓印
 
-拓印當然也可以自定義。
+你說拓印能不能自定義？可以啦，哪次不可以了。
 
 使用 rubbing slot，自訂按鈕拓印內容
 
