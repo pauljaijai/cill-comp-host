@@ -7,8 +7,6 @@ export default defineConfig({
   head: [
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/tailwindcss@2.0.4/dist/tailwind.min.css' }],
     ['link', { rel: 'icon', href: '/favicon.webp' }],
-    ['meta', { property: 'og:title', content: '🐟 鱈魚的酷酷元件' }],
-    ['meta', { property: 'og:description', content: '設計各類惡搞、有趣的特殊元件' }],
     ['meta', { property: 'og:image', content: '/og.jpg' }],
   ],
   markdown: {

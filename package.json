@@ -2,7 +2,7 @@
   "name": "chill-component",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vitepress dev docs",
     "build": "vue-tsc --noEmit --skipLibCheck && vite build",
     "preview": "vite preview",
     "test": "vitest",
