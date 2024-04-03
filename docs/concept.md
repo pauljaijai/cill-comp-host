@@ -32,13 +32,13 @@
 
 - 以 Quasar 為例，需考慮以下斷點
 
-[Breakpoints | Quasar Framework](https://quasar.dev/style/breakpoints)
+📚 [Breakpoints | Quasar Framework](https://quasar.dev/style/breakpoints)
 
 - 需考慮觸控與滑鼠互動差異。
 
 推薦閱讀以下資料：
 
-[Learn Responsive Design](https://web.dev/learn/design/)
+📚 [Learn Responsive Design](https://web.dev/learn/design/)
 
 ---
 
@@ -46,21 +46,29 @@
 
 tabindex 為最基本實現項目，詳細內容可以參考下面連結：
 
-[巧用 tabindex 讓你的 UI 更鍵盤友善](https://medium.com/@accessdiversers/%E5%B7%A7%E7%94%A8-tabindex-%E8%AE%93%E4%BD%A0%E7%9A%84-ui-%E6%9B%B4%E9%8D%B5%E7%9B%A4%E5%8F%8B%E5%96%84-ad3d087e26fe)
+📚 [巧用 tabindex 讓你的 UI 更鍵盤友善](https://medium.com/@accessdiversers/%E5%B7%A7%E7%94%A8-tabindex-%E8%AE%93%E4%BD%A0%E7%9A%84-ui-%E6%9B%B4%E9%8D%B5%E7%9B%A4%E5%8F%8B%E5%96%84-ad3d087e26fe)
 
 有興趣也可以深入閱讀 a11y 資料：
 
-[Learn Accessibility](https://web.dev/learn/accessibility/)
+📚 [Learn Accessibility](https://web.dev/learn/accessibility/)
 
 ---
 
 ### 🧪 可測試性（Testability）
 
-每種 prop、expose、emit、slot，至少分別考慮 2 種測試案例，推薦詳讀以下連結。
+每種 prop、expose、emit、slot，至少分別考慮 3 種測試案例：
 
-[小白也能輕鬆瞭解的 Vue3 單元測試！](https://ithelp.ithome.com.tw/users/20119062/ironman/5554)
+- Happy Path：在我們定義所謂「正常的使用狀況」下，針對「正確的內容」，我們預期應該要做出的反應
 
-[javascript-testing-best-practices](https://github.com/goldbergyoni/javascript-testing-best-practices/blob/master/readme-zh-TW.md)
+- Sad Path：在我們定義所謂「正常的使用狀況」下，針對「錯誤的內容」，我們預期應該要做出的反應
+
+- Bad Path：在我們定義所謂「錯誤」的使用狀況下，我們預期應該要做出的反應
+
+推薦詳讀以下連結。
+
+📚 [小白也能輕鬆瞭解的 Vue3 單元測試！](https://ithelp.ithome.com.tw/users/20119062/ironman/5554)
+
+📚 [javascript-testing-best-practices](https://github.com/goldbergyoni/javascript-testing-best-practices/blob/master/readme-zh-TW.md)
 
 ---
 

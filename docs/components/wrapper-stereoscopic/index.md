@@ -21,9 +21,9 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 
 沒設定的話，物體看起來像莫名其妙扁掉。...('◉◞⊖◟◉` )
 
-- [CSS perspective](https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective)
+📚 [CSS perspective](https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective)
 
-- [CSS translate3d](https://developer.mozilla.org/zh-TW/docs/Web/CSS/transform-function/translate3d)
+📚 [CSS translate3d](https://developer.mozilla.org/zh-TW/docs/Web/CSS/transform-function/translate3d)
 
 ## API
 

@@ -35,6 +35,7 @@ export default defineConfig({
         items: [
           { text: '緣起', link: '/origin' },
           { text: '設計概念', link: '/concept' },
+          { text: '風格指南', link: '/style-guide' },
         ]
       },
       {
