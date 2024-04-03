@@ -1,3 +1,7 @@
+---
+description: 一個越跑越遠的按鈕，像極了無緣的愛情。(._.`)
+---
+
 <script setup>
 import BasicUsage from '../../../src/components/btn-naughty/examples/basic-usage.vue'
 import MovingDistance from '../../../src/components/btn-naughty/examples/moving-distance.vue'

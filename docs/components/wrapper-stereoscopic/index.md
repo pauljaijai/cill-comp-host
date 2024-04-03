@@ -1,3 +1,7 @@
+---
+description: 可以讓元素有酷酷的 3D 偏轉效果。ˋ( ° ▽、° ) 
+---
+
 <script setup>
 import BasicUsage from '../../../src/components/wrapper-stereoscopic/examples/basic-usage.vue'
 import MultiLayer from '../../../src/components/wrapper-stereoscopic/examples/multi-layer.vue'
@@ -7,7 +11,7 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 
 # 立體包裝器
 
-可以讓元素有酷酷的 3D 偏轉效果
+可以讓元素有酷酷的 3D 偏轉效果。ˋ( ° ▽、° ) 
 
 ## 原理
 
