@@ -26,7 +26,7 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
 
 ::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕會被隱藏。
+請不要將 overflow 設定為 hidden，否則按鈕會啪沒了，消失的無影無蹤。
 :::
 
 ## API
