@@ -11,7 +11,7 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 
 # 立體包裝器
 
-可以讓元素有酷酷的 3D 偏轉效果。ˋ( ° ▽、° ) 
+可以讓元素有酷酷的 3D 偏轉效果。ˋ( ° ▽、° )
 
 ## 原理
 
@@ -24,6 +24,10 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 📚 [CSS perspective](https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective)
 
 📚 [CSS translate3d](https://developer.mozilla.org/zh-TW/docs/Web/CSS/transform-function/translate3d)
+
+知道如何偏轉後，剩下的部分就簡單惹。( •̀ ω •́ )✧
+
+計算從物體中心到滑鼠位置的向量，分別將向量的 x、y 分量映射到設定的角度範圍，最後套用到 transform 上。
 
 ## API
 

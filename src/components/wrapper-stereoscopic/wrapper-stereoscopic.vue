@@ -101,6 +101,7 @@ watchThrottled(coordinate, ({ x, y }) => {
 const style = computed<CSSProperties>(() => ({
   transform: `rotateX(${currentAngle.value.x}deg) rotateY(${-currentAngle.value.y}deg)`,
 }));
+/** 利用誤差積分方式調整角度，保證所有動作都有動畫效果 */
 useIntervalFn(() => {
   const target = pipe(enable.value,
     (value) => {
@@ -120,6 +121,7 @@ const slotStyle = computed<StyleValue>(() => ({
   transformStyle: 'preserve-3d',
 }));
 
+/** 儲存 layer */
 const componentMap = new Map<string, Layer>();
 
 function bindLayer(item: Layer) {
