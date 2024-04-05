@@ -1,31 +1,54 @@
 <template>
   <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border p-4 rounded">
-      <base-checkbox
-        v-model="disable"
-        label="停用按鈕"
+    <div class="flex gap-4">
+      <base-btn
+        label="開始"
+        @click="wrapperRef?.start()"
+      />
+
+      <base-btn
+        label="停止"
+        @click="wrapperRef?.stop()"
       />
     </div>
 
-    <div class="flex">
-      <wrapper-physics class="flex gap-1 border border-dashed w-80 h-40">
+    <wrapper-physics
+      ref="wrapperRef"
+      class="flex flex-col items-start gap-1 border border-dashed w-[40rem] h-[30rem]"
+    >
+      <wrapper-physics-body>
         <div>
           ( ´ ▽ ` )ﾉ
         </div>
+      </wrapper-physics-body>
 
+      <wrapper-physics-body>
+        <div>
+          安安安
+        </div>
+      </wrapper-physics-body>
+
+      <wrapper-physics-body>
         <div>
           安安
         </div>
-      </wrapper-physics>
-    </div>
+      </wrapper-physics-body>
+
+      <wrapper-physics-body>
+        <div>
+          安
+        </div>
+      </wrapper-physics-body>
+    </wrapper-physics>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import BaseCheckbox from '../../base-checkbox.vue';
+import BaseBtn from '../../base-btn.vue';
 import WrapperPhysics from '../wrapper-physics.vue';
+import WrapperPhysicsBody from '../wrapper-physics-body.vue';
 
-const disable = ref(true);
+const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>();
 </script>

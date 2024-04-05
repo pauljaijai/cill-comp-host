@@ -20,17 +20,9 @@ import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-u
 
 <<< ../../../src/components/wrapper-physics/wrapper-physics.vue/#Props
 
-### Emits
-
-<<< ../../../src/components/wrapper-physics/wrapper-physics.vue/#Emits
-
 ### Methods
 
 <<< ../../../src/components/wrapper-physics/wrapper-physics.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/wrapper-physics/wrapper-physics.vue/#Slots
 
 ## 使用範例
 

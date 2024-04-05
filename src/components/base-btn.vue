@@ -1,5 +1,9 @@
 <template>
-  <button class="base-btn">
+  <button
+    class="base-btn"
+    type="button"
+    @click="emit('click')"
+  >
     {{ props.label }}
   </button>
 </template>
@@ -15,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void;
+  'click': [];
 }>();
 </script>
 
@@ -26,5 +30,7 @@ const emit = defineEmits<{
   border-radius: 0.25rem
   background-color: #FEFEFE
   cursor: pointer
-  transition: background-color 0.3s
+  transition: background-color 0.1s
+  &:active
+    background-color: #F0F0F0
 </style>
