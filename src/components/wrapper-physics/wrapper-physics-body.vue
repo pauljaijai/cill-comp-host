@@ -11,7 +11,7 @@
 import { type VNode, inject, ref, onMounted, computed } from 'vue';
 import { PROVIDE_KEY, ProvideContent } from '.';
 import { nanoid } from 'nanoid';
-import { useElementBounding } from '@vueuse/core';
+import { useElementBounding, useIntervalFn } from '@vueuse/core';
 import { Body } from './'
 
 // #region Props
@@ -44,16 +44,12 @@ const info = ref({
   offsetY: 0,
   rotate: 0,
 });
-function updateInfo() {
+useIntervalFn(() => {
   const value = wrapper?.getInfo(id);
-  if (value) {
-    info.value = value;
-  }
+  if (!value) return;
 
-  requestAnimationFrame(updateInfo);
-}
-requestAnimationFrame(updateInfo);
-
+  info.value = value;
+}, 15);
 
 const style = computed(() => {
   const {

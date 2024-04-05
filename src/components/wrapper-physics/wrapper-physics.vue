@@ -17,13 +17,15 @@
 import {
   onMounted, ref, provide, onBeforeUnmount, computed, watch,
 } from 'vue';
-import {
-  Engine, Render, Runner, Bodies, Composite,
-} from 'matter-js';
 import { PROVIDE_KEY, Body } from '.';
 import { map, omit, pipe } from 'remeda';
 
-import { useElementBounding } from '@vueuse/core';
+import Matter from 'matter-js';
+const {
+  Engine, Render, Runner, Bodies, Composite,
+} = Matter;
+
+import { useElementBounding, useIntervalFn } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -121,7 +123,7 @@ function initBodies() {
         rotate: body.angle,
       };
 
-      function updateBodyInfo() {
+      useIntervalFn(() => {
         if (!bodyMap.has(item.id)) return;
 
         bodyInfoMap.set(item.id, {
@@ -131,10 +133,7 @@ function initBodies() {
           },
           rotate: body.angle * 180 / Math.PI,
         });
-
-        requestAnimationFrame(updateBodyInfo);
-      }
-      requestAnimationFrame(updateBodyInfo);
+      }, 15);
 
       return body;
     }),
