@@ -4,6 +4,7 @@ description: 產生物理世界，讓內部元素具有物理效果
 
 <script setup>
 import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-usage.vue'
+import BodyProperty from '../../../src/components/wrapper-physics/examples/body-property.vue'
 </script>
 
 # 物理包裝器
@@ -31,6 +32,16 @@ import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-u
 開始運行後，內部元素會產生物理效果
 
 <basic-usage/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-physics/examples/basic-usage.vue
+:::
+
+### 物理性質
+
+調整物理性質，可以讓元素嗨起來！ᕕ( ﾟ ∀。)ᕗ
+
+<body-property/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/basic-usage.vue

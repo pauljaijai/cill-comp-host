@@ -49,7 +49,7 @@ useIntervalFn(() => {
   if (!value) return;
 
   info.value = value;
-}, 15);
+}, 10);
 
 const style = computed(() => {
   const {

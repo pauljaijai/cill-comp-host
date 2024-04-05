@@ -1,30 +1,35 @@
 <template>
   <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <div class="flex gap-4">
-      <base-btn
-        label="開始"
-        @click="wrapperRef?.start()"
-      />
-    </div>
-
     <wrapper-physics
       ref="wrapperRef"
+      immediate
       class="flex flex-col items-start gap-1 border border-dashed w-[40rem] h-[30rem]"
     >
-      <wrapper-physics-body>
-        ( ´ ▽ ` )ﾉ
+      <wrapper-physics-body :friction-air="1">
+        超慢
       </wrapper-physics-body>
 
-      <wrapper-physics-body>
-        安安安
+      <wrapper-physics-body
+        v-for="item, i in 2"
+        :key="i"
+        :restitution="1.5"
+      >
+        ( ﾟ ∀。)
       </wrapper-physics-body>
 
-      <wrapper-physics-body>
-        安安
+      <wrapper-physics-body
+        v-for="item, i in 3"
+        :key="i"
+        :restitution="1.5"
+      >
+        🐟
       </wrapper-physics-body>
 
-      <wrapper-physics-body>
-        安
+      <wrapper-physics-body
+        class=" m-auto"
+        is-static
+      >
+        不動如山
       </wrapper-physics-body>
     </wrapper-physics>
   </div>

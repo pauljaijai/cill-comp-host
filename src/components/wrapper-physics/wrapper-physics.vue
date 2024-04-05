@@ -1,7 +1,7 @@
 <template>
   <div
     ref="wrapperRef"
-    class="wrapper-physics relative"
+    class="wrapper-physics relative overflow-hidden"
   >
     <slot />
 
@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
   immediate: false,
 });
 
-const debug = true;
+const debug = false;
 
 /** 儲存 body */
 const bodyMap = new Map<string, Body>();
@@ -133,7 +133,7 @@ function initBodies() {
           },
           rotate: body.angle * 180 / Math.PI,
         });
-      }, 15);
+      }, 10);
 
       return body;
     }),
