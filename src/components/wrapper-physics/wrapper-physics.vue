@@ -15,14 +15,14 @@
 
 <script setup lang="ts">
 import {
-  onMounted, ref, provide, onBeforeUnmount, computed, watch,
+  onMounted, ref, provide, onBeforeUnmount, shallowRef,
 } from 'vue';
 import { PROVIDE_KEY, Body } from '.';
-import { map, omit, pipe } from 'remeda';
+import { map, omit, pick, pipe } from 'remeda';
 
 import Matter from 'matter-js';
 const {
-  Engine, Render, Runner, Bodies, Composite,
+  Engine, Render, Runner, Bodies, Composite, Body: MatterBody,
 } = Matter;
 
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
@@ -41,6 +41,12 @@ const debug = false;
 
 /** 儲存 body */
 const bodyMap = new Map<string, Body>();
+/** 初始狀態，因為 transform 是相對偏移，所以要記錄初始的位置 */
+const bodyInitInfoMap = new Map<string, {
+  offsetX: number;
+  offsetY: number;
+  rotate: number;
+}>();
 const bodyInfoMap = new Map<string, {
   offsetX: number;
   offsetY: number;
@@ -64,127 +70,167 @@ provide(PROVIDE_KEY, {
 
 const wrapperRef = ref<HTMLDivElement>();
 const canvasRef = ref<HTMLCanvasElement>();
-const {
-  width, height,
-  x: wrapperX, y: wrapperY,
-} = useElementBounding(wrapperRef);
-
-const engine = Engine.create();
-const runner = Runner.create();
-
-/** 加入牆壁 */
-function addBounds() {
-  const thickness = 40;
-  const offset = 1;
-
-  const t = Bodies.rectangle(
-    width.value / 2, -thickness - offset,
-    width.value * 2, thickness,
-    { isStatic: true, }
-  );
-  const r = Bodies.rectangle(
-    width.value + thickness / 2 + offset, height.value / 2,
-    thickness, height.value * 2,
-    { isStatic: true }
-  );
-  const b = Bodies.rectangle(
-    width.value / 2, height.value + thickness / 2 + offset,
-    width.value * 2, thickness,
-    { isStatic: true }
-  );
-  const l = Bodies.rectangle(
-    -thickness / 2 - offset, height.value / 2,
-    thickness, height.value * 2,
-    { isStatic: true }
-  );
-
-  Composite.add(engine.world, [t, r, b, l]);
+const wrapperBounding = useElementBounding(wrapperRef);
+/** 儲存初始值 */
+let wrapperInitBounding = {
+  x: 0,
+  y: 0,
 }
+onMounted(() => {
+  wrapperInitBounding = {
+    x: wrapperBounding.x.value,
+    y: wrapperBounding.y.value,
+  }
+});
 
-/** 初始化所有的 body */
-function initBodies() {
-  const list = pipe(Array.from(bodyMap.values()),
+const engine = shallowRef(Engine.create());
+const runner = shallowRef(Runner.create());
+
+function init() {
+  const result = pipe(Array.from(bodyMap.values()),
+    /** 初始化所有 body */
     map((item) => {
       const {
         width, height
       } = item;
 
       const { x, y } = {
-        x: item.x - wrapperX.value + width / 2,
-        y: item.y - wrapperY.value + height / 2,
+        x: item.x - wrapperInitBounding.x + width / 2,
+        y: item.y - wrapperInitBounding.y + height / 2,
       }
 
       const body = Bodies.rectangle(x, y, width, height, {
-        ...omit(item, ['id']),
+        ...pick(item, ['frictionAir', 'friction', 'restitution', 'mass', 'isStatic']),
+        label: item.id,
       });
-      const initInfo = {
+
+      bodyInitInfoMap.set(item.id, {
         offsetX: body.position.x,
         offsetY: body.position.y,
         rotate: body.angle,
-      };
-
-      useIntervalFn(() => {
-        if (!bodyMap.has(item.id)) return;
-
-        bodyInfoMap.set(item.id, {
-          ...{
-            offsetX: body.position.x - initInfo.offsetX,
-            offsetY: body.position.y - initInfo.offsetY,
-          },
-          rotate: body.angle * 180 / Math.PI,
-        });
-      }, 10);
+      });
 
       return body;
     }),
+    /** 初始化牆壁 */
+    (bodies) => {
+      const thickness = 100;
+      const offset = 0;
+
+      const { width, height } = wrapperBounding;
+
+      const list = [
+        Bodies.rectangle(
+          width.value / 2, -thickness / 2 - offset,
+          width.value * 2, thickness,
+          { isStatic: true, label: 'top' }
+        ),
+        Bodies.rectangle(
+          width.value + thickness / 2 + offset, height.value / 2,
+          thickness, height.value * 2,
+          { isStatic: true, label: 'right' }
+        ),
+        Bodies.rectangle(
+          width.value / 2, height.value + thickness / 2 + offset,
+          width.value * 2, thickness,
+          { isStatic: true, label: 'bottom' }
+        ),
+        Bodies.rectangle(
+          -thickness / 2 - offset, height.value / 2,
+          thickness, height.value * 2,
+          { isStatic: true, label: 'left' }
+        ),
+      ];
+
+      bodies.push(...list);
+
+      return bodies;
+    },
   );
-
-  Composite.add(engine.world, list);
-}
-
-onMounted(() => {
-  addBounds();
-  initBodies();
-
-  const render = Render.create({
-    canvas: canvasRef.value,
-    engine: engine,
-    bounds: {
-      min: { x: 0, y: 0 },
-      max: { x: width.value, y: height.value },
-    },
-    options: {
-      width: width.value,
-      height: height.value,
-      hasBounds: true,
-      background: 'transparent',
-      wireframeBackground: 'transparent',
-      // showPerformance: true,
-    },
-  });
+  Composite.add(engine.value.world, result);
 
   if (debug) {
+    const { width, height } = wrapperBounding;
+
+    const render = Render.create({
+      canvas: canvasRef.value,
+      engine: engine.value,
+      bounds: {
+        min: { x: 0, y: 0 },
+        max: { x: width.value, y: height.value },
+      },
+      options: {
+        width: width.value,
+        height: height.value,
+        background: 'transparent',
+        wireframeBackground: 'transparent',
+        // showPerformance: true,
+      },
+    });
+
     Render.run(render);
   }
+}
+function clear() {
+  Composite.clear(engine.value.world, true);
+  Engine.clear(engine.value);
+  Runner.stop(runner.value);
+}
+function reset() {
+  clear();
+
+  engine.value = Engine.create();
+  runner.value = Runner.create();
+  init();
+}
+
+// 持續更新狀態
+useIntervalFn(() => {
+  const list = Composite.allBodies(engine.value.world);
+
+  list.forEach((body) => {
+    /** id 存在 label 中 */
+    const id = body.label;
+    const initInfo = bodyInitInfoMap.get(id);
+
+    if (!bodyMap.has(id) || !initInfo) {
+      return;
+    }
+
+    const value = {
+      ...{
+        offsetX: body.position.x - initInfo.offsetX,
+        offsetY: body.position.y - initInfo.offsetY,
+      },
+      rotate: body.angle * 180 / Math.PI,
+    }
+
+    bodyInfoMap.set(id, value);
+  });
+}, 10);
+
+onMounted(() => {
+  init();
 
   if (props.immediate) {
-    Runner.run(runner, engine);
+    Runner.run(runner.value, engine.value);
   }
 });
 
 onBeforeUnmount(() => {
-  Runner.stop(runner);
-  Engine.clear(engine);
+  clear();
 });
 
 function start() {
-  Runner.run(runner, engine);
+  Runner.run(runner.value, engine.value);
 }
 
 // #region Methods
 defineExpose({
   /** 開始 */
   start,
+  /** 重置所有元素 */
+  reset,
 });
 // #endregion Methods
 

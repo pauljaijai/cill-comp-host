@@ -5,6 +5,11 @@
         label="開始"
         @click="wrapperRef?.start()"
       />
+
+      <base-btn
+        label="重置"
+        @click="wrapperRef?.reset()"
+      />
     </div>
 
     <wrapper-physics
@@ -23,7 +28,7 @@
         安安
       </wrapper-physics-body>
 
-      <wrapper-physics-body>
+      <wrapper-physics-body is-static>
         安
       </wrapper-physics-body>
     </wrapper-physics>

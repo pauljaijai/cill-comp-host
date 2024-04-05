@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { type VNode, inject, ref, onMounted, computed } from 'vue';
+import { type VNode, inject, ref, onMounted, computed, watch } from 'vue';
 import { PROVIDE_KEY, ProvideContent } from '.';
 import { nanoid } from 'nanoid';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
@@ -61,8 +61,7 @@ const style = computed(() => {
   }
 });
 
-
-onMounted(() => {
+function bindBody() {
   wrapper?.bindBody({
     id,
     width: width.value,
@@ -71,6 +70,10 @@ onMounted(() => {
     y: y.value,
     ...props,
   });
+}
+
+onMounted(() => {
+  bindBody();
 });
 </script>
 
