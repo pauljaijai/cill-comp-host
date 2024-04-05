@@ -45,10 +45,14 @@ const info = ref({
   rotate: 0,
 });
 useIntervalFn(() => {
-  const value = wrapper?.getInfo(id);
-  if (!value) return;
+  const newInfo = wrapper?.getInfo(id);
+  if (!newInfo) return;
 
-  info.value = value;
+  info.value = {
+    offsetX: info.value.offsetX + (newInfo.offsetX - info.value.offsetX) * 0.5,
+    offsetY: info.value.offsetY + (newInfo.offsetY - info.value.offsetY) * 0.5,
+    rotate: info.value.rotate + (newInfo.rotate - info.value.rotate) * 0.5,
+  };
 }, 10);
 
 const style = computed(() => {
