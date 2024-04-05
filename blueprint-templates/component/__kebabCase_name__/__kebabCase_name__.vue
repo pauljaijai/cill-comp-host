@@ -1,7 +1,7 @@
 <!-- <template></template> -->
 
 <script setup lang="ts">
-import { VNode, ref } from 'vue';
+import { ref } from 'vue';
 
 interface Props {
   modelValue?: string;
@@ -15,8 +15,8 @@ const emit = defineEmits<{
 }>();
 
 defineSlots<{
-  default?: () => VNode;
-  item?: (props: { id: number }) => VNode;
+  default?: () => unknown;
+  item?: (props: { id: number }) => unknown;
 }>();
 </script>
 

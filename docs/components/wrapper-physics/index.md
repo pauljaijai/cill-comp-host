@@ -1,26 +1,18 @@
 ---
-description: 
+description: 讓物體具有物理效果的包裝器
 ---
 
 <script setup>
 import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-usage.vue'
 </script>
 
-# 標題
+# 物理包裝器
 
 說明說明
 
 ## 原理
 
-滑鼠碰觸按鈕時，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕尺寸的距離。
-
-如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕會啪沒了，消失的無影無蹤。
-:::
+物理包裝器是一個用來包裝物理效果的組件，透過物理包裝器可以讓組件具有物理效果，例如：拖曳、碰撞、彈跳等效果。
 
 ## API
 
