@@ -14,7 +14,14 @@
     </div>
 
     <div class="flex">
-      <wrapper-physics />
+      <wrapper-physics>
+        <div class="">
+          安安
+        </div>
+        <div class="">
+          安安
+        </div>
+      </wrapper-physics>
     </div>
   </div>
 </template>
