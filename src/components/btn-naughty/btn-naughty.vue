@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { throttle } from 'lodash-es';
-import { computed, ref, useAttrs, watch } from 'vue';
+import { VNode, computed, ref, useAttrs, watch } from 'vue';
 
 import { useIntersectionObserver, useMouseInElement, useToggle } from '@vueuse/core';
 import { getUnitVector, getVectorLength } from '../../common/utils';
@@ -89,9 +89,9 @@ const emit = defineEmits<{
 // #region Slots
 defineSlots<{
   /** 按鈕 */
-  default?: () => any
+  default?: () => VNode;
   /** 拓印 */
-  rubbing?: (props: { isRunning: boolean }) => any
+  rubbing?: (props: { isRunning: boolean }) => VNode;
 }>();
 // #endregion Slots
 
