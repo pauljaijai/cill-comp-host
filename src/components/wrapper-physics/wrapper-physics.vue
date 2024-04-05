@@ -171,10 +171,17 @@ function init() {
     Render.run(render);
   }
 }
+
+function start() {
+  Runner.run(runner.value, engine.value);
+  resumeUpdate();
+}
 function clear() {
   Composite.clear(engine.value.world, true);
   Engine.clear(engine.value);
   Runner.stop(runner.value);
+
+  bodyInfoMap.clear();
 }
 function reset() {
   clear();
@@ -182,10 +189,14 @@ function reset() {
   engine.value = Engine.create();
   runner.value = Runner.create();
   init();
+  pauseUpdate();
 }
 
 // 持續更新狀態
-useIntervalFn(() => {
+const {
+  pause: pauseUpdate,
+  resume: resumeUpdate,
+} = useIntervalFn(() => {
   const list = Composite.allBodies(engine.value.world);
 
   list.forEach((body) => {
@@ -213,17 +224,13 @@ onMounted(() => {
   init();
 
   if (props.immediate) {
-    Runner.run(runner.value, engine.value);
+    start();
   }
 });
 
 onBeforeUnmount(() => {
   clear();
 });
-
-function start() {
-  Runner.run(runner.value, engine.value);
-}
 
 // #region Methods
 defineExpose({

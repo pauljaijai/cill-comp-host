@@ -46,12 +46,19 @@ const info = ref({
 });
 useIntervalFn(() => {
   const newInfo = wrapper?.getInfo(id);
-  if (!newInfo) return;
+  if (!newInfo) {
+    info.value = {
+      offsetX: info.value.offsetX - info.value.offsetX * 0.05,
+      offsetY: info.value.offsetY - info.value.offsetY * 0.05,
+      rotate: info.value.rotate - info.value.rotate * 0.05,
+    };
+    return;
+  }
 
   info.value = {
-    offsetX: info.value.offsetX + (newInfo.offsetX - info.value.offsetX) * 0.5,
-    offsetY: info.value.offsetY + (newInfo.offsetY - info.value.offsetY) * 0.5,
-    rotate: info.value.rotate + (newInfo.rotate - info.value.rotate) * 0.5,
+    offsetX: info.value.offsetX + (newInfo.offsetX - info.value.offsetX) * 0.8,
+    offsetY: info.value.offsetY + (newInfo.offsetY - info.value.offsetY) * 0.8,
+    rotate: info.value.rotate + (newInfo.rotate - info.value.rotate) * 0.8,
   };
 }, 10);
 
