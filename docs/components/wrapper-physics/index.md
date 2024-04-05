@@ -12,7 +12,7 @@ import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-u
 
 ## 原理
 
-物理包裝器是一個用來包裝物理效果的組件，透過物理包裝器可以讓組件具有物理效果，例如：拖曳、碰撞、彈跳等效果。
+利用 Matter.js 模擬物理效果，並將對應元素之狀態同步至 DOM 元素上，達到物理效果的呈現。
 
 ## API
 
@@ -28,7 +28,7 @@ import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-u
 
 ### 基本用法
 
-當按鈕狀態為 disable 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+開始運行後，內部元素會產生物理效果
 
 <basic-usage/>
 

@@ -181,16 +181,11 @@ onBeforeUnmount(() => {
 function start() {
   Runner.run(runner, engine);
 }
-function stop() {
-  Runner.run(runner, engine);
-}
 
 // #region Methods
 defineExpose({
   /** 開始 */
   start,
-  /** 停止 */
-  stop,
 });
 // #endregion Methods
 

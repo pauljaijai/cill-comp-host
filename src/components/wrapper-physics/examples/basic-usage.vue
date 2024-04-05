@@ -5,11 +5,6 @@
         label="開始"
         @click="wrapperRef?.start()"
       />
-
-      <base-btn
-        label="停止"
-        @click="wrapperRef?.stop()"
-      />
     </div>
 
     <wrapper-physics
