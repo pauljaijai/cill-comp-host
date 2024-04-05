@@ -3,7 +3,7 @@ description:
 ---
 
 <script setup>
-import BasicUsage from '../../../src/components/btn-naughty/examples/basic-usage.vue'
+import BasicUsage from '../../../src/components/{{kebabCase name}}/examples/basic-usage.vue'
 </script>
 
 # 標題
@@ -26,19 +26,19 @@ import BasicUsage from '../../../src/components/btn-naughty/examples/basic-usage
 
 ### Props
 
-<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Props
+<<< ../../../src/components/{{kebabCase name}}/{{kebabCase name}}.vue/#Props
 
 ### Emits
 
-<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Emits
+<<< ../../../src/components/{{kebabCase name}}/{{kebabCase name}}.vue/#Emits
 
 ### Methods
 
-<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Methods
+<<< ../../../src/components/{{kebabCase name}}/{{kebabCase name}}.vue/#Methods
 
 ### Slots
 
-<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Slots
+<<< ../../../src/components/{{kebabCase name}}/{{kebabCase name}}.vue/#Slots
 
 ## 使用範例
 
@@ -49,5 +49,5 @@ import BasicUsage from '../../../src/components/btn-naughty/examples/basic-usage
 <basic-usage/>
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/btn-naughty/examples/basic-usage.vue
+<<< ../../../src/components/{{kebabCase name}}/examples/basic-usage.vue
 :::
