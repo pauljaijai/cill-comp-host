@@ -1,5 +1,5 @@
 ---
-description: 讓物體具有物理效果的包裝器
+description: 產生物理世界，讓內部元素具有物理效果
 ---
 
 <script setup>
@@ -8,7 +8,7 @@ import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-u
 
 # 物理包裝器
 
-說明說明
+產生物理世界，讓內部元素具有物理效果
 
 ## 原理
 
