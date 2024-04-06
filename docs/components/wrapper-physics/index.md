@@ -39,7 +39,7 @@ import BodyProperty from '../../../src/components/wrapper-physics/examples/body-
 
 ### 物理性質
 
-調整物理性質，可以讓元素嗨起來！ᕕ( ﾟ ∀。)ᕗ
+調整物理性質，讓元素嗨起來！ᕕ( ﾟ ∀。)ᕗ
 
 <body-property/>
 
