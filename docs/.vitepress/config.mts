@@ -7,20 +7,23 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', href: '/favicon.webp' }],
     ['meta', { property: 'og:image', content: 'https://cod-chill-component.pages.dev/og.jpg' }],
-
-    [
-      'script',
-      {
-        async: 'true',
-        src: 'https://www.googletagmanager.com/gtag/js?id=G-2T520RHFM9',
-      },
-    ],
-    [
-      'script',
-      {},
-      "window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-2T520RHFM9');",
-    ],
   ],
+  async transformHead() {
+    return [
+      [
+        'script',
+        {
+          async: 'true',
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-2T520RHFM9',
+        },
+      ],
+      [
+        'script',
+        {},
+        "window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-2T520RHFM9');",
+      ]
+    ]
+  },
   transformPageData(pageData) {
     pageData.frontmatter.head ??= []
     pageData.frontmatter.head.push(['meta', { property: 'og:description', content: pageData.frontmatter.description }])
