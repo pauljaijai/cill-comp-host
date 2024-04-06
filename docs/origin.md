@@ -18,6 +18,6 @@
 
 ![鱈魚感謝您](./codfish.webp)
 
-💝 若你喜歡我的作品，[歡迎打賞一杯飲料](https://portaly.cc/codfish/support)，讓我更有體力繼續創作與分享。
+若你喜歡我的作品，[歡迎打賞一杯飲料](https://portaly.cc/codfish/support)，讓我更有體力繼續創作與分享。
 
 感謝您的支持！❤ ( ˊ ᗜ ˋ  )
