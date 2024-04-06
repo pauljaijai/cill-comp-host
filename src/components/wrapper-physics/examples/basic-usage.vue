@@ -4,8 +4,8 @@
       ref="wrapperRef"
       class="flex flex-col items-start p-4 gap-1 border border-dashed w-[40rem] h-[30rem]"
     >
-      <div class="flex gap-20">
-        <wrapper-physics-body is-static>
+      <div class="flex gap-20 pl-10">
+        <wrapper-physics-body>
           <base-btn
             label="開始"
             @click="wrapperRef?.start()"
