@@ -8,16 +8,24 @@
 </template>
 
 <script setup lang="ts">
-import { type VNode, inject, ref, onMounted, computed, watch } from 'vue';
+import { inject, ref, onMounted, computed, watch } from 'vue';
 import { PROVIDE_KEY, ProvideContent } from '.';
 import { nanoid } from 'nanoid';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
-import { Body } from './'
 
 // #region Props
-interface Props extends Pick<
-  Body, 'frictionAir' | 'friction' | 'restitution' | 'mass' | 'isStatic'
-> { }
+interface Props {
+  /** 空氣阻力。物體在空氣中受到的阻力 */
+  frictionAir?: number;
+  /** 摩擦力。物體本身的摩擦力，必須為 0 ~ 1，0 表示持續滑動，1 表示受力後會立即停止 */
+  friction?: number;
+  /** 回彈力。碰撞的回彈係數，0 表示不反彈，1 表示完全反彈 */
+  restitution?: number;
+  /** 物體質量 */
+  mass?: number;
+  /** 靜止。會變成像地面那樣完全靜止的存在 */
+  isStatic?: boolean;
+}
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   frictionAir: 0.01,
@@ -63,6 +71,10 @@ useIntervalFn(() => {
 }, 10);
 
 const style = computed(() => {
+  if (!wrapper) {
+    return undefined;
+  }
+
   const {
     offsetX, offsetY, rotate
   } = info.value;

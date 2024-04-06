@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import {
-  onMounted, ref, provide, onBeforeUnmount, shallowRef,
+  onMounted, ref, provide, onBeforeUnmount, shallowRef, watch,
 } from 'vue';
 import { PROVIDE_KEY, Body } from '.';
 import { map, omit, pick, pipe } from 'remeda';
@@ -31,10 +31,25 @@ import { useElementBounding, useIntervalFn } from '@vueuse/core';
 interface Props {
   /** 立即開始，物體會在元件建立完成後馬上會開始掉落 */
   immediate?: boolean;
+
+  /** 重力加速度
+   * 
+   * x, y 為加速度的方向，scale 為加速度的大小
+   */
+  gravity?: {
+    scale: number;
+    x: number;
+    y: number;
+  };
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   immediate: false,
+  gravity: () => ({
+    scale: 0.001,
+    x: 0,
+    y: 1,
+  }),
 });
 
 const debug = false;
@@ -83,7 +98,18 @@ onMounted(() => {
   }
 });
 
-const engine = shallowRef(Engine.create());
+const engine = shallowRef(Engine.create({
+  gravity: props.gravity,
+}));
+watch(() => props.gravity, (value) => {
+  if (value) {
+    engine.value.gravity = value;
+  }
+}, {
+  immediate: true,
+  deep: true
+});
+
 const runner = shallowRef(Runner.create());
 
 function init() {
@@ -236,7 +262,7 @@ onBeforeUnmount(() => {
 defineExpose({
   /** 開始 */
   start,
-  /** 重置所有元素 */
+  /** 重置所有元素，元素會回到初始位置 */
   reset,
 });
 // #endregion Methods
