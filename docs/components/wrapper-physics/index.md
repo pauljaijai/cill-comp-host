@@ -5,6 +5,7 @@ description: 產生物理世界，讓內部元素具有物理效果
 <script setup>
 import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-usage.vue'
 import BodyProperty from '../../../src/components/wrapper-physics/examples/body-property.vue'
+import AdjustGravity from '../../../src/components/wrapper-physics/examples/adjust-gravity.vue'
 </script>
 
 # 物理包裝器
@@ -13,7 +14,7 @@ import BodyProperty from '../../../src/components/wrapper-physics/examples/body-
 
 ## 原理
 
-利用 Matter.js 模擬物理效果，並將對應元素之狀態同步至 DOM 元素上，達到物理效果的呈現。
+利用 Matter.js 模擬物理效果，並將對應元素之狀態同步至 DOM 元素上，。
 
 ## API
 
@@ -59,6 +60,18 @@ import BodyProperty from '../../../src/components/wrapper-physics/examples/body-
 調整物理性質，讓元素嗨起來！ᕕ( ﾟ ∀。)ᕗ
 
 <body-property/>
+
+鱈魚：我怎麼覺得這個範例偷嘴我？╭(°A ,°`)╮
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-physics/examples/basic-usage.vue
+:::
+
+### 調整重力
+
+調整重力方向，讓元素飄起來！(ﾉ>ω<)ﾉ
+
+<adjust-gravity/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/basic-usage.vue
