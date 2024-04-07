@@ -3,34 +3,47 @@
     <wrapper-physics
       ref="wrapperRef"
       immediate
-      class="flex flex-col items-start gap-1 border border-dashed w-[40rem] h-[30rem]"
+      class="flex flex-col items-center justify-center border border-dashed w-[40rem] h-[30rem]"
     >
-      <wrapper-physics-body :friction-air="1">
-        超慢
-      </wrapper-physics-body>
+      <div class="flex">
+        <wrapper-physics-body :friction-air="1">
+          鱈魚
+        </wrapper-physics-body>
 
-      <wrapper-physics-body
-        v-for="item, i in 2"
-        :key="i"
-        :restitution="1.5"
-      >
-        ( ﾟ ∀。)
-      </wrapper-physics-body>
+        <wrapper-physics-body
+          v-for="item, i in '是一種'"
+          :key="i"
+          :restitution="1.5"
+        >
+          {{ item }}
+        </wrapper-physics-body>
 
-      <wrapper-physics-body
-        v-for="item, i in 3"
-        :key="i"
-        :restitution="1.5"
-      >
-        🐟
-      </wrapper-physics-body>
+        <wrapper-physics-body is-static>
+          很肥
+        </wrapper-physics-body>
 
-      <wrapper-physics-body
-        class=" m-auto"
-        is-static
-      >
-        不動如山
-      </wrapper-physics-body>
+        <wrapper-physics-body
+          v-for="item, i in '的'"
+          :key="i"
+          :restitution="1.5"
+        >
+          {{ item }}
+        </wrapper-physics-body>
+
+        <wrapper-physics-body :restitution="1.5">
+          🐟
+        </wrapper-physics-body>
+      </div>
+
+      <div class="flex">
+        <wrapper-physics-body
+          v-for="item, i in 3"
+          :key="i"
+          :restitution="1.5"
+        >
+          🐟
+        </wrapper-physics-body>
+      </div>
     </wrapper-physics>
   </div>
 </template>

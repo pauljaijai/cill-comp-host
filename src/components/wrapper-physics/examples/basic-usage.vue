@@ -77,7 +77,7 @@ import WrapperPhysicsBody from '../wrapper-physics-body.vue';
 const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>();
 
 const list = [
-  ['•　', '世界上', '有 10 種', '人', '，', '一種', '懂二進位', '一種不懂'],
+  ['•　', '世界上', '有 10 種', '人', '，', '一種', '懂二進位', '，', '一種不懂'],
   ['•　', '要改得太多了', '，不如', '改天', '吧'],
   ['•　', '人', '和', '程式', '，一個能', '跑', '就行'],
   ['•　', '在我的', '機器', '上', '可以 work'],
