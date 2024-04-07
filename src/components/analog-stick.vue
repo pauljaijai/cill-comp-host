@@ -1,10 +1,9 @@
 <template>
   <div
     ref="padRef"
-    class="pad"
+    class="pad select-none"
     @mousedown="handleMouseDown"
     @mouseup="handleMouseUp"
-    @mousemove="handleMouseMove"
     @contextmenu="(e) => e.preventDefault()"
   >
     <div
@@ -16,35 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { useElementSize, useIntervalFn, useMouseInElement } from '@vueuse/core';
+import { useIntervalFn, useMouseInElement, useMousePressed, whenever } from '@vueuse/core';
 import { clamp } from 'lodash-es';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { getUnitVector, getVectorLength } from '../common/utils';
-
-interface TouchPenDetails {
-  touch: boolean;
-  mouse: boolean;
-  position: {
-    top: number;
-    left: number;
-  };
-  direction: 'up' | 'right' | 'down' | 'left';
-  isFirst: boolean;
-  isFinal: boolean;
-  duration: number;
-  distance: {
-    x: number;
-    y: number;
-  };
-  offset: {
-    x: number;
-    y: number;
-  };
-  delta: {
-    x: number;
-    y: number;
-  };
-}
 
 interface Props {
   /** 尺寸，直徑 */
@@ -60,10 +34,12 @@ const emit = defineEmits<{
 
 
 const padRef = ref<HTMLDivElement>();
+
 const {
   elementX: mouseX, elementY: mouseY,
   elementWidth: width, elementHeight: height,
 } = useMouseInElement(padRef);
+const { pressed } = useMousePressed()
 
 /** 計算滑鼠到與物體的中心距離 */
 const coordinate = computed(() => {
@@ -116,6 +92,21 @@ function handleMouseMove() {
     y: clamp(-y, -yMax, yMax),
   };
 }
+
+/** 偵測滑鼠狀態
+ * 
+ * 因為超出 DOM 後無法觸發 DOM 事件，所以直接偵測滑鼠狀態
+ */
+watch(
+  () => [mouseX, mouseY],
+  () => handleMouseMove(),
+  { deep: true }
+);
+whenever(
+  () => !pressed.value,
+  () => handleMouseUp(),
+  { deep: true }
+);
 
 useIntervalFn(() => {
   const { x, y } = thumb.value.offset;
