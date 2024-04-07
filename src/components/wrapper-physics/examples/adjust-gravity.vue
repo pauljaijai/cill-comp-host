@@ -1,33 +1,15 @@
 <template>
   <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
     <wrapper-physics
-      v-bind="param"
+      v-bind="env"
       immediate
       class="flex flex-col items-center justify-center border border-dashed w-[40rem] h-[30rem]"
     >
       <div class="flex">
         <wrapper-physics-body
-          v-for="item, i in 3"
+          v-for="item, i in 6"
           :key="i"
-          :restitution="1.1"
-        >
-          🐟
-        </wrapper-physics-body>
-      </div>
-      <div class="flex">
-        <wrapper-physics-body
-          v-for="item, i in 2"
-          :key="i"
-          :restitution="1.1"
-        >
-          🐟
-        </wrapper-physics-body>
-      </div>
-      <div class="flex">
-        <wrapper-physics-body
-          v-for="item, i in 1"
-          :key="i"
-          :restitution="1.1"
+          v-bind="body"
         >
           🐟
         </wrapper-physics-body>
@@ -35,11 +17,44 @@
     </wrapper-physics>
   </div>
 
-  <div class="flex p-4">
-    <analog-stick
-      size="14rem"
-      @trigger="handleTrigger"
-    />
+  <div class="flex p-4 gap-6">
+    <div class="">
+      重力方向:
+      <analog-stick
+        size="14rem"
+        @trigger="handleTrigger"
+      />
+    </div>
+
+    <div class="flex-col">
+      <base-input
+        v-model.number="body.friction"
+        type="range"
+        :label="`摩擦力: ${body.friction}`"
+        class=" w-full "
+        :min="0"
+        :step="0.01"
+        :max="1"
+      />
+      <base-input
+        v-model.number="body.frictionAir"
+        type="range"
+        :label="`空氣阻力: ${body.frictionAir}`"
+        class=" w-full "
+        :min="0"
+        :step="0.01"
+        :max="1"
+      />
+      <base-input
+        v-model.number="body.restitution"
+        type="range"
+        :label="`彈力: ${body.restitution}`"
+        class=" w-full "
+        :min="0"
+        :step="0.01"
+        :max="2"
+      />
+    </div>
   </div>
 </template>
 
@@ -47,20 +62,26 @@
 import { ref, } from 'vue';
 
 import AnalogStick from '../../analog-stick.vue';
-import BaseBtn from '../../base-btn.vue';
+import BaseInput from '../../base-input.vue';
 import WrapperPhysics from '../wrapper-physics.vue';
 import WrapperPhysicsBody from '../wrapper-physics-body.vue';
 
-const param = ref({
+const env = ref({
   gravity: {
     scale: 0.001,
     x: 0,
     y: 1,
-  }
+  },
+});
+
+const body = ref({
+  frictionAir: 0.01,
+  friction: 0.01,
+  restitution: 1,
 });
 
 const handleTrigger = (e: { x: number, y: number }) => {
-  param.value.gravity.x = e.x;
-  param.value.gravity.y = e.y;
+  env.value.gravity.x = e.x;
+  env.value.gravity.y = e.y;
 };
 </script>

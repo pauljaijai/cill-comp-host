@@ -35,6 +35,10 @@ const props = withDefaults(defineProps<Props>(), {
   isStatic: false,
 });
 
+watch(() => props, () => {
+  wrapper?.updateBody(id, props);
+}, { deep: true })
+
 const id = nanoid();
 
 const containerRef = ref<HTMLDivElement>();

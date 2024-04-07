@@ -17,10 +17,10 @@
 import {
   onMounted, ref, provide, onBeforeUnmount, shallowRef, watch,
 } from 'vue';
-import { PROVIDE_KEY, Body } from '.';
+import { PROVIDE_KEY, Body, UpdateParam } from '.';
 import { map, omit, pick, pipe } from 'remeda';
-
 import Matter from 'matter-js';
+
 const {
   Engine, Render, Runner, Bodies, Composite, Body: MatterBody,
 } = Matter;
@@ -75,9 +75,37 @@ function unbindBody(id: string) {
   bodyMap.delete(id);
   bodyInfoMap.delete(id);
 }
+function updateBody(id: string, param: UpdateParam) {
+  const bodyData = bodyMap.get(id);
+  if (bodyData) {
+    bodyMap.set(id, {
+      ...bodyData,
+      frictionAir: param.frictionAir,
+      friction: param.friction,
+      restitution: param.restitution,
+      mass: param.mass,
+      isStatic: param.isStatic,
+    })
+  }
+
+  const target = Composite.allBodies(engine.value.world).find(
+    (body) => body.label === id
+  );
+  if (!target) return;
+
+  param.frictionAir && (target.frictionAir = param.frictionAir);
+  param.friction && (target.friction = param.friction);
+  param.restitution && (target.restitution = param.restitution);
+  param.mass && MatterBody.setMass(target, param.mass);
+  param.isStatic && MatterBody.setStatic(target, param.isStatic);
+  param.velocity && MatterBody.setVelocity(target, param.velocity);
+  param.angularVelocity && MatterBody.setAngularVelocity(target, param.angularVelocity);
+}
+
 provide(PROVIDE_KEY, {
   bindBody,
   unbindBody,
+  updateBody,
   getInfo(id) {
     return bodyInfoMap.get(id);
   },
