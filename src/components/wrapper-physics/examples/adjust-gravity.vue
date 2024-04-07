@@ -10,6 +10,7 @@
           v-for="item, i in 6"
           :key="i"
           v-bind="body"
+          class=" select-none"
         >
           🐟
         </wrapper-physics-body>
@@ -52,7 +53,7 @@
         class=" w-full "
         :min="0"
         :step="0.01"
-        :max="2"
+        :max="1.1"
       />
     </div>
   </div>
