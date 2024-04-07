@@ -37,7 +37,7 @@
 
   <div class="flex p-4">
     <analog-stick
-      size="20rem"
+      size="14rem"
       @trigger="handleTrigger"
     />
   </div>
