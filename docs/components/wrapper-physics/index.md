@@ -47,7 +47,7 @@ import AdjustGravity from '../../../src/components/wrapper-physics/examples/adju
 
 ### 基本用法
 
-開始運行後，內部元素會產生物理效果
+開始運行後，被 body 包裹的元素會產生物理效果
 
 <basic-usage/>
 
@@ -61,10 +61,10 @@ import AdjustGravity from '../../../src/components/wrapper-physics/examples/adju
 
 <body-property/>
 
-鱈魚：我怎麼覺得這個範例偷嘴我？╭(°A ,°`)╮
+鱈魚：「我怎麼覺得這個範例偷嘴我？╭(°A ,°`)╮」
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/wrapper-physics/examples/basic-usage.vue
+<<< ../../../src/components/wrapper-physics/examples/body-property.vue
 :::
 
 ### 調整重力
@@ -74,5 +74,5 @@ import AdjustGravity from '../../../src/components/wrapper-physics/examples/adju
 <adjust-gravity/>
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/wrapper-physics/examples/basic-usage.vue
+<<< ../../../src/components/wrapper-physics/examples/adjust-gravity.vue
 :::
