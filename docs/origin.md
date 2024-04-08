@@ -18,6 +18,12 @@
 
 ![鱈魚感謝您](/codfish.webp)
 
-若您喜歡我的作品，[歡迎打賞一杯飲料](https://portaly.cc/codfish/support)，讓我更有體力繼續創作與分享。
+鱈魚感謝您的支持與指教，您可以：
+
+- 在 [GitLab](https://gitlab.com/side_project/chill-component) 給我一顆星星！
+
+- 和朋友們分享
+
+- [打賞一杯飲料](https://portaly.cc/codfish/support)，讓我更有體力繼續創作與分享。
 
 感謝您的支持！❤ ( ˊ ᗜ ˋ  )

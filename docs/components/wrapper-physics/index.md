@@ -18,7 +18,7 @@ import AdjustGravity from '../../../src/components/wrapper-physics/examples/adju
 
 具體流程如下：
 
-1. wrapper-physics 使用 [provide](https://vuejs.org/guide/components/provide-inject)
+1. wrapper-physics 收集內部註冊的 wrapper-physics-body 
 
 ## API
 
