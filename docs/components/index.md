@@ -1,7 +1,11 @@
 <script setup>
 import BtnNaughty from '../../src/components/btn-naughty/btn-naughty.vue';
+
 import WrapperStereoscopic from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic.vue';
 import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic-layer.vue';
+
+import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-usage.vue';
+
 </script>
 
 # 元件清單
@@ -39,3 +43,9 @@ import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/
   </div>
 </wrapper-stereoscopic>
 </div>
+
+## [立體包裝器](./wrapper-physics/)
+
+產生物理世界，讓內部元素具有物理效果
+
+<wrapper-physics />

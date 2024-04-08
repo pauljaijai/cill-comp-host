@@ -14,7 +14,11 @@ import AdjustGravity from '../../../src/components/wrapper-physics/examples/adju
 
 ## 原理
 
-利用 Matter.js 模擬物理效果，並將對應元素之狀態同步至 DOM 元素上，。
+概念為利用 Matter.js 模擬物理效果，並將對應元素之狀態同步至 DOM 元素上。
+
+具體流程如下：
+
+1. wrapper-physics 使用 [provide](https://vuejs.org/guide/components/provide-inject)
 
 ## API
 
