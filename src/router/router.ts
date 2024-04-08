@@ -6,13 +6,6 @@ export interface RouteMeta {
 
 export enum RouteName {
   HOME = 'home',
-
-  BTN_NAUGHTY = 'btn-naughty',
-
-  CURSOR_SANDEVISTAN = 'cursor-sandevistan',
-  CURSOR_THUNDER_BREATHING = 'cursor-thunder-breathing',
-
-  WRAPPER_STEREOSCOPIC = 'wrapper-stereoscopic',
 }
 
 const routes: Array<RouteRecordRaw> = [
@@ -21,35 +14,6 @@ const routes: Array<RouteRecordRaw> = [
     redirect: {
       name: RouteName.HOME,
     }
-  },
-
-  {
-    path: `/home`,
-    name: RouteName.HOME,
-    component: () => import('../views/the-home.vue')
-  },
-
-  {
-    path: `/btn-naughty`,
-    name: RouteName.BTN_NAUGHTY,
-    component: () => import('../views/the-btn-naughty.vue')
-  },
-
-  {
-    path: `/cursor-sandevistan`,
-    name: RouteName.CURSOR_SANDEVISTAN,
-    component: () => import('../views/the-cursor-sandevistan.vue')
-  },
-  {
-    path: `/cursor-thunder-breathing`,
-    name: RouteName.CURSOR_THUNDER_BREATHING,
-    component: () => import('../views/the-cursor-thunder-breathing.vue')
-  },
-
-  {
-    path: `/wrapper-stereoscopic`,
-    name: RouteName.WRAPPER_STEREOSCOPIC,
-    component: () => import('../views/the-wrapper-stereoscopic.vue')
   },
 
   {
