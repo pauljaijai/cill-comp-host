@@ -18,7 +18,14 @@ import AdjustGravity from '../../../src/components/wrapper-physics/examples/adju
 
 具體流程如下：
 
-1. wrapper-physics 收集內部註冊的 wrapper-physics-body 
+1. wrapper-physics 收集內部註冊的 wrapper-physics-body。
+1. 根據 body 的位置、尺寸或 prop 設定，建立對應的 Matter.js 物體。
+1. 透過 Matter.js 模擬物理效果並將物理效果儲存。
+1. body 取得儲存的物理效果，並同步至 DOM 元素上。
+
+如此我們變成實現物理效果模擬了！就像是替身一樣！(ﾉ>ω<)ﾉ 
+
+JOJO！我不想當 DOM 了！（⊙益⊙）
 
 ## API
 
