@@ -8,23 +8,23 @@
 
 ### ⚙️ 功能
 
-目前以 Vue 為主。
+目前以 Vue 為主，記得在每個欄位加上 [TSDoc](https://tsdoc.org/) 註解說明。
 
-- prop
+#### Prop
 
-    內容與樣式客製化
+內容與樣式客製化，需考慮型別檢查與預設值。
 
-- expose
+#### Expose
 
-    元件對外暴露的成員
+元件對外暴露的成員
 
-- emit
+#### Emit
 
-    除了 click、focus 這類常見事件外，是否有其他事件
+除了 click、focus 這類常見事件外，是否有其他事件
 
-- slot
+#### Slot
 
-    提供更高的客製化功能
+提供更高的客製化功能，請考慮其 slot prop 或動態 slot 規則等等。
 
 ---
 
