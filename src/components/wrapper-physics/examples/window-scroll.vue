@@ -3,25 +3,15 @@
     <wrapper-physics
       v-bind="env"
       immediate
-      class="flex flex-col items-center justify-center border border-dashed w-[20rem] h-[100vh]"
+      class=" border border-dashed w-[20rem] h-[100vh]"
     >
       <div class="flex">
         <wrapper-physics-body
-          v-for="item, i in 3"
-          :key="i"
+          v-for="item in list"
+          :key="item"
           v-bind="bodyProp"
-          class="fish select-none"
-        >
-          🐟
-        </wrapper-physics-body>
-      </div>
-
-      <div class="flex">
-        <wrapper-physics-body
-          v-for="item, i in 3"
-          :key="i"
-          v-bind="bodyProp"
-          class="fish select-none"
+          class=" select-none"
+          :class="item"
         >
           🐟
         </wrapper-physics-body>
@@ -31,40 +21,48 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, } from 'vue';
+import { computed, ref, watch, } from 'vue';
 
 import WrapperPhysics from '../wrapper-physics.vue';
 import WrapperPhysicsBody from '../wrapper-physics-body.vue';
-import { useWindowScroll } from '@vueuse/core';
+import {
+  refAutoReset,
+  useWindowScroll
+} from '@vueuse/core';
+import { clamp } from 'remeda';
 
 const { y } = useWindowScroll();
 
-const env = ref({
+const gravityScale = refAutoReset(0.001, 200);
+watch(y, (value, prevValue) => {
+  const delta = clamp(
+    value - prevValue,
+    { max: 100, min: -100 }
+  );
+
+  gravityScale.value = 0.001 + delta * 0.00015;
+});
+
+const env = computed(() => ({
   gravity: {
-    scale: 0.001,
+    scale: gravityScale.value,
     x: 0,
     y: 1,
   },
-});
+}));
 
-const bodyProp = ref({
+const bodyProp = {
   frictionAir: 0,
   friction: 0,
   restitution: 0.5,
-});
+}
 
-watch(y, (value, prevValue) => {
-  const delta = value - prevValue;
-  env.value.gravity.scale = 0.001 + delta * 0.00015;
-});
+const list = [
+  'text-base', 'text-xl',
+  'text-2xl', 'text-4xl',
+  'text-5xl', 'text-7xl',
+];
 </script>
 
 <style scoped lang="sass">
-.fish
-  &:nth-child(1)
-    font-size: 1rem
-  &:nth-child(2)
-    font-size: 2rem
-  &:nth-child(3)
-    font-size: 3rem
 </style>

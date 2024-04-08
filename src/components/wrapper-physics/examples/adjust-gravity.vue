@@ -7,10 +7,11 @@
     >
       <div class="flex">
         <wrapper-physics-body
-          v-for="item, i in 6"
-          :key="i"
+          v-for="item in list"
+          :key="item"
           v-bind="bodyProp"
           class=" select-none"
+          :class="item"
         >
           🐟
         </wrapper-physics-body>
@@ -80,6 +81,12 @@ const bodyProp = ref({
   friction: 0.01,
   restitution: 1,
 });
+
+const list = [
+  'text-base', 'text-lgF', 'text-xl',
+  'text-2xl', 'text-3xl', 'text-4xl',
+  'text-5xl', 'text-6xl', 'text-7xl',
+];
 
 const handleTrigger = (e: { x: number, y: number }) => {
   env.value.gravity.x = e.x;

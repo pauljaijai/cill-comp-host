@@ -16,55 +16,14 @@
       class="flex flex-col items-center justify-center border border-dashed w-[40rem] h-[30rem]"
     >
       <div class="flex">
-        <wrapper-physics-body is-static>
-          鱈魚
-        </wrapper-physics-body>
-
         <wrapper-physics-body
-          v-for="item, i in '真的不'"
+          v-for="item, i in list"
           :key="i"
-          :restitution="restitution"
+          v-bind="item"
         >
-          {{ item }}
+          {{ item.text }}
         </wrapper-physics-body>
 
-        <wrapper-physics-body :friction-air="1">
-          是
-        </wrapper-physics-body>
-
-        <wrapper-physics-body
-          v-for="item, i in '一種'"
-          :key="i"
-          :restitution="restitution"
-        >
-          {{ item }}
-        </wrapper-physics-body>
-
-        <wrapper-physics-body is-static>
-          很肥
-        </wrapper-physics-body>
-
-        <wrapper-physics-body
-          v-for="item, i in '的'"
-          :key="i"
-          :restitution="restitution"
-        >
-          {{ item }}
-        </wrapper-physics-body>
-
-        <wrapper-physics-body :restitution="restitution">
-          🐟
-        </wrapper-physics-body>
-      </div>
-
-      <div class="flex">
-        <wrapper-physics-body
-          v-for="item, i in 3"
-          :key="i"
-          :restitution="restitution"
-        >
-          🐟
-        </wrapper-physics-body>
       </div>
     </wrapper-physics>
   </div>
@@ -79,9 +38,22 @@ import WrapperPhysicsBody from '../wrapper-physics-body.vue';
 
 const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>();
 
-/** 彈力設為 1.5，表示回彈速度會是進入速度的 1.5 倍
+/** 回彈力設為 1.5，表示回彈速度會是進入速度的 1.5 倍
  * 
  * 畫面會超嗨喔！ᕕ( ﾟ ∀。)ᕗ 
  */
 const restitution = 1.5;
+
+const list = [
+  { text: '鱈魚', isStatic: true },
+  { text: '真', restitution },
+  { text: '的', restitution },
+  { text: '不', restitution },
+  { text: '是', frictionAir: 1 },
+  { text: '一', restitution },
+  { text: '種', restitution },
+  { text: '很肥', isStatic: true },
+  { text: '的', restitution },
+  { text: '🐟', restitution },
+]
 </script>

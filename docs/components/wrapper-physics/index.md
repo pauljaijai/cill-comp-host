@@ -1,5 +1,5 @@
 ---
-description: 產生物理世界，讓內部元素具有物理效果
+description: 產生物理世界，讓內部元素具有物理效果 ヾ(⌐■_■)ノ♪
 ---
 
 <script setup>
@@ -11,16 +11,22 @@ import WindowScroll from '../../../src/components/wrapper-physics/examples/windo
 
 # 物理包裝器
 
-產生物理世界，讓內部元素具有物理效果
+產生物理世界，讓內部元素具有物理效果 ヾ(⌐■_■)ノ♪
 
 ## 原理
 
 概念為利用 Matter.js 模擬物理效果，並將對應元素之狀態同步至 DOM 元素上。
 
+:::info 甚麼是 Matter.js
+Matter.js 是一個很成熟的 JavaScript 2D 物理引擎套件，官網上有很多有趣的範例
+
+📚 [Matter.js](https://brm.io/matter-js/)
+:::
+
 具體流程如下：
 
 1. wrapper-physics 收集內部註冊的 wrapper-physics-body。
-1. 根據 body 的位置、尺寸或 prop 設定，建立對應的 Matter.js 物體。
+1. 根據 body 的位置、尺寸與 prop，建立對應的 Matter.js 物體。
 1. 透過 Matter.js 模擬物理效果並將物理效果儲存。
 1. body 取得儲存的物理效果，並同步至 DOM 元素上。
 
