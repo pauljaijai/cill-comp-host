@@ -76,7 +76,14 @@ export default defineConfig({
         },
         link: 'https://gitlab.com/side_project/chill-component',
       },
-
+      {
+        icon: 'linkedin',
+        link: 'https://www.linkedin.com/in/shih-chen-lin-codfish',
+      },
+      {
+        icon: 'youtube',
+        link: 'https://www.youtube.com/@codfish2140',
+      },
     ],
 
     search: {
