@@ -24,7 +24,7 @@ import FeatureExample from '@/components/feature-example.vue';
 const sections = [
   {
     title: '基本用法',
-    description: '當按鈕狀態為 disable 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑',
+    description: '當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑',
     examples: [
       {
         path: 'btn-naughty/basic-usage',

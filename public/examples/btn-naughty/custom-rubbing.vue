@@ -1,6 +1,6 @@
 <template>
   <btn-naughty
-    disable
+    disabled
     z-index="30"
   >
     <template #rubbing>

@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-4 w-full">
     <div class="flex gap-4">
       <q-toggle
-        v-model="disable"
+        v-model="disabled"
         label="停用按鈕"
       />
       <q-input
@@ -17,7 +17,7 @@
       <btn-naughty
         label="調皮的按鈕"
         class=" font-bold"
-        :disable="disable"
+        :disabled="disabled"
         z-index="30"
       />
     </div>
@@ -30,5 +30,5 @@ import { ref } from 'vue';
 import BtnNaughty from '@/components/btn-naughty/btn-naughty.vue';
 
 const text = ref('');
-const disable = ref(true);
+const disabled = ref(true);
 </script>

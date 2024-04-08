@@ -1,6 +1,6 @@
 <template>
   <btn-naughty
-    disable
+    disabled
     z-index="30"
   >
     <div class="text-x bg-orange-500 text-white p-4 rounded">

@@ -10,7 +10,7 @@
     <btn-naughty
       label="按鈕"
       class=" font-bold"
-      disable
+      disabled
       :max-distance-multiple="maxMultiple"
       z-index="30"
     />

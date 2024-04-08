@@ -59,7 +59,7 @@ interface Props {
   /** 按鈕內文字 */
   label?: string;
   /** 是否停用 */
-  disable?: boolean;
+  disabled?: boolean;
   /** 同 CSS z-index */
   zIndex?: number | string;
   /** 最大移動距離，為按鈕尺寸倍數 */
@@ -70,7 +70,7 @@ interface Props {
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   label: '',
-  disable: false,
+  disabled: false,
   zIndex: undefined,
   maxDistanceMultiple: 5,
   tabindex: undefined,
@@ -89,7 +89,7 @@ const emit = defineEmits<{
 // #region Slots
 defineSlots<{
   /** 按鈕 */
-  default?: () => unknown;
+  default?: (props: { isRunning: boolean }) => unknown;
   /** 拓印 */
   rubbing?: (props: { isRunning: boolean }) => unknown;
 }>();
@@ -114,15 +114,15 @@ useIntersectionObserver(
 function handleClick() {
   emit('click');
 
-  if (!props.disable) return;
+  if (!props.disabled) return;
   run();
 }
 function handleMouseEnter() {
-  if (!props.disable) return;
+  if (!props.disabled) return;
   run();
 }
 watch(isOutside, (value) => {
-  if (value || props.disable) return;
+  if (value || props.disabled) return;
   run();
 });
 
@@ -133,7 +133,7 @@ const offset = ref({
 const moveStyle = computed(() => {
   const { x, y } = offset.value;
 
-  const cursor = props.disable ? 'not-allowed' : 'pointer';
+  const cursor = props.disabled ? 'not-allowed' : 'pointer';
 
   return {
     transform: `translate(${x}px, ${y}px)`,
@@ -147,7 +147,7 @@ const bounceStyle = computed(() => ({
   animationPlayState: counter.value === 0 ? 'paused' : 'running',
 }));
 
-watch(() => props.disable, (value) => {
+watch(() => props.disabled, (value) => {
   if (value) return;
   back();
 });

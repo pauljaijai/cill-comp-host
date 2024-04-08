@@ -44,7 +44,7 @@ import BasicUsage from '../../../src/components/{{kebabCase name}}/examples/basi
 
 ### 基本用法
 
-當按鈕狀態為 disable 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
 
 <basic-usage/>
 

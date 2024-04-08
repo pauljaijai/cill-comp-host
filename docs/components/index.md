@@ -15,7 +15,7 @@ import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-
 一個停用時會越跑越遠的按鈕，像極了無緣的愛情。(._.`)
 
 <div class="flex">
-  <btn-naughty label="你是好人" z-index="99" disable/>
+  <btn-naughty label="你是好人" z-index="99" disabled/>
 </div>
 
 ## [立體包裝器](./wrapper-stereoscopic/)

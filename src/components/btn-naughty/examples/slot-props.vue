@@ -1,7 +1,7 @@
 <template>
   <div class="flex border border-gray-300 p-6">
     <btn-naughty
-      disable
+      disabled
       z-index="30"
     >
       <template #rubbing="{ isRunning }">
