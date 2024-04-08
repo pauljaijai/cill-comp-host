@@ -22,8 +22,8 @@
 
 - 在 [GitLab](https://gitlab.com/side_project/chill-component) 給我一顆星星！
 
-- 和朋友們分享
+- 和朋友們分享！(・∀・(・∀・(・∀・*)
 
-- [打賞一杯飲料](https://portaly.cc/codfish/support)，讓我更有體力繼續創作與分享。
+- [贊助一杯飲料](https://portaly.cc/codfish/support)，讓我更有體力繼續創作與分享。
 
 感謝您的支持！❤ ( ˊ ᗜ ˋ  )
