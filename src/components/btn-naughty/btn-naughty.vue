@@ -119,10 +119,11 @@ function handleClick() {
 }
 function handleMouseEnter() {
   if (!props.disabled) return;
+  console.log('run');
   run();
 }
 watch(isOutside, (value) => {
-  if (value || props.disabled) return;
+  if (value! || !props.disabled) return;
   run();
 });
 
