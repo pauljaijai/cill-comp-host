@@ -9,7 +9,7 @@
         <wrapper-physics-body
           v-for="item, i in 6"
           :key="i"
-          v-bind="body"
+          v-bind="bodyProp"
           class=" select-none"
         >
           🐟
@@ -29,27 +29,27 @@
 
     <div class="flex-col">
       <base-input
-        v-model.number="body.friction"
+        v-model.number="bodyProp.friction"
         type="range"
-        :label="`摩擦力: ${body.friction}`"
+        :label="`摩擦力: ${bodyProp.friction}`"
         class=" w-full "
         :min="0"
         :step="0.01"
         :max="1"
       />
       <base-input
-        v-model.number="body.frictionAir"
+        v-model.number="bodyProp.frictionAir"
         type="range"
-        :label="`空氣阻力: ${body.frictionAir}`"
+        :label="`空氣阻力: ${bodyProp.frictionAir}`"
         class=" w-full "
         :min="0"
         :step="0.01"
         :max="1"
       />
       <base-input
-        v-model.number="body.restitution"
+        v-model.number="bodyProp.restitution"
         type="range"
-        :label="`彈力: ${body.restitution}`"
+        :label="`彈力: ${bodyProp.restitution}`"
         class=" w-full "
         :min="0"
         :step="0.01"
@@ -75,7 +75,7 @@ const env = ref({
   },
 });
 
-const body = ref({
+const bodyProp = ref({
   frictionAir: 0.01,
   friction: 0.01,
   restitution: 1,

@@ -64,7 +64,7 @@ export default defineConfig({
         items: [
           { text: '調皮的按鈕', link: '/components/btn-naughty/' },
           { text: '立體包裝器', link: '/components/wrapper-stereoscopic/' },
-          // { text: '物理包裝器', link: '/components/wrapper-physics/' },
+          { text: '物理包裝器', link: '/components/wrapper-physics/' },
         ]
       },
     ],

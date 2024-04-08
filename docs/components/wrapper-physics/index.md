@@ -6,6 +6,7 @@ description: 產生物理世界，讓內部元素具有物理效果
 import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-usage.vue'
 import BodyProperty from '../../../src/components/wrapper-physics/examples/body-property.vue'
 import AdjustGravity from '../../../src/components/wrapper-physics/examples/adjust-gravity.vue'
+import WindowScroll from '../../../src/components/wrapper-physics/examples/window-scroll.vue'
 </script>
 
 # 物理包裝器
@@ -86,4 +87,16 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/adjust-gravity.vue
+:::
+
+### 視窗滾動
+
+結合滾動效果，將捲動之速度映射至重力加速度，製造上下搖晃效果
+
+<window-scroll/>
+
+鱈魚：「夭壽虐魚喔！Σ(っ °Д °;)っ」
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-physics/examples/window-scroll.vue
 :::
