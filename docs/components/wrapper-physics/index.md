@@ -7,6 +7,7 @@ import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-u
 import BodyProperty from '../../../src/components/wrapper-physics/examples/body-property.vue'
 import AdjustGravity from '../../../src/components/wrapper-physics/examples/adjust-gravity.vue'
 import WindowScroll from '../../../src/components/wrapper-physics/examples/window-scroll.vue'
+import BodyPolygon from '../../../src/components/wrapper-physics/examples/body-polygon.vue'
 </script>
 
 # 物理包裝器
@@ -30,7 +31,7 @@ Matter.js 是一個很成熟的 JavaScript 2D 物理引擎套件，官網上有�
 1. 透過 Matter.js 模擬物理效果並將物理效果儲存。
 1. body 取得儲存的物理效果，並同步至 DOM 元素上。
 
-如此我們變成實現物理效果模擬了！就像是替身一樣！(ﾉ>ω<)ﾉ 
+如此這般，我們成功實現物理效果模擬了！就像是替身一樣！(ﾉ>ω<)ﾉ
 
 JOJO！我不想當 DOM 了！（⊙益⊙）
 
@@ -105,4 +106,16 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/window-scroll.vue
+:::
+
+### 物體形狀
+
+可以調整物體碰撞外型，例如圓形才符合鱈魚的真實體型。╮(╯▽╰)╭
+
+<body-polygon/>
+
+鱈魚：「現在是當我聽不到是不是？ಠ_ಠ」
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-physics/examples/body-polygon.vue
 :::

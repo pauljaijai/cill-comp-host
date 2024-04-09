@@ -145,6 +145,7 @@ function init() {
     /** 初始化所有 body */
     map((item) => {
       const {
+        polygon = 'rectangle',
         width, height
       } = item;
 
@@ -153,10 +154,22 @@ function init() {
         y: item.y - wrapperInitBounding.y + height / 2,
       }
 
-      const body = Bodies.rectangle(x, y, width, height, {
-        ...pick(item, ['frictionAir', 'friction', 'restitution', 'mass', 'isStatic']),
-        label: item.id,
-      });
+      const body = pipe(0,
+        () => {
+          if (polygon === 'circle') {
+            const r = Math.max(width, height) / 2;
+            return Bodies.circle(x, y, r, {
+              ...pick(item, ['frictionAir', 'friction', 'restitution', 'mass', 'isStatic']),
+              label: item.id,
+            });
+          }
+
+          return Bodies.rectangle(x, y, width, height, {
+            ...pick(item, ['frictionAir', 'friction', 'restitution', 'mass', 'isStatic']),
+            label: item.id,
+          });
+        }
+      );
 
       bodyInitInfoMap.set(item.id, {
         offsetX: body.position.x,

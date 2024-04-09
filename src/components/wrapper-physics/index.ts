@@ -11,6 +11,13 @@ export interface Body {
   x: number;
   y: number;
 
+  /** 物體形狀，預設為 rectangle
+   * 
+   * - rectangle：尺寸同 DOM 之長寬
+   * - circle：取 DOM 長寬最大值為直徑
+   */
+  polygon?: 'rectangle' | 'circle';
+
   /** 空氣阻力。物體在空氣中受到的阻力 */
   frictionAir?: number;
   /** 摩擦力。物體本身的摩擦力，必須為 0 ~ 1，0 表示持續滑動，1 表示受力後會立即停止 */

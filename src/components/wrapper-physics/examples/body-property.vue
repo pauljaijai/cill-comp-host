@@ -23,8 +23,11 @@
         >
           {{ item.text }}
         </wrapper-physics-body>
-
       </div>
+
+      <wrapper-physics-body>
+        🐟
+      </wrapper-physics-body>
     </wrapper-physics>
   </div>
 </template>

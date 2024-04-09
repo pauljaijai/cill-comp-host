@@ -5,13 +5,12 @@
       immediate
       class="flex flex-col items-center justify-center border border-dashed w-[40rem] h-[30rem]"
     >
-      <div class="flex">
+      <div class="">
         <wrapper-physics-body
-          v-for="item in list"
+          v-for="item in 10"
           :key="item"
           v-bind="bodyProp"
-          class=" select-none"
-          :class="item"
+          class=" w-10 h-10 flex justify-center items-center select-none bg-slate-300 rounded-full"
         >
           🐟
         </wrapper-physics-body>
@@ -25,36 +24,6 @@
       <analog-stick
         size="14rem"
         @trigger="handleTrigger"
-      />
-    </div>
-
-    <div class="flex-col">
-      <base-input
-        v-model.number="bodyProp.friction"
-        type="range"
-        :label="`摩擦力: ${bodyProp.friction}`"
-        class=" w-full "
-        :min="0"
-        :step="0.01"
-        :max="1"
-      />
-      <base-input
-        v-model.number="bodyProp.frictionAir"
-        type="range"
-        :label="`空氣阻力: ${bodyProp.frictionAir}`"
-        class=" w-full "
-        :min="0"
-        :step="0.01"
-        :max="1"
-      />
-      <base-input
-        v-model.number="bodyProp.restitution"
-        type="range"
-        :label="`彈力: ${bodyProp.restitution}`"
-        class=" w-full "
-        :min="0"
-        :step="0.01"
-        :max="1.1"
       />
     </div>
   </div>
@@ -76,17 +45,12 @@ const env = ref({
   },
 });
 
-const bodyProp = ref<InstanceType<typeof WrapperPhysicsBody>['$props']>({
-  frictionAir: 0.01,
+const bodyProp: InstanceType<typeof WrapperPhysicsBody>['$props'] = {
+  polygon: 'circle',
+  frictionAir: 0,
   friction: 0.01,
-  restitution: 1,
-});
-
-const list = [
-  'text-base', 'text-lgF', 'text-xl',
-  'text-2xl', 'text-3xl', 'text-4xl',
-  'text-5xl', 'text-6xl', 'text-7xl',
-];
+  restitution: 0.6,
+};
 
 const handleTrigger = (e: { x: number, y: number }) => {
   env.value.gravity.x = e.x;
