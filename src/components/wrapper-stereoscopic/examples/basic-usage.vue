@@ -8,7 +8,7 @@
       />
     </div>
 
-    <div class="content flex items-start gap-4">
+    <div class=" flex flex-col items-start gap-4">
       <wrapper-stereoscopic :enable="enable">
         <div class=" w-80 h-80 bg-gray-300 rounded flex-center">
           <div class=" w-40 h-40 bg-gray-100 rounded flex-center">
@@ -52,8 +52,6 @@ const enable = ref(true);
 </script>
 
 <style lang="sass" scoped>
-.content
-  perspective: 2000px
 .flex-center
   display: flex
   justify-content: center

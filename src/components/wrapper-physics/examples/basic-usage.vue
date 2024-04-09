@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
+  <div class="flex flex-col gap-4 w-full border border-gray-300">
     <wrapper-physics
       ref="wrapperRef"
-      class="flex flex-col items-start p-4 gap-1 border border-dashed w-[40rem] h-[30rem]"
+      class="flex flex-col items-start p-4 gap-1 md:w-[40rem] w-full h-[30rem]"
     >
       <div class="flex gap-20 pl-10">
         <wrapper-physics-body>

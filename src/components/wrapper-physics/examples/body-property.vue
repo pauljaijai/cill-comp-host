@@ -13,7 +13,7 @@
 
     <wrapper-physics
       ref="wrapperRef"
-      class="flex flex-col items-center justify-center border border-dashed w-[40rem] h-[30rem]"
+      class="flex flex-col items-center justify-center border border-dashed md:w-[40rem] w-full h-[30rem]"
     >
       <div class="flex">
         <wrapper-physics-body

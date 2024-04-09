@@ -3,7 +3,7 @@
     <wrapper-physics
       v-bind="env"
       immediate
-      class="flex flex-col items-center justify-center border border-dashed w-[40rem] h-[30rem]"
+      class="flex flex-col items-center justify-center border border-dashed md:w-[40rem] w-full h-[30rem]"
     >
       <div class="flex">
         <wrapper-physics-body
@@ -19,7 +19,7 @@
     </wrapper-physics>
   </div>
 
-  <div class="flex p-4 gap-6">
+  <div class="flex flex-col md:flex-row p-4 gap-6">
     <div class="">
       重力方向:
       <analog-stick

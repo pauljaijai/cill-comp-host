@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
+  <div class="flex flex-col gap-4 w-full border border-gray-300">
     <wrapper-physics
       v-bind="env"
       immediate
-      class=" border border-dashed w-[20rem] h-[100vh]"
+      class="flex justify-center items-start w-full h-[100vh]"
     >
       <div class="flex">
         <wrapper-physics-body

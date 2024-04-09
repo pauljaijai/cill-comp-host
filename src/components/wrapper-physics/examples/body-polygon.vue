@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
+  <div class="flex flex-col gap-4 w-full border border-gray-300">
     <wrapper-physics
       v-bind="env"
       immediate
-      class="flex items-center justify-center border border-dashed w-[40rem] h-[30rem]"
+      class="flex items-center justify-center md:w-[40rem] w-full h-[30rem]"
     >
       <template v-for="item in list">
         <wrapper-physics-body

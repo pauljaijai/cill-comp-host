@@ -14,7 +14,7 @@
     <wrapper-physics
       v-bind="env"
       ref="wrapperRef"
-      class="flex flex-row-reverse gap-4 items-center justify-center border border-dashed w-[40rem] h-[30rem]"
+      class="flex flex-row-reverse gap-4 items-center justify-center border border-dashed md:w-[40rem] w-full h-[30rem]"
     >
       <div
         v-for="text, i in list"
