@@ -5,16 +5,23 @@
       immediate
       class="flex flex-col items-center justify-center border border-dashed w-[40rem] h-[30rem]"
     >
-      <div class="">
-        <wrapper-physics-body
-          v-for="item in 10"
-          :key="item"
-          v-bind="bodyProp"
-          class=" w-10 h-10 flex justify-center items-center select-none bg-slate-300 rounded-full"
-        >
-          🐟
-        </wrapper-physics-body>
-      </div>
+      <wrapper-physics-body
+        v-for="item in 5"
+        :key="item"
+        v-bind="bodyProp"
+        class=" w-12 h-12 flex justify-center items-center select-none bg-slate-300 rounded-full"
+      >
+        🐟
+      </wrapper-physics-body>
+
+      <wrapper-physics-body
+        v-for="item in 5"
+        :key="item"
+        v-bind="bodyProp"
+        class=" w-8 h-8 flex justify-center items-center select-none bg-slate-300 rounded-full"
+      >
+        🐟
+      </wrapper-physics-body>
     </wrapper-physics>
   </div>
 
