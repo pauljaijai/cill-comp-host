@@ -253,7 +253,9 @@ function clear() {
 function reset() {
   clear();
 
-  engine.value = Engine.create();
+  engine.value = Engine.create({
+    gravity: props.gravity,
+  });
   runner.value = Runner.create();
   init();
   pauseUpdate();
