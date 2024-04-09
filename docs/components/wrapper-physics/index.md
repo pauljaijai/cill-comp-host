@@ -79,16 +79,6 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 <<< ../../../src/components/wrapper-physics/examples/basic-usage.vue
 :::
 
-### Scope Prop
-
-使用 Scope Prop 玩出更多花樣
-
-<scope-prop/>
-
-::: details 查看範例原始碼
-<<< ../../../src/components/wrapper-physics/examples/scope-prop.vue
-:::
-
 ### 物理性質
 
 調整物理性質，讓元素嗨起來！ᕕ( ﾟ ∀。)ᕗ
@@ -141,4 +131,14 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/body-polygon.vue
+:::
+
+### Scope Prop
+
+使用 Scope Prop 玩出更多花樣
+
+<scope-prop/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-physics/examples/scope-prop.vue
 :::
