@@ -6,7 +6,7 @@ export function mapNumber(
   outMin: number, outMax: number
 ) {
   const mapped: number = ((current - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
-  return clamp(mapped, outMin, outMax);
+  return mapped;
 }
 
 export function hslToHex(h: number, s: number, l: number) {
