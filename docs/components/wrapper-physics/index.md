@@ -8,6 +8,7 @@ import BodyProperty from '../../../src/components/wrapper-physics/examples/body-
 import AdjustGravity from '../../../src/components/wrapper-physics/examples/adjust-gravity.vue'
 import WindowScroll from '../../../src/components/wrapper-physics/examples/window-scroll.vue'
 import BodyPolygon from '../../../src/components/wrapper-physics/examples/body-polygon.vue'
+import ScopeProp from '../../../src/components/wrapper-physics/examples/scope-prop.vue'
 </script>
 
 # 物理包裝器
@@ -62,6 +63,10 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 
 <<< ../../../src/components/wrapper-physics/wrapper-physics-body.vue/#Props
 
+#### Slots {#wrapper-physics-body-slots}
+
+<<< ../../../src/components/wrapper-physics/wrapper-physics-body.vue/#Slots
+
 ## 使用範例
 
 ### 基本用法
@@ -72,6 +77,16 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/basic-usage.vue
+:::
+
+### Scope Prop
+
+使用 Scope Prop 玩出更多花樣
+
+<scope-prop/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-physics/examples/scope-prop.vue
 :::
 
 ### 物理性質

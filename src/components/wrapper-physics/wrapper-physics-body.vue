@@ -3,7 +3,7 @@
     ref="containerRef"
     :style="style"
   >
-    <slot />
+    <slot v-bind="scopeProp" />
   </div>
 </template>
 
@@ -41,6 +41,21 @@ const props = withDefaults(defineProps<Props>(), {
   mass: undefined,
   isStatic: false,
 });
+
+// #region Slots
+defineSlots<{
+  default?: (props: {
+    width: number;
+    height: number;
+    /** X 偏移量 */
+    offsetX: number;
+    /** Y 偏移量 */
+    offsetY: number;
+    /** 旋轉量 */
+    rotate: number;
+  }) => unknown;
+}>();
+// #endregion Slots
 
 watch(() => props, () => {
   wrapper?.updateBody(id, props);
@@ -108,6 +123,14 @@ function bindBody() {
 
 onMounted(() => {
   bindBody();
+});
+
+const scopeProp = computed(() => {
+  return {
+    ...info.value,
+    width: width.value,
+    height: height.value,
+  };
 });
 </script>
 

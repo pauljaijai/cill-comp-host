@@ -1,6 +1,10 @@
 import { clamp } from "lodash-es";
 
-export function mapNumber(current: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+export function mapNumber(
+  current: number,
+  inMin: number, inMax: number,
+  outMin: number, outMax: number
+) {
   const mapped: number = ((current - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   return clamp(mapped, outMin, outMax);
 }
