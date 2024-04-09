@@ -19,14 +19,14 @@
       <div
         v-for="text, i in list"
         :key="i"
-        class="flex flex-col-reverse"
+        class="flex flex-col"
       >
         <wrapper-physics-body
           v-for="word, j in text.split('')"
           v-slot="scope"
           :key="j"
           polygon="circle"
-          :friction-air="j * 0.05"
+          :friction-air="(j + i) * 0.005"
         >
           <span :style="getStyle(scope)">
             {{ word }}
@@ -43,7 +43,7 @@ import { CSSProperties, ref } from 'vue';
 import BaseBtn from '../../base-btn.vue';
 import WrapperPhysics from '../wrapper-physics.vue';
 import WrapperPhysicsBody from '../wrapper-physics-body.vue';
-import { mapNumber } from '../../../common/utils';
+import { getVectorLength, mapNumber } from '../../../common/utils';
 
 type ScopeProp = Parameters<
   NonNullable<InstanceType<typeof WrapperPhysicsBody>['$slots']['default']>
@@ -54,19 +54,28 @@ const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>();
 const env = ref({
   gravity: {
     scale: 0.0005,
-    x: -0.8,
-    y: 1,
+    x: -1,
+    y: -0.3,
   },
 });
 
 const list = [
-  '一首寫不盡的詩歌'.split('').reverse().join(''),
-  '隨之時間淡去'.split('').reverse().join(''),
+  '改不盡的需求交織',
+  '隨時間淡去，不是任務',
+  '而是我新鮮的',
+  '肝',
 ]
 
 function getStyle(scope: ScopeProp): CSSProperties {
+  /** 計算偏移距離 */
+  const distance = getVectorLength({
+    x: scope.offsetX,
+    y: scope.offsetY,
+  })
+
+  /** 偏越多越淡 */
   const opacity = mapNumber(
-    scope.offsetY,
+    distance,
     0, scope.height * 5,
     1, 0,
   );

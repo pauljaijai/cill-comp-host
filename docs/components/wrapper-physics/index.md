@@ -117,6 +117,8 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 
 調整物體碰撞箱（hit box）外型，例如圓形才符合鱈魚的真實體型。╮(╯▽╰)╭
 
+鱈魚：「現在是當我聽不到是不是？ಠ_ಠ」
+
 ::: tip 甚麼是碰撞箱（hit box）
 碰撞箱是指實際上在物理世界中參與碰撞的實際形狀。
 
@@ -126,8 +128,6 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 :::
 
 <body-polygon/>
-
-鱈魚：「現在是當我聽不到是不是？ಠ_ಠ」
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/body-polygon.vue
