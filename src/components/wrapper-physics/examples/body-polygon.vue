@@ -3,25 +3,20 @@
     <wrapper-physics
       v-bind="env"
       immediate
-      class="flex flex-col items-center justify-center border border-dashed w-[40rem] h-[30rem]"
+      class="flex items-center justify-center border border-dashed w-[40rem] h-[30rem]"
     >
-      <wrapper-physics-body
-        v-for="item in 5"
-        :key="item"
-        v-bind="bodyProp"
-        class=" w-12 h-12 flex justify-center items-center select-none bg-slate-300 rounded-full"
-      >
-        🐟
-      </wrapper-physics-body>
+      <template v-for="item in list">
+        <wrapper-physics-body
+          v-for="index in item.quantity"
+          :key="index"
+          v-bind="bodyProp"
+          class=" flex justify-center items-center select-none bg-slate-300 rounded-full"
+          :class="item.class"
+        >
+          🐟
+        </wrapper-physics-body>
+      </template>
 
-      <wrapper-physics-body
-        v-for="item in 5"
-        :key="item"
-        v-bind="bodyProp"
-        class=" w-8 h-8 flex justify-center items-center select-none bg-slate-300 rounded-full"
-      >
-        🐟
-      </wrapper-physics-body>
     </wrapper-physics>
   </div>
 
@@ -55,12 +50,27 @@ const env = ref({
 const bodyProp: InstanceType<typeof WrapperPhysicsBody>['$props'] = {
   polygon: 'circle',
   frictionAir: 0,
-  friction: 0.01,
-  restitution: 0.6,
+  friction: 0,
+  restitution: 0.7,
 };
 
 const handleTrigger = (e: { x: number, y: number }) => {
   env.value.gravity.x = e.x;
   env.value.gravity.y = e.y;
 };
+
+const list = [
+  {
+    class: 'w-14 h-14 text-3xl',
+    quantity: 2,
+  },
+  {
+    class: 'w-10 h-10',
+    quantity: 3,
+  },
+  {
+    class: 'w-6 h-6 text-xs',
+    quantity: 10,
+  },
+]
 </script>

@@ -18,7 +18,7 @@ import BodyPolygon from '../../../src/components/wrapper-physics/examples/body-p
 
 概念為利用 Matter.js 模擬物理效果，並將對應元素之狀態同步至 DOM 元素上。
 
-:::info 甚麼是 Matter.js
+::: tip 甚麼是 Matter.js
 Matter.js 是一個很成熟的 JavaScript 2D 物理引擎套件，官網上有很多有趣的範例
 
 📚 [Matter.js](https://brm.io/matter-js/)
@@ -110,7 +110,15 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 
 ### 物體形狀
 
-可以調整物體碰撞外型，例如圓形才符合鱈魚的真實體型。╮(╯▽╰)╭
+調整物體碰撞箱（hit box）外型，例如圓形才符合鱈魚的真實體型。╮(╯▽╰)╭
+
+::: tip 甚麼是碰撞箱（hit box）
+碰撞箱是指實際上在物理世界中參與碰撞的實際形狀。
+
+你一定在想為甚麼不用物體本身的形狀？
+
+因為物體通常很複雜，如果使用過度複雜的形狀進行運算會導致性能問題，所以通常都會適當簡化，使用形狀更單純的碰撞箱呦。(. ❛ ᴗ ❛.)
+:::
 
 <body-polygon/>
 

@@ -6,7 +6,7 @@
 
 別看這些介面好像很沒用，實作起來反而更難啊！ᕕ( ﾟ ∀。)ᕗ
 
-::: info
+::: tip
 詳細內容可以看看這裡：[最糟糕音量控制設計大賽](https://www.inside.com.tw/article/9591-reddit-volume-slider)
 :::
 
