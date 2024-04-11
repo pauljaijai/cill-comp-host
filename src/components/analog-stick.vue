@@ -2,8 +2,9 @@
   <div
     ref="padRef"
     class="pad select-none"
-    @mousedown="handleMouseDown"
-    @mouseup="handleMouseUp"
+    @pointerdown="handleMouseDown"
+    @pointerup="handleMouseUp"
+    @touchmove="(e) => e.preventDefault()"
     @contextmenu="(e) => e.preventDefault()"
   >
     <div
