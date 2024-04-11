@@ -9,6 +9,7 @@ import AdjustGravity from '../../../src/components/wrapper-physics/examples/adju
 import WindowScroll from '../../../src/components/wrapper-physics/examples/window-scroll.vue'
 import BodyPolygon from '../../../src/components/wrapper-physics/examples/body-polygon.vue'
 import ScopeProp from '../../../src/components/wrapper-physics/examples/scope-prop.vue'
+import DeviceMotion from '../../../src/components/wrapper-physics/examples/device-motion.vue'
 </script>
 
 # 物理包裝器
@@ -141,4 +142,20 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/scope-prop.vue
+:::
+
+### 手機感測器
+
+配合手機的加速度計，可以做出更有趣的互動
+
+::: tip
+感謝前端社團和 Line 社群的朋友們提供靈感！
+
+(o゜▽ ゜)o☆
+:::
+
+<device-motion/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-physics/examples/device-motion.vue
 :::

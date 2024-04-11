@@ -1,6 +1,6 @@
 {
   "name": "chill-component",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "scripts": {
     "dev": "vitepress dev docs --force --host",
     "build": "vue-tsc --noEmit --skipLibCheck && vite build",
