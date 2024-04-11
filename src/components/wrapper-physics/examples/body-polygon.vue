@@ -10,7 +10,7 @@
           v-for="index in item.quantity"
           :key="index"
           v-bind="bodyProp"
-          class=" flex justify-center items-center select-none bg-slate-300 rounded-full"
+          class=" flex justify-center items-center select-none bg-slate-300 rounded-full aspect-square"
           :class="item.class"
         >
           🐟
