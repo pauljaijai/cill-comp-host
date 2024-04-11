@@ -28,6 +28,7 @@
         <wrapper-physics-body
           v-for="text, j in section.texts"
           :key="j"
+          class=" whitespace-nowrap"
         >
           {{ text }}
         </wrapper-physics-body>
