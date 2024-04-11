@@ -39,6 +39,12 @@ import BaseBtn from '../../base-btn.vue';
 import WrapperPhysics from '../wrapper-physics.vue';
 import WrapperPhysicsBody from '../wrapper-physics-body.vue';
 
+type BodyProp = InstanceType<typeof WrapperPhysicsBody>['$props'];
+
+interface Item extends BodyProp {
+  text: string;
+}
+
 const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>();
 
 /** 回彈力設為 1.5，表示回彈速度會是進入速度的 1.5 倍
@@ -47,7 +53,7 @@ const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>();
  */
 const restitution = 1.5;
 
-const list = [
+const list: Item[] = [
   { text: '鱈魚', isStatic: true },
   { text: '真', restitution },
   { text: '的', restitution },
