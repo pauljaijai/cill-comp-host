@@ -17,36 +17,6 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 越想嚕他，就跑得越遠，和你家的貓一樣。(._.`)
 
-## 原理
-
-滑鼠碰觸按鈕時，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕尺寸的距離。
-
-如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
-:::
-
-## API
-
-### Props
-
-<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Props
-
-### Emits
-
-<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Slots
-
 ## 使用範例
 
 ### 基本用法
@@ -110,3 +80,33 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 ::: details 查看範例原始碼
 <<< ../../../src/components/btn-naughty/examples/slot-props.vue
 :::
+
+## 原理
+
+滑鼠碰觸按鈕時，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕尺寸的距離。
+
+如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
+
+📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
+
+::: danger 注意！Σ(ˊДˋ;)
+請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
+:::
+
+## API
+
+### Props
+
+<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Props
+
+### Emits
+
+<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Emits
+
+### Methods
+
+<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Methods
+
+### Slots
+
+<<< ../../../src/components/btn-naughty/btn-naughty.vue/#Slots

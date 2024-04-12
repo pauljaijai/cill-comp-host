@@ -44,7 +44,7 @@ import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-
 </wrapper-stereoscopic>
 </div>
 
-## [立體包裝器](./wrapper-physics/)
+## [物理包裝器](./wrapper-physics/)
 
 產生物理世界，讓內部元素具有物理效果
 
