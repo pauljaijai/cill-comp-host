@@ -68,6 +68,8 @@ import BaseInput from '../../base-input.vue';
 import WrapperPhysics from '../wrapper-physics.vue';
 import WrapperPhysicsBody from '../wrapper-physics-body.vue';
 
+type BodyProp = InstanceType<typeof WrapperPhysicsBody>['$props'];
+
 const env = ref({
   gravity: {
     scale: 0.001,
@@ -76,7 +78,7 @@ const env = ref({
   },
 });
 
-const bodyProp = ref<InstanceType<typeof WrapperPhysicsBody>['$props']>({
+const bodyProp = ref<BodyProp>({
   frictionAir: 0.01,
   friction: 0.01,
   restitution: 1,

@@ -9,63 +9,12 @@ import AdjustGravity from '../../../src/components/wrapper-physics/examples/adju
 import WindowScroll from '../../../src/components/wrapper-physics/examples/window-scroll.vue'
 import BodyPolygon from '../../../src/components/wrapper-physics/examples/body-polygon.vue'
 import ScopeProp from '../../../src/components/wrapper-physics/examples/scope-prop.vue'
+import DeviceMotion from '../../../src/components/wrapper-physics/examples/device-motion.vue'
 </script>
 
 # 物理包裝器
 
 產生物理世界，讓內部元素具有物理效果 ヾ(⌐■_■)ノ♪
-
-## 原理
-
-概念為利用 Matter.js 模擬物理效果，並將對應元素之狀態同步至 DOM 元素上。
-
-::: tip 甚麼是 Matter.js
-Matter.js 是一個很成熟的 JavaScript 2D 物理引擎套件，官網上有很多有趣的範例
-
-📚 [Matter.js](https://brm.io/matter-js/)
-:::
-
-具體流程如下：
-
-1. wrapper-physics 收集內部註冊的 wrapper-physics-body。
-1. 根據 body 的位置、尺寸與 prop，建立對應的 Matter.js 物體。
-1. 透過 Matter.js 模擬物理效果並將物理效果儲存。
-1. body 取得儲存的物理效果，並同步至 DOM 元素上。
-
-如此這般，我們成功實現物理效果模擬了！就像是替身一樣！(ﾉ>ω<)ﾉ
-
-JOJO！我不想當 DOM 了！（⊙益⊙）
-
-## API
-
-需要兩個元件，分別為：
-
-- wrapper-physics：產生物理世界。
-- wrapper-physics-body：定義物體，放在物理世界中。
-
-### 🧩 WrapperPhysics
-
-定義物理世界與特性，對其中物體產生交互作用。
-
-#### Props {#wrapper-physics-props}
-
-<<< ../../../src/components/wrapper-physics/wrapper-physics.vue/#Props
-
-#### Methods {#wrapper-physics-methods}
-
-<<< ../../../src/components/wrapper-physics/wrapper-physics.vue/#Methods
-
-### 🧩 WrapperPhysicsBody
-
-定義物體與性質，放在物理世界中，會受其物理規則影響。
-
-#### Props {#wrapper-physics-body-props}
-
-<<< ../../../src/components/wrapper-physics/wrapper-physics-body.vue/#Props
-
-#### Slots {#wrapper-physics-body-slots}
-
-<<< ../../../src/components/wrapper-physics/wrapper-physics-body.vue/#Slots
 
 ## 使用範例
 
@@ -142,3 +91,71 @@ JOJO！我不想當 DOM 了！（⊙益⊙）
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/scope-prop.vue
 :::
+
+### 手機感測器
+
+配合手機的加速度計，做出更有趣的互動！(/≧▽≦)/
+
+::: tip
+感謝前端社團和 Line 社群的朋友們提供靈感！
+
+(o゜▽ ゜)o☆
+:::
+
+<device-motion/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-physics/examples/device-motion.vue
+:::
+
+## 原理
+
+概念為利用 Matter.js 模擬物理效果，並將對應元素之狀態同步至 DOM 元素上。
+
+::: tip 甚麼是 Matter.js
+Matter.js 是一個很成熟的 JavaScript 2D 物理引擎套件，官網上有很多有趣的範例
+
+📚 [Matter.js](https://brm.io/matter-js/)
+:::
+
+具體流程如下：
+
+1. wrapper-physics 收集內部註冊的 wrapper-physics-body。
+1. 根據 body 的位置、尺寸與 prop，建立對應的 Matter.js 物體。
+1. 透過 Matter.js 模擬物理效果並將物理效果儲存。
+1. body 取得儲存的物理效果，並同步至 DOM 元素上。
+
+如此這般，我們成功實現物理效果模擬了！就像是替身一樣！(ﾉ>ω<)ﾉ
+
+JOJO！我不想當 DOM 了！（⊙益⊙）
+
+## API
+
+需要兩個元件，分別為：
+
+- wrapper-physics：產生物理世界。
+- wrapper-physics-body：定義物體，放在物理世界中。
+
+### 🧩 WrapperPhysics
+
+定義物理世界與特性，對其中物體產生交互作用。
+
+#### Props {#wrapper-physics-props}
+
+<<< ../../../src/components/wrapper-physics/wrapper-physics.vue/#Props
+
+#### Methods {#wrapper-physics-methods}
+
+<<< ../../../src/components/wrapper-physics/wrapper-physics.vue/#Methods
+
+### 🧩 WrapperPhysicsBody
+
+定義物體與性質，放在物理世界中，會受其物理規則影響。
+
+#### Props {#wrapper-physics-body-props}
+
+<<< ../../../src/components/wrapper-physics/wrapper-physics-body.vue/#Props
+
+#### Slots {#wrapper-physics-body-slots}
+
+<<< ../../../src/components/wrapper-physics/wrapper-physics-body.vue/#Slots

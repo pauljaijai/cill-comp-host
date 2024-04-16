@@ -12,6 +12,7 @@ import { inject, ref, onMounted, computed, watch } from 'vue';
 import { PROVIDE_KEY, ProvideContent } from '.';
 import { nanoid } from 'nanoid';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
+import { conditional, constant } from 'remeda';
 
 // #region Props
 interface Props {
@@ -78,13 +79,19 @@ const info = ref({
   offsetY: 0,
   rotate: 0,
 });
+/** 數字最小不能小於 0.0001 */
+const adjAccuracy = conditional(
+  [(value: number) => Math.abs(value) < 0.0001, constant(0)],
+  conditional.defaultCase((value) => value),
+)
+
 useIntervalFn(() => {
   const newInfo = wrapper?.getInfo(id);
   if (!newInfo) {
     info.value = {
-      offsetX: info.value.offsetX - info.value.offsetX * 0.05,
-      offsetY: info.value.offsetY - info.value.offsetY * 0.05,
-      rotate: info.value.rotate - info.value.rotate * 0.05,
+      offsetX: adjAccuracy(info.value.offsetX - info.value.offsetX * 0.05),
+      offsetY: adjAccuracy(info.value.offsetY - info.value.offsetY * 0.05),
+      rotate: adjAccuracy(info.value.rotate - info.value.rotate * 0.05),
     };
     return;
   }

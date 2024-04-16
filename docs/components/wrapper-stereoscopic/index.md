@@ -13,32 +13,6 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 
 可以讓元素有酷酷的 3D 偏轉效果。ˋ( ° ▽、° )
 
-## 原理
-
-利用 CSS 的 perspective 與 transform3d，產生 3D 旋轉與透視變形效果。
-
-其中 perspective 尤為重要，此屬性負責讓物體產生透視變形效果。
-
-沒設定的話，物體看起來像莫名其妙扁掉。...('◉◞⊖◟◉` )
-
-📚 [CSS perspective](https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective)
-
-📚 [CSS translate3d](https://developer.mozilla.org/zh-TW/docs/Web/CSS/transform-function/translate3d)
-
-知道如何偏轉後，剩下的部分就簡單惹。( •̀ ω •́ )✧
-
-計算從物體中心到滑鼠位置的向量，分別將向量的 x、y 分量映射到設定的角度範圍，最後套用到 transform 上即可。
-
-不過這裡有個小技巧，我們不把「目前角度」直接設為「目標角度」，而是逐漸趨近「目標角度」。
-
-這樣無論「目標角度」怎麼亂跳，都可以保證偏轉效果都有動畫呈現，看起來更自然、舒服。◝(≧∀≦)◟
-
-## API
-
-### Props
-
-<<< ../../../src/components/wrapper-stereoscopic/wrapper-stereoscopic.vue/#Props
-
 ## 使用範例
 
 ### 基本用法
@@ -80,3 +54,29 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-stereoscopic/examples/z-offset.vue
 :::
+
+## 原理
+
+利用 CSS 的 perspective 與 transform3d，產生 3D 旋轉與透視變形效果。
+
+其中 perspective 尤為重要，此屬性負責讓物體產生透視變形效果。
+
+沒設定的話，物體看起來像莫名其妙扁掉。...('◉◞⊖◟◉` )
+
+📚 [CSS perspective](https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective)
+
+📚 [CSS translate3d](https://developer.mozilla.org/zh-TW/docs/Web/CSS/transform-function/translate3d)
+
+知道如何偏轉後，剩下的部分就簡單惹。( •̀ ω •́ )✧
+
+計算從物體中心到滑鼠位置的向量，分別將向量的 x、y 分量映射到設定的角度範圍，最後套用到 transform 上即可。
+
+不過這裡有個小技巧，我們不把「目前角度」直接設為「目標角度」，而是逐漸趨近「目標角度」。
+
+這樣無論「目標角度」怎麼亂跳，都可以保證偏轉效果都有動畫呈現，看起來更自然、舒服。◝(≧∀≦)◟
+
+## API
+
+### Props
+
+<<< ../../../src/components/wrapper-stereoscopic/wrapper-stereoscopic.vue/#Props

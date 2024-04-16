@@ -28,6 +28,7 @@
         <wrapper-physics-body
           v-for="text, j in section.texts"
           :key="j"
+          class=" whitespace-nowrap"
         >
           {{ text }}
         </wrapper-physics-body>
@@ -64,7 +65,7 @@ const sections = [
     texts: ['•　', '世界上', '有 10 種', '人', '，', '一種', '懂二進位', '，', '一種不懂'],
   },
   {
-    texts: ['•　', '要改得太多了', '，不如', '改天', '吧'],
+    texts: ['•　', '要改的太多了', '，不如', '改天', '吧'],
   },
   {
     texts: ['•　', '人', '和', '程式', '，一個能', '跑', '就行'],
