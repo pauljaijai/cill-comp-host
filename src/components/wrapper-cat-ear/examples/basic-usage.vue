@@ -14,7 +14,9 @@
     </div>
 
     <div class="flex">
-      <wrapper-cat-ear />
+      <wrapper-cat-ear>
+        ・ω・
+      </wrapper-cat-ear>
     </div>
   </div>
 </template>
