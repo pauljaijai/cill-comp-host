@@ -10,6 +10,18 @@ import BasicUsage from '../../../src/components/{{kebabCase name}}/examples/basi
 
 說明說明
 
+## 使用範例
+
+### 基本用法
+
+當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+
+<basic-usage/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/{{kebabCase name}}/examples/basic-usage.vue
+:::
+
 ## 原理
 
 滑鼠碰觸按鈕時，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕尺寸的距離。
@@ -39,15 +51,3 @@ import BasicUsage from '../../../src/components/{{kebabCase name}}/examples/basi
 ### Slots
 
 <<< ../../../src/components/{{kebabCase name}}/{{kebabCase name}}.vue/#Slots
-
-## 使用範例
-
-### 基本用法
-
-當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
-
-<basic-usage/>
-
-::: details 查看範例原始碼
-<<< ../../../src/components/{{kebabCase name}}/examples/basic-usage.vue
-:::
