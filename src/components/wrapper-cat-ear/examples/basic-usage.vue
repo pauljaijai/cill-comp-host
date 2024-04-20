@@ -1,23 +1,10 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border p-4 rounded">
-      <!-- <base-checkbox
-        v-model="disable"
-        label="停用按鈕"
-      />
-
-      <base-input
-        v-model="text"
-        placeholder="點擊這裡並使用 tab 將焦點轉移至按鈕後，再按下 Enter 看看"
-        class=" w-full "
-      /> -->
-    </div>
-
-    <div class="flex">
-      <wrapper-cat-ear>
+  <div class="w-full h-[50vh] border border-gray-300 flex justify-center items-center">
+    <wrapper-cat-ear>
+      <div class="border rounded p-2">
         ・ω・
-      </wrapper-cat-ear>
-    </div>
+      </div>
+    </wrapper-cat-ear>
   </div>
 </template>
 

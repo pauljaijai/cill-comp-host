@@ -1,4 +1,6 @@
-<!-- <template></template> -->
+<template>
+  <slot />
+</template>
 
 <script setup lang="ts">
 import { ref } from 'vue';

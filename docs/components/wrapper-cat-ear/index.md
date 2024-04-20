@@ -8,7 +8,26 @@ import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-u
 
 # 標題
 
-說明說明
+包起來就會長出貓耳，讓萬物皆可萌吧！~(=^‥^)ノ
+
+路人：「所以為啥要做這個玩意兒？」
+
+鱈魚：「聽說有貓就給讚啊？」
+
+路人：「只有耳朵算啥貓啊。」
+
+## 使用範例
+
+### 基本用法
+
+當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+
+<basic-usage/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-cat-ear/examples/basic-usage.vue
+:::
+
 
 ## 原理
 
@@ -39,15 +58,3 @@ import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-u
 ### Slots
 
 <<< ../../../src/components/wrapper-cat-ear/wrapper-cat-ear.vue/#Slots
-
-## 使用範例
-
-### 基本用法
-
-當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
-
-<basic-usage/>
-
-::: details 查看範例原始碼
-<<< ../../../src/components/wrapper-cat-ear/examples/basic-usage.vue
-:::
