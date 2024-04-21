@@ -6,7 +6,7 @@ description:
 import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-usage.vue'
 </script>
 
-# 標題
+# 貓耳包裝器
 
 包起來就會長出貓耳，讓萬物皆可萌吧！~(=^‥^)ノ
 

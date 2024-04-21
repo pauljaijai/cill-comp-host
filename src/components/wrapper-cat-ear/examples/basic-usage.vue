@@ -1,7 +1,19 @@
 <template>
-  <div class="w-full h-[50vh] border border-gray-300 flex justify-center items-center">
+  <div class="w-full h-[50vh] border border-gray-300 flex flex-col gap-10 justify-center items-center">
     <wrapper-cat-ear>
-      <div class="border rounded p-2">
+      <div class="border rounded p-2 bg-white">
+        ・ω・
+      </div>
+    </wrapper-cat-ear>
+
+    <wrapper-cat-ear>
+      <div class="border rounded px-6 py-4 bg-white">
+        ・ω・
+      </div>
+    </wrapper-cat-ear>
+
+    <wrapper-cat-ear>
+      <div class="border rounded p-10 bg-white">
         ・ω・
       </div>
     </wrapper-cat-ear>

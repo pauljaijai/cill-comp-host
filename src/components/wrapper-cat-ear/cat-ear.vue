@@ -1,30 +1,33 @@
 <template>
   <svg
-    width="350"
-    height="542"
-    viewBox="0 0 350 542"
+    viewBox="0 0 350 540"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    class="ear"
   >
     <circle
       cx="175"
-      cy="366.497"
+      cy="364.997"
       r="175"
-      fill="#FFB74B"
+      fill="#CECECE"
+      class="base z-[0]"
     />
     <path
-      d="M159.5 -0.00292969C350 153.5 350 366.497 350 366.497H0C0 366.497 0 155 159.5 -0.00292969Z"
-      fill="#FFB74B"
+      d="M200 0C338 190 350 364.997 350 364.997H0C0 364.997 0 147 200 0Z"
+      fill="#CECECE"
+      class="outside z-[2]"
     />
     <path
-      d="M159.5 -0.00292969C350 153.5 350 366.497 350 366.497H136.5C136.5 366.497 85.4999 225.5 159.5 -0.00292969Z"
-      fill="#FF8B66"
+      d="M202 0C350 170 350 364.997 350 364.997H136.5C136.5 364.997 128 225.503 202 0Z"
+      fill="#E7E7E7"
+      class="inner z-[2]"
     />
   </svg>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { } from '';
 
 // #region Props
 interface Props {
@@ -47,6 +50,7 @@ defineSlots<{
 }>();
 // #endregion Slots
 
+const id = ref<string>();
 
 
 // #region Methods
@@ -55,4 +59,6 @@ defineExpose({});
 </script>
 
 <style scoped lang="sass">
+.ear
+  transform-origin: 50% 80%
 </style>

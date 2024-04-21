@@ -1,9 +1,26 @@
 <template>
-  <slot />
+  <div
+    ref="wrapperRef"
+    class=" relative"
+  >
+    <cat-ear
+      class="ear absolute top-0 right-0 -z-10"
+      :style="leftEarStyle"
+    />
+    <cat-ear
+      class="ear right absolute top-0 left-0 -z-10"
+      :style="rightEarStyle"
+    />
+    <slot />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref, CSSProperties } from 'vue';
+
+import CatEar from './cat-ear.vue';
+
+import { useMouseInElement } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -26,6 +43,22 @@ defineSlots<{
 }>();
 // #endregion Slots
 
+const wrapperRef = ref<HTMLDivElement>();
+const {
+  elementWidth: width,
+  elementHeight: height,
+} = useMouseInElement(wrapperRef);
+
+const earWidth = computed(() => width.value / 4);
+
+const leftEarStyle = computed<CSSProperties>(() => ({
+  width: `${earWidth.value}px`,
+  translate: `0% calc(-100% + ${earWidth.value / 2}px)`,
+}));
+const rightEarStyle = computed<CSSProperties>(() => ({
+  width: `${earWidth.value}px`,
+  translate: `0% calc(-100% + ${earWidth.value / 2}px)`,
+}));
 
 // #region Methods
 defineExpose({});
@@ -33,4 +66,9 @@ defineExpose({});
 </script>
 
 <style scoped lang="sass">
+.ear
+  transform-origin: 50% 80%
+  &.right
+    scale: -1 1
+
 </style>
