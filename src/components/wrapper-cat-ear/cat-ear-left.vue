@@ -11,15 +11,16 @@ import CatEar, {
   Props as EarProps,
   Emits as EarEmits,
 } from './base-cat-ear.vue';
+import { shallowRef } from "vue";
 
 interface Props extends Pick<EarProps, 'emotion' | 'color'> { }
 const props = defineProps<Props>();
 
 const emit = defineEmits<EarEmits>();
 
-type GetAnimateParam = Parameters<
-  InstanceType<typeof CatEar>['$props']['initAnimate']
->[0]
+type InitAnimate = InstanceType<typeof CatEar>['$props']['initAnimate'];
+type GetAnimateParam = Parameters<InitAnimate>[0]
+
 function getRelaxedAnimate({ earEl }: GetAnimateParam) {
   return animate(
     earEl,
@@ -60,7 +61,7 @@ function getDispleasedAnimate({ earEl }: GetAnimateParam) {
   )
 }
 
-const initAnimate: InstanceType<typeof CatEar>['$props']['initAnimate'] = (param) => {
+const initAnimate: InitAnimate = (param) => {
   const result: AnimateMap = {
     relaxed: getRelaxedAnimate(param),
     displeased: getDispleasedAnimate(param),

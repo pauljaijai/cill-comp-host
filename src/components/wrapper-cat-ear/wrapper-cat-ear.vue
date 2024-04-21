@@ -28,28 +28,26 @@ import { computed, ref, CSSProperties } from 'vue';
 import EarLeft from './cat-ear-left.vue';
 import EarRight from './cat-ear-right.vue';
 
-import { useMouseInElement } from '@vueuse/core';
+import { useMouseInElement, useVModel } from '@vueuse/core';
 
 // #region Props
 interface Props {
-  modelValue?: string;
+  emotion?: `${EmotionName}`;
+  color?: string;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
+  emotion: 'relaxed',
+  color: '#CECECE',
 });
 
 // #region Emits
 const emit = defineEmits<{
-  'update:modelValue': [value: Props['modelValue']];
+  'update:emotion': [value: Props['emotion']];
 }>();
 // #endregion Emits
 
-// #region Slots
-defineSlots<{
-  default?: () => unknown;
-}>();
-// #endregion Slots
+const emotion = useVModel(props, 'emotion', emit);
 
 const wrapperRef = ref<HTMLDivElement>();
 const {
