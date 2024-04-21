@@ -1,14 +1,18 @@
 <template>
   <div class="w-full h-[50vh] border border-gray-300 flex flex-col gap-10 justify-center items-center">
-    <div class=" flex gap-4">
-      <base-btn
-        label="relaxed"
-        @click="emotion = 'relaxed'"
-      />
-      <base-btn
-        label="displeased"
-        @click="emotion = 'displeased'"
-      />
+    <div class=" border border-gray-300 rounded">
+      <select
+        v-model="emotion"
+        class="  p-2"
+      >
+        <option
+          v-for="option in emotionOptions"
+          :key="option"
+          :value="option"
+        >
+          {{ option }}
+        </option>
+      </select>
     </div>
 
     <wrapper-cat-ear :emotion="emotion">
@@ -34,8 +38,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import BaseBtn from '../../base-btn.vue';
+import BaseInput from '../../base-input.vue';
 import WrapperCatEar, { EmotionName } from '../wrapper-cat-ear.vue';
 
 const emotion = ref<`${EmotionName}`>('relaxed');
+
+const emotionOptions = Object.values(EmotionName);
 </script>

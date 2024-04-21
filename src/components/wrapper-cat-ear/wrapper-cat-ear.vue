@@ -21,6 +21,7 @@
 export enum EmotionName {
   RELAXED = 'relaxed',
   DISPLEASED = 'displeased',
+  SHAKE = 'shake',
 }
 </script>
 

@@ -59,6 +59,7 @@ let prevAnimate: gsap.core.Timeline | undefined;
 watch(() => props.emotion, (value) => {
   if (!animateMap) return;
 
+  prevAnimate?.pause();
   prevAnimate?.kill();
 
   prevAnimate = animateMap[value]?.();
