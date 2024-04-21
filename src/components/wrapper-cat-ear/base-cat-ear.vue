@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-export type AnimateMap = Record<EmotionName, AnimationControls>;
+export type AnimateMap = Record<EmotionName, () => gsap.core.Timeline>;
 
 export interface Props {
   emotion?: `${EmotionName}`;
@@ -38,31 +38,31 @@ export interface Props {
   }) => AnimateMap;
 }
 
-export type Emits = {
-  'update:emotion': [value: NonNullable<Props['emotion']>];
-}
 </script>
 
 <script setup lang="ts">
-import { onMounted, ref, shallowRef } from 'vue';
-import { AnimationControls } from "motion"
+import { onMounted, ref, shallowRef, watch } from 'vue';
 import { EmotionName } from './wrapper-cat-ear.vue';
-
-import { useVModel } from '@vueuse/core';
+import gsap from 'gsap';
 
 const props = withDefaults(defineProps<Props>(), {
   emotion: 'relaxed',
   color: '#CECECE'
 });
-const emit = defineEmits<Emits>();
 
 const earRef = ref<SVGElement>();
 const insideRef = ref<SVGPathElement>();
 const outsideRef = ref<SVGPathElement>();
 
-const emotion = useVModel(props, 'emotion', emit);
+let animateMap: AnimateMap | undefined;
+let prevAnimate: gsap.core.Timeline | undefined;
+watch(() => props.emotion, (value) => {
+  if (!animateMap) return;
 
-const animateMap = shallowRef<AnimateMap>();
+  prevAnimate?.kill();
+
+  prevAnimate = animateMap[value]?.();
+});
 
 onMounted(() => {
   if (
@@ -72,13 +72,13 @@ onMounted(() => {
     return;
   }
 
-  animateMap.value = props.initAnimate({
+  animateMap = props.initAnimate({
     earEl: earRef.value!,
     insideEl: insideRef.value!,
     outsideEl: outsideRef.value!,
   });
 
-  animateMap.value?.[emotion.value]?.play();
+  animateMap?.[props.emotion]?.();
 });
 
 // #region Methods

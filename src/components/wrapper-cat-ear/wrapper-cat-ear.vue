@@ -6,10 +6,12 @@
     <ear-left
       class="absolute top-0 right-0 -z-10"
       :style="leftEarStyle"
+      v-bind="props"
     />
     <ear-right
       class="right-ear absolute top-0 left-0 -z-10"
       :style="rightEarStyle"
+      v-bind="props"
     />
     <slot />
   </div>
@@ -28,7 +30,7 @@ import { computed, ref, CSSProperties } from 'vue';
 import EarLeft from './cat-ear-left.vue';
 import EarRight from './cat-ear-right.vue';
 
-import { useMouseInElement, useVModel } from '@vueuse/core';
+import { useMouseInElement } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -46,8 +48,6 @@ const emit = defineEmits<{
   'update:emotion': [value: Props['emotion']];
 }>();
 // #endregion Emits
-
-const emotion = useVModel(props, 'emotion', emit);
 
 const wrapperRef = ref<HTMLDivElement>();
 const {

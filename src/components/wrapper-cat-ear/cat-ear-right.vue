@@ -1,80 +1,75 @@
 <template>
-  <cat-ear
-    class="right-ear"
-    :init-animate="initAnimate"
-  />
+  <div class="right-ear">
+    <cat-ear
+      :init-animate="initAnimate"
+      v-bind="props"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { animate } from "motion"
-import { constant, times } from 'remeda';
+import gsap from 'gsap';
 
 import CatEar, {
   AnimateMap,
   Props as EarProps,
-  Emits as EarEmits,
 } from './base-cat-ear.vue';
 
 interface Props extends Pick<EarProps, 'emotion' | 'color'> { }
 const props = defineProps<Props>();
 
-const emit = defineEmits<EarEmits>();
-
 type InitAnimate = InstanceType<typeof CatEar>['$props']['initAnimate'];
 type GetAnimateParam = Parameters<InitAnimate>[0]
 
-function getRelaxedAnimate({ earEl }: GetAnimateParam) {
-  return animate(
-    earEl,
-    {
-      rotate: [
-        '3deg',
-        '-3deg',
-        '3deg',
-      ],
-    },
-    {
-      delay: 0.5,
-      easing: times(3, constant('ease-in-out')),
-      duration: 2,
-      repeat: Infinity,
-      autoplay: false,
-    }
-  )
+function startRelaxedAnimate({ earEl }: GetAnimateParam) {
+  const rotation = gsap.getProperty(earEl, 'rotation');
+  const tl = gsap.timeline();
+
+  return tl
+    .fromTo(earEl,
+      { rotation },
+      {
+        rotation: 10,
+        duration: 0.6,
+      })
+    .to(earEl, {
+      rotation: 0,
+      duration: 0.6,
+      repeat: -1,
+      yoyo: true,
+    });
 }
 
-function getDispleasedAnimate({ earEl }: GetAnimateParam) {
-  return animate(
-    earEl,
-    {
-      rotate: [
-        '3deg',
-        '-3deg',
-        '3deg',
-      ],
-    },
-    {
-      delay: 0.5,
-      easing: times(3, constant('ease-in-out')),
-      duration: 2,
-      repeat: Infinity,
-      autoplay: false,
-    }
-  )
+function startDispleasedAnimate({ earEl }: GetAnimateParam) {
+  const rotation = gsap.getProperty(earEl, 'rotation');
+
+  const tl = gsap.timeline();
+
+  return tl
+    .fromTo(earEl,
+      { rotation },
+      {
+        rotation: 85,
+        duration: 0.6,
+      })
+    .to(earEl, {
+      rotation: 90,
+      duration: 0.6,
+      repeat: -1,
+      yoyo: true,
+    })
 }
 
 const initAnimate: InitAnimate = (param) => {
   const result: AnimateMap = {
-    relaxed: getRelaxedAnimate(param),
-    displeased: getDispleasedAnimate(param),
+    relaxed: () => startRelaxedAnimate(param),
+    displeased: () => startDispleasedAnimate(param),
   }
+
+  result.relaxed();
 
   return result;
 }
-
-// #region Methods
-defineExpose({});
-// #endregion Methods
 </script>
 
 <style scoped lang="sass">
