@@ -7,14 +7,14 @@
     </wrapper-cat-ear>
 
     <wrapper-cat-ear>
-      <div class="border rounded px-6 py-4 bg-white">
-        ・ω・
+      <div class="border rounded px-6 py-10 bg-white">
+        ʘ ᴥ ʘ
       </div>
     </wrapper-cat-ear>
 
     <wrapper-cat-ear>
-      <div class="border rounded p-10 bg-white">
-        ・ω・
+      <div class="border rounded px-10 py-2 bg-white">
+        ◕ ω ◕
       </div>
     </wrapper-cat-ear>
   </div>

@@ -1,31 +1,29 @@
 <template>
-  <div>
-    <svg
-      ref="earRef"
-      viewBox="0 0 350 540"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      class="ear"
-    >
-      <circle
-        cx="175"
-        cy="364.997"
-        r="175"
-        fill="#CECECE"
-        class="base z-[0]"
-      />
-      <path
-        d="M200 0C338 190 350 364.997 350 364.997H0C0 364.997 0 147 200 0Z"
-        fill="#CECECE"
-        class="outside z-[2]"
-      />
-      <path
-        d="M202 0C350 170 350 364.997 350 364.997H136.5C136.5 364.997 128 225.503 202 0Z"
-        fill="#E7E7E7"
-        class="inner z-[2]"
-      />
-    </svg>
-  </div>
+  <svg
+    ref="earRef"
+    viewBox="0 0 350 540"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="ear"
+  >
+    <circle
+      cx="175"
+      cy="364.997"
+      r="175"
+      fill="#CECECE"
+      class="base z-[0]"
+    />
+    <path
+      d="M200 0C338 190 350 364.997 350 364.997H0C0 364.997 0 147 200 0Z"
+      fill="#CECECE"
+      class="outside z-[2]"
+    />
+    <path
+      d="M202 0C350 170 350 364.997 350 364.997H136.5C136.5 364.997 128 225.503 202 0Z"
+      fill="#E7E7E7"
+      class="inner z-[2]"
+    />
+  </svg>
 </template>
 
 <script setup lang="ts">

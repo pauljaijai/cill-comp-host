@@ -3,11 +3,11 @@
     ref="wrapperRef"
     class=" relative"
   >
-    <cat-ear
+    <ear-left
       class="absolute top-0 right-0 -z-10"
       :style="leftEarStyle"
     />
-    <cat-ear
+    <ear-right
       class="right-ear absolute top-0 left-0 -z-10"
       :style="rightEarStyle"
     />
@@ -18,7 +18,8 @@
 <script setup lang="ts">
 import { computed, ref, CSSProperties } from 'vue';
 
-import CatEar from './cat-ear.vue';
+import EarLeft from './cat-ear-left.vue';
+import EarRight from './cat-ear-right.vue';
 
 import { useMouseInElement } from '@vueuse/core';
 
@@ -46,7 +47,6 @@ defineSlots<{
 const wrapperRef = ref<HTMLDivElement>();
 const {
   elementWidth: width,
-  elementHeight: height,
 } = useMouseInElement(wrapperRef);
 
 const earWidth = computed(() => width.value / 4);
