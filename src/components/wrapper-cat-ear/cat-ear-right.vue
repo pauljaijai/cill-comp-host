@@ -13,7 +13,7 @@ import CatEar, {
   AnimateMap,
   Props as EarProps,
   Emits as EarEmits,
-} from './cat-ear.vue';
+} from './base-cat-ear.vue';
 
 interface Props extends Pick<EarProps, 'emotion' | 'color'> { }
 const props = defineProps<Props>();
