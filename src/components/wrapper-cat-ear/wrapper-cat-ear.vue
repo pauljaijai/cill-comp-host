@@ -15,6 +15,13 @@
   </div>
 </template>
 
+<script lang="ts">
+export enum EmotionName {
+  RELAXED = 'relaxed',
+  DISPLEASED = 'displeased',
+}
+</script>
+
 <script setup lang="ts">
 import { computed, ref, CSSProperties } from 'vue';
 
@@ -66,6 +73,4 @@ defineExpose({});
 </script>
 
 <style scoped lang="sass">
-.right-ear
-  scale: -1 1
 </style>
