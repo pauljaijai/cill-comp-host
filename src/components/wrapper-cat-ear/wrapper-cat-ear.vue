@@ -4,11 +4,11 @@
     class=" relative"
   >
     <cat-ear
-      class="ear absolute top-0 right-0 -z-10"
+      class="absolute top-0 right-0 -z-10"
       :style="leftEarStyle"
     />
     <cat-ear
-      class="ear right absolute top-0 left-0 -z-10"
+      class="right-ear absolute top-0 left-0 -z-10"
       :style="rightEarStyle"
     />
     <slot />
@@ -66,9 +66,6 @@ defineExpose({});
 </script>
 
 <style scoped lang="sass">
-.ear
-  transform-origin: 50% 80%
-  &.right
-    scale: -1 1
-
+.right-ear
+  scale: -1 1
 </style>
