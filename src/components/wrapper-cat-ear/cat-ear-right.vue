@@ -39,61 +39,60 @@ type InitAnimate = InstanceType<typeof CatEar>['$props']['initAnimate'];
 type GetAnimateParam = Parameters<InitAnimate>[0]
 
   function startRelaxedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
-  const initValue = anime.get(earEl, 'rotate');
-
-  const step01 = anime({
-    targets: earEl,
-    rotate: [initValue, -10],
-    duration: 1000,
-    complete: () => step02.play(),
-  })
-
   const step02 = anime({
     targets: earEl,
     keyframes: [
-      { rotate: [-10, 10] },
+      { rotate: 10 },
       { rotate: -10 },
     ],
     duration: 2000,
     loop: true,
-    autoplay: false,
+    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
+    loopComplete() {
+      const tween = step02.animations[0].tweens[0] as any;
+      tween.from.numbers = [-10]
+    },
   })
 
   return {
     stop() {
-      anime.remove([earEl])
+      anime.remove(earEl);
     },
   };
 }
 function startDispleasedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
-  const initValue = anime.get(earEl, 'rotate');
-
   const step01 = anime({
     targets: earEl,
-    rotate: [initValue, 85],
-    duration: 600,
+    rotate: 88,
+    duration: 500,
     complete: () => step02.play(),
   })
 
   const step02 = anime({
     targets: earEl,
     keyframes: [
-      { rotate: [85, 88] },
+      { rotate: 88 },
       { rotate: 85 },
     ],
     duration: 100,
     loop: true,
     autoplay: false,
+    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
+    loopComplete() {
+      const tween = step02.animations[0].tweens[0] as any;
+      tween.from.numbers = [85]
+    },
   })
+
 
   return {
     stop() {
-      anime.remove([earEl])
+      anime.remove(earEl);
     },
   };
 }
 function startShakeAnimate({ earEl }: GetAnimateParam): AnimateInstance {
-  const result = anime({
+  const step = anime({
     targets: earEl,
     keyframes: [
       { rotate: 85 },
@@ -101,12 +100,17 @@ function startShakeAnimate({ earEl }: GetAnimateParam): AnimateInstance {
       { rotate: 85 },
     ],
     duration: 1000,
-    loop: true
+    loop: true,
+    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
+    loopComplete() {
+      const tween = step.animations[0].tweens[0] as any;
+      tween.from.numbers = [85]
+    },
   })
 
   return {
     stop() {
-      result.pause();
+      anime.remove(earEl);
     },
   };
 }
@@ -117,8 +121,6 @@ const initAnimate: InitAnimate = (param) => {
     displeased: () => startDispleasedAnimate(param),
     shake: () => startShakeAnimate(param),
   }
-
-  result.relaxed();
 
   return result;
 }

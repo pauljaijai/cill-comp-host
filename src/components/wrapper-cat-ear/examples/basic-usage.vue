@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-[50vh] border border-gray-300 flex flex-col gap-10 justify-center items-center">
-    <div class=" border border-gray-300 rounded">
+    <div class=" border border-gray-300 rounded mb-20">
       <select
         v-model="emotion"
         class="  p-2"
@@ -15,7 +15,7 @@
       </select>
     </div>
 
-    <wrapper-cat-ear :emotion="emotion">
+    <!-- <wrapper-cat-ear :emotion="emotion">
       <div class="border rounded p-2 bg-white">
         ・ω・
       </div>
@@ -25,7 +25,7 @@
       <div class="border rounded px-6 py-10 bg-white">
         ʘ ᴥ ʘ
       </div>
-    </wrapper-cat-ear>
+    </wrapper-cat-ear> -->
 
     <wrapper-cat-ear :emotion="emotion">
       <div class="border rounded px-10 py-2 bg-white">

@@ -9,7 +9,9 @@
 
 <script setup lang="ts">
 import anime from 'animejs';
+import { animate } from 'motion';
 import { computed, ref } from 'vue';
+import { constant, times } from 'remeda';
 
 import CatEar, {
   AnimateInstance,
@@ -35,80 +37,61 @@ const earProps = computed(() => {
 type InitAnimate = InstanceType<typeof CatEar>['$props']['initAnimate'];
 type GetAnimateParam = Parameters<InitAnimate>[0]
 
-function cancelAnimation(animations: anime.AnimeInstance[]) {
-  animations.forEach((animation) => {
-    const index = anime.running.indexOf(animation);
-    anime.running.splice(index, 1);
-  });
-}
-
 function startRelaxedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
-  const step01 = anime({
-    targets: earEl,
-    rotate: -10,
-    duration: 1000,
-    begin() {
-      const rotate = anime.get(earEl, 'rotate');
-      console.log(rotate);
-      anime.set(earEl, { rotate })
-    },
-    complete: () => step02.play(),
-  })
-
   const step02 = anime({
     targets: earEl,
     keyframes: [
-      { rotate: [-10, 10] },
+      { rotate: 10 },
       { rotate: -10 },
     ],
-    begin() {
-      anime.set(earEl, { rotate: -10 })
-    },
     duration: 2000,
     loop: true,
-    autoplay: false,
+    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
+    loopComplete() {
+      const tween = step02.animations[0].tweens[0] as any;
+      tween.from.numbers = [-10]
+    },
   })
 
   return {
     stop() {
-      cancelAnimation([step01, step02]);
+      anime.remove(earEl);
     },
   };
 }
 function startDispleasedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
   const step01 = anime({
     targets: earEl,
-    rotate: 85,
-    duration: 600,
-    begin() {
-      const rotate = anime.get(earEl, 'rotate');
-      anime.set(earEl, { rotate })
-    },
+    rotate: 88,
+    duration: 500,
     complete: () => step02.play(),
   })
 
   const step02 = anime({
     targets: earEl,
     keyframes: [
-      { rotate: [85, 88] },
+      { rotate: 88 },
       { rotate: 85 },
     ],
-    begin() {
-      anime.set(earEl, { rotate: 85 })
-    },
     duration: 100,
     loop: true,
     autoplay: false,
+    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
+    loopComplete() {
+      const tween = step02.animations[0].tweens[0] as any;
+      tween.from.numbers = [85]
+    },
   })
+
 
   return {
     stop() {
-      cancelAnimation([step01, step02]);
+      anime.remove(earEl);
     },
   };
 }
 function startShakeAnimate({ earEl }: GetAnimateParam): AnimateInstance {
-  const result = anime({
+  const step = anime({
     targets: earEl,
     keyframes: [
       { rotate: 85 },
@@ -116,12 +99,17 @@ function startShakeAnimate({ earEl }: GetAnimateParam): AnimateInstance {
       { rotate: 85 },
     ],
     duration: 1000,
-    loop: true
+    loop: true,
+    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
+    loopComplete() {
+      const tween = step.animations[0].tweens[0] as any;
+      tween.from.numbers = [85]
+    },
   })
 
   return {
     stop() {
-      result.pause();
+      anime.remove(earEl);
     },
   };
 }
@@ -132,8 +120,6 @@ const initAnimate: InitAnimate = (param) => {
     displeased: () => startDispleasedAnimate(param),
     shake: () => startShakeAnimate(param),
   }
-
-  result.relaxed();
 
   return result;
 }

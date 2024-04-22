@@ -61,12 +61,9 @@ let prevAnimate: AnimateInstance | undefined;
 watch(() => props.emotion, (value) => {
   if (!animateMap) return;
 
-  const newAni = animateMap[value]?.();
-
   prevAnimate?.stop();
-  prevAnimate = undefined;
 
-  prevAnimate = newAni;
+  prevAnimate = animateMap?.[value]?.();
 });
 
 onMounted(() => {
