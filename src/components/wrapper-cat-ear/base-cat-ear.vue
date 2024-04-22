@@ -26,7 +26,10 @@
 </template>
 
 <script lang="ts">
-export type AnimateMap = Record<EmotionName, () => gsap.core.Timeline>;
+export interface AnimateInstance {
+  stop: () => void;
+}
+export type AnimateMap = Record<EmotionName, () => AnimateInstance>;
 
 export interface Props {
   emotion?: `${EmotionName}`;
@@ -41,9 +44,8 @@ export interface Props {
 </script>
 
 <script setup lang="ts">
-import { onMounted, ref, shallowRef, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { EmotionName } from './wrapper-cat-ear.vue';
-import gsap from 'gsap';
 
 const props = withDefaults(defineProps<Props>(), {
   emotion: 'relaxed',
@@ -55,14 +57,16 @@ const insideRef = ref<SVGPathElement>();
 const outsideRef = ref<SVGPathElement>();
 
 let animateMap: AnimateMap | undefined;
-let prevAnimate: gsap.core.Timeline | undefined;
+let prevAnimate: AnimateInstance | undefined;
 watch(() => props.emotion, (value) => {
   if (!animateMap) return;
 
-  prevAnimate?.pause();
-  prevAnimate?.kill();
+  const newAni = animateMap[value]?.();
 
-  prevAnimate = animateMap[value]?.();
+  prevAnimate?.stop();
+  prevAnimate = undefined;
+
+  prevAnimate = newAni;
 });
 
 onMounted(() => {
@@ -79,7 +83,7 @@ onMounted(() => {
     outsideEl: outsideRef.value!,
   });
 
-  animateMap?.[props.emotion]?.();
+  prevAnimate = animateMap?.[props.emotion]?.();
 });
 
 // #region Methods

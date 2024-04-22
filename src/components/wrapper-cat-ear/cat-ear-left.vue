@@ -8,10 +8,11 @@
 </template>
 
 <script setup lang="ts">
-import gsap from 'gsap';
+import anime from 'animejs';
 import { computed, ref } from 'vue';
 
 import CatEar, {
+  AnimateInstance,
   AnimateMap,
   Props as EarProps,
 } from './base-cat-ear.vue';
@@ -34,84 +35,95 @@ const earProps = computed(() => {
 type InitAnimate = InstanceType<typeof CatEar>['$props']['initAnimate'];
 type GetAnimateParam = Parameters<InitAnimate>[0]
 
-function startRelaxedAnimate({ earEl }: GetAnimateParam) {
-  const rotation = gsap.getProperty(earEl, 'rotation');
-  const tl = gsap.timeline();
-
-  return tl
-    .to(earEl, {
-      y: '0%',
-      duration: 0.5,
-    }, 'init')
-    .fromTo(earEl,
-      { rotation },
-      {
-        rotation: 5,
-        duration: 0.5,
-      }, 'init')
-    .to(earEl, {
-      rotation: 0,
-      duration: 1,
-      repeat: -1,
-      ease: 'back.inOut(5)',
-      yoyo: true,
-      yoyoEase: true,
-    })
+function cancelAnimation(animations: anime.AnimeInstance[]) {
+  animations.forEach((animation) => {
+    const index = anime.running.indexOf(animation);
+    anime.running.splice(index, 1);
+  });
 }
-function startDispleasedAnimate({ earEl }: GetAnimateParam) {
-  const rotation = gsap.getProperty(earEl, 'rotation');
 
-  const tl = gsap.timeline();
+function startRelaxedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
+  const step01 = anime({
+    targets: earEl,
+    rotate: -10,
+    duration: 1000,
+    begin() {
+      const rotate = anime.get(earEl, 'rotate');
+      console.log(rotate);
+      anime.set(earEl, { rotate })
+    },
+    complete: () => step02.play(),
+  })
 
-  return tl
-    .to(earEl, {
-      y: '10%',
-      duration: 0.4,
-    }, 'init')
-    /** 因為 rotation 使用 repeat，
-     * 如果不使用 fromTo 會造成 rotation 跳動，
-     */
-    .fromTo(earEl,
-      { rotation },
-      {
-        rotation: 80,
-        duration: 0.4,
-        ease: 'back.out(2)',
-      }, 'init')
-    .to(earEl, {
-      rotation: 85,
-      duration: 0.5,
-      repeat: -1,
-      ease: 'back.inOut(5)',
-      yoyo: true,
-      yoyoEase: true,
-    })
+  const step02 = anime({
+    targets: earEl,
+    keyframes: [
+      { rotate: [-10, 10] },
+      { rotate: -10 },
+    ],
+    begin() {
+      anime.set(earEl, { rotate: -10 })
+    },
+    duration: 2000,
+    loop: true,
+    autoplay: false,
+  })
+
+  return {
+    stop() {
+      cancelAnimation([step01, step02]);
+    },
+  };
 }
-function startShakeAnimate({ earEl }: GetAnimateParam) {
-  const rotation = gsap.getProperty(earEl, 'rotation');
+function startDispleasedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
+  const step01 = anime({
+    targets: earEl,
+    rotate: 85,
+    duration: 600,
+    begin() {
+      const rotate = anime.get(earEl, 'rotate');
+      anime.set(earEl, { rotate })
+    },
+    complete: () => step02.play(),
+  })
 
-  const tl = gsap.timeline();
+  const step02 = anime({
+    targets: earEl,
+    keyframes: [
+      { rotate: [85, 88] },
+      { rotate: 85 },
+    ],
+    begin() {
+      anime.set(earEl, { rotate: 85 })
+    },
+    duration: 100,
+    loop: true,
+    autoplay: false,
+  })
 
-  return tl
-    .to(earEl, {
-      y: '0%',
-      duration: 0,
-    }, 'init')
-    .fromTo(earEl,
-      { rotation },
-      {
-        rotation: 0,
-        duration: 0,
-        ease: 'back.out(2)',
-      }, 'init')
-    .to(earEl, {
-      rotation: 'random(30, 130)',
-      duration: 0.1,
-      repeat: -1,
-      ease: 'expo.in',
-      repeatRefresh: true,
-      yoyo: true,
-    })
+  return {
+    stop() {
+      cancelAnimation([step01, step02]);
+    },
+  };
+}
+function startShakeAnimate({ earEl }: GetAnimateParam): AnimateInstance {
+  const result = anime({
+    targets: earEl,
+    keyframes: [
+      { rotate: 85 },
+      { rotate: 95 },
+      { rotate: 85 },
+    ],
+    duration: 1000,
+    loop: true
+  })
+
+  return {
+    stop() {
+      result.pause();
+    },
+  };
 }
 
 const initAnimate: InitAnimate = (param) => {
