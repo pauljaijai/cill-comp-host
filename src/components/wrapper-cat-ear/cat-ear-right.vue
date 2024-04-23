@@ -173,10 +173,10 @@ function startDispleasedAnimate(param: GetAnimateParam): AnimateInstance {
   const step02 = anime({
     targets: earEl,
     keyframes: [
-      { rotate: 80 },
+      { rotate: 85 },
       { rotate: finalValue },
     ],
-    duration: 1000,
+    duration: 900,
     loop: true,
     autoplay: false,
   })

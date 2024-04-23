@@ -199,7 +199,7 @@ function startShakeAnimate(param: GetAnimateParam): AnimateInstance {
       { rotate: 110, easing: 'easeInBack' },
       { rotate: -10, easing: 'easeOutBack', endDelay: 100 },
       { rotate: 110, easing: 'easeInBack' },
-      { rotate: -10, easing: 'easeOutBack', endDelay: 500 },
+      { rotate: -10, easing: 'easeOutBack', endDelay: 800 },
       { rotate: 110, easing: 'easeInBack' },
       { rotate: finalValue },
     ],
