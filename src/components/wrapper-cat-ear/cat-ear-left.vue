@@ -59,6 +59,37 @@ function startRelaxedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
     },
   };
 }
+function startFearAnimate({ earEl }: GetAnimateParam): AnimateInstance {
+  const step01 = anime({
+    targets: earEl,
+    rotate: 88,
+    duration: 500,
+    complete: () => step02.play(),
+  })
+
+  const step02 = anime({
+    targets: earEl,
+    keyframes: [
+      { rotate: 88 },
+      { rotate: 85 },
+    ],
+    duration: 100,
+    loop: true,
+    autoplay: false,
+    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
+    loopComplete() {
+      const tween = step02.animations[0].tweens[0] as any;
+      tween.from.numbers = [85]
+    },
+  })
+
+
+  return {
+    stop() {
+      anime.remove(earEl);
+    },
+  };
+}
 function startDispleasedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
   const step01 = anime({
     targets: earEl,
@@ -117,6 +148,7 @@ function startShakeAnimate({ earEl }: GetAnimateParam): AnimateInstance {
 const initAnimate: InitAnimate = (param) => {
   const result: AnimateMap = {
     relaxed: () => startRelaxedAnimate(param),
+    fear: () => startFearAnimate(param),
     displeased: () => startDispleasedAnimate(param),
     shake: () => startShakeAnimate(param),
   }

@@ -20,6 +20,7 @@
 <script lang="ts">
 export enum EmotionName {
   RELAXED = 'relaxed',
+  FEAR = 'fear',
   DISPLEASED = 'displeased',
   SHAKE = 'shake',
 }
