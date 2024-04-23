@@ -5,6 +5,7 @@ description:
 <script setup>
 import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-usage.vue'
 import SelectEmotion from '../../../src/components/wrapper-cat-ear/examples/select-emotion.vue'
+import MixColors from '../../../src/components/wrapper-cat-ear/examples/mix-colors.vue'
 </script>
 
 # 貓耳包裝器
@@ -33,14 +34,22 @@ import SelectEmotion from '../../../src/components/wrapper-cat-ear/examples/sele
 
 ### 選擇情緒
 
-使用元件包裹後，萬物都會長出貓耳，變得更可愛。(. ❛ ᴗ ❛.)
-
-而且耳朵會根據尺寸自動調整！ˋ( ° ▽、° )
+可以切換各種不同的情緒
 
 <select-emotion/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-cat-ear/examples/select-emotion.vue
+:::
+
+### 調整顏色
+
+調整毛色，個性化貓貓。
+
+<mix-colors/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-cat-ear/examples/mix-colors.vue
 :::
 
 ## 原理

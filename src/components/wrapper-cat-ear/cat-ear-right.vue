@@ -78,14 +78,14 @@ function resetEarAnimate(
 
 function startRelaxedAnimate(param: GetAnimateParam): AnimateInstance {
   const { earEl } = param;
-  const finalValue = -10;
+  const finalValue = 10;
 
   const initStep = resetEarAnimate(param);
 
   const step02 = anime({
     targets: earEl,
     keyframes: [
-      { rotate: 10 },
+      { rotate: -10 },
       { rotate: finalValue },
     ],
     duration: 2000,

@@ -9,9 +9,7 @@
 
 <script setup lang="ts">
 import anime from 'animejs';
-import { animate } from 'motion';
 import { computed, ref } from 'vue';
-import { constant, times } from 'remeda';
 
 import CatEar, {
   AnimateInstance,
@@ -39,6 +37,7 @@ const earProps = computed(() => {
 type InitAnimate = InstanceType<typeof CatEar>['$props']['initAnimate'];
 type GetAnimateParam = Parameters<InitAnimate>[0]
 
+/** 修正不同 loop 動畫切換時，會導致起點閃爍問題 */
 function fixAnimateLoop(instance: anime.AnimeInstance, value: number) {
   try {
     const tween = instance.animations[0].tweens[0] as any;
@@ -54,7 +53,7 @@ interface ResetAnimateOption {
 }
 /** 回復初始外觀，消除 SVG 變形動畫 */
 function resetEarAnimate(
-  { insideEl }: GetAnimateParam,
+  { insideEl, outsideEl }: GetAnimateParam,
   option?: ResetAnimateOption
 ): AnimateInstance {
   const {
@@ -62,8 +61,14 @@ function resetEarAnimate(
   } = option ?? {}
 
   anime({
+    targets: outsideEl,
+    d: 'M182.5 0C350 112.5 350 363.497 350 363.497C350 363.497 91.5 390 0 363.497C-4.92036e-05 253 50 108 182.5 0Z',
+    duration,
+    complete: onComplete,
+  })
+  anime({
     targets: insideEl,
-    d: 'M195 17.5C319 184 329.5 313 340.5 364.997C292.5 380.5 211 396.5 136.5 364.997C136.5 295.5 121 243.003 195 17.5Z',
+    d: 'M184.5 28.5C330.5 155.5 330.5 335 330.5 363.497C313 368.5 182.5 390.5 127.5 363.497C127.5 287.5 122.5 183.5 184.5 28.5Z',
     duration,
     complete: onComplete,
   })
@@ -102,12 +107,17 @@ function startRelaxedAnimate(param: GetAnimateParam): AnimateInstance {
     },
   };
 }
-function startFearAnimate({ earEl, insideEl }: GetAnimateParam): AnimateInstance {
+function startFearAnimate({ earEl, insideEl, outsideEl }: GetAnimateParam): AnimateInstance {
   const finalValue = 92;
 
   anime({
+    targets: outsideEl,
+    d: 'M222.768 0C350 187 350 377.497 350 377.497C350 377.497 91.5 404 0 377.497C-4.92036e-05 267 54.2683 68 222.768 0Z',
+    duration: 500,
+  })
+  anime({
     targets: insideEl,
-    d: 'M195 17.5C319 184 340.5 336.5 340.5 364.997C323 370 305 371 284 364.997C284 315 289.5 269 195 17.5Z',
+    d: 'M228.268 39C316.768 154.5 340.5 349 340.5 377.497C323 382.5 305 383.5 284 377.497C284 301.5 277.768 144.5 228.268 39Z',
     duration: 500,
   })
   anime({
@@ -136,12 +146,17 @@ function startFearAnimate({ earEl, insideEl }: GetAnimateParam): AnimateInstance
     },
   };
 }
-function startDispleasedAnimate({ earEl, insideEl }: GetAnimateParam): AnimateInstance {
+function startDispleasedAnimate({ earEl, insideEl, outsideEl }: GetAnimateParam): AnimateInstance {
   const finalValue = 85;
 
   anime({
+    targets: outsideEl,
+    d: 'M43.0001 0C350 138.5 350 399.997 350 399.997C350 399.997 91.5003 426.5 0.000305281 399.997C0.000256077 289.5 15 144.5 43.0001 0Z',
+    duration: 500,
+  })
+  anime({
     targets: insideEl,
-    d: 'M195 17.5C319 184 340.5 336.5 340.5 364.997C323 370 305 371 284 364.997C284 315 289.5 269 195 17.5Z',
+    d: 'M58.9999 20.5C307 142 340.5 371.5 340.5 399.997C323 405 305 406 284 399.997C284 324 187 136 58.9999 20.5Z',
     duration: 500,
   })
   anime({

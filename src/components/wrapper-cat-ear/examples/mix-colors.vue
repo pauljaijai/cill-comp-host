@@ -1,36 +1,58 @@
 <template>
-  <div class="w-full h-[50vh] border border-gray-300 flex flex-col gap-10 justify-center items-center">
-    <div class=" border border-gray-300 rounded">
-      <select
-        v-model="emotion"
-        class="  p-2"
+  <div class="w-full py-10 border border-gray-300 flex flex-col gap-10 justify-center items-center">
+    <div class="flex items-center p-10 border border-gray-300 rounded">
+      <input
+        v-model="mainColor"
+        type="color"
       >
-        <option
-          v-for="option in emotionOptions"
-          :key="option"
-          :value="option"
-        >
-          {{ option }}
-        </option>
-      </select>
+
+      <input
+        v-model="innerColor"
+        type="color"
+      >
+
+      <wrapper-cat-ear
+        :main-color="mainColor"
+        :inner-color="innerColor"
+        class="ml-10"
+      >
+        <div
+          class="rounded p-2 px-3  text-white "
+          :style="{ backgroundColor: mainColor }"
+          v-text="`◕ ω ◕`"
+        />
+      </wrapper-cat-ear>
     </div>
 
-    <wrapper-cat-ear :emotion="emotion">
-      <div class="border rounded p-2 bg-white">
-        ・ω・
-      </div>
+    <wrapper-cat-ear
+      main-color="#3b3b3b"
+      inner-color="#ffc2b8"
+    >
+      <div
+        class="rounded p-2 px-3 bg-[#3b3b3b] text-white"
+        v-text="`◕ ω ◕`"
+      />
     </wrapper-cat-ear>
 
-    <wrapper-cat-ear :emotion="emotion">
-      <div class="border rounded p-2 bg-white">
-        ʘ ᴥ ʘ
-      </div>
+    <wrapper-cat-ear
+      main-color="#323d69"
+      inner-color="#ffc2b8"
+    >
+      <div
+        class="rounded p-2 px-3 bg-[#323d69] text-white"
+        v-text="`◕ ω ◕`"
+      />
     </wrapper-cat-ear>
 
-    <wrapper-cat-ear :emotion="emotion">
-      <div class="border rounded p-2 bg-white">
-        ◕ ω ◕
-      </div>
+    <wrapper-cat-ear
+      main-color="#ff852e"
+      inner-color="#ffc2b8"
+      class="mt-10"
+    >
+      <div
+        class="rounded p-10 tracking-[1rem] bg-[#ff852e] text-white"
+        v-text="`> ◕ ω ◕ <`"
+      />
     </wrapper-cat-ear>
   </div>
 </template>
@@ -40,7 +62,6 @@ import { ref } from 'vue';
 
 import WrapperCatEar, { EmotionName } from '../wrapper-cat-ear.vue';
 
-const emotion = ref<`${EmotionName}`>('relaxed');
-
-const emotionOptions = Object.values(EmotionName);
+const mainColor = ref('#b38546');
+const innerColor = ref('#ffc2b8');
 </script>
