@@ -38,32 +38,80 @@ const earProps = computed(() => {
 type InitAnimate = InstanceType<typeof CatEar>['$props']['initAnimate'];
 type GetAnimateParam = Parameters<InitAnimate>[0]
 
-function startRelaxedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
+function fixAnimateLoop(instance: anime.AnimeInstance, value: number) {
+  try {
+    const tween = instance.animations[0].tweens[0] as any;
+    tween.from.numbers = [value]
+  } catch (error) {
+    console.error('[ fixAnimateLoop ] : ', error);
+  }
+}
+
+interface ResetAnimateOption {
+  duration?: number;
+  onComplete?: () => void;
+}
+/** 回復初始外觀，消除 SVG 變形動畫 */
+function resetEarAnimate(
+  { insideEl }: GetAnimateParam,
+  option?: ResetAnimateOption
+): AnimateInstance {
+  const {
+    duration, onComplete,
+  } = option ?? {}
+
+  anime({
+    targets: insideEl,
+    d: 'M202 0C350 170 350 364.997 350 364.997H136.5C136.5 364.997 128 225.503 202 0Z',
+    duration,
+    complete: onComplete,
+  })
+
+  return {
+    stop() {
+      anime.remove(insideEl);
+    },
+  };
+}
+
+function startRelaxedAnimate(param: GetAnimateParam): AnimateInstance {
+  const { earEl } = param;
+  const finalValue = -10;
+
+  const initStep = resetEarAnimate(param);
+
   const step02 = anime({
     targets: earEl,
     keyframes: [
       { rotate: 10 },
-      { rotate: -10 },
+      { rotate: finalValue },
     ],
     duration: 2000,
     loop: true,
     /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
     loopComplete() {
-      const tween = step02.animations[0].tweens[0] as any;
-      tween.from.numbers = [-10]
+      fixAnimateLoop(step02, finalValue);
     },
   })
 
   return {
     stop() {
       anime.remove(earEl);
+      initStep.stop();
     },
   };
 }
-function startFearAnimate({ earEl }: GetAnimateParam): AnimateInstance {
-  const step01 = anime({
+function startFearAnimate({ earEl, insideEl }: GetAnimateParam): AnimateInstance {
+  const finalValue = 92;
+
+  anime({
+    targets: insideEl,
+    d: 'M202 0C350 170 350 364.997 350 364.997H303C303 364.997 227.5 223 202 0Z',
+    duration: 500,
+  })
+  anime({
     targets: earEl,
-    rotate: 88,
+    rotate: finalValue,
     duration: 500,
     complete: () => step02.play(),
   })
@@ -71,19 +119,15 @@ function startFearAnimate({ earEl }: GetAnimateParam): AnimateInstance {
   const step02 = anime({
     targets: earEl,
     keyframes: [
-      { rotate: 88 },
-      { rotate: 85 },
+      { rotate: 90 },
+      { rotate: finalValue },
     ],
     duration: 100,
     loop: true,
     autoplay: false,
-    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
-    loopComplete() {
-      const tween = step02.animations[0].tweens[0] as any;
-      tween.from.numbers = [85]
-    },
   })
-
+  /** 因為有 step01 所以提早修正 */
+  fixAnimateLoop(step02, finalValue);
 
   return {
     stop() {
@@ -91,10 +135,17 @@ function startFearAnimate({ earEl }: GetAnimateParam): AnimateInstance {
     },
   };
 }
-function startDispleasedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
-  const step01 = anime({
+function startDispleasedAnimate({ earEl, insideEl }: GetAnimateParam): AnimateInstance {
+  const finalValue = 85;
+
+  anime({
+    targets: insideEl,
+    d: 'M202 0C350 170 350 364.997 350 364.997H303C303 364.997 227.5 223 202 0Z',
+    duration: 500,
+  })
+  anime({
     targets: earEl,
-    rotate: 88,
+    rotate: finalValue,
     duration: 500,
     complete: () => step02.play(),
   })
@@ -102,46 +153,49 @@ function startDispleasedAnimate({ earEl }: GetAnimateParam): AnimateInstance {
   const step02 = anime({
     targets: earEl,
     keyframes: [
-      { rotate: 88 },
-      { rotate: 85 },
-    ],
-    duration: 100,
-    loop: true,
-    autoplay: false,
-    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
-    loopComplete() {
-      const tween = step02.animations[0].tweens[0] as any;
-      tween.from.numbers = [85]
-    },
-  })
-
-
-  return {
-    stop() {
-      anime.remove(earEl);
-    },
-  };
-}
-function startShakeAnimate({ earEl }: GetAnimateParam): AnimateInstance {
-  const step = anime({
-    targets: earEl,
-    keyframes: [
-      { rotate: 85 },
-      { rotate: 95 },
-      { rotate: 85 },
+      { rotate: 90 },
+      { rotate: finalValue },
     ],
     duration: 1000,
     loop: true,
-    /** 第一次循環時，強制調整 from，就不會有跳動問題了  */
+    autoplay: false,
+  })
+  fixAnimateLoop(step02, finalValue);
+
+  return {
+    stop() {
+      anime.remove(earEl);
+    },
+  };
+}
+function startShakeAnimate(param: GetAnimateParam): AnimateInstance {
+  const { earEl } = param;
+  const finalValue = -10;
+
+  const initStep = resetEarAnimate(param);
+
+  const step = anime({
+    targets: earEl,
+    keyframes: [
+      { rotate: -10, easing: 'easeOutBack' },
+      { rotate: 110, easing: 'easeInBack' },
+      { rotate: -10, easing: 'easeOutBack', endDelay: 100 },
+      { rotate: 110, easing: 'easeInBack' },
+      { rotate: -10, easing: 'easeOutBack', endDelay: 500 },
+      { rotate: 110, easing: 'easeInBack' },
+      { rotate: finalValue },
+    ],
+    duration: 800,
+    loop: true,
     loopComplete() {
-      const tween = step.animations[0].tweens[0] as any;
-      tween.from.numbers = [85]
+      fixAnimateLoop(step, finalValue);
     },
   })
 
   return {
     stop() {
       anime.remove(earEl);
+      initStep.stop();
     },
   };
 }
