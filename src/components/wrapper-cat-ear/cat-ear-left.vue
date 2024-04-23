@@ -75,7 +75,7 @@ function resetEarAnimate(
 
   return {
     stop() {
-      anime.remove(insideEl);
+      anime.remove([insideEl, outsideEl]);
     },
   };
 }
@@ -107,7 +107,8 @@ function startRelaxedAnimate(param: GetAnimateParam): AnimateInstance {
     },
   };
 }
-function startFearAnimate({ earEl, insideEl, outsideEl }: GetAnimateParam): AnimateInstance {
+function startFearAnimate(param: GetAnimateParam): AnimateInstance {
+  const { earEl, insideEl, outsideEl } = param;
   const finalValue = 92;
 
   anime({
@@ -137,17 +138,18 @@ function startFearAnimate({ earEl, insideEl, outsideEl }: GetAnimateParam): Anim
     loop: true,
     autoplay: false,
   })
-  /** 因為有 step01 所以提早修正 */
+  /** 因為有轉換動畫所以提早修正 */
   fixAnimateLoop(step02, finalValue);
 
   return {
     stop() {
-      anime.remove(earEl);
+      anime.remove([earEl, insideEl, outsideEl]);
     },
   };
 }
-function startDispleasedAnimate({ earEl, insideEl, outsideEl }: GetAnimateParam): AnimateInstance {
-  const finalValue = 85;
+function startDispleasedAnimate(param: GetAnimateParam): AnimateInstance {
+  const { earEl, insideEl, outsideEl } = param;
+  const finalValue = 70;
 
   anime({
     targets: outsideEl,
@@ -169,7 +171,7 @@ function startDispleasedAnimate({ earEl, insideEl, outsideEl }: GetAnimateParam)
   const step02 = anime({
     targets: earEl,
     keyframes: [
-      { rotate: 90 },
+      { rotate: 80 },
       { rotate: finalValue },
     ],
     duration: 1000,
@@ -180,7 +182,7 @@ function startDispleasedAnimate({ earEl, insideEl, outsideEl }: GetAnimateParam)
 
   return {
     stop() {
-      anime.remove(earEl);
+      anime.remove([earEl, insideEl, outsideEl]);
     },
   };
 }
