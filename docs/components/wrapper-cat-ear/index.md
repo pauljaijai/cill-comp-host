@@ -4,6 +4,7 @@ description:
 
 <script setup>
 import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-usage.vue'
+import SelectEmotion from '../../../src/components/wrapper-cat-ear/examples/select-emotion.vue'
 </script>
 
 # 貓耳包裝器
@@ -20,7 +21,9 @@ import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-u
 
 ### 基本用法
 
-當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+使用元件包裹後，萬物都會長出貓耳，變得更可愛。(. ❛ ᴗ ❛.)
+
+而且耳朵會根據尺寸自動調整！ˋ( ° ▽、° )
 
 <basic-usage/>
 
@@ -28,6 +31,17 @@ import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-u
 <<< ../../../src/components/wrapper-cat-ear/examples/basic-usage.vue
 :::
 
+### 選擇情緒
+
+使用元件包裹後，萬物都會長出貓耳，變得更可愛。(. ❛ ᴗ ❛.)
+
+而且耳朵會根據尺寸自動調整！ˋ( ° ▽、° )
+
+<select-emotion/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-cat-ear/examples/select-emotion.vue
+:::
 
 ## 原理
 

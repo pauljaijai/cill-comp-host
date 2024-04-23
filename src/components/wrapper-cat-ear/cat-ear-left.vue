@@ -21,7 +21,9 @@ import CatEar, {
 
 import { useMouseInElement } from '@vueuse/core';
 
-interface Props extends Pick<EarProps, 'emotion' | 'color'> { }
+interface Props extends Pick<
+  EarProps, 'emotion' | 'mainColor' | 'innerColor'
+> { }
 const props = defineProps<Props>();
 
 const frameRef = ref<HTMLDivElement>();
@@ -61,7 +63,7 @@ function resetEarAnimate(
 
   anime({
     targets: insideEl,
-    d: 'M202 0C350 170 350 364.997 350 364.997H136.5C136.5 364.997 128 225.503 202 0Z',
+    d: 'M195 17.5C319 184 329.5 313 340.5 364.997C292.5 380.5 211 396.5 136.5 364.997C136.5 295.5 121 243.003 195 17.5Z',
     duration,
     complete: onComplete,
   })
@@ -105,7 +107,7 @@ function startFearAnimate({ earEl, insideEl }: GetAnimateParam): AnimateInstance
 
   anime({
     targets: insideEl,
-    d: 'M202 0C350 170 350 364.997 350 364.997H303C303 364.997 227.5 223 202 0Z',
+    d: 'M195 17.5C319 184 340.5 336.5 340.5 364.997C323 370 305 371 284 364.997C284 315 289.5 269 195 17.5Z',
     duration: 500,
   })
   anime({
@@ -139,7 +141,7 @@ function startDispleasedAnimate({ earEl, insideEl }: GetAnimateParam): AnimateIn
 
   anime({
     targets: insideEl,
-    d: 'M202 0C350 170 350 364.997 350 364.997H303C303 364.997 227.5 223 202 0Z',
+    d: 'M195 17.5C319 184 340.5 336.5 340.5 364.997C323 370 305 371 284 364.997C284 315 289.5 269 195 17.5Z',
     duration: 500,
   })
   anime({

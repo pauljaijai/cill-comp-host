@@ -37,12 +37,14 @@ import { useMouseInElement } from '@vueuse/core';
 // #region Props
 interface Props {
   emotion?: `${EmotionName}`;
-  color?: string;
+  mainColor?: string;
+  innerColor?: string;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   emotion: 'relaxed',
-  color: '#CECECE',
+  mainColor: '#E7E7E7',
+  innerColor: '#fcfcfc',
 });
 
 // #region Emits

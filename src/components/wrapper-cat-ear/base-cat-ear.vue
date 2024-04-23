@@ -10,17 +10,17 @@
       cx="175"
       cy="364.997"
       r="175"
-      fill="#CECECE"
+      :fill="props.mainColor"
     />
     <path
       ref="outsideRef"
       d="M200 0C338 190 350 364.997 350 364.997H0C0 364.997 0 147 200 0Z"
-      fill="#CECECE"
+      :fill="props.mainColor"
     />
     <path
       ref="insideRef"
-      d="M202 0C350 170 350 364.997 350 364.997H136.5C136.5 364.997 128 225.503 202 0Z"
-      fill="#E7E7E7"
+      d="M195 17.5C319 184 329.5 313 340.5 364.997C292.5 380.5 211 396.5 136.5 364.997C136.5 295.5 121 243.003 195 17.5Z"
+      :fill="props.innerColor"
     />
   </svg>
 </template>
@@ -33,7 +33,8 @@ export type AnimateMap = Record<EmotionName, () => AnimateInstance>;
 
 export interface Props {
   emotion?: `${EmotionName}`;
-  color?: string;
+  mainColor?: string;
+  innerColor?: string;
   initAnimate: (param: {
     earEl: SVGElement;
     insideEl: SVGPathElement;
@@ -49,7 +50,8 @@ import { EmotionName } from './wrapper-cat-ear.vue';
 
 const props = withDefaults(defineProps<Props>(), {
   emotion: 'relaxed',
-  color: '#CECECE'
+  mainColor: '#CECECE',
+  innerColor: '#E7E7E7',
 });
 
 const earRef = ref<SVGElement>();
