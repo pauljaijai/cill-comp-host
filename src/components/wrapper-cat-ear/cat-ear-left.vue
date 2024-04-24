@@ -20,7 +20,7 @@ import CatEar, {
 import { useMouseInElement } from '@vueuse/core';
 
 interface Props extends Pick<
-  EarProps, 'emotion' | 'mainColor' | 'innerColor'
+  EarProps, 'action' | 'mainColor' | 'innerColor'
 > { }
 const props = defineProps<Props>();
 
@@ -30,7 +30,7 @@ const { isOutside } = useMouseInElement(frameRef);
 const earProps = computed(() => {
   return {
     ...props,
-    emotion: isOutside.value ? props.emotion : 'shake',
+    action: isOutside.value ? props.action : 'shake',
   }
 });
 

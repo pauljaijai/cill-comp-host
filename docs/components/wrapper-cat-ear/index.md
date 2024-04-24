@@ -4,7 +4,7 @@ description:
 
 <script setup>
 import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-usage.vue'
-import SelectEmotion from '../../../src/components/wrapper-cat-ear/examples/select-emotion.vue'
+import SwitchAction from '../../../src/components/wrapper-cat-ear/examples/switch-action.vue'
 import MixColors from '../../../src/components/wrapper-cat-ear/examples/mix-colors.vue'
 import InteractiveEffect from '../../../src/components/wrapper-cat-ear/examples/interactive-effect.vue'
 import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty-cat.vue'
@@ -38,10 +38,10 @@ import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty
 
 可以切換各種不同的情緒
 
-<select-emotion/>
+<switch-action/>
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/wrapper-cat-ear/examples/select-emotion.vue
+<<< ../../../src/components/wrapper-cat-ear/examples/switch-action.vue
 :::
 
 ### 調整顏色

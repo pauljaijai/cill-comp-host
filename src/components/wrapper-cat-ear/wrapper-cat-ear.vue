@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-export enum EmotionName {
+export enum ActionName {
   RELAXED = 'relaxed',
   FEAR = 'fear',
   DISPLEASED = 'displeased',
@@ -36,20 +36,20 @@ import { useMouseInElement } from '@vueuse/core';
 
 // #region Props
 interface Props {
-  emotion?: `${EmotionName}`;
+  action?: `${ActionName}`;
   mainColor?: string;
   innerColor?: string;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  emotion: 'relaxed',
+  action: 'relaxed',
   mainColor: '#E7E7E7',
   innerColor: '#fcfcfc',
 });
 
 // #region Emits
 const emit = defineEmits<{
-  'update:emotion': [value: Props['emotion']];
+  'update:action': [value: Props['action']];
 }>();
 // #endregion Emits
 

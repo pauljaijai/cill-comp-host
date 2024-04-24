@@ -1,7 +1,7 @@
 <template>
   <div class="w-full py-20 border border-gray-300 flex flex-col gap-16 justify-center items-center">
     <wrapper-cat-ear
-      :emotion="emotion"
+      :action="action"
       main-color="#DDD"
       class="cat border rounded "
     >
@@ -28,11 +28,11 @@
 import { computed, ref } from 'vue';
 import { getVectorLength } from '../../../common/utils';
 
-import WrapperCatEar, { EmotionName } from '../wrapper-cat-ear.vue';
+import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
 
 import { useMouseInElement, useMousePressed } from '@vueuse/core';
 
-const faceMap: Record<EmotionName, string> = {
+const faceMap: Record<ActionName, string> = {
   relaxed: '◕ ω ◕',
   fear: '´•̥̥̥ ω •̥̥̥`',
   displeased: '˘･ ω ･˘',
@@ -62,7 +62,7 @@ const catDistance = computed(
 );
 
 
-const emotion = computed<`${EmotionName}`>(() => {
+const action = computed<`${ActionName}`>(() => {
   if (!isOutside.value) {
     return pressed.value ? 'shake' : 'fear';
   }
@@ -78,7 +78,7 @@ const face = computed(() => {
     return '送出';
   }
 
-  return faceMap[emotion.value]
+  return faceMap[action.value]
 });
 </script>
 

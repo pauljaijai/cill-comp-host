@@ -29,10 +29,10 @@
 export interface AnimateInstance {
   stop: () => void;
 }
-export type AnimateMap = Record<EmotionName, () => AnimateInstance>;
+export type AnimateMap = Record<ActionName, () => AnimateInstance>;
 
 export interface Props {
-  emotion?: `${EmotionName}`;
+  action?: `${ActionName}`;
   mainColor?: string;
   innerColor?: string;
   initAnimate: (param: {
@@ -46,10 +46,10 @@ export interface Props {
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
-import { EmotionName } from './wrapper-cat-ear.vue';
+import { ActionName } from './wrapper-cat-ear.vue';
 
 const props = withDefaults(defineProps<Props>(), {
-  emotion: 'relaxed',
+  action: 'relaxed',
   mainColor: '#CECECE',
   innerColor: '#E7E7E7',
 });
@@ -60,7 +60,7 @@ const outsideRef = ref<SVGPathElement>();
 
 let animateMap: AnimateMap | undefined;
 let prevAnimate: AnimateInstance | undefined;
-watch(() => props.emotion, (value) => {
+watch(() => props.action, (value) => {
   if (!animateMap) return;
 
   prevAnimate?.stop();
@@ -82,7 +82,7 @@ onMounted(() => {
     outsideEl: outsideRef.value!,
   });
 
-  prevAnimate = animateMap?.[props.emotion]?.();
+  prevAnimate = animateMap?.[props.action]?.();
 });
 
 // #region Methods

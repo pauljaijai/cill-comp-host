@@ -12,7 +12,7 @@
       :disabled="disabled"
     >
       <wrapper-cat-ear
-        :emotion="emotion"
+        :action="action"
         main-color="#DDD"
       >
         <div
@@ -28,7 +28,7 @@
 import { ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
-import WrapperCatEar, { EmotionName } from '../wrapper-cat-ear.vue';
+import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
 import BtnNaughty from '../../btn-naughty/btn-naughty.vue';
 
 import { whenever, refAutoReset } from '@vueuse/core';
@@ -36,12 +36,12 @@ import { whenever, refAutoReset } from '@vueuse/core';
 const btnRef = ref<InstanceType<typeof BtnNaughty>>();
 
 const disabled = ref(true);
-const emotion = refAutoReset<`${EmotionName}`>('relaxed', 700);
+const action = refAutoReset<`${ActionName}`>('relaxed', 700);
 const face = refAutoReset('◔ ω ◔', 700);
 
 whenever(() => btnRef.value?.isRunning, () => {
   face.value = '˘･ ω ･˘'
-  emotion.value = 'displeased';
+  action.value = 'displeased';
 })
 </script>
 

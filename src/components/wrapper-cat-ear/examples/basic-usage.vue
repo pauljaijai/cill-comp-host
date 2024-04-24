@@ -24,5 +24,5 @@
 </template>
 
 <script setup lang="ts">
-import WrapperCatEar, { EmotionName } from '../wrapper-cat-ear.vue';
+import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
 </script>
