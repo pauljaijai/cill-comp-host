@@ -35,11 +35,11 @@
     </wrapper-cat-ear>
 
     <wrapper-cat-ear
-      main-color="#323d69"
-      inner-color="#ffc2b8"
+      main-color="#03a1fc"
+      inner-color="#8f003e"
     >
       <div
-        class="rounded p-2 px-3 bg-[#323d69] text-white"
+        class="rounded p-2 px-3 bg-[#03a1fc] text-white"
         v-text="`◕ ω ◕`"
       />
     </wrapper-cat-ear>

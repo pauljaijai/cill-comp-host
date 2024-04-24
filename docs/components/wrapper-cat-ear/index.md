@@ -6,6 +6,7 @@ description:
 import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-usage.vue'
 import SelectEmotion from '../../../src/components/wrapper-cat-ear/examples/select-emotion.vue'
 import MixColors from '../../../src/components/wrapper-cat-ear/examples/mix-colors.vue'
+import InteractiveEffect from '../../../src/components/wrapper-cat-ear/examples/interactive-effect.vue'
 </script>
 
 # 貓耳包裝器
@@ -46,10 +47,24 @@ import MixColors from '../../../src/components/wrapper-cat-ear/examples/mix-colo
 
 調整毛色，個性化貓貓。
 
+10 隻橘貓 9 隻胖，1 隻超級胖。(oﾟvﾟ)ノ
+
 <mix-colors/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-cat-ear/examples/mix-colors.vue
+:::
+
+### 嚕貓囉
+
+配合情緒設計各類邏輯，讓互動更加有趣。
+
+嘗試讓滑鼠慢慢靠近貓貓看看。(. ❛ ᴗ ❛.)
+
+<interactive-effect/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-cat-ear/examples/interactive-effect.vue
 :::
 
 ## 原理
