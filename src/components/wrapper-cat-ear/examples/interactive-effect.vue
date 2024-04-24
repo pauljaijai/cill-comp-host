@@ -4,17 +4,18 @@
       :emotion="emotion"
       main-color="#4fb3ff"
       inner-color="#ffc2b8"
+      class="cat"
     >
       <div
         ref="catRef"
-        class="rounded px-[4rem] py-[3rem] bg-[#4fb3ff] flex justify-center items-center "
+        class=" rounded px-[4rem] py-[3rem] bg-[#4fb3ff] flex justify-center items-center "
       >
         <transition
           name="cat"
           mode="out-in"
         >
           <div
-            class=" absolute text-nowrap"
+            class=" absolute text-nowrap select-none"
             :key="face"
             v-text="face"
           />
@@ -26,15 +27,17 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import WrapperCatEar, { EmotionName } from '../wrapper-cat-ear.vue';
-import { useMouseInElement } from '@vueuse/core';
 import { getVectorLength } from '../../../common/utils';
+
+import WrapperCatEar, { EmotionName } from '../wrapper-cat-ear.vue';
+
+import { useMouseInElement, useMousePressed } from '@vueuse/core';
 
 const faceMap: Record<EmotionName, string> = {
   relaxed: '◕ ω ◕',
   fear: '´•̥̥̥ ω •̥̥̥`',
   displeased: '˘･ ω ･˘',
-  shake: '◕ ω ◕',
+  shake: '≧ X ≦',
 }
 
 const catRef = ref();
@@ -43,6 +46,7 @@ const {
   elementWidth, elementHeight,
   isOutside,
 } = useMouseInElement(catRef);
+const { pressed } = useMousePressed()
 
 /** 滑鼠與貓的距離 */
 const distance = computed(() => getVectorLength({
@@ -55,7 +59,7 @@ const displeasedDistance = computed(
 
 const emotion = computed<`${EmotionName}`>(() => {
   if (!isOutside.value) {
-    return 'fear';
+    return pressed.value ? 'shake' : 'fear';
   }
 
   if (distance.value < displeasedDistance.value) {
@@ -68,6 +72,16 @@ const face = computed(() => faceMap[emotion.value]);
 </script>
 
 <style lang="sass">
+.cat
+  transition-duration: 0.4s
+  &:hover
+    transition-duration: 0.3s
+    scale: 1.02
+  &:active
+    transition-duration: 0.1s
+    opacity: 0.5
+    scale: 0.95
+
 .cat-enter-active, .cat-leave-active
   transition-duration: 0.2s
 .cat-enter-from, .cat-leave-to
