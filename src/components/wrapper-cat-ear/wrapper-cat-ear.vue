@@ -18,13 +18,20 @@
 </template>
 
 <script lang="ts">
+// #region ActionName
 export enum ActionName {
+  /** 躲貓貓 */
   PEEKABOO = 'peekaboo',
+  /** 放鬆 */
   RELAXED = 'relaxed',
+  /** 害怕 */
   FEAR = 'fear',
+  /** 煩躁，飛機耳 */
   DISPLEASED = 'displeased',
+  /** 甩耳朵 */
   SHAKE = 'shake',
 }
+// #endregion ActionName
 </script>
 
 <script setup lang="ts">
@@ -37,8 +44,11 @@ import { useMouseInElement } from '@vueuse/core';
 
 // #region Props
 interface Props {
+  /** 目前動作 */
   action?: `${ActionName}`;
+  /** 主要毛色 */
   mainColor?: string;
+  /** 耳朵內部的顏色 */
   innerColor?: string;
 }
 // #endregion Props

@@ -48,17 +48,17 @@ import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty
 
 調整毛色，個性化貓貓。
 
-10 隻橘貓 9 隻胖，1 隻超級胖。(oﾟvﾟ)ノ
-
 <mix-colors/>
+
+10 隻橘貓 9 隻胖，1 隻超級胖。(oﾟvﾟ)ノ
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-cat-ear/examples/mix-colors.vue
 :::
 
-### 嚕貓囉
+### 互動效果
 
-配合情緒設計各類邏輯，讓互動更加有趣。
+配合耳朵動作設計各類邏輯，讓互動更加有趣。
 
 嘗試讓滑鼠從遠處慢慢靠近按鈕看看。(. ❛ ᴗ ❛.)
 
@@ -80,30 +80,26 @@ import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty
 
 ## 原理
 
-滑鼠碰觸按鈕時，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕尺寸的距離。
+使用 SVG 繪製耳朵，透過 anime.js 控制耳朵動畫。
 
-如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
+📚 [anime.js](https://animejs.com/)
 
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
+### 為甚麼選擇 anime.js？
 
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕會啪沒了，消失的無影無蹤。
-:::
+因為最主流的 GSAP 的 SVG 動畫要收費。
+
+最酷炫的 Motion One 使用上有點小問題，而且資料太少。
+
+最後選擇了資料還算齊全且 SVG 支援度不錯的 anime.js 了。
+
+如果大家有更好的套件，拜託請推薦給我。(´▽`ʃ♡ƪ)
 
 ## API
+
+### ActionName
+
+<<< ../../../src/components/wrapper-cat-ear/wrapper-cat-ear.vue/#ActionName
 
 ### Props
 
 <<< ../../../src/components/wrapper-cat-ear/wrapper-cat-ear.vue/#Props
-
-### Emits
-
-<<< ../../../src/components/wrapper-cat-ear/wrapper-cat-ear.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/wrapper-cat-ear/wrapper-cat-ear.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/wrapper-cat-ear/wrapper-cat-ear.vue/#Slots
