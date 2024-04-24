@@ -31,6 +31,10 @@ const frameRef = ref<HTMLDivElement>();
 const { isOutside } = useMouseInElement(frameRef);
 
 const earProps = computed(() => {
+  if (props.action === 'peekaboo') {
+    return props;
+  }
+
   return {
     ...props,
     action: isOutside.value ? props.action : 'shake',
@@ -82,6 +86,21 @@ function resetEarAnimate(
   };
 }
 
+function startPeekabooAnimate(param: GetAnimateParam): AnimateInstance {
+  const { earEl } = param;
+
+  anime({
+    targets: earEl,
+    rotate: 180,
+    duration: 1600,
+  })
+
+  return {
+    stop() {
+      anime.remove(earEl);
+    },
+  };
+}
 function startRelaxedAnimate(param: GetAnimateParam): AnimateInstance {
   const { earEl } = param;
   const finalValue = 10;
@@ -222,6 +241,7 @@ function startShakeAnimate(param: GetAnimateParam): AnimateInstance {
 
 const initAnimate: InitAnimate = (param) => {
   const result: AnimateMap = {
+    peekaboo: () => startPeekabooAnimate(param),
     relaxed: () => startRelaxedAnimate(param),
     fear: () => startFearAnimate(param),
     displeased: () => startDispleasedAnimate(param),

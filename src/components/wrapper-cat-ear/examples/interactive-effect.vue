@@ -33,6 +33,7 @@ import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
 import { useMouseInElement, useMousePressed } from '@vueuse/core';
 
 const faceMap: Record<ActionName, string> = {
+  peekaboo: '送出',
   relaxed: '◕ ω ◕',
   fear: '´•̥̥̥ ω •̥̥̥`',
   displeased: '˘･ ω ･˘',
@@ -67,19 +68,17 @@ const action = computed<`${ActionName}`>(() => {
     return pressed.value ? 'shake' : 'fear';
   }
 
+  if (distance.value > catDistance.value) {
+    return 'peekaboo';
+  }
+
   if (distance.value < displeasedDistance.value) {
     return 'displeased';
   }
 
   return 'relaxed';
 });
-const face = computed(() => {
-  if (distance.value > catDistance.value) {
-    return '送出';
-  }
-
-  return faceMap[action.value]
-});
+const face = computed(() => faceMap[action.value]);
 </script>
 
 <style lang="sass">

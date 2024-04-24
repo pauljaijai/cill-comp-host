@@ -19,6 +19,7 @@
 
 <script lang="ts">
 export enum ActionName {
+  PEEKABOO = 'peekaboo',
   RELAXED = 'relaxed',
   FEAR = 'fear',
   DISPLEASED = 'displeased',
