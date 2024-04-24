@@ -7,6 +7,7 @@ import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-u
 import SelectEmotion from '../../../src/components/wrapper-cat-ear/examples/select-emotion.vue'
 import MixColors from '../../../src/components/wrapper-cat-ear/examples/mix-colors.vue'
 import InteractiveEffect from '../../../src/components/wrapper-cat-ear/examples/interactive-effect.vue'
+import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty-cat.vue'
 </script>
 
 # 貓耳包裝器
@@ -65,6 +66,16 @@ import InteractiveEffect from '../../../src/components/wrapper-cat-ear/examples/
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-cat-ear/examples/interactive-effect.vue
+:::
+
+### 調皮的貓貓
+
+搭配調皮的按鈕，貓貓度更高了！ᕕ( ﾟ ∀。)ᕗ
+
+<naughty-cat/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-cat-ear/examples/naughty-cat.vue
 :::
 
 ## 原理
