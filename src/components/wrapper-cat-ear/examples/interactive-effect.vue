@@ -2,8 +2,8 @@
   <div class="w-full py-20 border border-gray-300 flex flex-col gap-16 justify-center items-center">
     <wrapper-cat-ear
       :action="action"
-      main-color="#DDD"
-      class="cat border rounded "
+      main-color="#666"
+      class="cat border-2 border-[#666] rounded "
     >
       <div
         ref="catRef"
@@ -84,16 +84,16 @@ const face = computed(() => faceMap[action.value]);
 <style lang="sass">
 .cat
   transition-duration: 0.4s
-  box-shadow: 4px 4px 0px 0px #AAA
+  box-shadow: 3px 3px 0px 0px rgba(#AAA, 0.8)
   &:hover
     transition-duration: 0.3s
     scale: 1.02
-    box-shadow: 6px 6px 0px 0px #CCC
+    box-shadow: 5px 5px 0px 0px rgba(#AAA, 0.5)
   &:active
     transition-duration: 0.1s
     scale: 0.95
     animation: shake 0.3s infinite ease-in-out
-    box-shadow: 0px 0px 0px 0px #888
+    box-shadow: 0px 0px 0px 0px rgba(#AAA, 1)
 
 .cat-enter-active, .cat-leave-active
   transition-duration: 0.2s

@@ -10,13 +10,14 @@
     <btn-naughty
       ref="btnRef"
       :disabled="disabled"
+      class="cat-btn select-none"
     >
       <wrapper-cat-ear
-        :action="action"
-        main-color="#DDD"
+        :action="currentAction"
+        main-color="#777"
       >
         <div
-          class=" w-[6rem] h-[3rem] border rounded bg-white text-xl font-bold text-nowrap flex-center"
+          class=" w-[6rem] h-[3rem] border border-[#777] rounded bg-white text-xl font-bold flex-center"
           v-text="face"
         />
       </wrapper-cat-ear>
@@ -25,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
 import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
@@ -35,9 +36,17 @@ import { whenever, refAutoReset } from '@vueuse/core';
 
 const btnRef = ref<InstanceType<typeof BtnNaughty>>();
 
-const disabled = ref(true);
+const disabled = ref(false);
 const action = refAutoReset<`${ActionName}`>('relaxed', 700);
-const face = refAutoReset('◔ ω ◔', 700);
+const face = refAutoReset('儲存', 700);
+
+const currentAction = computed(() => {
+  if (!disabled.value) {
+    return 'peekaboo';
+  }
+
+  return action.value;
+});
 
 whenever(() => btnRef.value?.isRunning, () => {
   face.value = '˘･ ω ･˘'
@@ -46,6 +55,12 @@ whenever(() => btnRef.value?.isRunning, () => {
 </script>
 
 <style lang="sass">
+.cat-btn
+  transition-duration: 0.4s
+  &:active
+    transition-duration: 0.01s
+    scale: 0.95
+
 .flex-center
   display: flex
   justify-content: center

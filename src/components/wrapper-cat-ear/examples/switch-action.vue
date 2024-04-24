@@ -1,7 +1,10 @@
 <template>
   <div class="w-full py-10 border border-gray-300 flex flex-col gap-16 justify-center items-center">
-    <wrapper-cat-ear :action="action">
-      <div class=" border border-gray-300 rounded">
+    <wrapper-cat-ear
+      :action="action"
+      main-color="#444"
+    >
+      <div class=" border-2 border-[#444] rounded">
         <select
           v-model="action"
           class="  p-2"
@@ -15,13 +18,6 @@
           </option>
         </select>
       </div>
-    </wrapper-cat-ear>
-
-    <wrapper-cat-ear :action="action">
-      <div
-        class="border rounded px-6 py-4 bg-white"
-        v-text="`◔ ω ◔`"
-      />
     </wrapper-cat-ear>
   </div>
 </template>

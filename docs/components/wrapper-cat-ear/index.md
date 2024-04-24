@@ -34,9 +34,9 @@ import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty
 <<< ../../../src/components/wrapper-cat-ear/examples/basic-usage.vue
 :::
 
-### 選擇情緒
+### 切換動作
 
-可以切換各種不同的情緒
+可以切換各種不同的動作
 
 <switch-action/>
 
