@@ -28,6 +28,5 @@ import { ref } from 'vue';
 import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
 
 const action = ref<`${ActionName}`>('relaxed');
-
 const options = Object.values(ActionName);
 </script>

@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
+import WrapperCatEar from '../wrapper-cat-ear.vue';
 
 const mainColor = ref('#b38546');
 const innerColor = ref('#ffc2b8');
