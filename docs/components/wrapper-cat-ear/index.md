@@ -1,5 +1,5 @@
 ---
-description: 任何元素包起來就會長出貓耳，讓萬物皆可萌吧！(^・ω・^ )✧
+description: 任何元素包起來都會長出貓耳，讓萬物皆可萌吧！(^・ω・^ )✧
 ---
 
 <script setup>
@@ -12,7 +12,7 @@ import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty
 
 # 貓耳包裝器
 
-任何元素包起來就會長出貓耳，讓萬物皆可萌吧！(^・ω・^ )✧
+任何元素包起來都會長出貓耳，讓萬物皆可萌吧！(^・ω・^ )✧
 
 路人：「這是甚麼鬼玩意兒？(っ´Ι`)っ」
 
