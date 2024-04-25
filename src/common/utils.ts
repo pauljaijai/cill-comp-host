@@ -45,3 +45,9 @@ export function getUnitVector(
     z: z / magnitude,
   };
 }
+
+export async function runTasks(tasks: (() => Promise<any>)[]) {
+  for (const task of tasks) {
+    await task();
+  }
+}
