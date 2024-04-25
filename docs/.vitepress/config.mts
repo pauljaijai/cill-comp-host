@@ -62,10 +62,20 @@ export default defineConfig({
         text: '元件',
         link: '/components/',
         items: [
-          { text: '調皮的按鈕', link: '/components/btn-naughty/' },
-          { text: '立體包裝器', link: '/components/wrapper-stereoscopic/' },
-          { text: '物理包裝器', link: '/components/wrapper-physics/' },
-          { text: '貓耳包裝器', link: '/components/wrapper-cat-ear/' },
+          {
+            text: '按鈕',
+            items: [
+              { text: '調皮的按鈕', link: '/components/btn-naughty/' },
+            ]
+          },
+          {
+            text: '包裝器',
+            items: [
+              { text: '立體包裝器', link: '/components/wrapper-stereoscopic/' },
+              { text: '物理包裝器', link: '/components/wrapper-physics/' },
+              { text: '貓耳包裝器', link: '/components/wrapper-cat-ear/' },
+            ]
+          },
         ]
       },
     ],

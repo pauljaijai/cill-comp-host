@@ -12,7 +12,7 @@ import ScopeProp from '../../../src/components/wrapper-physics/examples/scope-pr
 import DeviceMotion from '../../../src/components/wrapper-physics/examples/device-motion.vue'
 </script>
 
-# 物理包裝器
+# 物理包裝器 <Badge type="info" text="wrapper" />
 
 產生物理世界，讓內部元素具有物理效果 ヾ(⌐■_■)ノ♪
 

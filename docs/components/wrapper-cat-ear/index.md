@@ -10,7 +10,7 @@ import InteractiveEffect from '../../../src/components/wrapper-cat-ear/examples/
 import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty-cat.vue'
 </script>
 
-# 貓耳包裝器
+# 貓耳包裝器 <Badge type="info" text="wrapper" />
 
 任何元素包起來都會長出貓耳，讓萬物皆可萌吧！(^・ω・^ )✧
 

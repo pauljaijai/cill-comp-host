@@ -11,7 +11,7 @@ import CustomRubbing from '../../../src/components/btn-naughty/examples/custom-r
 import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.vue'
 </script>
 
-# 調皮的按鈕
+# 調皮的按鈕 <Badge type="info" text="button" />
 
 停用時會越跑越遠的按鈕。ᕕ( ﾟ ∀。)ᕗ
 

@@ -9,7 +9,7 @@ import AngleRange from '../../../src/components/wrapper-stereoscopic/examples/an
 import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-offset.vue'
 </script>
 
-# 立體包裝器
+# 立體包裝器 <Badge type="info" text="wrapper" />
 
 可以讓元素有酷酷的 3D 偏轉效果。ˋ( ° ▽、° )
 

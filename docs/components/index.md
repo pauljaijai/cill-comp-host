@@ -12,7 +12,7 @@ import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interac
 
 # 元件清單
 
-## [調皮的按鈕](./btn-naughty/)
+## [調皮的按鈕](./btn-naughty/) <Badge type="info" text="button" />
 
 一個停用時會越嚕越遠的按鈕，像極了你家那隻欠揍的貓。(._.`)
 
@@ -20,7 +20,7 @@ import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interac
   <btn-naughty label="(^._.^)ﾉ" z-index="99" disabled/>
 </div>
 
-## [立體包裝器](./wrapper-stereoscopic/)
+## [立體包裝器](./wrapper-stereoscopic/) <Badge type="info" text="wrapper" />
 
 可以讓元素有酷酷的 3D 偏轉效果
 
@@ -46,13 +46,13 @@ import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interac
 </wrapper-stereoscopic>
 </div>
 
-## [物理包裝器](./wrapper-physics/)
+## [物理包裝器](./wrapper-physics/) <Badge type="info" text="wrapper" />
 
 產生物理世界，讓內部元素具有物理效果
 
 <wrapper-physics />
 
-## [貓耳包裝器](./wrapper-cat-ear/)
+## [貓耳包裝器](./wrapper-cat-ear/) <Badge type="info" text="wrapper" />
 
 任何元素包起來就會長出貓耳，讓萬物皆可萌吧！(^・ω・^ )
 
