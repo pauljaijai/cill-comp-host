@@ -6,6 +6,8 @@ import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/
 
 import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-usage.vue';
 
+import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interactive-effect.vue';
+
 </script>
 
 # 元件清單
@@ -49,3 +51,9 @@ import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-
 產生物理世界，讓內部元素具有物理效果
 
 <wrapper-physics />
+
+## [貓耳包裝器](./wrapper-cat-ear/)
+
+任何元素包起來就會長出貓耳，讓萬物皆可萌吧！(^・ω・^ )
+
+<wrapper-cat-ear class="h-[70vh]" />

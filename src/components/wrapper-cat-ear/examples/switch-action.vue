@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full py-10 border border-gray-300 flex flex-col gap-16 justify-center items-center">
+  <div class="w-full h-[50vh] border border-gray-300 flex flex-col gap-16 justify-center items-center">
     <wrapper-cat-ear
       :action="action"
       main-color="#999"
