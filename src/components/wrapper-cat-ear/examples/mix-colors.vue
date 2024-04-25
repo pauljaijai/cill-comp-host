@@ -50,7 +50,7 @@
       class="mt-10"
     >
       <div
-        class="rounded px-10 py-12 text-3xl tracking-[0.4rem] bg-[#ff852e] text-white"
+        class="rounded px-20 py-12 text-xl bg-[#ff852e] text-white"
         v-text="`> ◕ ω ◕ <`"
       />
     </wrapper-cat-ear>
