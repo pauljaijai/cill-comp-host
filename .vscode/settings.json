@@ -1,6 +1,7 @@
 {
   "html.format.wrapAttributes": "force-expand-multiline",
   "cSpell.words": [
+    "animejs",
     "endregion",
     "nord",
     "pinia",
@@ -10,8 +11,10 @@
     "SANDEVISTAN",
     "shiki",
     "tailwindcss",
+    "tweens",
     "vitepress",
     "vueuse",
-    "webp"
+    "webp",
+    "yoyo"
   ]
 }
