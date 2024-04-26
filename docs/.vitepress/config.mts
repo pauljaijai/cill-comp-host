@@ -76,6 +76,13 @@ export default defineConfig({
               { text: '貓耳包裝器', link: '/components/wrapper-cat-ear/' },
             ]
           },
+          {
+            text: '滑桿',
+            items: [
+              { text: '固執的滑桿', link: '/components/slider-stubborn/' },
+            ]
+          },
+          
         ]
       },
     ],
