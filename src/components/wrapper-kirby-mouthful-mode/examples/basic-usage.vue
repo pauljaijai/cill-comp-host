@@ -14,7 +14,11 @@
     </div>
 
     <div class="flex">
-      <wrapper-kirby-mouthful-mode />
+      <wrapper-kirby-mouthful-mode>
+        <div class="border bg-slate-400 text-white rounded p-10">
+          按鈕
+        </div>
+      </wrapper-kirby-mouthful-mode>
     </div>
   </div>
 </template>
