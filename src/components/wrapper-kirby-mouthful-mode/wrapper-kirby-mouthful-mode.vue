@@ -17,36 +17,48 @@
           y="0"
           v-bind="size"
           fill="white"
-          rx="20"
         />
 
         <!-- 嘴巴 -->
         <rect
-          v-bind="mouthStyle"
+          ref="mouthRef"
+          v-bind="mouthStyleMap.leave"
           fill="black"
           rx="10"
         />
       </mask>
 
-      <!-- 使用遮罩的矩形 -->
+      <!-- 身體 -->
       <rect
-        x="0"
-        y="0"
-        v-bind="size"
+        ref="bodyRef"
+        v-bind="bodyStyleMap.leave"
         fill="#FF9DC0"
         :mask="`url(#${maskId})`"
+        rx="20"
       />
     </svg>
   </div>
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, SVGAttributes, computed, ref } from 'vue';
+import anime from 'animejs';
+import { CSSProperties, SVGAttributes, computed, nextTick, onMounted, ref, watch } from 'vue';
 import { nanoid } from 'nanoid';
 import { useMouseInElement } from '@vueuse/core';
 
+interface SvgElMap {
+  bodyEl: SVGRectElement;
+  mouthEl: SVGRectElement;
+}
+interface StyleMap {
+  enter: Pick<SVGAttributes, 'width' | 'height' | 'x' | 'y'>;
+  leave: Pick<SVGAttributes, 'width' | 'height' | 'x' | 'y'>;
+}
+
 // #region Props
 interface Props {
+  /** 是否塞滿嘴 */
+  isMouthful?: boolean;
   /** 卡比皮膚的厚度。單位 px
    * 
    * @default 10
@@ -55,6 +67,7 @@ interface Props {
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
+  isMouthful: false,
   thickness: 10,
 });
 
@@ -73,9 +86,10 @@ defineSlots<{
 const maskId = nanoid();
 const wrapperRef = ref<HTMLDivElement>();
 const {
-  elementWidth, elementHeight
+  elementWidth, elementHeight, isOutside
 } = useMouseInElement(wrapperRef);
 
+/** 卡比尺寸 */
 const size = computed(() => ({
   width: elementWidth.value + props.thickness * 2,
   height: elementHeight.value + props.thickness * 2,
@@ -87,16 +101,101 @@ const svgStyle = computed<CSSProperties>(() => ({
   top: -props.thickness,
 }));
 
-const mouthStyle = computed<SVGAttributes>(() => {
+const mouthRef = ref<SVGRectElement>();
+const mouthStyleMap = computed<StyleMap>(() => {
   const width = size.value.width / 2;
-  const height = size.value.height / 2;
+  const height = size.value.height / 4;
 
   return {
-    width,
-    height,
-    x: size.value.width / 2 - width / 2,
-    y: size.value.height / 2 - height / 2,
+    enter: {
+      width,
+      height,
+      x: size.value.width / 2 - width / 2,
+      y: size.value.height / 2 - height / 4,
+    },
+    leave: {
+      width: elementWidth.value,
+      height: elementHeight.value,
+      x: props.thickness,
+      y: props.thickness,
+    },
   }
+});
+
+const bodyRef = ref<SVGRectElement>();
+const bodyStyleMap = computed<StyleMap>(() => {
+  return {
+    enter: {
+      ...size.value,
+      x: 0,
+      y: 0,
+    },
+    leave: {
+      width: elementWidth.value,
+      height: elementHeight.value,
+      x: props.thickness,
+      y: props.thickness,
+    },
+  }
+});
+
+function enterStuffed({ bodyEl, mouthEl }: SvgElMap) {
+  anime.remove([bodyEl, mouthEl]);
+
+  anime({
+    targets: bodyEl,
+    ...bodyStyleMap.value.enter,
+    duration: 800,
+  })
+
+  anime({
+    targets: mouthEl,
+    ...mouthStyleMap.value.enter,
+    duration: 800,
+    delay: 300,
+  })
+}
+function leaveStuffed({ bodyEl, mouthEl }: SvgElMap) {
+  anime.remove([bodyEl, mouthEl]);
+
+  anime({
+    targets: mouthEl,
+    ...mouthStyleMap.value.leave,
+    duration: 800,
+    easing: 'easeInOutExpo',
+  })
+
+  anime({
+    targets: bodyEl,
+    ...bodyStyleMap.value.leave,
+    duration: 800,
+    delay: 600,
+  })
+}
+function startAnimation(value: boolean) {
+  if (!bodyRef.value || !mouthRef.value) return;
+
+  if (value) {
+    enterStuffed({
+      bodyEl: bodyRef.value,
+      mouthEl: mouthRef.value,
+    });
+    return;
+  }
+
+  leaveStuffed({
+    bodyEl: bodyRef.value,
+    mouthEl: mouthRef.value,
+  });
+}
+
+watch(() => props.isMouthful, () => {
+  startAnimation(props.isMouthful);
+})
+
+onMounted(async () => {
+  await nextTick();
+  startAnimation(props.isMouthful);
 });
 
 // #region Methods

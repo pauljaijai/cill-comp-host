@@ -1,20 +1,34 @@
 ---
-description: 
+description: 召喚粉紅色惡魔來幫你吃掉畫面上的東西吧。( ͡• ͜ʖ ͡• )
 ---
 
 <script setup>
 import BasicUsage from '../../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue'
 </script>
 
-# 標題
+# 塞滿嘴包裝器
 
-說明說明
+召喚粉紅色惡魔來幫你吃掉畫面上的東西吧。( ͡• ͜ʖ ͡• )
+
+在《星之卡比 探索發現》中，卡比不只可以吃掉敵人，還可以吃掉畫面上的東西，例如汽車、自動販賣機等等。
+
+<iframe width="100%" height="400"
+src="https://www.youtube.com/embed/1TnQh8xbGBg?si=Bt44bGxHD4Ccp4Ks"
+title="YouTube video player"
+frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen></iframe>
+
+粉紅色惡魔再度進化惹！ᕕ( ﾟ ∀。)ᕗ
+
+不得不說這個能力看起來真的有夠ㄎㄧㄤ，玩得時候笑到不行。
 
 ## 使用範例
 
 ### 基本用法
 
-當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+改變 isMouthful 參數即可召喚 ~~粉紅色惡魔~~ 卡比來幫你吃掉畫面上的東西。
 
 <basic-usage/>
 

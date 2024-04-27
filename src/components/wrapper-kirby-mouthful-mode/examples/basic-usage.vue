@@ -1,22 +1,22 @@
 <template>
   <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
     <div class="flex flex-col gap-4 border p-4 rounded">
-      <!-- <base-checkbox
-        v-model="disable"
-        label="停用按鈕"
+      <base-checkbox
+        v-model="isMouthful"
+        label="塞滿嘴"
       />
-
-      <base-input
-        v-model="text"
-        placeholder="點擊這裡並使用 tab 將焦點轉移至按鈕後，再按下 Enter 看看"
-        class=" w-full "
-      /> -->
     </div>
 
-    <div class="flex">
-      <wrapper-kirby-mouthful-mode>
-        <div class="border bg-slate-400 text-white rounded p-10">
-          按鈕
+    <div class="flex flex-col gap-10">
+      <wrapper-kirby-mouthful-mode :is-mouthful="isMouthful">
+        <div class="border bg-slate-100 rounded p-10">
+          <div class=" text-xl font-bold">
+            甚麼是塞滿嘴？
+          </div>
+
+          <div class="mt-2">
+            在《星之卡比 探索發現》中，卡比新覺醒了可以把汽車或是自動販賣機等散落在這個新世界各處的道具塞進嘴裡來發動的「塞滿嘴變形」能力。
+          </div>
         </div>
       </wrapper-kirby-mouthful-mode>
     </div>
@@ -27,9 +27,7 @@
 import { ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
-import BaseInput from '../../base-input.vue';
 import WrapperKirbyMouthfulMode from '../wrapper-kirby-mouthful-mode.vue';
 
-const text = ref('');
-const disable = ref(true);
+const isMouthful = ref(false);
 </script>
