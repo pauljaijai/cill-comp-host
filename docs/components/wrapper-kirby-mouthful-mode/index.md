@@ -1,5 +1,5 @@
 ---
-description: 召喚粉紅色惡魔來幫你吃掉畫面上的東西吧。( ͡• ͜ʖ ͡• )
+description: 讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡• )
 ---
 
 <script setup>
@@ -8,7 +8,7 @@ import BasicUsage from '../../../src/components/wrapper-kirby-mouthful-mode/exam
 
 # 塞滿嘴包裝器
 
-召喚粉紅色惡魔來幫你吃掉畫面上的東西吧。( ͡• ͜ʖ ͡• )
+讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡• )
 
 在《星之卡比 探索發現》中，卡比不只可以吃掉敵人，還可以吃掉畫面上的東西，例如汽車、自動販賣機等等。
 
@@ -20,7 +20,7 @@ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; pic
  referrerpolicy="strict-origin-when-cross-origin"
   allowfullscreen></iframe>
 
-粉紅色惡魔再度進化惹！ᕕ( ﾟ ∀。)ᕗ
+粉紅惡魔再度進化惹！ᕕ( ﾟ ∀。)ᕗ
 
 不得不說這個能力看起來真的有夠ㄎㄧㄤ，玩得時候笑到不行。
 
@@ -28,7 +28,7 @@ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; pic
 
 ### 基本用法
 
-改變 isMouthful 參數即可召喚 ~~粉紅色惡魔~~ 卡比來幫你吃掉畫面上的東西。
+改變 isMouthful 參數即可召喚 ~~粉紅惡魔~~ 卡比來幫你吃掉畫面上的東西。
 
 <basic-usage/>
 
