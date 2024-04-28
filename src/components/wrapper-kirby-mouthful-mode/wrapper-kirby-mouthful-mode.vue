@@ -14,7 +14,7 @@
       <mask :id="maskId">
         <rect
           ref="maskRef"
-          v-bind="size"
+          v-bind="maskStyleMap.leave"
           fill="white"
         />
 
@@ -66,6 +66,7 @@ import Blushes from './kirby-blushes.vue';
 import { useMouseInElement } from '@vueuse/core';
 
 interface SvgElMap {
+  maskEl: SVGRectElement;
   bodyEl: SVGRectElement;
   mouthEl: SVGRectElement;
 }
@@ -159,11 +160,11 @@ const bodyStyleMap = computed<StyleMap>(() => {
   }
 });
 
-function enterStuffed({ bodyEl, mouthEl }: SvgElMap) {
-  anime.remove([bodyEl, mouthEl, maskRef]);
+function enterStuffed({ maskEl, bodyEl, mouthEl }: SvgElMap) {
+  anime.remove([maskEl, bodyEl, mouthEl]);
 
   anime({
-    targets: maskRef,
+    targets: maskEl,
     ...maskStyleMap.value.enter,
     duration: 800,
   })
@@ -180,8 +181,8 @@ function enterStuffed({ bodyEl, mouthEl }: SvgElMap) {
     delay: 300,
   })
 }
-function leaveStuffed({ bodyEl, mouthEl }: SvgElMap) {
-  anime.remove([bodyEl, mouthEl, maskRef]);
+function leaveStuffed({ maskEl, bodyEl, mouthEl }: SvgElMap) {
+  anime.remove([maskEl, bodyEl, mouthEl]);
 
   anime({
     targets: mouthEl,
@@ -196,18 +197,20 @@ function leaveStuffed({ bodyEl, mouthEl }: SvgElMap) {
     duration: 800,
     delay: 600,
   })
+
   anime({
-    targets: maskRef,
+    targets: maskEl,
     ...maskStyleMap.value.leave,
     duration: 800,
     delay: 600,
   })
 }
 function startAnimation(value: boolean) {
-  if (!bodyRef.value || !mouthRef.value) return;
+  if (!maskRef.value || !bodyRef.value || !mouthRef.value) return;
 
   if (value) {
     enterStuffed({
+      maskEl: maskRef.value,
       bodyEl: bodyRef.value,
       mouthEl: mouthRef.value,
     });
@@ -215,6 +218,7 @@ function startAnimation(value: boolean) {
   }
 
   leaveStuffed({
+    maskEl: maskRef.value,
     bodyEl: bodyRef.value,
     mouthEl: mouthRef.value,
   });
