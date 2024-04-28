@@ -4,12 +4,17 @@
     :mask="`url(#${maskId})`"
   >
     <ellipse
-      v-bind="styles[0]"
+      v-for="style, i in styles"
+      :key="i"
+      v-bind="style"
       fill="#111"
     />
+
     <ellipse
-      v-bind="styles[1]"
-      fill="#111"
+      v-for="style, i in ballStyles"
+      :key="i"
+      v-bind="style"
+      fill="white"
     />
   </g>
 </template>
@@ -57,6 +62,26 @@ const styles = computed<SVGAttributes[]>(() => {
     map((cx) => ({
       ...size.value,
       cx, cy,
+    }))
+  )
+})
+
+const ballStyles = computed<SVGAttributes[]>(() => {
+  const kirbySize = props.size;
+
+  const rx = size.value.rx / 2;
+  const ry = size.value.ry / 2.5;
+
+  const [cxL, cxR] = [
+    kirbySize.width / 2 - size.value.rx * 2,
+    kirbySize.width / 2 + size.value.rx * 2,
+  ];
+  const cy = kirbySize.height / 2 - size.value.ry * 2 - ry - distanceFromMouth.value;
+
+  return pipe(
+    [cxL, cxR],
+    map((cx) => ({
+      rx, ry, cx, cy,
     }))
   )
 })
