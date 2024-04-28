@@ -40,7 +40,7 @@ const {
   elementX: mouseX, elementY: mouseY,
   elementWidth: width, elementHeight: height,
 } = useMouseInElement(padRef, {
-  eventFilter: throttleFilter(35)
+  eventFilter: throttleFilter(15)
 });
 const { pressed } = useMousePressed()
 
