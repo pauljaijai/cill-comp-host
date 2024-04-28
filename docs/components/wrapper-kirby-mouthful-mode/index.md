@@ -28,7 +28,7 @@ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; pic
 
 ### 基本用法
 
-改變 isMouthful 參數即可召喚 ~~粉紅惡魔~~ 卡比來幫你吃掉畫面上的東西。
+改變 isMouthful 參數即可召喚~~粉紅惡魔~~卡比來幫你吃掉畫面上的東西。
 
 <basic-usage/>
 
