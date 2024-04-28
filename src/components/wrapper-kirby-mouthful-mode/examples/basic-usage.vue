@@ -22,9 +22,9 @@
       </wrapper-kirby-mouthful-mode>
 
       <wrapper-kirby-mouthful-mode :is-mouthful="isMouthful">
-        <div class="border bg-slate-100 rounded px-4 py-2">
-          送出
-        </div>
+        <button class="border bg-slate-600 text-white rounded px-4 py-2">
+          按個讚
+        </button>
       </wrapper-kirby-mouthful-mode>
     </div>
   </div>

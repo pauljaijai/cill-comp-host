@@ -6,12 +6,10 @@
     <ellipse
       v-bind="styles[0]"
       fill="#111"
-      :mask="`url(#${maskId})`"
     />
     <ellipse
       v-bind="styles[1]"
       fill="#111"
-      :mask="`url(#${maskId})`"
     />
   </g>
 </template>
