@@ -37,12 +37,14 @@
       />
 
       <eyes
+        ref="eyesRef"
         :size="size"
         :thickness="props.thickness"
         :mask-id="maskId"
       />
 
       <blushes
+        ref="blushesRef"
         :size="size"
         :thickness="props.thickness"
         :mask-id="maskId"
@@ -160,6 +162,9 @@ const bodyStyleMap = computed<StyleMap>(() => {
   }
 });
 
+const eyesRef = ref<InstanceType<typeof Eyes>>();
+const blushesRef = ref<InstanceType<typeof Blushes>>();
+
 function enterStuffed({ maskEl, bodyEl, mouthEl }: SvgElMap) {
   anime.remove([maskEl, bodyEl, mouthEl]);
 
@@ -180,17 +185,35 @@ function enterStuffed({ maskEl, bodyEl, mouthEl }: SvgElMap) {
     duration: 800,
     delay: 300,
   })
+
+  eyesRef.value?.enter({
+    duration: 800,
+    delay: 300,
+  });
+  blushesRef.value?.enter({
+    duration: 800,
+    delay: 300,
+  });
 }
 function leaveStuffed({ maskEl, bodyEl, mouthEl }: SvgElMap) {
   anime.remove([maskEl, bodyEl, mouthEl]);
 
+  eyesRef.value?.leave({
+    duration: 800,
+    delay: 0,
+    easing: 'easeInOutExpo',
+  });
+  blushesRef.value?.leave({
+    duration: 800,
+    delay: 0,
+    easing: 'easeInOutExpo',
+  });
   anime({
     targets: mouthEl,
     ...mouthStyleMap.value.leave,
     duration: 800,
     easing: 'easeInOutExpo',
   })
-
   anime({
     targets: bodyEl,
     ...bodyStyleMap.value.leave,

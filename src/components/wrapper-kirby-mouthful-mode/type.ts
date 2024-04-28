@@ -1,12 +1,21 @@
 import { SVGAttributes } from "vue";
 
-type StyleAttr = 'width' | 'height' | 'x' | 'y' | 'cx' | 'cy' | 'rx' | 'ry' | 'fill';
 export type StyleMap = Record<
   'enter' | 'leave',
-  Pick<SVGAttributes, StyleAttr>
+  Omit<SVGAttributes, 'direction' | 'begin'>
 >;
 
 export interface Size {
   width: number;
   height: number;
+}
+
+export interface AnimeComponentParam {
+  duration: number;
+  delay: number;
+  easing?: string;
+}
+export interface AnimeComponent {
+  enter: (param: AnimeComponentParam) => void;
+  leave: (param: AnimeComponentParam) => void;
 }

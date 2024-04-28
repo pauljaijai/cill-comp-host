@@ -1,14 +1,15 @@
 <template>
-  <g :mask="`url(#${maskId})`">
+  <g
+    ref="gRef"
+    :mask="`url(#${maskId})`"
+  >
     <ellipse
-      :ref="(ref) => bindRef(ref, 0)"
-      v-bind="styleMaps[0].enter"
+      v-bind="styles[0]"
       fill="#111"
       :mask="`url(#${maskId})`"
     />
     <ellipse
-      :ref="(ref) => bindRef(ref, 1)"
-      v-bind="styleMaps[1].enter"
+      v-bind="styles[1]"
       fill="#111"
       :mask="`url(#${maskId})`"
     />
@@ -16,8 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import { ComponentPublicInstance, computed, ref } from 'vue';
-import { Size, StyleMap } from './type';
+import { SVGAttributes, computed, ref } from 'vue';
+import { AnimeComponent, Size, StyleMap } from './type';
+import anime from 'animejs';
+import { map, pipe } from 'remeda';
 
 // #region Props
 interface Props {
@@ -28,16 +31,7 @@ interface Props {
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {});
 
-/** [左, 右] */
-const refs = ref<[SVGEllipseElement?, SVGEllipseElement?]>([undefined, undefined]);
-function bindRef(
-  el: Element | ComponentPublicInstance | null,
-  index: 0 | 1
-) {
-  if (el instanceof SVGEllipseElement) {
-    refs.value[index] = el;
-  }
-}
+
 const size = computed(() => {
   const base = Math.min(props.size.width, props.size.height);
 
@@ -50,43 +44,66 @@ const distanceFromMouth = computed(
   () => props.size.height / 14
 );
 
-const styleMaps = computed<StyleMap[]>(() => {
+/** [左, 右] */
+const styles = computed<SVGAttributes[]>(() => {
   const kirbySize = props.size;
 
   const [cxL, cxR] = [
     kirbySize.width / 2 - size.value.rx * 2,
     kirbySize.width / 2 + size.value.rx * 2,
   ];
-  const enterCy = kirbySize.height / 2 - size.value.ry * 2 - distanceFromMouth.value;
+  const cy = kirbySize.height / 2 - size.value.ry * 2 - distanceFromMouth.value;
 
-  return [
-    {
-      enter: {
-        ...size.value,
-        cx: cxL,
-        cy: enterCy,
-      },
-      leave: {
-        ...size.value,
-        cx: cxL,
-      },
+  return pipe(
+    [cxL, cxR],
+    map((cx) => ({
+      ...size.value,
+      cx, cy,
+    }))
+  )
+})
+
+const gRef = ref<SVGGElement>();
+const gStyleMap = computed<StyleMap>(() => {
+  const kirbySize = props.size;
+
+  return {
+    enter: {
+      style: 'transform: translateY(0px)',
     },
-    {
-      enter: {
-        ...size.value,
-        cx: cxR,
-        cy: enterCy,
-      },
-      leave: {
-        ...size.value,
-        cx: cxR,
-      },
+    leave: {
+      style: `transform: translateY(-${kirbySize.height / 2}px)`,
     },
-  ]
+  }
 });
 
 // #region Methods
-defineExpose({});
+defineExpose<AnimeComponent>({
+  enter(param) {
+    const gEl = gRef.value;
+    if (!gEl) return;
+
+    anime.remove([gEl]);
+
+    anime({
+      targets: gEl,
+      ...gStyleMap.value.enter,
+      ...param,
+    })
+  },
+  leave(param) {
+    const gEl = gRef.value;
+    if (!gEl) return;
+
+    anime.remove([gEl]);
+
+    anime({
+      targets: gEl,
+      ...gStyleMap.value.leave,
+      ...param,
+    })
+  },
+});
 // #endregion Methods
 </script>
 
