@@ -11,7 +11,7 @@ import MixColors from '../../../src/components/wrapper-kirby-mouthful-mode/examp
 
 讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡• )
 
-在《星之卡比 探索發現》中，卡比不只可以吃掉敵人，還可以吃掉畫面上的東西，例如汽車、自動販賣機等等。
+在《星之卡比 探索發現》中，卡比不只可以吃掉敵人，還可以吃掉各類物品，例如汽車、自動販賣機等等。
 
 <iframe width="100%" height="400"
 src="https://www.youtube.com/embed/1TnQh8xbGBg?si=Bt44bGxHD4Ccp4Ks"
