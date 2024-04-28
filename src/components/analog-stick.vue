@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { useIntervalFn, useMouseInElement, useMousePressed, whenever } from '@vueuse/core';
+import { throttleFilter, useIntervalFn, useMouseInElement, useMousePressed, whenever } from '@vueuse/core';
 import { clamp } from 'lodash-es';
 import { computed, ref, watch } from 'vue';
 import { getUnitVector, getVectorLength } from '../common/utils';
@@ -39,7 +39,9 @@ const padRef = ref<HTMLDivElement>();
 const {
   elementX: mouseX, elementY: mouseY,
   elementWidth: width, elementHeight: height,
-} = useMouseInElement(padRef);
+} = useMouseInElement(padRef, {
+  eventFilter: throttleFilter(35)
+});
 const { pressed } = useMousePressed()
 
 /** 計算滑鼠到與物體的中心距離 */

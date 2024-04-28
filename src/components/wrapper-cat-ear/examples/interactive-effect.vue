@@ -30,7 +30,7 @@ import { getVectorLength } from '../../../common/utils';
 
 import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
 
-import { useMouseInElement, useMousePressed } from '@vueuse/core';
+import { throttleFilter, useMouseInElement, useMousePressed } from '@vueuse/core';
 
 const faceMap: Record<ActionName, string> = {
   peekaboo: '送出',
@@ -45,7 +45,9 @@ const {
   elementX, elementY,
   elementWidth, elementHeight,
   isOutside,
-} = useMouseInElement(catRef);
+} = useMouseInElement(catRef, {
+  eventFilter: throttleFilter(35)
+});
 const { pressed } = useMousePressed();
 
 /** 滑鼠與貓的距離 */

@@ -17,7 +17,7 @@ import CatEar, {
   Props as EarProps,
 } from './base-cat-ear.vue';
 
-import { useMouseInElement } from '@vueuse/core';
+import { throttleFilter, useMouseInElement } from '@vueuse/core';
 import { runTasks } from '../../common/utils';
 
 interface Props extends Pick<
@@ -26,7 +26,9 @@ interface Props extends Pick<
 const props = defineProps<Props>();
 
 const frameRef = ref<HTMLDivElement>();
-const { isOutside } = useMouseInElement(frameRef);
+const { isOutside } = useMouseInElement(frameRef, {
+  eventFilter: throttleFilter(35)
+});
 
 const earProps = computed(() => {
   if (props.action === 'peekaboo') {
