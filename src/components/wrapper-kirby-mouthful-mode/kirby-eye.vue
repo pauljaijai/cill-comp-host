@@ -50,7 +50,7 @@ watchThrottled(
       y: clamp(y, { min: -maxY, max: maxY }),
     }
   },
-  { throttle: 30, deep: true },
+  { throttle: 100, deep: true },
 )
 
 const ballStyle = computed<SVGAttributes>(() => {
