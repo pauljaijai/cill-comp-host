@@ -17,6 +17,7 @@ import { AnimeComponent, Size, StyleMap } from './type';
 import anime from 'animejs';
 import { add, clamp, filter, hasAtLeast, isTruthy, map, pipe } from 'remeda';
 import { useMouseInElement, watchThrottled } from '@vueuse/core';
+import { getUnitVector } from '../../common/utils';
 
 interface Props {
   size: Size;
@@ -35,22 +36,25 @@ const ballOffset = ref({ x: 0, y: 0 });
 watchThrottled(
   () => [elementX, elementY],
   () => {
-    /** 計算座標中心 */
-    const [x, y] = [
-      elementX.value - elementWidth.value / 2,
-      elementY.value - elementHeight.value / 2,
-    ]
+    ballOffset.value = pipe(
+      /** 計算座標中心 */
+      {
+        x: elementX.value - elementWidth.value / 2,
+        y: elementY.value - elementHeight.value / 2,
+      },
+      getUnitVector,
+      /** 調整範圍，最大距離為寬度的 1/5 */
+      ({ x, y }) => {
+        const value = Number(props.style.rx) / 5;
 
-    /** 限制最大值 */
-    const maxX = elementWidth.value / 5;
-    const maxY = elementHeight.value / 5;
-
-    ballOffset.value = {
-      x: clamp(x, { min: -maxX, max: maxX }),
-      y: clamp(y, { min: -maxY, max: maxY }),
-    }
+        return {
+          x: x * value,
+          y: y * value,
+        }
+      },
+    )
   },
-  { throttle: 100, deep: true },
+  { throttle: 30, deep: true },
 )
 
 const ballStyle = computed<SVGAttributes>(() => {
