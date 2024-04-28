@@ -50,7 +50,7 @@
 import { throttle } from 'lodash-es';
 import { computed, ref, useAttrs, watch } from 'vue';
 
-import { useIntersectionObserver, useMouseInElement, useToggle } from '@vueuse/core';
+import { throttleFilter, useIntersectionObserver, useMouseInElement, useToggle } from '@vueuse/core';
 import { getUnitVector, getVectorLength } from '../../common/utils';
 import { pipe } from 'remeda';
 
@@ -102,11 +102,13 @@ const {
   elementX, elementY,
   elementWidth, elementHeight,
   isOutside
-} = useMouseInElement(carrierRef);
+} = useMouseInElement(carrierRef, {
+  eventFilter: throttleFilter(35)
+});
 useIntersectionObserver(
   carrierRef,
-  ([{ isIntersecting }]) => {
-    if (isIntersecting) return;
+  (value) => {
+    if (value[0]?.isIntersecting) return;
     back();
   },
 );

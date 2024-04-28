@@ -40,7 +40,7 @@ import { computed, ref, CSSProperties } from 'vue';
 import EarLeft from './cat-ear-left.vue';
 import EarRight from './cat-ear-right.vue';
 
-import { useMouseInElement } from '@vueuse/core';
+import { throttleFilter, useMouseInElement } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -67,7 +67,9 @@ const emit = defineEmits<{
 const wrapperRef = ref<HTMLDivElement>();
 const {
   elementWidth: width,
-} = useMouseInElement(wrapperRef);
+} = useMouseInElement(wrapperRef, {
+  eventFilter: throttleFilter(35)
+});
 
 const earWidth = computed(() => width.value / 4);
 

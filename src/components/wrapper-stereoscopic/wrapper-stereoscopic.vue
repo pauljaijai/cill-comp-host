@@ -30,6 +30,7 @@ import {
 import { mapNumber } from '../../common/utils';
 
 import {
+  throttleFilter,
   useIntersectionObserver, useIntervalFn,
   useMouseInElement,
   watchThrottled
@@ -59,13 +60,15 @@ const wrapperRef = ref();
 const {
   elementX: mouseX, elementY: mouseY,
   elementWidth: width, elementHeight: height,
-} = useMouseInElement(wrapperRef);
+} = useMouseInElement(wrapperRef, {
+  eventFilter: throttleFilter(35)
+});
 
 const isVisible = ref(false)
 useIntersectionObserver(
   wrapperRef,
-  ([{ isIntersecting }]) => {
-    isVisible.value = isIntersecting
+  (value) => {
+    isVisible.value = !!value[0]?.isIntersecting
   },
 )
 
