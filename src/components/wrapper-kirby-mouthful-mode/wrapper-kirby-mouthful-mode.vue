@@ -8,13 +8,12 @@
     <svg
       v-bind="size"
       xmlns="http://www.w3.org/2000/svg"
-      class=" absolute"
+      class=" absolute pointer-events-none"
       :style="svgStyle"
     >
       <mask :id="maskId">
         <rect
-          x="0"
-          y="0"
+          ref="maskRef"
           v-bind="size"
           fill="white"
         />
@@ -36,23 +35,39 @@
         :mask="`url(#${maskId})`"
         rx="20"
       />
+
+      <eyes
+        :size="size"
+        :thickness="props.thickness"
+        :mask-id="maskId"
+      />
+
+      <blushes
+        :size="size"
+        :thickness="props.thickness"
+        :mask-id="maskId"
+      />
     </svg>
   </div>
 </template>
 
 <script setup lang="ts">
 import anime from 'animejs';
-import { CSSProperties, SVGAttributes, computed, nextTick, onMounted, ref, watch } from 'vue';
+import {
+  CSSProperties, computed,
+  nextTick, onMounted, ref, watch
+} from 'vue';
 import { nanoid } from 'nanoid';
+import { Size, StyleMap } from './type';
+
+import Eyes from './kirby-eyes.vue';
+import Blushes from './kirby-blushes.vue';
+
 import { useMouseInElement } from '@vueuse/core';
 
 interface SvgElMap {
   bodyEl: SVGRectElement;
   mouthEl: SVGRectElement;
-}
-interface StyleMap {
-  enter: Pick<SVGAttributes, 'width' | 'height' | 'x' | 'y'>;
-  leave: Pick<SVGAttributes, 'width' | 'height' | 'x' | 'y'>;
 }
 
 // #region Props
@@ -71,26 +86,14 @@ const props = withDefaults(defineProps<Props>(), {
   thickness: 10,
 });
 
-// #region Emits
-const emit = defineEmits<{
-  // 'update:modelValue': [value: Props['modelValue']];
-}>();
-// #endregion Emits
-
-// #region Slots
-defineSlots<{
-  default?: () => unknown;
-}>();
-// #endregion Slots
-
 const maskId = nanoid();
 const wrapperRef = ref<HTMLDivElement>();
 const {
-  elementWidth, elementHeight, isOutside
+  elementWidth, elementHeight,
 } = useMouseInElement(wrapperRef);
 
 /** 卡比尺寸 */
-const size = computed(() => ({
+const size = computed<Size>(() => ({
   width: elementWidth.value + props.thickness * 2,
   height: elementHeight.value + props.thickness * 2,
 }));
@@ -100,6 +103,23 @@ const svgStyle = computed<CSSProperties>(() => ({
   left: -props.thickness,
   top: -props.thickness,
 }));
+
+const maskRef = ref<SVGRectElement>();
+const maskStyleMap = computed<StyleMap>(() => {
+  return {
+    enter: {
+      ...size.value,
+      x: 0,
+      y: 0
+    },
+    leave: {
+      width: elementWidth.value,
+      height: elementHeight.value,
+      x: props.thickness,
+      y: props.thickness,
+    },
+  }
+})
 
 const mouthRef = ref<SVGRectElement>();
 const mouthStyleMap = computed<StyleMap>(() => {
@@ -140,8 +160,13 @@ const bodyStyleMap = computed<StyleMap>(() => {
 });
 
 function enterStuffed({ bodyEl, mouthEl }: SvgElMap) {
-  anime.remove([bodyEl, mouthEl]);
+  anime.remove([bodyEl, mouthEl, maskRef]);
 
+  anime({
+    targets: maskRef,
+    ...maskStyleMap.value.enter,
+    duration: 800,
+  })
   anime({
     targets: bodyEl,
     ...bodyStyleMap.value.enter,
@@ -156,7 +181,7 @@ function enterStuffed({ bodyEl, mouthEl }: SvgElMap) {
   })
 }
 function leaveStuffed({ bodyEl, mouthEl }: SvgElMap) {
-  anime.remove([bodyEl, mouthEl]);
+  anime.remove([bodyEl, mouthEl, maskRef]);
 
   anime({
     targets: mouthEl,
@@ -168,6 +193,12 @@ function leaveStuffed({ bodyEl, mouthEl }: SvgElMap) {
   anime({
     targets: bodyEl,
     ...bodyStyleMap.value.leave,
+    duration: 800,
+    delay: 600,
+  })
+  anime({
+    targets: maskRef,
+    ...maskStyleMap.value.leave,
     duration: 800,
     delay: 600,
   })
@@ -194,6 +225,7 @@ watch(() => props.isMouthful, () => {
 })
 
 onMounted(async () => {
+  // 等待下一個 tick，確保 slot 內容已渲染
   await nextTick();
   startAnimation(props.isMouthful);
 });
