@@ -31,7 +31,7 @@ const {
   elementX, elementY,
   elementWidth, elementHeight,
 } = useMouseInElement(ballRef, {
-  eventFilter: throttleFilter(50)
+  eventFilter: throttleFilter(35)
 });
 const visible = useElementVisibility(ballRef)
 
