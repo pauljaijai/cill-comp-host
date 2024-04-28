@@ -66,7 +66,7 @@ import { Size, StyleMap } from './type';
 import Eyes from './kirby-eyes.vue';
 import Blushes from './kirby-blushes.vue';
 
-import { useMouseInElement } from '@vueuse/core';
+import { throttleFilter, useMouseInElement } from '@vueuse/core';
 
 interface SvgElMap {
   maskEl: SVGRectElement;
@@ -106,7 +106,9 @@ const maskId = nanoid();
 const wrapperRef = ref<HTMLDivElement>();
 const {
   elementWidth, elementHeight,
-} = useMouseInElement(wrapperRef);
+} = useMouseInElement(wrapperRef, {
+  eventFilter: throttleFilter(500),
+});
 
 /** 卡比尺寸 */
 const size = computed<Size>(() => ({

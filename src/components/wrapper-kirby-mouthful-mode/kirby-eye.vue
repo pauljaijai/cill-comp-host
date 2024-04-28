@@ -12,11 +12,11 @@
 </template>
 
 <script setup lang="ts">
-import { SVGAttributes, computed, ref } from 'vue';
+import { SVGAttributes, computed, ref, watch } from 'vue';
 import { AnimeComponent, Size, StyleMap } from './type';
 import anime from 'animejs';
 import { add, clamp, filter, hasAtLeast, isTruthy, map, pipe } from 'remeda';
-import { throttleFilter, useElementVisibility, useMouseInElement, watchThrottled } from '@vueuse/core';
+import { pausableFilter, throttleFilter, useElementVisibility, useMouseInElement, watchThrottled } from '@vueuse/core';
 import { getUnitVector } from '../../common/utils';
 
 interface Props {
@@ -27,19 +27,21 @@ const props = withDefaults(defineProps<Props>(), {});
 
 /** 眼睛反光 */
 const ballRef = ref<SVGEllipseElement>();
+
+const mouseControl = pausableFilter(throttleFilter(15));
+const visible = useElementVisibility(ballRef)
+watch(visible, (value) => {
+  value ? mouseControl.resume() : mouseControl.pause();
+}, { immediate: true });
+
 const {
   elementX, elementY,
   elementWidth, elementHeight,
 } = useMouseInElement(ballRef, {
-  eventFilter: throttleFilter(35)
+  eventFilter: mouseControl.eventFilter,
 });
-const visible = useElementVisibility(ballRef)
 
 const ballOffset = computed(() => {
-  if (!visible.value) {
-    return { x: 0, y: 0 }
-  }
-
   return pipe(
     /** 計算座標中心 */
     {
