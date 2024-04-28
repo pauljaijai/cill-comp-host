@@ -4,6 +4,7 @@ description: 讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡�
 
 <script setup>
 import BasicUsage from '../../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue'
+import MixColors from '../../../src/components/wrapper-kirby-mouthful-mode/examples/mix-colors.vue'
 </script>
 
 # 塞滿嘴包裝器
@@ -34,6 +35,16 @@ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; pic
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue
+:::
+
+### 卡比小夥伴
+
+調整顏色，讓卡比的朋友們一起大吃特吃吧！ლ（´∀`ლ）
+
+<mix-colors/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-kirby-mouthful-mode/examples/mix-colors.vue
 :::
 
 ## 原理

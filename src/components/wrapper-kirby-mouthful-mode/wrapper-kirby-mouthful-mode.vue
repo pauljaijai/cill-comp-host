@@ -23,7 +23,7 @@
           ref="mouthRef"
           v-bind="mouthStyleMap.leave"
           fill="black"
-          rx="10"
+          :rx="props.mouthRounded"
         />
       </mask>
 
@@ -31,9 +31,9 @@
       <rect
         ref="bodyRef"
         v-bind="bodyStyleMap.leave"
-        fill="#FF9DC0"
+        :fill="props.mainColor"
         :mask="`url(#${maskId})`"
-        rx="20"
+        :rx="props.bodyRounded"
       />
 
       <eyes
@@ -48,6 +48,7 @@
         :size="size"
         :thickness="props.thickness"
         :mask-id="maskId"
+        :color="props.blushColor"
       />
     </svg>
   </div>
@@ -82,11 +83,23 @@ interface Props {
    * @default 10
    */
   thickness?: number;
+  /** 主色 */
+  mainColor?: string;
+  /** 腮紅顏色 */
+  blushColor?: string;
+  /** 身體圓角 */
+  bodyRounded?: number;
+  /** 嘴巴圓角 */
+  mouthRounded?: number;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   isMouthful: false,
   thickness: 10,
+  mainColor: '#FF9DC0',
+  blushColor: '#FF639B',
+  bodyRounded: 20,
+  mouthRounded: 10,
 });
 
 const maskId = nanoid();

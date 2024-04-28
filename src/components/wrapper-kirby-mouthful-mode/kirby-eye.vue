@@ -16,7 +16,7 @@ import { SVGAttributes, computed, ref } from 'vue';
 import { AnimeComponent, Size, StyleMap } from './type';
 import anime from 'animejs';
 import { add, clamp, filter, hasAtLeast, isTruthy, map, pipe } from 'remeda';
-import { useMouseInElement, watchThrottled } from '@vueuse/core';
+import { useElementVisibility, useMouseInElement, watchThrottled } from '@vueuse/core';
 import { getUnitVector } from '../../common/utils';
 
 interface Props {
@@ -31,11 +31,14 @@ const {
   elementX, elementY,
   elementWidth, elementHeight,
 } = useMouseInElement(ballRef);
+const visible = useElementVisibility(ballRef)
 
 const ballOffset = ref({ x: 0, y: 0 });
 watchThrottled(
   () => [elementX, elementY],
   () => {
+    if (!visible.value) return;
+
     ballOffset.value = pipe(
       /** 計算座標中心 */
       {
@@ -54,7 +57,7 @@ watchThrottled(
       },
     )
   },
-  { throttle: 30, deep: true },
+  { throttle: 50, deep: true },
 )
 
 const ballStyle = computed<SVGAttributes>(() => {
@@ -66,12 +69,15 @@ const ballStyle = computed<SVGAttributes>(() => {
   ];
 
   const [cx, cy] = [
-    Number(style.cx) + ballOffset.value.x,
-    Number(style.cy) - ry + ballOffset.value.y,
+    Number(style.cx),
+    Number(style.cy) - ry,
   ];
 
   return {
-    rx, ry, cx, cy
+    rx, ry, cx, cy,
+    style: {
+      transform: `translate(${ballOffset.value.x}px, ${ballOffset.value.y}px)`,
+    }
   }
 })
 

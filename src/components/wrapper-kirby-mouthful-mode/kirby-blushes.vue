@@ -5,11 +5,11 @@
   >
     <ellipse
       v-bind="styles[0]"
-      fill="#FF639B"
+      :fill="props.color"
     />
     <ellipse
       v-bind="styles[1]"
-      fill="#FF639B"
+      :fill="props.color"
     />
   </g>
 </template>
@@ -25,6 +25,7 @@ interface Props {
   size: Size;
   thickness: number;
   maskId: string;
+  color: string;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {});

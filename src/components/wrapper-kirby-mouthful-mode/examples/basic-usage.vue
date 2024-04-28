@@ -11,7 +11,7 @@
     </wrapper-kirby-mouthful-mode>
 
     <wrapper-kirby-mouthful-mode :is-mouthful="isMouthful">
-      <div class="border bg-slate-100 rounded p-10">
+      <div class="border bg-slate-100 rounded p-6">
         <div class=" text-xl font-bold">
           甚麼是塞滿嘴？
         </div>
