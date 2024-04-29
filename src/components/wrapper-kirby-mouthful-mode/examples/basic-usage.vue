@@ -5,7 +5,7 @@
         <base-checkbox
           v-model="isMouthful"
           class=" p-4"
-          label="塞滿嘴"
+          label="召喚卡比"
         />
       </div>
     </wrapper-kirby-mouthful-mode>
@@ -36,5 +36,5 @@ import { ref } from 'vue';
 import BaseCheckbox from '../../base-checkbox.vue';
 import WrapperKirbyMouthfulMode from '../wrapper-kirby-mouthful-mode.vue';
 
-const isMouthful = ref(true);
+const isMouthful = ref(false);
 </script>
