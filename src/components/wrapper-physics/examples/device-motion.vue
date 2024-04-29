@@ -38,11 +38,13 @@ import { isNullish, pipe } from 'remeda';
 import WrapperPhysics from '../wrapper-physics.vue';
 import WrapperPhysicsBody from '../wrapper-physics-body.vue';
 
-import { useDeviceMotion } from '@vueuse/core';
+import { throttleFilter, useDeviceMotion } from '@vueuse/core';
 
 const {
   accelerationIncludingGravity: acceleration
-} = useDeviceMotion();
+} = useDeviceMotion({
+  eventFilter: throttleFilter(35),
+});
 
 const isSupport = computed(() => {
   if (acceleration.value === null) {
