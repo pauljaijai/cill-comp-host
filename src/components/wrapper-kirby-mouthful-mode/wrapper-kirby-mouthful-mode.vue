@@ -16,6 +16,7 @@
           ref="maskRef"
           v-bind="maskStyleMap.leave"
           fill="white"
+          :rx="props.bodyRounded"
         />
 
         <!-- 嘴巴 -->
