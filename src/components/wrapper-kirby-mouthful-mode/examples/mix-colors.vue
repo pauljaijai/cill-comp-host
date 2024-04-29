@@ -16,11 +16,10 @@
         :main-color="mainColor"
         :blush-color="blushColor"
         :body-rounded="9999"
-        :mouth-rounded="9999"
         class="ml-10"
       >
         <div
-          class="rounded px-10 py-14"
+          class="rounded px-8 py-11"
           v-text="`塞滿嘴`"
         />
       </wrapper-kirby-mouthful-mode>
@@ -32,10 +31,9 @@
       is-mouthful
       v-bind="item"
       :body-rounded="9999"
-      :mouth-rounded="9999"
     >
       <div
-        class="rounded px-10 py-14 text-xl"
+        class="rounded px-8 py-11 text-xl"
         v-text="`塞滿嘴`"
       />
     </wrapper-kirby-mouthful-mode>
