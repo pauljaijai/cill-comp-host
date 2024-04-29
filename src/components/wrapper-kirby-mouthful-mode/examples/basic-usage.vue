@@ -36,5 +36,5 @@ import { ref } from 'vue';
 import BaseCheckbox from '../../base-checkbox.vue';
 import WrapperKirbyMouthfulMode from '../wrapper-kirby-mouthful-mode.vue';
 
-const isMouthful = ref(false);
+const isMouthful = ref(true);
 </script>

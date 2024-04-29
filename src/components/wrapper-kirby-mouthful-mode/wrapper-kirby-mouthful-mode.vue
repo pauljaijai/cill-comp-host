@@ -36,20 +36,20 @@
         :rx="props.bodyRounded"
       />
 
-      <eyes
-        ref="eyesRef"
-        :size="size"
-        :thickness="props.thickness"
-        :mask-id="maskId"
-      />
+      <g :mask="`url(#${maskId})`">
+        <eyes
+          ref="eyesRef"
+          :size="size"
+          :thickness="props.thickness"
+        />
 
-      <blushes
-        ref="blushesRef"
-        :size="size"
-        :thickness="props.thickness"
-        :mask-id="maskId"
-        :color="props.blushColor"
-      />
+        <blushes
+          ref="blushesRef"
+          :size="size"
+          :thickness="props.thickness"
+          :color="props.blushColor"
+        />
+      </g>
     </svg>
   </div>
 </template>
@@ -116,10 +116,12 @@ const size = computed<Size>(() => ({
   height: elementHeight.value + props.thickness * 2,
 }));
 
+/** 再大一點，保留動畫空間 */
 const svgStyle = computed<CSSProperties>(() => ({
-  ...size.value,
-  left: -props.thickness,
-  top: -props.thickness,
+  width: size.value.width + props.thickness * 2,
+  height: size.value.height + props.thickness * 2,
+  left: -props.thickness * 2,
+  top: -props.thickness * 2,
 }));
 
 const maskRef = ref<SVGRectElement>();
@@ -127,14 +129,14 @@ const maskStyleMap = computed<StyleMap>(() => {
   return {
     enter: {
       ...size.value,
-      x: 0,
-      y: 0
+      x: props.thickness,
+      y: props.thickness,
     },
     leave: {
       width: elementWidth.value,
       height: elementHeight.value,
-      x: props.thickness,
-      y: props.thickness,
+      x: props.thickness * 2,
+      y: props.thickness * 2,
     },
   }
 })
@@ -148,14 +150,14 @@ const mouthStyleMap = computed<StyleMap>(() => {
     enter: {
       width,
       height,
-      x: size.value.width / 2 - width / 2,
-      y: size.value.height / 2 - height / 4,
+      x: size.value.width / 2 - width / 2 + props.thickness,
+      y: size.value.height / 2 - height / 4 + props.thickness,
     },
     leave: {
       width: elementWidth.value,
       height: elementHeight.value,
-      x: props.thickness,
-      y: props.thickness,
+      x: props.thickness * 2,
+      y: props.thickness * 2,
     },
   }
 });
@@ -165,14 +167,14 @@ const bodyStyleMap = computed<StyleMap>(() => {
   return {
     enter: {
       ...size.value,
-      x: 0,
-      y: 0,
+      x: props.thickness,
+      y: props.thickness,
     },
     leave: {
       width: elementWidth.value,
       height: elementHeight.value,
-      x: props.thickness,
-      y: props.thickness,
+      x: props.thickness * 2,
+      y: props.thickness * 2,
     },
   }
 });

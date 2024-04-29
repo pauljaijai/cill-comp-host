@@ -13,9 +13,8 @@
 
 <script setup lang="ts">
 import { SVGAttributes, computed, ref, watch } from 'vue';
-import { AnimeComponent, Size, StyleMap } from './type';
-import anime from 'animejs';
-import { add, clamp, filter, hasAtLeast, isTruthy, map, pipe } from 'remeda';
+import { AnimeComponent, Size } from './type';
+import { pipe } from 'remeda';
 import { pausableFilter, throttleFilter, useElementVisibility, useMouseInElement, watchThrottled } from '@vueuse/core';
 import { getUnitVector } from '../../common/utils';
 

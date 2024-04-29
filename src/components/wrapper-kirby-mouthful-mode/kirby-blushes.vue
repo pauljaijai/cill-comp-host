@@ -1,8 +1,5 @@
 <template>
-  <g
-    ref="gRef"
-    :mask="`url(#${maskId})`"
-  >
+  <g ref="gRef">
     <ellipse
       v-bind="styles[0]"
       :fill="props.color"
@@ -24,7 +21,6 @@ import anime from 'animejs';
 interface Props {
   size: Size;
   thickness: number;
-  maskId: string;
   color: string;
 }
 // #endregion Props
@@ -50,10 +46,10 @@ const styles = computed<SVGAttributes[]>(() => {
   const kirbySize = props.size;
 
   const [cxL, cxR] = [
-    kirbySize.width / 2 - size.value.rx * 4,
-    kirbySize.width / 2 + size.value.rx * 4,
+    kirbySize.width / 2 - size.value.rx * 4 + props.thickness,
+    kirbySize.width / 2 + size.value.rx * 4 + props.thickness,
   ];
-  const cy = kirbySize.height / 2 - size.value.ry * 2 - distanceFromMouth.value;
+  const cy = kirbySize.height / 2 - size.value.ry * 2 - distanceFromMouth.value + props.thickness;
 
   return pipe(
     [cxL, cxR],

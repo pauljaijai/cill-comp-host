@@ -1,8 +1,5 @@
 <template>
-  <g
-    ref="gRef"
-    :mask="`url(#${maskId})`"
-  >
+  <g ref="gRef">
     <eye
       v-for="style, i in styles"
       :key="i"
@@ -17,19 +14,14 @@ import { SVGAttributes, computed, ref } from 'vue';
 import { AnimeComponent, Size, StyleMap } from './type';
 import anime from 'animejs';
 import {
-  add, clamp, filter,
-  hasAtLeast,
-  isTruthy, map, pipe
+  map, pipe
 } from 'remeda';
 
 import eye from './kirby-eye.vue';
 
-import { useMouseInElement } from '@vueuse/core';
-
 interface Props {
   size: Size;
   thickness: number;
-  maskId: string;
 }
 const props = withDefaults(defineProps<Props>(), {});
 
@@ -50,10 +42,10 @@ const styles = computed<SVGAttributes[]>(() => {
   const kirbySize = props.size;
 
   const [cxL, cxR] = [
-    kirbySize.width / 2 - eyeSize.value.rx * 2,
-    kirbySize.width / 2 + eyeSize.value.rx * 2,
+    kirbySize.width / 2 - eyeSize.value.rx * 2 + props.thickness,
+    kirbySize.width / 2 + eyeSize.value.rx * 2 + props.thickness,
   ];
-  const cy = kirbySize.height / 2 - eyeSize.value.ry * 2 - distanceFromMouth.value;
+  const cy = kirbySize.height / 2 - eyeSize.value.ry * 2 - distanceFromMouth.value + props.thickness;
 
   return pipe(
     [cxL, cxR],
