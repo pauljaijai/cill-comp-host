@@ -7,7 +7,7 @@ import BasicUsage from '../../../src/components/wrapper-kirby-mouthful-mode/exam
 import MixColors from '../../../src/components/wrapper-kirby-mouthful-mode/examples/mix-colors.vue'
 </script>
 
-# 塞滿嘴包裝器
+# 塞滿嘴包裝器 <Badge type="info" text="wrapper" />
 
 讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡• )
 
@@ -49,30 +49,14 @@ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; pic
 
 ## 原理
 
-滑鼠碰觸按鈕時，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕尺寸的距離。
+使用 SVG 繪製卡比主體，透過 anime.js 控制動畫。
 
-如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
+📚 [anime.js](https://animejs.com/)
 
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕會啪沒了，消失的無影無蹤。
-:::
+這裡使用了 SVG Mask 的技巧，切割出卡比的嘴巴，實現卡比吃掉元素的效果。
 
 ## API
 
 ### Props
 
 <<< ../../../src/components/wrapper-kirby-mouthful-mode/wrapper-kirby-mouthful-mode.vue/#Props
-
-### Emits
-
-<<< ../../../src/components/wrapper-kirby-mouthful-mode/wrapper-kirby-mouthful-mode.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/wrapper-kirby-mouthful-mode/wrapper-kirby-mouthful-mode.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/wrapper-kirby-mouthful-mode/wrapper-kirby-mouthful-mode.vue/#Slots
