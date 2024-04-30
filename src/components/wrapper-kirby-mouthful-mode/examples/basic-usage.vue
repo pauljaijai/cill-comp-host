@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center items-center gap-10 w-full border border-gray-300 p-6">
+  <div class="flex flex-col justify-center items-center gap-10 w-full p-6">
     <wrapper-kirby-mouthful-mode :is-mouthful="isMouthful">
       <div class="flex flex-col gap-4 border  rounded">
         <base-checkbox
@@ -34,7 +34,7 @@
         </div>
 
         <div class="  mt-2 ">
-          一隻熱愛程式的魚，但是沒有手指可以打鍵盤，也買不到能在水裡用的電腦。
+          一隻熱愛程式的魚，但是沒有手指可以打鍵盤，更買不到能在水裡用的電腦。( ´•̥̥̥ ω •̥̥̥` )
         </div>
       </div>
     </wrapper-kirby-mouthful-mode>

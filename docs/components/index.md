@@ -5,14 +5,18 @@ import WrapperStereoscopic from '../../src/components/wrapper-stereoscopic/wrapp
 import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic-layer.vue';
 
 import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-usage.vue';
-
 import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interactive-effect.vue';
+import WrapperKirbyMouthfulMode from '../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue';
 
 </script>
 
 # 元件清單
 
-## [調皮的按鈕](./btn-naughty/) <Badge type="info" text="button" />
+## 按鈕
+
+經典卻又不常見的按鈕。(。・∀・)ノ
+
+### [調皮的按鈕](./btn-naughty/) <Badge type="info" text="button" />
 
 一個停用時會越嚕越遠的按鈕，像極了你家那隻欠揍的貓。(._.`)
 
@@ -20,7 +24,11 @@ import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interac
   <btn-naughty label="(^._.^)ﾉ" z-index="99" disabled/>
 </div>
 
-## [立體包裝器](./wrapper-stereoscopic/) <Badge type="info" text="wrapper" />
+## 包裝器
+
+包起來，產生各種有趣的效果吧！(´▽`ʃ♡ƪ)
+
+### [立體包裝器](./wrapper-stereoscopic/) <Badge type="info" text="wrapper" />
 
 可以讓元素有酷酷的 3D 偏轉效果
 
@@ -46,14 +54,20 @@ import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interac
 </wrapper-stereoscopic>
 </div>
 
-## [物理包裝器](./wrapper-physics/) <Badge type="info" text="wrapper" />
+### [物理包裝器](./wrapper-physics/) <Badge type="info" text="wrapper" />
 
 產生物理世界，讓內部元素具有物理效果
 
 <wrapper-physics />
 
-## [貓耳包裝器](./wrapper-cat-ear/) <Badge type="info" text="wrapper" />
+### [貓耳包裝器](./wrapper-cat-ear/) <Badge type="info" text="wrapper" />
 
 任何元素包起來就會長出貓耳，讓萬物皆可萌吧！(^・ω・^ )
 
 <wrapper-cat-ear class="h-[70vh]" />
+
+### [塞滿嘴包裝器](./wrapper-kirby-mouthful-mode/) <Badge type="info" text="wrapper" />
+
+讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡• )
+
+<wrapper-kirby-mouthful-mode class="h-[70vh]" />
