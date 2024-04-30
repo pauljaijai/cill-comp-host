@@ -31,6 +31,9 @@
       is-mouthful
       v-bind="item"
       :body-rounded="9999"
+      :mouth-rounded="9999"
+      @mouseenter="onMouseenter(item)"
+      @mouseleave="onMouseleave(item)"
     >
       <div
         class="rounded px-8 py-11 text-xl"
@@ -45,21 +48,33 @@ import { ref } from 'vue';
 
 import WrapperKirbyMouthfulMode from '../wrapper-kirby-mouthful-mode.vue';
 
+type Param = InstanceType<typeof WrapperKirbyMouthfulMode>['$props'];
+
 const mainColor = ref('#FF9DC0');
 const blushColor = ref('#FF639B');
 
-const list = [
+const list = ref<Param[]>([
   {
+    isMouthful: true,
     mainColor: '#ffea08',
     blushColor: '#fcb423',
   },
   {
+    isMouthful: true,
     mainColor: '#5fd42c',
     blushColor: '#378c12',
   },
   {
+    isMouthful: true,
     mainColor: '#f72a2a',
     blushColor: '#8f003e',
   },
-]
+]);
+
+function onMouseenter(param: Param) {
+  param.isMouthful = false;
+}
+function onMouseleave(param: Param) {
+  param.isMouthful = true;
+}
 </script>
