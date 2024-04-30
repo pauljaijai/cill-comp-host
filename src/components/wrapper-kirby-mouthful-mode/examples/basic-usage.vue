@@ -10,22 +10,33 @@
       </div>
     </wrapper-kirby-mouthful-mode>
 
-    <wrapper-kirby-mouthful-mode :is-mouthful="isMouthful">
-      <div class="border bg-slate-100 rounded p-6">
-        <div class=" text-xl font-bold">
-          甚麼是塞滿嘴？
-        </div>
-
-        <div class="mt-2">
-          在《星之卡比 探索發現》中，卡比新覺醒了可以把汽車或是自動販賣機等散落在這個新世界各處的道具塞進嘴裡來發動的「塞滿嘴變形」能力。
-        </div>
-      </div>
+    <wrapper-kirby-mouthful-mode
+      :is-mouthful="isMouthful"
+      :body-rounded="9999"
+      :mouth-rounded="9999"
+    >
+      <img
+        src="/profile.webp"
+        class=" w-60 rounded-full object-cover shadow-xl border-[0.5rem] border-white"
+      >
     </wrapper-kirby-mouthful-mode>
 
     <wrapper-kirby-mouthful-mode :is-mouthful="isMouthful">
-      <button class="border bg-slate-600 text-white rounded px-4 py-2">
-        讚
-      </button>
+      <div class="relative border bg-slate-100 rounded p-6 overflow-hidden">
+        <div class="icon">
+          <div class="fish">
+            🐟
+          </div>
+        </div>
+
+        <div class=" text-xl font-bold text-center">
+          鱈魚
+        </div>
+
+        <div class="  mt-2 ">
+          一隻熱愛程式的魚，但是沒有手指可以打鍵盤，也買不到能在水裡用的電腦。
+        </div>
+      </div>
     </wrapper-kirby-mouthful-mode>
   </div>
 </template>
@@ -38,3 +49,24 @@ import WrapperKirbyMouthfulMode from '../wrapper-kirby-mouthful-mode.vue';
 
 const isMouthful = ref(false);
 </script>
+
+<style scoped lang="sass">
+.icon
+  position: absolute
+  right: 0rem
+  bottom: 0rem
+  font-size: 14rem
+  line-height: 10rem
+  filter: brightness(0)
+  transform: translate(14%, 60%) rotate(10deg)
+  opacity: 0.04
+  .fish
+    animation: float 3s infinite ease-in-out
+
+@keyframes float
+  0%, 100%
+    transform: translate(0%)
+  50%
+    transform: translate(-5%, 2%) rotate(5deg)
+
+</style>
