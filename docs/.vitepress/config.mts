@@ -77,6 +77,12 @@ export default defineConfig({
               { text: '塞滿嘴包裝器', link: '/components/wrapper-kirby-mouthful-mode/' },
             ]
           },
+          {
+            text: '實用',
+            items: [
+              { text: '拉炮', link: '/components/util-party-popper/' },
+            ]
+          },
         ]
       },
     ],
