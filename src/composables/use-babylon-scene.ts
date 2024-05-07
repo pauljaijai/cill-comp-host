@@ -5,16 +5,18 @@ import {
 } from '@babylonjs/core';
 import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue';
 
+export interface InitParam {
+  canvas: HTMLCanvasElement;
+  engine: Engine;
+  scene: Scene;
+  camera: ArcRotateCamera;
+}
+
 interface UseBabylonSceneParams {
   createEngine?: (canvas: HTMLCanvasElement) => Engine;
   createScene?: (engine: Engine) => Scene;
   createCamera?: (scene: Scene) => ArcRotateCamera;
-  init?: (params: {
-    canvas: HTMLCanvasElement;
-    engine: Engine;
-    scene: Scene;
-    camera: ArcRotateCamera;
-  }) => Promise<void>;
+  init?: (params: InitParam) => Promise<void>;
 }
 const defaultParams: Required<UseBabylonSceneParams> = {
   createEngine(canvas) {
@@ -47,7 +49,7 @@ const defaultParams: Required<UseBabylonSceneParams> = {
 }
 
 export function useBabylonScene(params?: UseBabylonSceneParams) {
-  const canvas = ref<HTMLCanvasElement>();
+  const canvasRef = ref<HTMLCanvasElement>();
 
   const engine = shallowRef<Engine>();
   const scene = shallowRef<Scene>();
@@ -58,11 +60,11 @@ export function useBabylonScene(params?: UseBabylonSceneParams) {
   } = defaults(params, defaultParams);
 
   onMounted(async () => {
-    if (!canvas.value) {
+    if (!canvasRef.value) {
       console.error('無法取得 canvas DOM');
       return;
     }
-    engine.value = createEngine(canvas.value);
+    engine.value = createEngine(canvasRef.value);
     scene.value = createScene(engine.value);
     camera.value = createCamera(scene.value);
 
@@ -74,7 +76,7 @@ export function useBabylonScene(params?: UseBabylonSceneParams) {
     });
 
     await init({
-      canvas: canvas.value,
+      canvas: canvasRef.value,
       engine: engine.value,
       scene: scene.value,
       camera: camera.value,
@@ -91,7 +93,7 @@ export function useBabylonScene(params?: UseBabylonSceneParams) {
   }
 
   return {
-    canvas,
+    canvasRef,
     engine,
     scene,
     camera,

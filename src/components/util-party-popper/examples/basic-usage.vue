@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
+  <div class="flex flex-col gap-4 w-full border border-gray-300">
     <util-party-popper class="flex h-[40vh]" />
   </div>
 </template>
