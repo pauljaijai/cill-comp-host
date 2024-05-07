@@ -12,6 +12,8 @@
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
+    "@babylonjs/core": "^7.5.0",
+    "@babylonjs/inspector": "^7.5.0",
     "@types/animejs": "^3.1.12",
     "@types/lodash-es": "^4.17.12",
     "@types/matter-js": "^0.19.6",
