@@ -1,11 +1,17 @@
 <template>
-  <canvas ref="canvasRef" />
+  <div class="view">
+    <canvas
+      ref="canvasRef"
+      class=" absolute left-0 top-0 w-full h-full"
+    />
+
+    <slot />
+  </div>
 </template>
 
 
 <script setup lang="ts">
 import { useElementBounding } from '@vueuse/core';
-import { Application } from 'pixi.js';
 import { onMounted, ref, shallowRef } from 'vue';
 
 // #region Props
@@ -32,24 +38,10 @@ defineSlots<{
 const canvasRef = ref<HTMLCanvasElement>();
 const canvasBounding = useElementBounding(canvasRef);
 
-const app = shallowRef<Application>();
-async function createApplication(el: HTMLCanvasElement) {
-  const app = new Application();
-
-  await app.init({
-    canvas: el,
-    backgroundAlpha: 0,
-    width: canvasBounding.width.value,
-    height: canvasBounding.height.value,
-    resizeTo: canvasRef.value,
-  })
-
-  return app;
-}
-
 onMounted(async () => {
   if (!canvasRef.value) return;
-  app.value = await createApplication(canvasRef.value);
+ 
+
 });
 
 

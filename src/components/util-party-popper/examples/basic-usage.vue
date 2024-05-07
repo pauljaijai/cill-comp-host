@@ -1,21 +1,6 @@
 <template>
   <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border p-4 rounded">
-      <!-- <base-checkbox
-        v-model="disable"
-        label="停用按鈕"
-      />
-
-      <base-input
-        v-model="text"
-        placeholder="點擊這裡並使用 tab 將焦點轉移至按鈕後，再按下 Enter 看看"
-        class=" w-full "
-      /> -->
-    </div>
-
-    <div class="flex">
-      <util-party-popper />
-    </div>
+    <util-party-popper class="flex h-[40vh]" />
   </div>
 </template>
 
