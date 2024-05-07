@@ -4,7 +4,7 @@ import packageJson from '../../package.json';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "🐟 鱈魚的酷酷元件",
-  description: "設計各類惡搞、有趣的特殊元件",
+  description: "設計各類惡搞、有趣且實用（？）的特殊元件",
   head: [
     ['link', { rel: 'icon', href: '/favicon.webp' }],
     ['meta', { property: 'og:image', content: 'https://cod-chill-component.pages.dev/og.jpg' }],
