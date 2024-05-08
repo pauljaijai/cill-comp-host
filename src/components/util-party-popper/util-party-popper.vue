@@ -2,7 +2,7 @@
   <div class="view relative">
     <canvas
       ref="canvasRef"
-      class=" absolute left-0 top-0 w-full h-full"
+      class=" absolute left-0 top-0 w-full h-full -z-10"
     />
 
     <slot />
@@ -13,7 +13,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
-import { MeshBuilder, Scalar, SolidParticleSystem } from '@babylonjs/core';
+import { ArcRotateCamera, Camera, MeshBuilder, Scalar, SolidParticleSystem, Vector3 } from '@babylonjs/core';
+import { useElementBounding } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -37,22 +38,49 @@ defineSlots<{
 // #endregion Slots
 
 const { canvasRef } = useBabylonScene({
+  createCamera(scene) {
+    const camera = new ArcRotateCamera(
+      'camera',
+      Math.PI / 2,
+      Math.PI / 2,
+      Math.max(width.value, height.value),
+      new Vector3(0, 0, 0),
+      scene
+    );
+    camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
+
+    return camera;
+  },
   async init(param) {
     initParticles(param);
+
+    MeshBuilder.CreateBox('', {
+      width: 20,
+      height: 20,
+      depth: 20,
+    }, param.scene);
+
+    const box2 = MeshBuilder.CreateBox('', {
+      width: 20,
+      height: 20,
+      depth: 20,
+    }, param.scene);
+
+    console.log('width : ', width.value);
+    box2.position = new Vector3(width.value / 2, 0, 0);
   },
 });
+const { width, height } = useElementBounding(canvasRef);
 
 function initParticles({ scene }: InitParam) {
   const SPS = new SolidParticleSystem("SPS", scene);
-  const sphere = MeshBuilder.CreateSphere("s", {});
-  const poly = MeshBuilder.CreatePolyhedron("p", { type: 2 });
-  SPS.addShape(sphere, 20);
+  const poly = MeshBuilder.CreatePolyhedron("p", { type: 2, size: 5 });
   SPS.addShape(poly, 120);
-  SPS.addShape(sphere, 80);
-  sphere.dispose();
   poly.dispose();
 
   const mesh = SPS.buildMesh();
+
+  const [x, y] = [width.value / 2, height.value / 2];
 
   // initiate particles function
   SPS.initParticles = () => {
@@ -60,9 +88,8 @@ function initParticles({ scene }: InitParam) {
       const particle = SPS.particles[p];
       if (!particle) return;
 
-      particle.position.x = Scalar.RandomRange(-50, 50);
-      particle.position.y = Scalar.RandomRange(-50, 50);
-      particle.position.z = Scalar.RandomRange(-50, 50);
+      particle.position.x = Scalar.RandomRange(-x, x);
+      particle.position.y = Scalar.RandomRange(-y, y);
     }
   };
 

@@ -2,24 +2,34 @@ import { defaults } from 'lodash-es';
 import {
   ArcRotateCamera,
   Engine, HemisphericLight, Scene, Vector3,
+  WebGPUEngine,
 } from '@babylonjs/core';
 import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue';
 
+type BabylonEngine = Engine | WebGPUEngine;
+
 export interface InitParam {
   canvas: HTMLCanvasElement;
-  engine: Engine;
+  engine: BabylonEngine;
   scene: Scene;
   camera: ArcRotateCamera;
 }
 
 interface UseBabylonSceneParams {
-  createEngine?: (canvas: HTMLCanvasElement) => Engine;
-  createScene?: (engine: Engine) => Scene;
+  createEngine?: (canvas: HTMLCanvasElement) => Promise<BabylonEngine>;
+  createScene?: (engine: BabylonEngine) => Scene;
   createCamera?: (scene: Scene) => ArcRotateCamera;
   init?: (params: InitParam) => Promise<void>;
 }
 const defaultParams: Required<UseBabylonSceneParams> = {
-  createEngine(canvas) {
+  async createEngine(canvas) {
+    const webGPUSupported = await WebGPUEngine.IsSupportedAsync;
+    if (webGPUSupported) {
+      const engine = new WebGPUEngine(canvas);
+      await engine.initAsync();
+      return engine;
+    }
+
     return new Engine(canvas, true);
   },
   createScene(engine) {
@@ -37,9 +47,9 @@ const defaultParams: Required<UseBabylonSceneParams> = {
     const camera = new ArcRotateCamera(
       'camera',
       Math.PI / 2,
-      Math.PI / 4,
-      34,
-      new Vector3(0, 0, 2),
+      Math.PI / 2,
+      10,
+      new Vector3(0, 0, 100),
       scene
     );
 
@@ -51,7 +61,7 @@ const defaultParams: Required<UseBabylonSceneParams> = {
 export function useBabylonScene(params?: UseBabylonSceneParams) {
   const canvasRef = ref<HTMLCanvasElement>();
 
-  const engine = shallowRef<Engine>();
+  const engine = shallowRef<BabylonEngine>();
   const scene = shallowRef<Scene>();
   const camera = shallowRef<ArcRotateCamera>();
 
@@ -64,7 +74,7 @@ export function useBabylonScene(params?: UseBabylonSceneParams) {
       console.error('無法取得 canvas DOM');
       return;
     }
-    engine.value = createEngine(canvasRef.value);
+    engine.value = await createEngine(canvasRef.value);
     scene.value = createScene(engine.value);
     camera.value = createCamera(scene.value);
 
