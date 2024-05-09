@@ -30,7 +30,9 @@ const defaultParams: Required<UseBabylonSceneParams> = {
       return engine;
     }
 
-    return new Engine(canvas, true);
+    return new Engine(canvas, true, {
+      alpha: true,
+    });
   },
   createScene(engine) {
     const scene = new Scene(engine);
@@ -49,7 +51,7 @@ const defaultParams: Required<UseBabylonSceneParams> = {
       Math.PI / 2,
       Math.PI / 2,
       10,
-      new Vector3(0, 0, 100),
+      new Vector3(0, 0, 50),
       scene
     );
 
