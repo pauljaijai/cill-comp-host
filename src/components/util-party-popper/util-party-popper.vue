@@ -133,12 +133,12 @@ useIntervalFn(() => {
 const { width: elWidth, height: elHeight } = useElementBounding(canvasRef);
 /** 畫布邊界 */
 const canvasBoundary = computed(() => {
-  const { width, height } = confetti.value;
+  const x = elWidth.value / 3 * 2;
 
   return {
-    left: -elWidth.value / 2 - Math.max(width, height),
-    right: elWidth.value / 2 + Math.max(width, height),
-    bottom: -elHeight.value / 2 - Math.max(width, height),
+    left: -x,
+    right: x,
+    bottom: -elHeight.value / 3 * 2,
   }
 });
 
@@ -153,7 +153,7 @@ function initParticles({ scene }: InitParam) {
   const mesh = spSystem.buildMesh();
 
   spSystem.initParticles = () => {
-    particleSystem.value?.particles.forEach((particle) => {
+    spSystem.particles.forEach((particle) => {
       particle.color = new Color4(
         Scalar.RandomRange(0.5, 1),
         Scalar.RandomRange(0.5, 1),
@@ -163,7 +163,7 @@ function initParticles({ scene }: InitParam) {
 
       initParticle(particle);
 
-      particle.position.y = canvasBoundary.value.bottom;
+      particle.position.y = canvasBoundary.value.bottom * 2;
     });
   };
 

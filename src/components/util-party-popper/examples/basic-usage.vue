@@ -2,8 +2,8 @@
   <div class="flex flex-col gap-4 w-full border border-gray-300">
     <util-party-popper
       ref="popperRef"
-      class=" flex h-[40vh]"
       v-slot="{ fps }"
+      class=" flex h-[40vh]"
     >
       <div class=" w-full h-full flex justify-center items-center gap-10">
         <div class="flex flex-col gap-10">
