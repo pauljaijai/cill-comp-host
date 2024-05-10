@@ -8,7 +8,7 @@
     <slot />
 
     <div class=" absolute top-0 left-0 p-4">
-      {{ engine?.getFps() }}
+      {{ fps }}
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@ import {
   , HemisphericLight, MeshBuilder, Scalar,
   Scene, SolidParticle, SolidParticleSystem, Vector3
 } from '@babylonjs/core';
-import { useElementBounding } from '@vueuse/core';
+import { useElementBounding, useIntervalFn } from '@vueuse/core';
 import { pipe } from 'remeda';
 
 // #region Props
@@ -39,11 +39,11 @@ interface Props {
    * @default 10
    */
   quantityOfPerEmit?: number;
-  /** 最大粒子數量。
+  /** 最大同時觸發次數。
    * 
-   * @default 100
+   * @default 10
    */
-  maxQuantity?: number;
+  maxConcurrency?: number;
 
   /** 最大角速度
    * 
@@ -68,7 +68,7 @@ const props = withDefaults(defineProps<Props>(), {
     height: 15,
   }),
   quantityOfPerEmit: 10,
-  maxQuantity: 100,
+  maxConcurrency: 10,
   maxAngularVelocity: Math.PI / 20,
   gravity: -0.05,
   airResistance: 0.01,
@@ -127,6 +127,13 @@ const {
   },
 });
 
+const groupIndex = ref(0);
+
+const fps = ref(0);
+useIntervalFn(() => {
+  fps.value = Math.floor(engine.value?.getFps() ?? 0);
+}, 100);
+
 const { width: elWidth, height: elHeight } = useElementBounding(canvasRef);
 /** 畫布邊界 */
 const canvasBoundary = computed(() => {
@@ -144,7 +151,7 @@ function initParticles({ scene }: InitParam) {
 
   const spSystem = new SolidParticleSystem('SPS', scene);
   const box = MeshBuilder.CreateBox('box', { width, height, depth: 1 });
-  spSystem.addShape(box, props.maxQuantity);
+  spSystem.addShape(box, props.quantityOfPerEmit * props.maxConcurrency);
   box.dispose();
 
   const mesh = spSystem.buildMesh();
@@ -222,15 +229,19 @@ interface EmitParam {
 function emit(param: EmitParam) {
   if (!particleSystem.value) return;
 
-  /** babylon 中心點為 0, 0，需要偏移 */
+  /** babylon 中心點和網頁中心點位置不同，需要轉換 */
   const { x, y } = pipe(param,
     (data) => ({
-      x: data.x - elWidth.value / 2,
-      y: data.y - elHeight.value / 2,
+      x: -(data.x - elWidth.value / 2),
+      y: -(data.y - elHeight.value / 2),
     }),
   );
 
-  particleSystem.value?.particles.forEach((particle) => {
+  for (let i = 0; i < props.quantityOfPerEmit; i++) {
+    const index = i + groupIndex.value * props.quantityOfPerEmit;
+    const particle = particleSystem.value.particles[index];
+    if (!particle) return;
+
     particle.color = new Color4(
       Scalar.RandomRange(0.5, 1),
       Scalar.RandomRange(0.5, 1),
@@ -240,7 +251,10 @@ function emit(param: EmitParam) {
     particle.position = new Vector3(x, y, 0);
 
     initParticle(particle);
-  });
+  }
+
+  groupIndex.value++;
+  groupIndex.value %= props.maxConcurrency;
 }
 
 // #region Methods

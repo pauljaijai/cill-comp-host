@@ -4,13 +4,31 @@
       ref="popperRef"
       class=" flex h-[40vh]"
     >
-      <div class=" w-full h-full flex justify-center items-center">
+      <div class=" w-full h-full flex justify-center items-center gap-10">
+        <div class="flex flex-col gap-10">
+          <div
+            ref="btn01Ref"
+            class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
+            @click="emit(btn01Bounding)"
+          >
+            🎉
+          </div>
+
+          <div
+            ref="btn02Ref"
+            class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
+            @click="emit(btn02Bounding)"
+          >
+            🎉
+          </div>
+        </div>
+
         <div
-          ref="btnRef"
+          ref="btn03Ref"
           class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
-          @click="emit()"
+          @click="emit(btn03Bounding)"
         >
-          按鈕
+          🎉
         </div>
       </div>
     </util-party-popper>
@@ -31,14 +49,20 @@ const disable = ref(true);
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
 const popperBounding = useElementBounding(popperRef);
 
-const btnRef = ref<HTMLDivElement>();
-const btnBounding = useElementBounding(btnRef);
+const btn01Ref = ref<HTMLDivElement>();
+const btn01Bounding = useElementBounding(btn01Ref);
+
+const btn02Ref = ref<HTMLDivElement>();
+const btn02Bounding = useElementBounding(btn02Ref);
+
+const btn03Ref = ref<HTMLDivElement>();
+const btn03Bounding = useElementBounding(btn03Ref);
 
 
-function emit() {
+function emit(bounding: ReturnType<typeof useElementBounding>) {
   const param = {
-    x: btnBounding.left.value + btnBounding.width.value / 2 - popperBounding.left.value,
-    y: btnBounding.top.value + btnBounding.height.value / 2 - popperBounding.top.value,
+    x: bounding.left.value + bounding.width.value / 2 - popperBounding.left.value,
+    y: bounding.top.value + bounding.height.value / 2 - popperBounding.top.value,
   }
   popperRef.value?.emit(param);
 }
