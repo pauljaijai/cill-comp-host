@@ -3,6 +3,7 @@
     <util-party-popper
       ref="popperRef"
       class=" flex h-[40vh]"
+      v-slot="{ fps }"
     >
       <div class=" w-full h-full flex justify-center items-center gap-10">
         <div class="flex flex-col gap-10">
@@ -30,6 +31,10 @@
         >
           🎉
         </div>
+      </div>
+
+      <div class=" absolute left-0 top-0 p-4">
+        {{ fps }}
       </div>
     </util-party-popper>
   </div>

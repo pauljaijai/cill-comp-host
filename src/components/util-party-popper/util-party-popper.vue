@@ -5,11 +5,7 @@
       class=" absolute left-0 top-0 w-full h-full -z-10"
     />
 
-    <slot />
-
-    <div class=" absolute top-0 left-0 p-4">
-      {{ fps }}
-    </div>
+    <slot :fps="fps" />
   </div>
 </template>
 
@@ -36,7 +32,7 @@ interface Props {
 
   /** 每次發射數量
    * 
-   * @default 10
+   * @default 20
    */
   quantityOfPerEmit?: number;
   /** 最大同時觸發次數。
@@ -67,7 +63,7 @@ const props = withDefaults(defineProps<Props>(), {
     width: 10,
     height: 15,
   }),
-  quantityOfPerEmit: 10,
+  quantityOfPerEmit: 20,
   maxConcurrency: 10,
   maxAngularVelocity: Math.PI / 20,
   gravity: -0.05,
@@ -76,7 +72,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 // #region Slots
 defineSlots<{
-  default?: () => unknown;
+  default?: (data: { fps: number }) => unknown;
 }>();
 // #endregion Slots
 
@@ -260,6 +256,7 @@ function emit(param: EmitParam) {
 // #region Methods
 defineExpose({
   emit,
+  fps,
 });
 // #endregion Methods
 </script>
