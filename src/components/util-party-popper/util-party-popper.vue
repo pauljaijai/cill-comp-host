@@ -20,7 +20,7 @@ import {
   SolidParticle, SolidParticleSystem, Vector3
 } from '@babylonjs/core';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
-import { constant, pipe, piped, sample } from 'remeda';
+import { add, chunk, constant, multiply, pipe, piped, range, sample } from 'remeda';
 
 interface Vector {
   x: number;
@@ -42,11 +42,9 @@ type Confetti = {
   height: number;
   depth: number;
 } | {
-  shape: 'sphere',
+  shape: 'cylinder',
+  height: number;
   diameter: number;
-  diameterX?: number;
-  diameterY?: number;
-  diameterZ?: number;
 } | {
   shape: 'disc',
   radius: number;
@@ -74,7 +72,7 @@ type Confetti = {
 
 interface Props {
   /** 紙屑參數。初始化後即固定，不支援動態變更 */
-  confetti?: Confetti;
+  confetti?: Confetti | Confetti[];
 
   /** 每次發射數量
    * 
@@ -184,7 +182,17 @@ const {
   },
 });
 
-const groupIndex = ref(0);
+const totalAmount = props.quantityOfPerEmit * props.maxConcurrency;
+const numberOfEachMesh = pipe(props.confetti,
+  (data) => {
+    if (Array.isArray(data)) {
+      return totalAmount / data.length;
+    }
+
+    return totalAmount;
+  },
+  Math.floor,
+);
 
 const fps = ref(0);
 useIntervalFn(() => {
@@ -213,10 +221,10 @@ const meshProviders: (
       return MeshBuilder.CreateBox('mesh', data);
     },
     (data) => {
-      if (data.shape !== 'sphere') return;
-      return MeshBuilder.CreateSphere('mesh', {
+      if (data.shape !== 'cylinder') return;
+      return MeshBuilder.CreateCylinder('mesh', {
         ...data,
-        segments: 1,
+        tessellation: 8,
       });
     },
     (data) => {
@@ -236,25 +244,33 @@ const meshProviders: (
     },
   ]
 
+
+
 async function initParticles({ scene }: InitParam) {
   const spSystem = new SolidParticleSystem('SPS', scene);
 
-  const mesh = pipe(confetti.value,
-    (data) => {
-      for (const provider of meshProviders) {
-        const result = provider(data);
-        if (!result) continue;
+  const list = Array.isArray(confetti.value)
+    ? confetti.value : [confetti.value];
 
-        return result;
-      }
-    },
-    (data) => data ?? MeshBuilder.CreateBox('plane', {
-      width: 10, height: 10
-    }),
-  );
+  // 依序建立每個 mesh
+  list.forEach((item) => {
+    const mesh = pipe(item,
+      (data) => {
+        for (const provider of meshProviders) {
+          const result = provider(data);
+          if (!result) continue;
 
-  spSystem.addShape(mesh, props.quantityOfPerEmit * props.maxConcurrency);
-  mesh.dispose();
+          return result;
+        }
+      },
+      (data) => data ?? MeshBuilder.CreateBox('box', {
+        width: 10, height: 10, depth: 1
+      }),
+    );
+
+    spSystem.addShape(mesh, numberOfEachMesh);
+    mesh.dispose();
+  });
 
   spSystem.buildMesh();
 
@@ -362,6 +378,11 @@ function initParticle(particle: SolidParticle) {
   };
 }
 
+let groupIndex = 0;
+const particleIndexMapList = pipe(
+  range(0, totalAmount),
+  chunk(props.quantityOfPerEmit),
+)
 interface EmitParam {
   x: number;
   y: number;
@@ -387,9 +408,12 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
       }),
     );
 
-    const index = i + groupIndex.value * props.quantityOfPerEmit;
+    /** 平均取得每種 mesh  */
+    const index = particleIndexMapList[groupIndex]?.[i];
+    if (index === undefined) continue;
+
     const particle = particleSystem.value.particles[index];
-    if (!particle) return;
+    if (!particle) continue;
 
     particle.isVisible = true;
     particle.alive = true;
@@ -405,8 +429,8 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
     }
   }
 
-  groupIndex.value++;
-  groupIndex.value %= props.maxConcurrency;
+  groupIndex++;
+  groupIndex %= props.maxConcurrency;
 }
 
 // #region Methods

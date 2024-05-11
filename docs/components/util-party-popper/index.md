@@ -6,6 +6,7 @@ description: 隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
 import BasicUsage from '../../../src/components/util-party-popper/examples/basic-usage.vue'
 import EmitPosition from '../../../src/components/util-party-popper/examples/emit-position.vue'
 import MousePopper from '../../../src/components/util-party-popper/examples/mouse-popper.vue'
+import ConfettiShape from '../../../src/components/util-party-popper/examples/confetti-shape.vue'
 </script>
 
 # 拉炮
@@ -46,6 +47,16 @@ import MousePopper from '../../../src/components/util-party-popper/examples/mous
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/util-party-popper/examples/mouse-popper.vue
+:::
+
+### 各種形狀
+
+不只是紙屑，還有各種形狀可以選擇。
+
+<confetti-shape/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/util-party-popper/examples/confetti-shape.vue
 :::
 
 ## 原理

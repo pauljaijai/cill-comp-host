@@ -3,22 +3,17 @@
     <div class=" w-full h-full flex justify-center items-center gap-10 p-10">
       <div
         class=" bg-white text-2xl rounded px-4 py-2 select-none cursor-pointer"
-        @click="emit('left')"
+        @click="emit()"
       >
-        👈
-      </div>
-
-      <div
-        class="bg-white text-2xl rounded px-4 py-2 select-none cursor-pointer"
-        @click="emit('right')"
-      >
-        👉
+        🎇
       </div>
     </div>
 
     <util-party-popper
       ref="popperRef"
+      :confetti="confettiList"
       class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
+      :quantity-of-per-emit="50"
     />
   </div>
 </template>
@@ -31,71 +26,38 @@ import { conditional, constant, isDeepEqual } from 'remeda';
 import UtilPartyPopper from '../util-party-popper.vue';
 
 import { useElementBounding } from '@vueuse/core';
+import { ExtractArrayType } from '../../../types/main.type';
 
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
 const popperBounding = useElementBounding(popperRef);
 
-function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
-  const offset = 50;
+type Confetti = ExtractArrayType<
+  InstanceType<typeof UtilPartyPopper>['confetti']
+>;
+const confettiList: Confetti[] = [
+  {
+    shape: 'box',
+    width: 10,
+    height: 10,
+    depth: 1,
+  },
+  {
+    shape: 'cylinder',
+    diameter: 10,
+    height: 1,
+  },
+  {
+    shape: 'disc',
+    radius: 10,
+    tessellation: 3,
+    arc: 1,
+  },
+]
 
-  const param = conditional(position,
-    [
-      isDeepEqual('top'),
-      constant(() => ({
-        x: Scalar.RandomRange(0, popperBounding.width.value),
-        y: -offset,
-        velocity: {
-          x: Scalar.RandomRange(1, -1),
-          y: Scalar.RandomRange(0, -5)
-        },
-      }))
-    ],
-    [
-      isDeepEqual('bottom'),
-      constant(() => ({
-        x: Scalar.RandomRange(0, popperBounding.width.value),
-        y: popperBounding.height.value + offset,
-        velocity: {
-          x: Scalar.RandomRange(1, -1),
-          y: Scalar.RandomRange(5, 10)
-        },
-      }))
-    ],
-    [
-      isDeepEqual('bottom-center'),
-      () => ({
-        x: Scalar.RandomRange(0, popperBounding.width.value),
-        y: popperBounding.height.value + offset,
-        velocity: {
-          x: 0,
-          y: Scalar.RandomRange(5, 12),
-        },
-      })
-    ],
-    [
-      isDeepEqual('left'),
-      constant(() => ({
-        x: -offset,
-        y: Scalar.RandomRange(0, popperBounding.height.value),
-        velocity: {
-          x: Scalar.RandomRange(-1, -5),
-          y: Scalar.RandomRange(-1, 1)
-        },
-      }))
-    ],
-    [
-      isDeepEqual('right'),
-      constant(() => ({
-        x: popperBounding.width.value + offset,
-        y: Scalar.RandomRange(0, popperBounding.height.value),
-        velocity: {
-          x: Scalar.RandomRange(1, 5),
-          y: Scalar.RandomRange(-1, 1)
-        },
-      }))
-    ],
-  );
-
-  popperRef.value?.emit(param);
+function emit() {
+  popperRef.value?.emit({
+    x: popperBounding.width.value / 2,
+    y: popperBounding.height.value / 2,
+  });
 }
 </script>
