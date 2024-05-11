@@ -35,6 +35,7 @@
     <util-party-popper
       ref="popperRef"
       class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
+      :color="initColor"
       :quantity-of-per-emit="300"
     />
   </div>
@@ -43,7 +44,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Scalar } from '@babylonjs/core';
-import { conditional, constant, isDeepEqual, pipe } from 'remeda';
+import { conditional, constant, isDeepEqual, pipe, sample } from 'remeda';
 
 import UtilPartyPopper from '../util-party-popper.vue';
 
@@ -51,6 +52,19 @@ import { useElementBounding } from '@vueuse/core';
 
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
 const popperBounding = useElementBounding(popperRef);
+
+function initColor() {
+  return pipe(
+    [
+      { r: 1, g: 0.4, b: 0, },
+      { r: 1, g: 0.9, b: 0, },
+      { r: 0.5, g: 1, b: 0, },
+      { r: 0, g: 0.9, b: 1, },
+    ],
+    sample(1),
+    ([value]) => value,
+  )
+}
 
 function emit(position: 'top' | 'bottom' | 'left' | 'right') {
   const offset = 50;
