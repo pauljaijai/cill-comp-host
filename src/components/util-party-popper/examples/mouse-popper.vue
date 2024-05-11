@@ -9,7 +9,7 @@
     <util-party-popper
       ref="popperRef"
       class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
-      :quantity-of-per-emit="5"
+      :quantity-of-per-emit="10"
       :max-concurrency="500"
       :color="initColor"
     />
@@ -23,17 +23,18 @@ import { Scalar } from '@babylonjs/core';
 import BaseCheckbox from '../../base-checkbox.vue';
 import UtilPartyPopper from '../util-party-popper.vue';
 
-import { throttleFilter, useMouseInElement } from '@vueuse/core';
+import { throttleFilter, useMouseInElement, useMousePressed, whenever } from '@vueuse/core';
 
-const enable = ref(true);
+const enable = ref(false);
 
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
 const {
   elementX, elementY,
 } = useMouseInElement(popperRef, {
-  eventFilter: throttleFilter(15),
+  eventFilter: throttleFilter(10),
   scroll: false,
 });
+const { pressed } = useMousePressed();
 
 function initColor() {
   return {
@@ -43,12 +44,30 @@ function initColor() {
   }
 }
 
+whenever(pressed, () => {
+  if (!enable.value) return;
+
+  popperRef.value?.emit(() => ({
+    x: elementX.value,
+    y: elementY.value,
+    velocity: {
+      x: Scalar.RandomRange(-10, 10),
+      y: Scalar.RandomRange(-10, 10)
+    },
+  }));
+})
+
 watch(() => [elementX, elementY], () => {
   if (!enable.value) return;
 
-  popperRef.value?.emit({
-    x: elementX.value, y: elementY.value,
-  });
+  popperRef.value?.emit(() => ({
+    x: elementX.value,
+    y: elementY.value,
+    velocity: {
+      x: Scalar.RandomRange(-2, 2),
+      y: Scalar.RandomRange(-2, 2)
+    },
+  }));
 }, { deep: true });
 
 </script>
