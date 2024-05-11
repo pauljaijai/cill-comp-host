@@ -2,7 +2,6 @@
   <div class="flex flex-col gap-4 w-full border border-gray-300">
     <div class=" w-full h-full flex justify-center items-center gap-10 p-10">
       <div
-        ref="btn03Ref"
         class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
         @click="emit('left')"
       >
@@ -11,7 +10,6 @@
 
       <div class="flex flex-col gap-10">
         <div
-          ref="btn01Ref"
           class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
           @click="emit('top')"
         >
@@ -19,7 +17,6 @@
         </div>
 
         <div
-          ref="btn02Ref"
           class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
           @click="emit('bottom')"
         >
@@ -28,7 +25,6 @@
       </div>
 
       <div
-        ref="btn03Ref"
         class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
         @click="emit('right')"
       >
