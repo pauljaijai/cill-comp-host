@@ -78,7 +78,7 @@ const props = withDefaults(defineProps<Props>(), {
   quantityOfPerEmit: 20,
   maxConcurrency: 10,
   maxAngularVelocity: Math.PI / 40,
-  gravity: -0.05,
+  gravity: -0.04,
   // airResistance: 0.01,
   velocity: () => ({
     x: Scalar.RandomRange(-5, 5),
@@ -210,8 +210,8 @@ function initParticles({ scene }: InitParam) {
     // 模擬空氣擾動
     particle.velocity.addInPlace(
       new Vector3(
-        Scalar.RandomRange(-0.3, 0.3),
-        Scalar.RandomRange(-0.3, 0.3),
+        Scalar.RandomRange(-0.2, 0.2),
+        Scalar.RandomRange(-0.2, 0.2),
         0
       )
     );
@@ -271,13 +271,13 @@ function initParticle(particle: SolidParticle) {
 interface EmitParam {
   x: number;
   y: number;
+  velocity?: Vector
 }
 function emit(param: EmitParam | ((index: number) => EmitParam)) {
   if (!particleSystem.value) return;
 
   for (let i = 0; i < props.quantityOfPerEmit; i++) {
-    /** babylon 中心點和網頁中心點位置不同，需要轉換 */
-    const { x, y } = pipe(param,
+    const { x, y, velocity } = pipe(param,
       (data) => {
         if (data instanceof Function) {
           return data(i);
@@ -286,8 +286,10 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
         return data;
       },
       (data) => ({
+        /** babylon 中心點和網頁中心點位置不同，需要轉換 */
         x: -(data.x - elWidth.value / 2),
         y: -(data.y - elHeight.value / 2),
+        velocity: data.velocity,
       }),
     );
 
@@ -298,6 +300,12 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
     particle.position = new Vector3(x, y, 0);
 
     initParticle(particle);
+
+    if (velocity) {
+      particle.velocity = new Vector3(
+        velocity.x, velocity.y, 0
+      );
+    }
   }
 
   groupIndex.value++;

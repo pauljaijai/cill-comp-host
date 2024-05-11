@@ -43,13 +43,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import BaseCheckbox from '../../base-checkbox.vue';
-import BaseInput from '../../base-input.vue';
 import UtilPartyPopper from '../util-party-popper.vue';
 import { useElementBounding } from '@vueuse/core';
-
-const text = ref('');
-const disable = ref(true);
 
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
 const popperBounding = useElementBounding(popperRef);

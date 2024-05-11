@@ -4,6 +4,7 @@ description:
 
 <script setup>
 import BasicUsage from '../../../src/components/util-party-popper/examples/basic-usage.vue'
+import EmitPosition from '../../../src/components/util-party-popper/examples/emit-position.vue'
 </script>
 
 # 標題
@@ -20,6 +21,20 @@ import BasicUsage from '../../../src/components/util-party-popper/examples/basic
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/util-party-popper/examples/basic-usage.vue
+:::
+
+### 發射範圍
+
+不只可自訂發射位置，粒子發射範圍也可以調整。
+
+鱈魚：「讓你想射在哪就射在哪！ᕕ( ﾟ ∀。)ᕗ 」
+
+路人：「這句話聽起來怎麼怪怪的...(˘･_･˘)」
+
+<emit-position/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/util-party-popper/examples/emit-position.vue
 :::
 
 ## 原理
