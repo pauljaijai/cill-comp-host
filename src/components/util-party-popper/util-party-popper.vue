@@ -17,7 +17,7 @@ import {
   ArcRotateCamera, Camera,
   Color3, Color4
   , HemisphericLight, Mesh, MeshBuilder, Scalar,
-  Scene, SceneLoader, SolidParticle, SolidParticleSystem, Vector3
+  SolidParticle, SolidParticleSystem, Vector3
 } from '@babylonjs/core';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
 import { constant, pipe, piped, sample } from 'remeda';
@@ -36,12 +36,45 @@ interface Color {
 }
 
 // #region Props
+type Confetti = {
+  shape: 'box',
+  width: number;
+  height: number;
+  depth: number;
+} | {
+  shape: 'sphere',
+  diameter: number;
+  diameterX?: number;
+  diameterY?: number;
+  diameterZ?: number;
+} | {
+  shape: 'disc',
+  radius: number;
+  /** the number of disc/polygon sides */
+  tessellation: number;
+  /** ratio of the circumference between 0 and 1 */
+  arc: number;
+} | {
+  shape: 'torus',
+  diameter: number;
+  /** number of segments along the circle */
+  thickness: number;
+} | {
+  shape: 'polyhedron',
+  /** polyhedron type in the range。0-14
+   * 
+   * https://doc.babylonjs.com/features/featuresDeepDive/mesh/creation/polyhedra/polyhedra_by_numbers
+   */
+  type: number;
+  size: number;
+  sizeX?: number;
+  sizeY?: number;
+  sizeZ?: number;
+}
+
 interface Props {
-  /** 紙屑參數 */
-  confetti?: {
-    width: number;
-    height: number;
-  };
+  /** 紙屑參數。初始化後即固定，不支援動態變更 */
+  confetti?: Confetti;
 
   /** 每次發射數量
    * 
@@ -76,8 +109,10 @@ interface Props {
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   confetti: () => ({
+    shape: 'box',
     width: 10,
     height: 10,
+    depth: 1,
   }),
   quantityOfPerEmit: 20,
   maxConcurrency: 10,
@@ -170,16 +205,58 @@ const canvasBoundary = computed(() => {
   }
 });
 
-async function initParticles({ scene }: InitParam) {
-  const { width, height } = confetti.value;
+const meshProviders: (
+  (param: Confetti) => Mesh | undefined
+)[] = [
+    (data) => {
+      if (data.shape !== 'box') return;
+      return MeshBuilder.CreateBox('mesh', data);
+    },
+    (data) => {
+      if (data.shape !== 'sphere') return;
+      return MeshBuilder.CreateSphere('mesh', {
+        ...data,
+        segments: 1,
+      });
+    },
+    (data) => {
+      if (data.shape !== 'disc') return;
+      return MeshBuilder.CreateDisc('mesh', data);
+    },
+    (data) => {
+      if (data.shape !== 'torus') return;
+      return MeshBuilder.CreateTorus('mesh', {
+        ...data,
+        tessellation: 6,
+      });
+    },
+    (data) => {
+      if (data.shape !== 'polyhedron') return;
+      return MeshBuilder.CreatePolyhedron('mesh', data);
+    },
+  ]
 
+async function initParticles({ scene }: InitParam) {
   const spSystem = new SolidParticleSystem('SPS', scene);
 
-  const box = MeshBuilder.CreateBox('box', { width, height, depth: 1 });
-  spSystem.addShape(box, props.quantityOfPerEmit * props.maxConcurrency);
-  box.dispose();
+  const mesh = pipe(confetti.value,
+    (data) => {
+      for (const provider of meshProviders) {
+        const result = provider(data);
+        if (!result) continue;
 
-  const mesh = spSystem.buildMesh();
+        return result;
+      }
+    },
+    (data) => data ?? MeshBuilder.CreateBox('plane', {
+      width: 10, height: 10
+    }),
+  );
+
+  spSystem.addShape(mesh, props.quantityOfPerEmit * props.maxConcurrency);
+  mesh.dispose();
+
+  spSystem.buildMesh();
 
   spSystem.initParticles = () => {
     spSystem.particles.forEach((particle) => {
