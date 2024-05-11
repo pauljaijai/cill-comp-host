@@ -48,6 +48,7 @@ interface Props {
    * @default 20
    */
   quantityOfPerEmit?: number;
+
   /** 最大同時觸發次數。
    * 
    * @default 10
@@ -59,14 +60,17 @@ interface Props {
    * @default 1.5
    */
   maxAngularVelocity?: number;
+
   /** 重力
    * 
    * @default -0.01
    */
   gravity?: number;
 
+  /** 預設發射速度 */
   velocity?: Vector | ((index: number) => Vector);
 
+  /** 粒子顏色 */
   color?: Color | ((index: number) => Color);
 }
 // #endregion Props
@@ -330,7 +334,9 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
 
 // #region Methods
 defineExpose({
+  /** 發射粒子，如果提供 function，則可以分別設定粒子參數 */
   emit,
+  /** 目前畫面 FPS */
   fps,
 });
 // #endregion Methods
