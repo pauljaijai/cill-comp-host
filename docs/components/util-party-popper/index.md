@@ -5,6 +5,7 @@ description: 隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
 <script setup>
 import BasicUsage from '../../../src/components/util-party-popper/examples/basic-usage.vue'
 import EmitPosition from '../../../src/components/util-party-popper/examples/emit-position.vue'
+import MousePopper from '../../../src/components/util-party-popper/examples/mouse-popper.vue'
 </script>
 
 # 拉炮
@@ -35,6 +36,16 @@ import EmitPosition from '../../../src/components/util-party-popper/examples/emi
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/util-party-popper/examples/emit-position.vue
+:::
+
+### 滑鼠拉炮
+
+勞贖嘉年華！ᕕ( ﾟ ∀。)ᕗ
+
+<mouse-popper/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/util-party-popper/examples/mouse-popper.vue
 :::
 
 ## 原理
