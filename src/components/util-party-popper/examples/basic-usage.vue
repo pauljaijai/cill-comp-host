@@ -161,7 +161,6 @@ function emit(
     ],
     conditional.defaultCase(() => position),
   );
-  console.log(`🚀 ~ param:`, param);
 
   popperRef.value?.emit(param);
 }
