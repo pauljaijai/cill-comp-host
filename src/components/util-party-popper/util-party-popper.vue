@@ -68,11 +68,11 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   confetti: () => ({
     width: 10,
-    height: 15,
+    height: 20,
   }),
   quantityOfPerEmit: 20,
   maxConcurrency: 10,
-  maxAngularVelocity: Math.PI / 20,
+  maxAngularVelocity: Math.PI / 40,
   gravity: -0.05,
   airResistance: 0.01,
   velocity: () => ({
@@ -122,7 +122,7 @@ const {
       defaultLight.direction = new Vector3(0.5, 1, 0);
 
       defaultLight.diffuse = new Color3(1, 0.8, 0.8);
-      defaultLight.groundColor = new Color3(0.8, 0.8, 0.8);
+      defaultLight.groundColor = new Color3(1, 1, 1);
     }
 
     // 初始化粒子系統
