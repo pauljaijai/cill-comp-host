@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Scalar } from '@babylonjs/core';
-import { conditional, constant, isDeepEqual, pipe, sample } from 'remeda';
+import { conditional, constant, isDeepEqual } from 'remeda';
 
 import UtilPartyPopper from '../util-party-popper.vue';
 

@@ -68,11 +68,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { Scalar } from '@babylonjs/core';
+import { conditional, constant, isDeepEqual } from 'remeda';
 
 import UtilPartyPopper from '../util-party-popper.vue';
+
 import { useElementBounding } from '@vueuse/core';
-import { conditional, constant, isDeepEqual } from 'remeda';
-import { Scalar } from '@babylonjs/core';
 
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
 const popperBounding = useElementBounding(popperRef);
