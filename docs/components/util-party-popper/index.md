@@ -54,7 +54,7 @@ import MousePopper from '../../../src/components/util-party-popper/examples/mous
 
 📚 [babylon.js](https://doc.babylonjs.com/)
 
-預設使用 WebGPU，所以效能好棒棒！*｡✧*｡٩(ˊᗜˋ*)و✧*｡
+預設使用 WebGPU，效能好棒棒！*｡✧*｡٩(ˊᗜˋ*)و✧*｡
 
 ## API
 

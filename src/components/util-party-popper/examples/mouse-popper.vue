@@ -9,6 +9,7 @@
     <util-party-popper
       ref="popperRef"
       class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
+      :confetti="{ width: 20, height: 3 }"
       :quantity-of-per-emit="10"
       :max-concurrency="500"
       :color="initColor"
