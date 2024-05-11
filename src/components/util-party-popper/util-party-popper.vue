@@ -78,7 +78,7 @@ const props = withDefaults(defineProps<Props>(), {
   quantityOfPerEmit: 20,
   maxConcurrency: 10,
   maxAngularVelocity: Math.PI / 40,
-  gravity: -0.04,
+  gravity: -0.09,
   // airResistance: 0.01,
   velocity: () => ({
     x: Scalar.RandomRange(-5, 5),
@@ -198,7 +198,7 @@ function initParticles({ scene }: InitParam) {
 
       initParticle(particle);
 
-      particle.position.y = canvasBoundary.value.bottom * 2;
+      particle.isVisible = false;
     });
   };
 
@@ -206,11 +206,16 @@ function initParticles({ scene }: InitParam) {
   spSystem.setParticles();
 
   spSystem.updateParticle = (particle) => {
+    if (!particle.isVisible) return particle;
+
     if (particle.position.y > canvasBoundary.value.top
       || particle.position.y < canvasBoundary.value.bottom
       || particle.position.x < canvasBoundary.value.left
       || particle.position.x > canvasBoundary.value.right
-    ) return particle;
+    ) {
+      particle.isVisible = false;
+      return particle;
+    }
 
     // 模擬空氣擾動
     particle.velocity.addInPlace(
@@ -220,7 +225,10 @@ function initParticles({ scene }: InitParam) {
         0
       )
     );
-    particle.velocity.y += gravity.value;
+    // 限制粒子最大掉落速度
+    if (particle.velocity.y > -5) {
+      particle.velocity.y += gravity.value
+    }
     particle.position.addInPlace(particle.velocity);
 
     if (particle?.props?.rotationVelocity) {
@@ -302,6 +310,7 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
     const particle = particleSystem.value.particles[index];
     if (!particle) return;
 
+    particle.isVisible = true;
     particle.position = new Vector3(x, y, 0);
 
     initParticle(particle);
