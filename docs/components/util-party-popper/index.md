@@ -1,5 +1,5 @@
 ---
-description: 
+description: 隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
 ---
 
 <script setup>
@@ -7,9 +7,9 @@ import BasicUsage from '../../../src/components/util-party-popper/examples/basic
 import EmitPosition from '../../../src/components/util-party-popper/examples/emit-position.vue'
 </script>
 
-# 標題
+# 拉炮
 
-說明說明
+隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
 
 ## 使用範例
 

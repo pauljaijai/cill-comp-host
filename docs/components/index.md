@@ -8,6 +8,8 @@ import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-
 import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interactive-effect.vue';
 import WrapperKirbyMouthfulMode from '../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue';
 
+import UtilPartyPopper from '../../src/components/util-party-popper/examples/emit-position.vue';
+
 </script>
 
 # 元件清單
@@ -71,3 +73,11 @@ import WrapperKirbyMouthfulMode from '../../src/components/wrapper-kirby-mouthfu
 讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡• )
 
 <wrapper-kirby-mouthful-mode class="h-[70vh]" />
+
+## 實用
+
+### [拉炮](./util-party-popper/) <Badge type="info" text="util" />
+
+隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
+
+<util-party-popper class="h-[70vh]" />
