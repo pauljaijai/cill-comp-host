@@ -24,7 +24,6 @@ import BasicUsage from '../../../src/components/util-party-popper/examples/basic
 
 ## 原理
 
-
 ## API
 
 ### Props

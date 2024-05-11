@@ -26,6 +26,14 @@ interface Vector {
   x: number;
   y: number;
 }
+interface Color {
+  /** 0 ~ 1 */
+  r: number;
+  /** 0 ~ 1 */
+  g: number;
+  /** 0 ~ 1 */
+  b: number;
+}
 
 // #region Props
 interface Props {
@@ -56,28 +64,30 @@ interface Props {
    * @default -0.01
    */
   gravity?: number;
-  /** 空氣阻力
-   * 
-   * @default 0.01
-   */
-  airResistance?: number;
 
   velocity?: Vector | ((index: number) => Vector);
+
+  color?: Color | ((index: number) => Color);
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   confetti: () => ({
     width: 10,
-    height: 20,
+    height: 10,
   }),
   quantityOfPerEmit: 20,
   maxConcurrency: 10,
   maxAngularVelocity: Math.PI / 40,
   gravity: -0.05,
-  airResistance: 0.01,
+  // airResistance: 0.01,
   velocity: () => ({
     x: Scalar.RandomRange(-5, 5),
     y: Scalar.RandomRange(-5, 5),
+  }),
+  color: () => ({
+    r: 1,
+    g: Scalar.RandomRange(0.4, 1),
+    b: 0,
   }),
 });
 
@@ -141,11 +151,13 @@ const { width: elWidth, height: elHeight } = useElementBounding(canvasRef);
 /** 畫布邊界 */
 const canvasBoundary = computed(() => {
   const x = elWidth.value / 3 * 2;
+  const y = elHeight.value / 3 * 2;
 
   return {
     left: -x,
     right: x,
-    bottom: -elHeight.value / 3 * 2,
+    top: y,
+    bottom: -y,
   }
 });
 
@@ -161,11 +173,22 @@ function initParticles({ scene }: InitParam) {
 
   spSystem.initParticles = () => {
     spSystem.particles.forEach((particle) => {
+      const colorValue = pipe(props.color,
+        (param) => {
+          if (param instanceof Function) {
+            return param(particle.idx);
+          }
+
+          return {
+            r: 1,
+            g: Scalar.RandomRange(0.4, 1),
+            b: 0,
+          }
+        },
+      );
+
       particle.color = new Color4(
-        1,
-        Scalar.RandomRange(0.4, 1),
-        0,
-        1
+        colorValue.r, colorValue.g, colorValue.b, 1
       );
 
       initParticle(particle);
@@ -178,7 +201,8 @@ function initParticles({ scene }: InitParam) {
   spSystem.setParticles();
 
   spSystem.updateParticle = (particle) => {
-    if (particle.position.y < canvasBoundary.value.bottom
+    if (particle.position.y > canvasBoundary.value.top
+      || particle.position.y < canvasBoundary.value.bottom
       || particle.position.x < canvasBoundary.value.left
       || particle.position.x > canvasBoundary.value.right
     ) return particle;
@@ -192,7 +216,6 @@ function initParticles({ scene }: InitParam) {
       )
     );
     particle.velocity.y += gravity.value;
-
     particle.position.addInPlace(particle.velocity);
 
     if (particle?.props?.rotationVelocity) {
@@ -212,10 +235,21 @@ function initParticles({ scene }: InitParam) {
   return spSystem;
 }
 function initParticle(particle: SolidParticle) {
+  const velocityValue = pipe(props.velocity,
+    (param) => {
+      if (param instanceof Function) {
+        return param(particle.idx);
+      }
+
+      return {
+        x: Scalar.RandomRange(-5, 5),
+        y: Scalar.RandomRange(-5, 5)
+      }
+    },
+  );
+
   particle.velocity = new Vector3(
-    Scalar.RandomRange(-5, 5),
-    Scalar.RandomRange(-5, 5),
-    0
+    velocityValue.x, velocityValue.y, 0
   );
 
   particle.rotation = new Vector3(
@@ -238,18 +272,25 @@ interface EmitParam {
   x: number;
   y: number;
 }
-function emit(param: EmitParam) {
+function emit(param: EmitParam | ((index: number) => EmitParam)) {
   if (!particleSystem.value) return;
 
-  /** babylon 中心點和網頁中心點位置不同，需要轉換 */
-  const { x, y } = pipe(param,
-    (data) => ({
-      x: -(data.x - elWidth.value / 2),
-      y: -(data.y - elHeight.value / 2),
-    }),
-  );
-
   for (let i = 0; i < props.quantityOfPerEmit; i++) {
+    /** babylon 中心點和網頁中心點位置不同，需要轉換 */
+    const { x, y } = pipe(param,
+      (data) => {
+        if (data instanceof Function) {
+          return data(i);
+        }
+
+        return data;
+      },
+      (data) => ({
+        x: -(data.x - elWidth.value / 2),
+        y: -(data.y - elHeight.value / 2),
+      }),
+    );
+
     const index = i + groupIndex.value * props.quantityOfPerEmit;
     const particle = particleSystem.value.particles[index];
     if (!particle) return;
