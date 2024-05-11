@@ -379,6 +379,7 @@ function initParticle(particle: SolidParticle) {
 }
 
 let groupIndex = 0;
+/** 要平均每個 mesh，預先建立 index 映射表，用查表法取得目前 groupIndex 對應之 particle index */
 const particleIndexMapList = pipe(
   range(0, totalAmount),
   chunk(props.quantityOfPerEmit),
