@@ -20,7 +20,7 @@ import {
   Scene, SolidParticle, SolidParticleSystem, Vector3
 } from '@babylonjs/core';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
-import { pipe } from 'remeda';
+import { constant, pipe, piped, sample } from 'remeda';
 
 interface Vector {
   x: number;
@@ -84,11 +84,16 @@ const props = withDefaults(defineProps<Props>(), {
     x: Scalar.RandomRange(-5, 5),
     y: Scalar.RandomRange(-5, 5),
   }),
-  color: () => ({
-    r: 1,
-    g: Scalar.RandomRange(0.4, 1),
-    b: 0,
-  }),
+  color: () => piped(
+    constant([
+      { r: 1, g: 0.4, b: 0, },
+      { r: 1, g: 0.9, b: 0, },
+      { r: 0.5, g: 1, b: 0, },
+      { r: 0, g: 0.9, b: 1, },
+    ]),
+    sample(1),
+    ([value]) => value ?? { r: 1, g: 0.4, b: 0, },
+  )
 });
 
 // #region Slots
