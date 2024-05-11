@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-4 w-full">
     <div class=" w-full h-full flex justify-center items-center gap-10 p-10">
       <div
-        class=" bg-white rounded px-4 py-2 select-none cursor-pointer"
+        class=" bg-white text-2xl rounded px-4 py-2 select-none cursor-pointer"
         @click="emit('left')"
       >
         👈
@@ -10,21 +10,21 @@
 
       <div class="flex flex-col gap-10">
         <div
-          class="bg-white rounded px-4 py-2 select-none cursor-pointer"
+          class="bg-white text-2xl rounded px-4 py-2 select-none cursor-pointer"
           @click="emit('top')"
         >
           👆
         </div>
 
         <div
-          class="bg-white rounded px-4 py-2 select-none cursor-pointer"
+          class="bg-white text-2xl rounded px-4 py-2 select-none cursor-pointer"
           @click="emit('bottom')"
         >
           👇
         </div>
 
         <div
-          class="bg-white rounded px-4 py-2 select-none cursor-pointer"
+          class="bg-white text-2xl rounded px-4 py-2 select-none cursor-pointer"
           @click="emit('bottom-center')"
         >
           🎆
@@ -32,7 +32,7 @@
       </div>
 
       <div
-        class="bg-white rounded px-4 py-2 select-none cursor-pointer"
+        class="bg-white text-2xl rounded px-4 py-2 select-none cursor-pointer"
         @click="emit('right')"
       >
         👉

@@ -16,8 +16,8 @@ import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene'
 import {
   ArcRotateCamera, Camera,
   Color3, Color4
-  , HemisphericLight, MeshBuilder, Scalar,
-  Scene, SolidParticle, SolidParticleSystem, Vector3
+  , HemisphericLight, Mesh, MeshBuilder, Scalar,
+  Scene, SceneLoader, SolidParticle, SolidParticleSystem, Vector3
 } from '@babylonjs/core';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
 import { constant, pipe, piped, sample } from 'remeda';
@@ -141,7 +141,7 @@ const {
     }
 
     // 初始化粒子系統
-    particleSystem.value = initParticles(param);
+    particleSystem.value = await initParticles(param);
   },
 });
 
@@ -166,10 +166,11 @@ const canvasBoundary = computed(() => {
   }
 });
 
-function initParticles({ scene }: InitParam) {
+async function initParticles({ scene }: InitParam) {
   const { width, height } = confetti.value;
 
   const spSystem = new SolidParticleSystem('SPS', scene);
+
   const box = MeshBuilder.CreateBox('box', { width, height, depth: 1 });
   spSystem.addShape(box, props.quantityOfPerEmit * props.maxConcurrency);
   box.dispose();
@@ -214,16 +215,15 @@ function initParticles({ scene }: InitParam) {
       || particle.position.x > canvasBoundary.value.right
     ) {
       particle.isVisible = false;
+      particle.alive = false;
       return particle;
     }
 
     // 模擬空氣擾動
-    particle.velocity.addInPlace(
-      new Vector3(
-        Scalar.RandomRange(-0.2, 0.2),
-        Scalar.RandomRange(-0.2, 0.2),
-        0
-      )
+    particle.velocity.addInPlaceFromFloats(
+      Scalar.RandomRange(-0.2, 0.2),
+      Scalar.RandomRange(-0.2, 0.2),
+      0
     );
     // 限制粒子最大掉落速度
     if (particle.velocity.y > -5) {
@@ -311,6 +311,8 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
     if (!particle) return;
 
     particle.isVisible = true;
+    particle.alive = true;
+
     particle.position = new Vector3(x, y, 0);
 
     initParticle(particle);
