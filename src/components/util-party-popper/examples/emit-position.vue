@@ -27,7 +27,7 @@
           class="bg-white rounded px-4 py-2 select-none cursor-pointer"
           @click="emit('bottom-center')"
         >
-          🎇
+          🎆
         </div>
       </div>
 
