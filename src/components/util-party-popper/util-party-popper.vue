@@ -22,6 +22,11 @@ import {
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
 import { pipe } from 'remeda';
 
+interface Vector {
+  x: number;
+  y: number;
+}
+
 // #region Props
 interface Props {
   /** 紙屑參數 */
@@ -56,6 +61,8 @@ interface Props {
    * @default 0.01
    */
   airResistance?: number;
+
+  velocity?: Vector | ((index: number) => Vector);
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -68,6 +75,10 @@ const props = withDefaults(defineProps<Props>(), {
   maxAngularVelocity: Math.PI / 20,
   gravity: -0.05,
   airResistance: 0.01,
+  velocity: () => ({
+    x: Scalar.RandomRange(-5, 5),
+    y: Scalar.RandomRange(-5, 5),
+  }),
 });
 
 // #region Slots
@@ -86,25 +97,6 @@ const {
   canvasRef,
   engine,
 } = useBabylonScene({
-  createScene(engine) {
-    const scene = new Scene(engine);
-    // 背景透明
-    scene.clearColor = new Color4(0, 0, 0, 0);
-
-    /** 使用預設光源 */
-    scene.createDefaultLight();
-    const defaultLight = scene.lights.at(-1);
-
-    if (defaultLight instanceof HemisphericLight) {
-      defaultLight.intensity = 1;
-      defaultLight.direction = new Vector3(0.5, 1, 0);
-
-      defaultLight.diffuse = new Color3(1, 0.8, 0.8);
-      defaultLight.groundColor = new Color3(0.8, 0.8, 0.8);
-    }
-
-    return scene;
-  },
   createCamera(scene) {
     const camera = new ArcRotateCamera(
       'camera',
@@ -119,6 +111,21 @@ const {
     return camera;
   },
   async init(param) {
+    const { scene } = param;
+    // 背景透明
+    scene.clearColor = new Color4(0, 0, 0, 0);
+
+    // 調整預設光源
+    const defaultLight = scene.lights.at(-1);
+    if (defaultLight instanceof HemisphericLight) {
+      defaultLight.intensity = 1;
+      defaultLight.direction = new Vector3(0.5, 1, 0);
+
+      defaultLight.diffuse = new Color3(1, 0.8, 0.8);
+      defaultLight.groundColor = new Color3(0.8, 0.8, 0.8);
+    }
+
+    // 初始化粒子系統
     particleSystem.value = initParticles(param);
   },
 });
@@ -155,9 +162,9 @@ function initParticles({ scene }: InitParam) {
   spSystem.initParticles = () => {
     spSystem.particles.forEach((particle) => {
       particle.color = new Color4(
-        Scalar.RandomRange(0.5, 1),
-        Scalar.RandomRange(0.5, 1),
-        Scalar.RandomRange(0.5, 1),
+        1,
+        Scalar.RandomRange(0.4, 1),
+        0,
         1
       );
 
@@ -176,7 +183,16 @@ function initParticles({ scene }: InitParam) {
       || particle.position.x > canvasBoundary.value.right
     ) return particle;
 
+    // 模擬空氣擾動
+    particle.velocity.addInPlace(
+      new Vector3(
+        Scalar.RandomRange(-0.3, 0.3),
+        Scalar.RandomRange(-0.3, 0.3),
+        0
+      )
+    );
     particle.velocity.y += gravity.value;
+
     particle.position.addInPlace(particle.velocity);
 
     if (particle?.props?.rotationVelocity) {
@@ -198,7 +214,7 @@ function initParticles({ scene }: InitParam) {
 function initParticle(particle: SolidParticle) {
   particle.velocity = new Vector3(
     Scalar.RandomRange(-5, 5),
-    Scalar.RandomRange(-10, 10),
+    Scalar.RandomRange(-5, 5),
     0
   );
 
@@ -238,12 +254,6 @@ function emit(param: EmitParam) {
     const particle = particleSystem.value.particles[index];
     if (!particle) return;
 
-    particle.color = new Color4(
-      Scalar.RandomRange(0.5, 1),
-      Scalar.RandomRange(0.5, 1),
-      Scalar.RandomRange(0.5, 1),
-      1
-    );
     particle.position = new Vector3(x, y, 0);
 
     initParticle(particle);
