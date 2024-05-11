@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300">
+  <div class="flex flex-col gap-4 w-full">
     <div class=" w-full h-full flex justify-center items-center gap-10 p-10">
       <div
-        class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
+        class=" bg-white rounded px-4 py-2 select-none cursor-pointer"
         @click="emit('left')"
       >
         👈
@@ -10,22 +10,29 @@
 
       <div class="flex flex-col gap-10">
         <div
-          class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
+          class="bg-white rounded px-4 py-2 select-none cursor-pointer"
           @click="emit('top')"
         >
           👆
         </div>
 
         <div
-          class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
+          class="bg-white rounded px-4 py-2 select-none cursor-pointer"
           @click="emit('bottom')"
         >
           👇
         </div>
+
+        <div
+          class="bg-white rounded px-4 py-2 select-none cursor-pointer"
+          @click="emit('bottom-center')"
+        >
+          🎇
+        </div>
       </div>
 
       <div
-        class="border bg-white rounded px-4 py-2 select-none cursor-pointer"
+        class="bg-white rounded px-4 py-2 select-none cursor-pointer"
         @click="emit('right')"
       >
         👉
@@ -35,7 +42,8 @@
     <util-party-popper
       ref="popperRef"
       class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
-      :quantity-of-per-emit="300"
+      :quantity-of-per-emit="200"
+      :max-concurrency="50"
     />
   </div>
 </template>
@@ -52,7 +60,7 @@ import { useElementBounding } from '@vueuse/core';
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
 const popperBounding = useElementBounding(popperRef);
 
-function emit(position: 'top' | 'bottom' | 'left' | 'right') {
+function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
   const offset = 50;
 
   const param = conditional(position,
@@ -74,9 +82,20 @@ function emit(position: 'top' | 'bottom' | 'left' | 'right') {
         y: popperBounding.height.value + offset,
         velocity: {
           x: Scalar.RandomRange(1, -1),
-          y: Scalar.RandomRange(1, 5)
+          y: Scalar.RandomRange(5, 10)
         },
       }))
+    ],
+    [
+      isDeepEqual('bottom-center'),
+      () => ({
+        x: Scalar.RandomRange(0, popperBounding.width.value),
+        y: popperBounding.height.value + offset,
+        velocity: {
+          x: 0,
+          y: Scalar.RandomRange(5, 12),
+        },
+      })
     ],
     [
       isDeepEqual('left'),
