@@ -100,7 +100,7 @@ interface Props {
 
   /** 空氣阻力。速度衰減比率
    *
-   * @default 0.99
+   * @default 0.985
    */
   airResistance?: number;
 
@@ -122,7 +122,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxConcurrency: 10,
   maxAngularVelocity: Math.PI / 40,
   gravity: -0.09,
-  airResistance: 0.99,
+  airResistance: 0.985,
   velocity: () => ({
     x: Scalar.RandomRange(-5, 5),
     y: Scalar.RandomRange(-5, 5),
@@ -189,16 +189,10 @@ const {
 });
 
 const totalAmount = props.quantityOfPerEmit * props.maxConcurrency;
-const numberOfEachMesh = pipe(props.confetti,
-  (data) => {
-    if (Array.isArray(data)) {
-      return totalAmount / data.length;
-    }
-
-    return totalAmount;
-  },
-  Math.floor,
+const numberOfMeshType = pipe(props.confetti,
+  (data) => Array.isArray(data) ? data.length : 1
 );
+const numberOfEachMesh = totalAmount / numberOfMeshType;
 
 const fps = ref(0);
 useIntervalFn(() => {
@@ -333,7 +327,7 @@ async function initParticles({ scene }: InitParam) {
     particle.velocity.y *= props.airResistance;
 
     // 限制粒子最大掉落速度
-    if (particle.velocity.y > -5) {
+    if (particle.velocity.y > -3) {
       particle.velocity.y += gravity.value
     }
     particle.position.addInPlace(particle.velocity);
@@ -392,7 +386,22 @@ let groupIndex = 0;
 /** 要平均每個 mesh，預先建立 index 映射表，用查表法取得目前 groupIndex 對應之 particle index */
 const particleIndexMapList = pipe(
   range(0, totalAmount),
-  chunk(props.quantityOfPerEmit),
+  (list) => {
+    const numCols = totalAmount / numberOfMeshType;
+    const result: number[] = [];
+
+    // 重組陣列
+    for (let col = 0; col < numCols; col++) {
+      for (let row = 0; row < numberOfMeshType; row++) {
+        const value = list[row * numCols + col];
+        if (value !== undefined) {
+          result.push(value);
+        }
+      }
+    }
+
+    return result;
+  },
 )
 interface EmitParam {
   x: number;
@@ -419,8 +428,8 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
       }),
     );
 
-    /** 平均取得每種 mesh  */
-    const index = particleIndexMapList[i]?.[groupIndex];
+    /** 根據 groupIndex 取得正確 index  */
+    const index = particleIndexMapList[i + groupIndex * props.quantityOfPerEmit];
     if (index === undefined) continue;
 
     const particle = particleSystem.value.particles[index];

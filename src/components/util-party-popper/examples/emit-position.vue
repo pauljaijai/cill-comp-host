@@ -93,7 +93,7 @@ function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
         y: popperBounding.height.value + offset,
         velocity: {
           x: 0,
-          y: Scalar.RandomRange(10, 15),
+          y: Scalar.RandomRange(8, 20),
         },
       })
     ],

@@ -14,6 +14,7 @@
       :confetti="confettiList"
       class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
       :quantity-of-per-emit="50"
+      :max-concurrency="50"
     />
   </div>
 </template>
@@ -21,7 +22,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Scalar } from '@babylonjs/core';
-import { conditional, constant, isDeepEqual } from 'remeda';
 
 import UtilPartyPopper from '../util-party-popper.vue';
 
@@ -53,8 +53,14 @@ const confettiList: Confetti[] = [
     arc: 1,
   },
   {
+    shape: 'disc',
+    radius: 8,
+    tessellation: 8,
+    arc: 1,
+  },
+  {
     shape: 'torus',
-    diameter: 10,
+    diameter: 12,
     thickness: 2,
   },
 ]
@@ -65,7 +71,7 @@ function emit() {
     y: popperBounding.height.value,
     velocity: {
       x: -Scalar.RandomRange(5, 10),
-      y: Scalar.RandomRange(6, 12),
+      y: Scalar.RandomRange(10, 20),
     },
   }));
 
@@ -74,7 +80,7 @@ function emit() {
     y: popperBounding.height.value,
     velocity: {
       x: Scalar.RandomRange(5, 10),
-      y: Scalar.RandomRange(6, 12),
+      y: Scalar.RandomRange(10, 20),
     },
   }));
 }
