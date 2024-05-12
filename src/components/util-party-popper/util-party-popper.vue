@@ -19,7 +19,7 @@ import {
   , HemisphericLight, Mesh, MeshBuilder, Scalar,
   SolidParticle, SolidParticleSystem, Vector3
 } from '@babylonjs/core';
-import { useElementBounding, useIntervalFn } from '@vueuse/core';
+import { useElementBounding, useIntervalFn, useRafFn } from '@vueuse/core';
 import { add, chunk, constant, multiply, pipe, piped, range, sample } from 'remeda';
 
 interface Vector {
@@ -341,10 +341,10 @@ async function initParticles({ scene }: InitParam) {
     return particle;
   }
 
-  /** 播放動畫 */
-  scene.onAfterRenderObservable.add(() => {
+  /** 播放動畫，使用 useRafFn 讓統一 fps 最大值為 60 */
+  useRafFn(() => {
     spSystem.setParticles();
-  })
+  }, { fpsLimit: 60 })
 
   return spSystem;
 }
