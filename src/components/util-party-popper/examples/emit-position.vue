@@ -42,7 +42,7 @@
     <util-party-popper
       ref="popperRef"
       class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
-      :quantity-of-per-emit="200"
+      :quantity-of-per-emit="100"
       :max-concurrency="50"
     />
   </div>
@@ -71,7 +71,7 @@ function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
         y: -offset,
         velocity: {
           x: Scalar.RandomRange(1, -1),
-          y: Scalar.RandomRange(0, -5)
+          y: Scalar.RandomRange(0, -10)
         },
       }))
     ],
@@ -82,7 +82,7 @@ function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
         y: popperBounding.height.value + offset,
         velocity: {
           x: Scalar.RandomRange(1, -1),
-          y: Scalar.RandomRange(5, 10)
+          y: Scalar.RandomRange(10, 15)
         },
       }))
     ],
@@ -93,7 +93,7 @@ function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
         y: popperBounding.height.value + offset,
         velocity: {
           x: 0,
-          y: Scalar.RandomRange(5, 12),
+          y: Scalar.RandomRange(10, 15),
         },
       })
     ],
@@ -103,7 +103,7 @@ function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
         x: -offset,
         y: Scalar.RandomRange(0, popperBounding.height.value),
         velocity: {
-          x: Scalar.RandomRange(-1, -5),
+          x: Scalar.RandomRange(-5, -10),
           y: Scalar.RandomRange(-1, 1)
         },
       }))
@@ -114,7 +114,7 @@ function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
         x: popperBounding.width.value + offset,
         y: Scalar.RandomRange(0, popperBounding.height.value),
         velocity: {
-          x: Scalar.RandomRange(1, 5),
+          x: Scalar.RandomRange(5, 10),
           y: Scalar.RandomRange(-1, 1)
         },
       }))

@@ -98,6 +98,12 @@ interface Props {
    */
   gravity?: number;
 
+  /** 空氣阻力。速度衰減比率
+   *
+   * @default 0.99
+   */
+  airResistance?: number;
+
   /** 預設發射速度 */
   velocity?: Vector | ((index: number) => Vector);
 
@@ -116,7 +122,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxConcurrency: 10,
   maxAngularVelocity: Math.PI / 40,
   gravity: -0.09,
-  // airResistance: 0.01,
+  airResistance: 0.99,
   velocity: () => ({
     x: Scalar.RandomRange(-5, 5),
     y: Scalar.RandomRange(-5, 5),
@@ -322,6 +328,10 @@ async function initParticles({ scene }: InitParam) {
       Scalar.RandomRange(-0.2, 0.2),
       0
     );
+    // 空氣阻力
+    particle.velocity.x *= props.airResistance;
+    particle.velocity.y *= props.airResistance;
+
     // 限制粒子最大掉落速度
     if (particle.velocity.y > -5) {
       particle.velocity.y += gravity.value
@@ -410,7 +420,7 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
     );
 
     /** 平均取得每種 mesh  */
-    const index = particleIndexMapList[groupIndex]?.[i];
+    const index = particleIndexMapList[i]?.[groupIndex];
     if (index === undefined) continue;
 
     const particle = particleSystem.value.particles[index];

@@ -5,7 +5,7 @@
         class=" bg-white text-2xl rounded px-4 py-2 select-none cursor-pointer"
         @click="emit()"
       >
-        🎇
+        🎉
       </div>
     </div>
 
@@ -52,12 +52,30 @@ const confettiList: Confetti[] = [
     tessellation: 3,
     arc: 1,
   },
+  {
+    shape: 'torus',
+    diameter: 10,
+    thickness: 2,
+  },
 ]
 
 function emit() {
-  popperRef.value?.emit({
-    x: popperBounding.width.value / 2,
-    y: popperBounding.height.value / 2,
-  });
+  popperRef.value?.emit(() => ({
+    x: 0,
+    y: popperBounding.height.value,
+    velocity: {
+      x: -Scalar.RandomRange(5, 10),
+      y: Scalar.RandomRange(6, 12),
+    },
+  }));
+
+  popperRef.value?.emit(() => ({
+    x: popperBounding.width.value,
+    y: popperBounding.height.value,
+    velocity: {
+      x: Scalar.RandomRange(5, 10),
+      y: Scalar.RandomRange(6, 12),
+    },
+  }));
 }
 </script>

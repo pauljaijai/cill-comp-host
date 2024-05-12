@@ -51,7 +51,7 @@ import ConfettiShape from '../../../src/components/util-party-popper/examples/co
 
 ### 各種形狀
 
-不只是紙屑，還有各種形狀可以選擇。
+不只是方形，還有各種形狀可以選擇。
 
 <confetti-shape/>
 
