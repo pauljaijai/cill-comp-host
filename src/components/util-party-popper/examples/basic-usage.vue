@@ -4,6 +4,7 @@
       ref="popperRef"
       v-slot="{ fps }"
       class=" flex h-[60vh]"
+      :max-concurrency="40"
     >
       <div class=" w-full h-full flex flex-col justify-center items-center gap-6">
         <div class="flex gap-6">
