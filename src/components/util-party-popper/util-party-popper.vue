@@ -16,11 +16,11 @@ import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene'
 import {
   ArcRotateCamera, Camera,
   Color3, Color4
-  , HemisphericLight, Mesh, MeshBuilder, RollingAverage, Scalar,
+  , HemisphericLight, Mesh, MeshBuilder, Scalar,
   SolidParticle, SolidParticleSystem, Vector3
 } from '@babylonjs/core';
-import { useElementBounding, useIntervalFn, useRafFn } from '@vueuse/core';
-import { add, chunk, constant, multiply, pipe, piped, range, sample } from 'remeda';
+import { useElementBounding, useIntervalFn } from '@vueuse/core';
+import { constant, pipe, piped, range, sample } from 'remeda';
 
 interface Vector {
   x: number;
@@ -213,9 +213,6 @@ const canvasBoundary = computed(() => {
   }
 });
 
-/** 限制最大 FPS 為 60 */
-const rollingAverage = new RollingAverage(60);
-
 const meshProviders: (
   (param: Confetti) => Mesh | undefined
 )[] = [
@@ -319,30 +316,28 @@ async function initParticles({ scene }: InitParam) {
       return particle;
     }
 
-    /** 動畫平滑比例，用來調節 FPS 比率，讓不同 FPS 裝置的動畫速度相等 */
-    const average = rollingAverage.average;
-
     // 模擬空氣擾動
     particle.velocity.addInPlaceFromFloats(
-      Scalar.RandomRange(-0.2, 0.2) * average,
-      Scalar.RandomRange(-0.2, 0.2) * average,
+      Scalar.RandomRange(-0.2, 0.2),
+      Scalar.RandomRange(-0.2, 0.2),
       0
     );
+
     // 空氣阻力
-    particle.velocity.x *= props.airResistance * average;
-    particle.velocity.y *= props.airResistance * average;
+    particle.velocity.x *= props.airResistance;
+    particle.velocity.y *= props.airResistance;
 
     // 限制粒子最大掉落速度
     if (particle.velocity.y > -3) {
-      particle.velocity.y += gravity.value * average
+      particle.velocity.y += gravity.value;
     }
     particle.position.addInPlace(
-      particle.velocity.multiplyByFloats(average, average, 1)
+      particle.velocity
     );
 
     if (particle?.props?.rotationVelocity) {
       particle.rotation.addInPlace(
-        particle.props.rotationVelocity.multiplyByFloats(average, average, 1)
+        particle.props.rotationVelocity
       );
     }
 
@@ -351,9 +346,7 @@ async function initParticles({ scene }: InitParam) {
 
   /** 播放動畫 */
   scene.onAfterRenderObservable.add(() => {
-    rollingAverage.add(scene.getAnimationRatio());
     spSystem.setParticles();
-
   })
 
   return spSystem;
