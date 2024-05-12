@@ -16,7 +16,7 @@ import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene'
 import {
   ArcRotateCamera, Camera,
   Color3, Color4
-  , HemisphericLight, Mesh, MeshBuilder, Scalar,
+  , HemisphericLight, Mesh, MeshBuilder, RollingAverage, Scalar,
   SolidParticle, SolidParticleSystem, Vector3
 } from '@babylonjs/core';
 import { useElementBounding, useIntervalFn, useRafFn } from '@vueuse/core';
@@ -213,6 +213,9 @@ const canvasBoundary = computed(() => {
   }
 });
 
+/** 限制最大 FPS 為 60 */
+const rollingAverage = new RollingAverage(60);
+
 const meshProviders: (
   (param: Confetti) => Mesh | undefined
 )[] = [
@@ -316,35 +319,42 @@ async function initParticles({ scene }: InitParam) {
       return particle;
     }
 
+    /** 動畫平滑比例，用來調節 FPS 比率，讓不同 FPS 裝置的動畫速度相等 */
+    const average = rollingAverage.average;
+
     // 模擬空氣擾動
     particle.velocity.addInPlaceFromFloats(
-      Scalar.RandomRange(-0.2, 0.2),
-      Scalar.RandomRange(-0.2, 0.2),
+      Scalar.RandomRange(-0.2, 0.2) * average,
+      Scalar.RandomRange(-0.2, 0.2) * average,
       0
     );
     // 空氣阻力
-    particle.velocity.x *= props.airResistance;
-    particle.velocity.y *= props.airResistance;
+    particle.velocity.x *= props.airResistance * average;
+    particle.velocity.y *= props.airResistance * average;
 
     // 限制粒子最大掉落速度
     if (particle.velocity.y > -3) {
-      particle.velocity.y += gravity.value
+      particle.velocity.y += gravity.value * average
     }
-    particle.position.addInPlace(particle.velocity);
+    particle.position.addInPlace(
+      particle.velocity.multiplyByFloats(average, average, 1)
+    );
 
     if (particle?.props?.rotationVelocity) {
       particle.rotation.addInPlace(
-        particle.props.rotationVelocity
+        particle.props.rotationVelocity.multiplyByFloats(average, average, 1)
       );
     }
 
     return particle;
   }
 
-  /** 播放動畫，使用 useRafFn 讓統一 fps 最大值為 60 */
-  useRafFn(() => {
+  /** 播放動畫 */
+  scene.onAfterRenderObservable.add(() => {
+    rollingAverage.add(scene.getAnimationRatio());
     spSystem.setParticles();
-  }, { fpsLimit: 60 })
+
+  })
 
   return spSystem;
 }

@@ -27,6 +27,7 @@ const defaultParams: Required<UseBabylonSceneParams> = {
     if (webGPUSupported) {
       const engine = new WebGPUEngine(canvas);
       await engine.initAsync();
+
       return engine;
     }
 
