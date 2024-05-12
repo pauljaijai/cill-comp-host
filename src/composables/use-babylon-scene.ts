@@ -25,7 +25,9 @@ const defaultParams: Required<UseBabylonSceneParams> = {
   async createEngine(canvas) {
     const webGPUSupported = await WebGPUEngine.IsSupportedAsync;
     if (webGPUSupported) {
-      const engine = new WebGPUEngine(canvas);
+      const engine = new WebGPUEngine(canvas, {
+        antialias: true,
+      });
       await engine.initAsync();
 
       return engine;

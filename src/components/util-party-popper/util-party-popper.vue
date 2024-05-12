@@ -15,8 +15,7 @@ import { computed, ref, shallowRef, toRefs } from 'vue';
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import {
   ArcRotateCamera, Camera,
-  Color3, Color4
-  , HemisphericLight, Mesh, MeshBuilder, Scalar,
+  Color3, Color4, HemisphericLight, Mesh, MeshBuilder, Scalar,
   SolidParticle, SolidParticleSystem, Vector3
 } from '@babylonjs/core';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
@@ -316,28 +315,37 @@ async function initParticles({ scene }: InitParam) {
       return particle;
     }
 
+    const animationRatio = scene.getAnimationRatio();
+
     // 模擬空氣擾動
     particle.velocity.addInPlaceFromFloats(
-      Scalar.RandomRange(-0.2, 0.2),
-      Scalar.RandomRange(-0.2, 0.2),
+      Scalar.RandomRange(-0.2, 0.2) * animationRatio,
+      Scalar.RandomRange(-0.2, 0.2) * animationRatio,
       0
     );
 
     // 空氣阻力
-    particle.velocity.x *= props.airResistance;
-    particle.velocity.y *= props.airResistance;
+    const airResistance = pipe(
+      props.airResistance,
+      (value) => {
+        const delta = 1 - value;
+        return value + (delta - delta * animationRatio);
+      },
+    );
+    particle.velocity.x *= airResistance;
+    particle.velocity.y *= airResistance;
 
     // 限制粒子最大掉落速度
     if (particle.velocity.y > -3) {
-      particle.velocity.y += gravity.value;
+      particle.velocity.y += gravity.value * animationRatio;
     }
     particle.position.addInPlace(
-      particle.velocity
+      particle.velocity.multiplyByFloats(animationRatio, animationRatio, 1)
     );
 
     if (particle?.props?.rotationVelocity) {
       particle.rotation.addInPlace(
-        particle.props.rotationVelocity
+        particle.props.rotationVelocity.multiplyByFloats(animationRatio, animationRatio, 1)
       );
     }
 
