@@ -78,6 +78,12 @@ export default defineConfig({
             ]
           },
           {
+            text: '輪播',
+            items: [
+              { text: 'carousel-colorful-particles', link: '/components/carousel-colorful-particles/' },
+            ]
+          },
+          {
             text: '實用',
             items: [
               { text: '拉炮', link: '/components/util-party-popper/' },
