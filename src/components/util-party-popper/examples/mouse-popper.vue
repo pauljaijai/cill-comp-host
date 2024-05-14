@@ -9,9 +9,11 @@
     <util-party-popper
       ref="popperRef"
       class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
-      :quantity-of-per-emit="10"
+      :confetti="confettiList"
+      :quantity-of-per-emit="2"
       :max-concurrency="500"
-      :color="initColor"
+      :max-angular-velocity="Math.PI / 100"
+      :color="{ r: 1, g: 1, b: 1 }"
     />
   </div>
 </template>
@@ -24,8 +26,27 @@ import BaseCheckbox from '../../base-checkbox.vue';
 import UtilPartyPopper from '../util-party-popper.vue';
 
 import { throttleFilter, useMouseInElement, useMousePressed, whenever } from '@vueuse/core';
+import { ExtractArrayType } from '../../../types/main.type';
 
 const enable = ref(false);
+
+type Confetti = ExtractArrayType<
+  InstanceType<typeof UtilPartyPopper>['confetti']
+>;
+const confettiList: Confetti[] = [
+  {
+    shape: 'text',
+    width: 30,
+    height: 30,
+    char: '🐁',
+  },
+  {
+    shape: 'text',
+    width: 40,
+    height: 40,
+    char: '🐀',
+  },
+]
 
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
 const {
@@ -35,14 +56,6 @@ const {
   scroll: false,
 });
 const { pressed } = useMousePressed();
-
-function initColor() {
-  return {
-    r: Scalar.RandomRange(0.8, 1),
-    g: Scalar.RandomRange(0.8, 1),
-    b: 1
-  }
-}
 
 whenever(pressed, () => {
   if (!enable.value) return;
