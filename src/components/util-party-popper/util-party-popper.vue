@@ -111,10 +111,9 @@ interface Props {
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   confetti: () => ({
-    shape: 'box',
+    shape: 'plane',
     width: 10,
     height: 10,
-    depth: 1,
   }),
   quantityOfPerEmit: 20,
   maxConcurrency: 10,
