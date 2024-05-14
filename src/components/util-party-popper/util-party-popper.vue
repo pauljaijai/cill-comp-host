@@ -181,7 +181,7 @@ const {
       defaultLight.intensity = 1;
       defaultLight.direction = new Vector3(0.5, 1, 0);
 
-      defaultLight.diffuse = new Color3(1, 0.8, 0.8);
+      defaultLight.diffuse = new Color3(1, 1, 1);
       defaultLight.groundColor = new Color3(1, 1, 1);
     }
 
@@ -194,7 +194,7 @@ const totalAmount = props.quantityOfPerEmit * props.maxConcurrency;
 const numberOfMeshType = pipe(props.confetti,
   (data) => Array.isArray(data) ? data.length : 1
 );
-const numberOfEachMesh = totalAmount / numberOfMeshType;
+const numberOfEachMesh = Math.floor(totalAmount / numberOfMeshType);
 
 const fps = ref(0);
 useIntervalFn(() => {
@@ -246,12 +246,22 @@ const meshProviders: (
     },
     (data) => {
       if (data.shape !== 'text') return;
-      const mesh = MeshBuilder.CreatePlane('mesh', data);
+      const mesh = MeshBuilder.CreatePlane('text', data);
+
       const texture = new DynamicTexture('text', {
         width: data.width,
         height: data.height,
       });
-      texture.drawText(data.char, 20, 20, 'bold 40px monospace', 'black', 'white');
+
+      // 量測文字寬度
+      const ctx = texture.getContext();
+      const size = 12;
+      ctx.font = `${size}px monospace`;
+      const textWidth = ctx.measureText(data.char).width;
+      const ratio = textWidth / size;
+      const fontSize = Math.floor(data.width / ratio);
+
+      texture.drawText(data.char, null, null, `${fontSize}px monospace`, 'black', 'white', true);
 
       const material = new StandardMaterial('material');
       material.diffuseTexture = texture;
@@ -307,7 +317,7 @@ async function initParticles({ scene }: InitParam) {
             return param(particle.idx);
           }
 
-          return {
+          return param ?? {
             r: 1,
             g: Scalar.RandomRange(0.4, 1),
             b: 0,
