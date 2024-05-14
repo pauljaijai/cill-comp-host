@@ -36,10 +36,9 @@ interface Color {
 
 // #region Props
 type Confetti = {
-  shape: 'box',
+  shape: 'plane',
   width: number;
   height: number;
-  depth: number;
 } | {
   shape: 'cylinder',
   height: number;
@@ -216,7 +215,7 @@ const meshProviders: (
   (param: Confetti) => Mesh | undefined
 )[] = [
     (data) => {
-      if (data.shape !== 'box') return;
+      if (data.shape !== 'plane') return;
       return MeshBuilder.CreateBox('mesh', data);
     },
     (data) => {
@@ -262,8 +261,8 @@ async function initParticles({ scene }: InitParam) {
           return result;
         }
       },
-      (data) => data ?? MeshBuilder.CreateBox('box', {
-        width: 10, height: 10, depth: 1
+      (data) => data ?? MeshBuilder.CreatePlane('mesh', {
+        width: 10, height: 10
       }),
     );
 
@@ -394,7 +393,7 @@ function initParticle(particle: SolidParticle) {
 }
 
 let groupIndex = 0;
-/** 要平均每個 mesh，預先建立 index 映射表，用查表法取得目前 groupIndex 對應之 particle index */
+/** 要平均取得每個 mesh。預先建立 index 映射表，用查表法取得目前 groupIndex 對應之 particle index */
 const particleIndexMapList = pipe(
   range(0, totalAmount),
   (list) => {

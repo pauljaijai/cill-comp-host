@@ -36,10 +36,9 @@ type Confetti = ExtractArrayType<
 >;
 const confettiList: Confetti[] = [
   {
-    shape: 'box',
+    shape: 'plane',
     width: 10,
     height: 10,
-    depth: 1,
   },
   {
     shape: 'cylinder',
