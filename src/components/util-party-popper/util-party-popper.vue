@@ -15,8 +15,8 @@ import { computed, ref, shallowRef, toRefs } from 'vue';
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import {
   ArcRotateCamera, Camera,
-  Color3, Color4, HemisphericLight, Mesh, MeshBuilder, Scalar,
-  SolidParticle, SolidParticleSystem, Vector3
+  Color3, Color4, DynamicTexture, HemisphericLight, Mesh, MeshBuilder, Scalar,
+  SolidParticle, SolidParticleSystem, StandardMaterial, Vector3
 } from '@babylonjs/core';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
 import { constant, pipe, piped, range, sample } from 'remeda';
@@ -66,6 +66,11 @@ type Confetti = {
   sizeX?: number;
   sizeY?: number;
   sizeZ?: number;
+} | {
+  shape: 'text',
+  width: number;
+  height: number;
+  char: string;
 }
 
 interface Props {
@@ -239,12 +244,35 @@ const meshProviders: (
       if (data.shape !== 'polyhedron') return;
       return MeshBuilder.CreatePolyhedron('mesh', data);
     },
+    (data) => {
+      if (data.shape !== 'text') return;
+      const mesh = MeshBuilder.CreatePlane('mesh', data);
+      const texture = new DynamicTexture('text', {
+        width: data.width,
+        height: data.height,
+      });
+      texture.drawText(data.char, 20, 20, 'bold 40px monospace', 'black', 'white');
+
+      const material = new StandardMaterial('material');
+      material.diffuseTexture = texture;
+
+      mesh.material = material;
+
+      return mesh;
+    },
   ]
 
 
 
 async function initParticles({ scene }: InitParam) {
-  const spSystem = new SolidParticleSystem('SPS', scene);
+  const useModelMaterial = pipe(props.confetti,
+    (data) => Array.isArray(data) ? data : [data],
+    (data) => data.some(({ shape }) => shape === 'text'),
+  );
+
+  const spSystem = new SolidParticleSystem('SPS', scene, {
+    useModelMaterial,
+  });
 
   const list = Array.isArray(confetti.value)
     ? confetti.value : [confetti.value];
@@ -471,6 +499,3 @@ defineExpose({
 });
 // #endregion Methods
 </script>
-
-<style scoped lang="sass">
-</style>
