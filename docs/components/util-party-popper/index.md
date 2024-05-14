@@ -52,7 +52,7 @@ import CustomText from '../../../src/components/util-party-popper/examples/custo
 
 ### 使用文字
 
-還可以使用文字
+不只形狀，還可以使用文字，有更多理由可以慶祝了！(/≧▽≦)/
 
 <custom-text/>
 
@@ -60,9 +60,9 @@ import CustomText from '../../../src/components/util-party-popper/examples/custo
 <<< ../../../src/components/util-party-popper/examples/custom-text.vue
 :::
 
-### 滑鼠拉炮
+### 勞贖嘉年華
 
-勞贖嘉年華！ᕕ( ﾟ ∀。)ᕗ
+勞贖！滿滿的勞贖！Σ(ˊДˋ;)
 
 <mouse-popper/>
 
