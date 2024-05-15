@@ -80,7 +80,7 @@ export default defineConfig({
           {
             text: '轉場',
             items: [
-              { text: 'transition-shape', link: '/components/transition-shape/' },
+              { text: '多邊形轉場', link: '/components/transition-shape/' },
             ]
           },
           {
