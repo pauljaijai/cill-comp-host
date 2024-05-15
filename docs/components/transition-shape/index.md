@@ -34,10 +34,6 @@ import BasicUsage from '../../../src/components/transition-shape/examples/basic-
 
 <<< ../../../src/components/transition-shape/transition-shape.vue/#Emits
 
-### Methods
-
-<<< ../../../src/components/transition-shape/transition-shape.vue/#Methods
-
 ### Slots
 
 <<< ../../../src/components/transition-shape/transition-shape.vue/#Slots
