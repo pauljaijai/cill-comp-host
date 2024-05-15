@@ -24,16 +24,6 @@ import BasicUsage from '../../../src/components/transition-shape/examples/basic-
 
 ## 原理
 
-滑鼠碰觸按鈕時，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕尺寸的距離。
-
-如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕會啪沒了，消失的無影無蹤。
-:::
-
 ## API
 
 ### Props

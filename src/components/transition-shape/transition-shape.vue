@@ -1,7 +1,21 @@
-<!-- <template></template> -->
+<template>
+  <div class="">
+    <transition
+      mode="out-in"
+      @before-enter="handleBeforeEnter"
+      @enter="handleEnter"
+      @after-enter="handleAfterEnter"
+      @before-leave="handleBeforeLeave"
+      @leave="handleLeave"
+      @after-leave="handleAfterLeave"
+    >
+      <slot />
+    </transition>
+  </div>
+</template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, TransitionProps } from 'vue';
 
 // #region Props
 interface Props {
@@ -18,16 +32,27 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
+const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => { }
+const handleEnter: TransitionProps['onEnter'] = (el, done) => {
+  done()
+}
+const handleAfterEnter: TransitionProps['onAfterEnter'] = (el) => {
+};
+
+const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
+};
+const handleLeave: TransitionProps['onLeave'] = (el, done) => {
+  done();
+};
+const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
+};
+
 // #region Slots
 defineSlots<{
   default?: () => unknown;
 }>();
 // #endregion Slots
 
-
-// #region Methods
-defineExpose({});
-// #endregion Methods
 </script>
 
 <style scoped lang="sass">

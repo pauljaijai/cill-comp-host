@@ -1,21 +1,19 @@
 <template>
   <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border p-4 rounded">
-      <!-- <base-checkbox
-        v-model="disable"
-        label="停用按鈕"
-      />
+    <base-checkbox
+      v-model="visible"
+      label="顯示"
+      class=" border p-4 rounded"
+    />
 
-      <base-input
-        v-model="text"
-        placeholder="點擊這裡並使用 tab 將焦點轉移至按鈕後，再按下 Enter 看看"
-        class=" w-full "
-      /> -->
-    </div>
-
-    <div class="flex">
-      <transition-shape />
-    </div>
+    <transition-shape>
+      <div
+        v-if="visible"
+        class="text-xl"
+      >
+        我是一段文字
+      </div>
+    </transition-shape>
   </div>
 </template>
 
@@ -23,9 +21,7 @@
 import { ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
-import BaseInput from '../../base-input.vue';
 import TransitionShape from '../transition-shape.vue';
 
-const text = ref('');
-const disable = ref(true);
+const visible = ref(true);
 </script>
