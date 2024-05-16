@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
+  <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
     <base-checkbox
       v-model="visible"
       label="顯示"
-      class=" border p-4 rounded"
+      class=" border p-4 rounded w-full"
     />
 
-    <transition-shape>
+    <transition-shape appear>
       <div
         v-if="visible"
         class="text-xl"

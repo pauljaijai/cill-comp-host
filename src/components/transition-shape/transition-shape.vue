@@ -1,6 +1,7 @@
 <template>
   <transition
     mode="out-in"
+    :appear="props.appear"
     @before-enter="handleBeforeEnter"
     @enter="handleEnter"
     @after-enter="handleAfterEnter"
@@ -11,25 +12,29 @@
     <slot />
   </transition>
 
-  <canvas
-    v-show="canvasVisible"
-    class=" fixed pointer-events-none bg-black/10"
-    :style="canvasStyle"
+  <shape-mask
+    ref="maskRef"
+    class=" fixed"
+    :style="maskStyle"
+    :width="elBounding.width.value"
+    :height="elBounding.height.value"
+    @init="handleInit()"
   />
 </template>
 
 <script setup lang="ts">
-import { useElementBounding, useEventListener } from '@vueuse/core';
-import { pick } from 'remeda';
-import { computed, CSSProperties, Ref, ref, shallowRef, TransitionProps, watch } from 'vue';
+import { useElementBounding } from '@vueuse/core';
+import { computed, CSSProperties, ref, TransitionProps } from 'vue';
+
+import ShapeMask from './shape-mask.vue';
 
 // #region Props
 interface Props {
-  modelValue?: string;
+  appear?: boolean;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
+  appear: false,
 });
 
 // #region Slots
@@ -42,22 +47,41 @@ const slots = defineSlots<{
 const elRef = ref<HTMLElement>();
 const elBounding = useElementBounding(elRef);
 
-const canvasVisible = ref(false);
-const canvasStyle = computed<CSSProperties>(() => ({
+const maskRef = ref<InstanceType<typeof ShapeMask>>();
+const maskVisible = ref(false);
+const maskStyle = computed<CSSProperties>(() => ({
   top: `${elBounding.top.value}px`,
   left: `${elBounding.left.value}px`,
   width: `${elBounding.width.value}px`,
   height: `${elBounding.height.value}px`,
+  opacity: maskVisible.value ? 1 : 0,
 }));
+function handleInit() {
+  console.log(`🚀 ~ handleInit:`);
+
+  setTimeout(() => {
+    maskRef.value?.enter();
+    setTimeout(() => {
+      maskRef.value?.leave();
+    }, 2000);
+  }, 1000);
+}
 
 
 const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
-  canvasVisible.value = true;
+  maskVisible.value = true;
   if (el instanceof HTMLElement) {
     elRef.value = el;
   }
 }
 const handleEnter: TransitionProps['onEnter'] = (el, done) => {
+  setTimeout(() => {
+    maskRef.value?.enter();
+    setTimeout(() => {
+      maskRef.value?.leave();
+    }, 2000);
+  }, 1000);
+
   console.log('handleEnter')
   done()
 }
@@ -75,7 +99,7 @@ const handleLeave: TransitionProps['onLeave'] = (el, done) => {
 };
 const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
   console.log('handleAfterLeave')
-  canvasVisible.value = false;
+  maskVisible.value = false;
   elRef.value = undefined;
 };
 
