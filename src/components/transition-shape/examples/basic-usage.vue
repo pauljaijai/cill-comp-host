@@ -11,7 +11,7 @@
         v-if="visible"
         class="text-xl"
       >
-        我是一段文字
+        我是一隻鱈魚 🐟
       </div>
     </transition-shape>
   </div>
