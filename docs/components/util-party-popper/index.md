@@ -54,11 +54,11 @@ import CustomText from '../../../src/components/util-party-popper/examples/custo
 
 不只形狀，還可以使用文字，有更多理由可以慶祝了。
 
-例如鱈魚發現自己胖了 2 公斤！(/≧▽≦)/
+例如鱈魚又胖了 2 公斤！(/≧▽≦)/
 
 <custom-text/>
 
-鱈魚：「不要慶祝這種事情好嘛！╭(°A ,°`)╮」
+鱈魚：「這種事別拿出來慶祝啊！╭(°A ,°`)╮」
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/util-party-popper/examples/custom-text.vue
