@@ -6,10 +6,12 @@
 </template>
 
 <script setup lang="ts">
-import { useElementBounding } from '@vueuse/core';
-import { pick } from 'remeda';
-import { computed, CSSProperties, Ref, ref, shallowRef, TransitionProps, watch } from 'vue';
-import { ArcRotateCamera, Camera, Color3, Color4, HemisphericLight, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from '@babylonjs/core';
+import {
+  ArcRotateCamera, Camera,
+  Color3, Color4
+  , HemisphericLight, Mesh, MeshBuilder,
+  Scene, StandardMaterial, Vector3
+} from '@babylonjs/core';
 import anime from 'animejs';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
@@ -95,8 +97,8 @@ function enter() {
   anime({
     targets: first.position,
     x: [props.width, 0],
-    duration: 1400,
-    easing: 'easeOutExpo',
+    duration: 1000,
+    easing: 'easeInOutExpo',
   });
 }
 
@@ -107,8 +109,8 @@ function leave() {
   anime({
     targets: first.position,
     x: -props.width,
-    duration: 1400,
-    easing: 'easeInExpo',
+    duration: 1000,
+    easing: 'easeInOutExpo',
   });
 }
 
