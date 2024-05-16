@@ -46,26 +46,20 @@ const confettiList: Confetti[] = [
   {
     shape: 'text',
     width: 40,
-    height: 40,
-    char: '🎣',
+    height: 20,
+    char: '肥魚',
   },
   {
     shape: 'text',
-    width: 40,
+    width: 80,
     height: 40,
-    char: '🐠',
+    char: '2 KG！',
   },
   {
     shape: 'text',
-    width: 40,
-    height: 40,
-    char: '🐳',
-  },
-  {
-    shape: 'text',
-    width: 40,
-    height: 40,
-    char: '魚',
+    width: 30,
+    height: 30,
+    char: '✨',
   },
 ]
 
