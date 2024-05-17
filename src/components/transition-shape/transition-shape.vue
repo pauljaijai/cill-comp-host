@@ -69,22 +69,32 @@ let isAppear = props.appear;
 
 // 進入事件
 const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
+  console.log('--- handleBeforeEnter')
   if (!(el instanceof HTMLElement)) return;
+  el.style.opacity = '0';
 
   maskVisible.value = true;
-  el.style.opacity = '0';
   enterElRef.value = el;
 }
 const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   console.log('handleEnter')
+  if (!(el instanceof HTMLElement)) {
+    return done()
+  }
 
-  await maskRef.value?.enter();
-  await maskRef.value?.leave();
+  await maskRef.value?.initFinished();
+
+  await maskRef.value?.enter(el);
+  el.style.opacity = '1';
+
+  await maskRef.value?.leave(el);
+
+  console.log('maskRef leaved')
 
   done()
 }
 const handleAfterEnter: TransitionProps['onAfterEnter'] = (el) => {
-  console.log('handleAfterEnter')
+  if (!(el instanceof HTMLElement)) return;
 
   /** appear 只會有一次 */
   isAppear = false;
@@ -92,16 +102,22 @@ const handleAfterEnter: TransitionProps['onAfterEnter'] = (el) => {
 
 // 離開事件
 const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
-  console.log('handleBeforeLeave')
+  // console.log('handleBeforeLeave')
 };
-const handleLeave: TransitionProps['onLeave'] = (el, done) => {
+const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   console.log('handleLeave')
+
+  if (!(el instanceof HTMLElement)) return;
+
+  await maskRef.value?.enter(el);
+  el.style.opacity = '0';
+
+  await maskRef.value?.leave(el);
 
   done();
 };
 const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
-  console.log('handleAfterLeave')
-  maskVisible.value = false;
+  // console.log('handleAfterLeave')
   enterElRef.value = undefined;
 };
 

@@ -15,6 +15,8 @@ import {
 import anime from 'animejs';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
+import { ref } from 'vue';
+import { until } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -35,7 +37,7 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-
+const initFinished = ref(false);
 const { canvasRef } = useBabylonScene({
   createCamera(scene) {
     const camera = new ArcRotateCamera(
@@ -67,6 +69,7 @@ const { canvasRef } = useBabylonScene({
 
     await initRectangleMeshes(scene);
     emit('init');
+    initFinished.value = true;
   },
 });
 
@@ -88,33 +91,38 @@ async function initRectangleMeshes(scene: Scene) {
   rectangleMeshes.push(rectangle);
 }
 
-function enter() {
+async function enter(el: Element) {
   const first = rectangleMeshes[0];
   if (!first) return;
 
-  anime.remove(first.position);
+  const rect = el.getBoundingClientRect();
 
   return anime({
     targets: first.position,
-    x: [props.width, 0],
+    x: [rect.width, 0],
     duration: 1000,
     easing: 'easeInOutExpo',
   }).finished;
 }
 
-function leave() {
+async function leave(el: Element) {
   const first = rectangleMeshes[0];
   if (!first) return;
 
+  const rect = el.getBoundingClientRect();
+
   return anime({
     targets: first.position,
-    x: -props.width,
+    x: -rect.width,
     duration: 1000,
     easing: 'easeInOutExpo',
   }).finished;
 }
 
 defineExpose({
+  async initFinished() {
+    await until(initFinished).toBe(true);
+  },
   enter,
   leave,
 });
