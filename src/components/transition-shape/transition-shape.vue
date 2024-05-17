@@ -24,9 +24,9 @@
 <script setup lang="ts">
 import { useElementBounding } from '@vueuse/core';
 import { computed, CSSProperties, ref, TransitionProps } from 'vue';
+import { find, pipe } from 'remeda';
 
 import ShapeMask from './shape-mask.vue';
-import { find, pipe } from 'remeda';
 
 // #region Props
 interface Props {
