@@ -8,8 +8,7 @@
 <script setup lang="ts">
 import {
   ArcRotateCamera, Camera,
-  Color3, Color4
-  , HemisphericLight, Mesh, MeshBuilder,
+  Color3, Color4, HemisphericLight, Mesh, MeshBuilder,
   Scene, StandardMaterial, Vector3
 } from '@babylonjs/core';
 import anime from 'animejs';
