@@ -94,24 +94,24 @@ function enter() {
 
   anime.remove(first.position);
 
-  anime({
+  return anime({
     targets: first.position,
     x: [props.width, 0],
     duration: 1000,
     easing: 'easeInOutExpo',
-  });
+  }).finished;
 }
 
 function leave() {
   const first = rectangleMeshes[0];
   if (!first) return;
 
-  anime({
+  return anime({
     targets: first.position,
     x: -props.width,
     duration: 1000,
     easing: 'easeInOutExpo',
-  });
+  }).finished;
 }
 
 defineExpose({

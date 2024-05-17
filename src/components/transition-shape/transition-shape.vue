@@ -16,8 +16,8 @@
     ref="maskRef"
     class=" fixed"
     :style="maskStyle"
-    :width="elBounding.width.value"
-    :height="elBounding.height.value"
+    :width="enterElBounding.width.value"
+    :height="enterElBounding.height.value"
     @init="handleInit()"
   />
 </template>
@@ -44,51 +44,53 @@ const slots = defineSlots<{
 // #endregion Slots
 // console.log(`🚀 ~ slots:`, slots.default?.());
 
-const elRef = ref<HTMLElement>();
-const elBounding = useElementBounding(elRef);
+const enterElRef = ref<HTMLElement>();
+const enterElBounding = useElementBounding(enterElRef);
+
+const leaveElRef = ref<HTMLElement>();
+const leaveElBounding = useElementBounding(leaveElRef);
 
 const maskRef = ref<InstanceType<typeof ShapeMask>>();
 const maskVisible = ref(false);
 const maskStyle = computed<CSSProperties>(() => ({
-  top: `${elBounding.top.value}px`,
-  left: `${elBounding.left.value}px`,
-  width: `${elBounding.width.value}px`,
-  height: `${elBounding.height.value}px`,
+  top: `${enterElBounding.top.value}px`,
+  left: `${enterElBounding.left.value}px`,
+  width: `${enterElBounding.width.value}px`,
+  height: `${enterElBounding.height.value}px`,
   opacity: maskVisible.value ? 1 : 0,
 }));
-function handleInit() {
+async function handleInit() {
   console.log(`🚀 ~ handleInit:`);
-
-  setTimeout(() => {
-    maskRef.value?.enter();
-    setTimeout(() => {
-      maskRef.value?.leave();
-    }, 2000);
-  }, 1000);
 }
 
+/** appear 只會觸發 enter 事件，一般情況下則是 leave 接著 enter */
+let isAppear = props.appear;
 
+
+// 進入事件
 const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
-  maskVisible.value = true;
-  if (el instanceof HTMLElement) {
-    elRef.value = el;
-  }
-}
-const handleEnter: TransitionProps['onEnter'] = (el, done) => {
-  setTimeout(() => {
-    maskRef.value?.enter();
-    setTimeout(() => {
-      maskRef.value?.leave();
-    }, 2000);
-  }, 1000);
+  if (!(el instanceof HTMLElement)) return;
 
+  maskVisible.value = true;
+  el.style.opacity = '0';
+  enterElRef.value = el;
+}
+const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   console.log('handleEnter')
+
+  await maskRef.value?.enter();
+  await maskRef.value?.leave();
+
   done()
 }
 const handleAfterEnter: TransitionProps['onAfterEnter'] = (el) => {
   console.log('handleAfterEnter')
+
+  /** appear 只會有一次 */
+  isAppear = false;
 };
 
+// 離開事件
 const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
   console.log('handleBeforeLeave')
 };
@@ -100,7 +102,7 @@ const handleLeave: TransitionProps['onLeave'] = (el, done) => {
 const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
   console.log('handleAfterLeave')
   maskVisible.value = false;
-  elRef.value = undefined;
+  enterElRef.value = undefined;
 };
 
 
