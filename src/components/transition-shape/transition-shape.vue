@@ -18,7 +18,6 @@
     :style="maskStyle"
     :width="enterElBounding.width.value"
     :height="enterElBounding.height.value"
-    @init="handleInit()"
   />
 </template>
 
@@ -27,6 +26,7 @@ import { useElementBounding } from '@vueuse/core';
 import { computed, CSSProperties, ref, TransitionProps } from 'vue';
 
 import ShapeMask from './shape-mask.vue';
+import { find, pipe } from 'remeda';
 
 // #region Props
 interface Props {
@@ -52,24 +52,20 @@ const leaveElBounding = useElementBounding(leaveElRef);
 
 const maskRef = ref<InstanceType<typeof ShapeMask>>();
 const maskVisible = ref(false);
-const maskStyle = computed<CSSProperties>(() => ({
-  top: `${enterElBounding.top.value}px`,
-  left: `${enterElBounding.left.value}px`,
-  width: `${enterElBounding.width.value}px`,
-  height: `${enterElBounding.height.value}px`,
-  opacity: maskVisible.value ? 1 : 0,
-}));
-async function handleInit() {
-  console.log(`🚀 ~ handleInit:`);
-}
-
-/** appear 只會觸發 enter 事件，一般情況下則是 leave 接著 enter */
-let isAppear = props.appear;
-
+const maskStyle = computed<CSSProperties>(() => pipe(
+  [enterElBounding, leaveElBounding],
+  find(({ width }) => width.value > 0),
+  (bounding) => ({
+    top: `${bounding?.top.value}px`,
+    left: `${bounding?.left.value}px`,
+    width: `${bounding?.width.value}px`,
+    height: `${bounding?.height.value}px`,
+    opacity: maskVisible.value ? 1 : 0,
+  })
+));
 
 // 進入事件
 const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
-  console.log('--- handleBeforeEnter')
   if (!(el instanceof HTMLElement)) return;
   el.style.opacity = '0';
 
@@ -77,11 +73,12 @@ const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
   enterElRef.value = el;
 }
 const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
-  console.log('handleEnter')
+  console.log(`🚀 ~ handleEnter el:`, el);
   if (!(el instanceof HTMLElement)) {
     return done()
   }
 
+  // appear 情況時，需要等待 mask 初始化完成
   await maskRef.value?.initFinished();
 
   await maskRef.value?.enter(el);
@@ -89,25 +86,25 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
 
   await maskRef.value?.leave(el);
 
-  console.log('maskRef leaved')
 
   done()
 }
 const handleAfterEnter: TransitionProps['onAfterEnter'] = (el) => {
-  if (!(el instanceof HTMLElement)) return;
-
-  /** appear 只會有一次 */
-  isAppear = false;
+  maskVisible.value = false;
+  enterElRef.value = undefined;
 };
 
 // 離開事件
 const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
-  // console.log('handleBeforeLeave')
+  if (!(el instanceof HTMLElement)) return;
+  maskVisible.value = true;
+  leaveElRef.value = el;
 };
 const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
-  console.log('handleLeave')
-
-  if (!(el instanceof HTMLElement)) return;
+  console.log(`🚀 ~ handleLeave el:`, el);
+  if (!(el instanceof HTMLElement)) {
+    return done()
+  }
 
   await maskRef.value?.enter(el);
   el.style.opacity = '0';
@@ -118,7 +115,8 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
 };
 const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
   // console.log('handleAfterLeave')
-  enterElRef.value = undefined;
+  maskVisible.value = false;
+  leaveElRef.value = undefined;
 };
 
 
