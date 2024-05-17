@@ -13,10 +13,10 @@ import {
   Scene, StandardMaterial, Vector3
 } from '@babylonjs/core';
 import anime from 'animejs';
-
-import { useBabylonScene } from '../../composables/use-babylon-scene';
 import { ref } from 'vue';
 import { until } from '@vueuse/core';
+
+import { useBabylonScene } from '../../composables/use-babylon-scene';
 
 // #region Props
 interface Props {
