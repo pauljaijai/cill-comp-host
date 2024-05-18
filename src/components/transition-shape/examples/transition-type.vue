@@ -124,7 +124,7 @@
       </div>
 
       <div
-        class="border rounded px-4 py-2 cursor-pointer w-full text-center"
+        class="w-full text-center border rounded px-4 py-2 cursor-pointer "
         @click="changeFish()"
       >
         換魚
