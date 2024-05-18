@@ -19,7 +19,7 @@ const rectEnterProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.scaling.setAll(1);
 
@@ -40,7 +40,7 @@ const rectEnterProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.scaling.setAll(1);
 
@@ -61,7 +61,7 @@ const rectEnterProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.scaling.setAll(1);
 
@@ -82,7 +82,7 @@ const rectEnterProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.scaling.setAll(1);
 
@@ -103,7 +103,7 @@ const rectEnterProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.position.setAll(0);
 
@@ -124,7 +124,7 @@ const rectEnterProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.position.setAll(0);
 
@@ -145,7 +145,7 @@ const rectEnterProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.position.setAll(0);
 
@@ -173,7 +173,7 @@ const rectLeaveProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.scaling.setAll(1);
 
@@ -194,7 +194,7 @@ const rectLeaveProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.scaling.setAll(1);
 
@@ -215,7 +215,7 @@ const rectLeaveProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.scaling.setAll(1);
 
@@ -236,7 +236,7 @@ const rectLeaveProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.scaling.setAll(1);
 
@@ -257,7 +257,7 @@ const rectLeaveProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.position.setAll(0);
 
@@ -278,7 +278,7 @@ const rectLeaveProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.position.setAll(0);
 
@@ -298,7 +298,7 @@ const rectLeaveProviders: AnimeProvider[] = [
       return;
 
     return pipe(meshes,
-      filter((item) => item.name.includes('rect')),
+      filter((item) => item.name === 'rect'),
       map.indexed((mesh, index) => {
         mesh.position.setAll(0);
 

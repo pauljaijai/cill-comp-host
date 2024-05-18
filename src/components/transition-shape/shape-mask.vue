@@ -83,7 +83,7 @@ async function initRectangleMeshes(scene: Scene) {
     const material = new StandardMaterial(`material-${index}`, scene);
     material.diffuseColor = Color3.FromHexString(color);
 
-    const mesh = MeshBuilder.CreateBox(`rect-${index}`, {
+    const mesh = MeshBuilder.CreateBox(`rect`, {
       width: props.width,
       height: props.height,
       depth: 0,
