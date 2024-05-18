@@ -25,7 +25,7 @@
     <transition-shape appear>
       <div
         :key="fishIndex"
-        class="text-3xl"
+        class="text-[6rem]"
       >
         {{ fishList[fishIndex] }}
       </div>

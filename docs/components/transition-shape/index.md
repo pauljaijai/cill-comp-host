@@ -4,6 +4,7 @@ description: Motion Graphic 風格的 Transition 元件
 
 <script setup>
 import BasicUsage from '../../../src/components/transition-shape/examples/basic-usage.vue'
+import TransitionType from '../../../src/components/transition-shape/examples/transition-type.vue'
 </script>
 
 # 多邊形轉場
@@ -16,10 +17,20 @@ Motion Graphic 風格的 Transition 元件
 
 基於 Vue 內建的 Transition 元件。
 
-<basic-usage class="h-[30vh]"/>
+<basic-usage class="h-[50vh]"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-shape/examples/basic-usage.vue
+:::
+
+### 轉場類型
+
+支援多種轉場類型。
+
+<transition-type class="h-[50vh]"/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/transition-shape/examples/transition-type.vue
 :::
 
 ## 原理
