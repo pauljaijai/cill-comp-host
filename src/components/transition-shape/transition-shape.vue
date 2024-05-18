@@ -38,12 +38,19 @@ const props = withDefaults(defineProps<Props>(), {
   appear: false,
 });
 
+// #region Emits
+const emit = defineEmits<{
+  (e: 'before-transition'): void;
+  (e: 'after-transition'): void;
+}>();
+// #endregion Emits
+
 // #region Slots
 const slots = defineSlots<{
   default?: () => unknown;
 }>();
 // #endregion Slots
-// console.log(`🚀 ~ slots:`, slots.default?.());
+
 
 const enterElRef = ref<HTMLElement>();
 const enterElBounding = useElementBounding(enterElRef);
@@ -73,7 +80,7 @@ const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
   enterElRef.value = el;
 }
 const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
-  // 這樣才能同時取得 enterElRef 和 leaveElRef
+  // nextTick 才能同時取得 enterElRef 和 leaveElRef
   await nextTick();
   console.log(`🚀 ~ handleEnter: `);
 
@@ -94,7 +101,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   el.style.opacity = '1';
   if (leaveElRef.value) {
     el.style.position = '';
-    /* 提早移除 leaveEl 以免影響定位 */
+    // 提早移除 leaveEl 以免影響定位
     leaveElRef.value = undefined;
   }
 
@@ -112,7 +119,7 @@ const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
   leaveElRef.value = el;
 };
 const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
-  // 這樣才能同時取得 enterElRef 和 leaveElRef
+  // nextTick 才能同時取得 enterElRef 和 leaveElRef
   await nextTick();
   console.log(`🚀 ~ handleLeave: `);
   if (!(el instanceof HTMLElement)) {

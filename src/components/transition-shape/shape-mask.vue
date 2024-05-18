@@ -1,7 +1,7 @@
 <template>
   <canvas
     ref="canvasRef"
-    class=" pointer-events-none"
+    class="shape-mask pointer-events-none"
   />
 </template>
 
@@ -12,7 +12,7 @@ import {
   Scene, StandardMaterial, Vector3
 } from '@babylonjs/core';
 import anime from 'animejs';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { until } from '@vueuse/core';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
@@ -102,12 +102,14 @@ async function enter(el: Element) {
   const rect = el.getBoundingClientRect();
 
   isEntering.value = true;
+
   await anime({
     targets: first.position,
     x: [rect.width, 0],
     duration: 1000,
     easing: 'easeInOutExpo',
   }).finished;
+
   isEntering.value = false;
 }
 
@@ -128,19 +130,26 @@ async function leave(el: Element) {
     x: -rect.width,
     duration: 1000,
     easing: 'easeInOutExpo',
-  }).finished
+  }).finished;
+
   isLeaving.value = false;
 }
+
+const isTransition = computed(
+  () => isEntering.value || isLeaving.value
+);
 
 defineExpose({
   async initFinished() {
     await until(initFinished).toBe(true);
   },
-  isLeaving,
+  isTransition,
   enter,
   leave,
 });
 </script>
 
 <style scoped lang="sass">
+.shape-mask
+  transition-duration: width 0.1s, height 0.1s !important
 </style>

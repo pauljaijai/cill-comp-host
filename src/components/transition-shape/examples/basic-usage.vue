@@ -44,7 +44,7 @@ const state = ref(true);
 
 const fishIndex = ref(0);
 const fishList = [
-  '🐟', '🐋', '🐠', '🐡'
+  '🐟', '🐋🐋', '🐠', '🐡🐡'
 ];
 function changeFish() {
   fishIndex.value++;
