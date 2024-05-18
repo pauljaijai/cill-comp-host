@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, CSSProperties, ref, TransitionProps } from 'vue';
+import { computed, CSSProperties, nextTick, ref, TransitionProps } from 'vue';
 import { find, pipe } from 'remeda';
 
 import ShapeMask from './shape-mask.vue';
@@ -47,23 +47,14 @@ const slots = defineSlots<{
 
 const enterElRef = ref<HTMLElement>();
 const enterElBounding = useElementBounding(enterElRef);
-/* 切換元素時，需要獨立調整元素 **/
-const enterElClassObject = ref({
-  position: '',
-  display: '',
-});
 
 const leaveElRef = ref<HTMLElement>();
 const leaveElBounding = useElementBounding(leaveElRef);
-const leaveElClassObject = ref({
-  position: '',
-  display: '',
-});
 
 const maskRef = ref<InstanceType<typeof ShapeMask>>();
 const maskVisible = ref(true);
 const maskStyle = computed<CSSProperties>(() => pipe(
-  [enterElBounding, leaveElBounding],
+  [leaveElBounding, enterElBounding],
   find(({ width }) => width.value > 0),
   (bounding) => ({
     top: `${bounding?.top.value}px`,
@@ -82,16 +73,30 @@ const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
   enterElRef.value = el;
 }
 const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
+  // 這樣才能同時取得 enterElRef 和 leaveElRef
+  await nextTick();
   console.log(`🚀 ~ handleEnter: `);
+
   if (!(el instanceof HTMLElement)) {
     return done()
+  }
+
+  // 如果有 leaveElRef，表示為切換動畫
+  if (leaveElRef.value) {
+    el.style.position = 'absolute';
   }
 
   // appear 時，需要等待 mask 初始化完成
   await maskRef.value?.initFinished();
 
   await maskRef.value?.enter(el);
+
   el.style.opacity = '1';
+  if (leaveElRef.value) {
+    el.style.position = '';
+    /* 提早移除 leaveEl 以免影響定位 */
+    leaveElRef.value = undefined;
+  }
 
   await maskRef.value?.leave(el);
 
@@ -107,13 +112,20 @@ const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
   leaveElRef.value = el;
 };
 const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
+  // 這樣才能同時取得 enterElRef 和 leaveElRef
+  await nextTick();
   console.log(`🚀 ~ handleLeave: `);
   if (!(el instanceof HTMLElement)) {
     return done()
   }
 
   await maskRef.value?.enter(el);
+
   el.style.opacity = '0';
+  // 如果有 enterElRef，表示為切換動畫
+  if (enterElRef.value) {
+    el.style.position = 'absolute';
+  }
 
   await maskRef.value?.leave(el);
 
@@ -128,10 +140,4 @@ const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
 </script>
 
 <style lang="sass">
-.enter-el
-  position: v-bind('enterElClassObject.position') !important
-  display: v-bind('enterElClassObject.display') !important
-.leave-el
-  position: v-bind('leaveElClassObject.position') !important
-  display: v-bind('leaveElClassObject.display') !important
 </style>
