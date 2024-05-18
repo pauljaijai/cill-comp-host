@@ -105,16 +105,17 @@ const animeInProviders: AnimeProvider[] = [
   // rect slide-right
   (rect) => {
     const type = props.type;
-    if (type.shape !== 'rect' || type.enter !== 'slide-right')
+    const option = type.enter;
+    if (type.shape !== 'rect' || option.action !== 'slide-right')
       return;
 
     return rectangleMeshes.map((mesh, index) => {
       return anime({
         targets: mesh.position,
         x: [rect.width, 0],
-        duration: 1000,
-        easing: 'easeInOutExpo',
-        delay: 100 * index,
+        duration: option.duration,
+        easing: option.easing,
+        delay: option.delay * index,
       }).finished;
     })
   },
@@ -124,16 +125,17 @@ const animeOutProviders: AnimeProvider[] = [
   // rect slide-right
   (rect) => {
     const type = props.type;
-    if (type.shape !== 'rect' || type.leave !== 'slide-right')
+    const option = type.leave;
+    if (type.shape !== 'rect' || option.action !== 'slide-right')
       return;
 
     return rectangleMeshes.map((mesh, index) => {
       return anime({
         targets: mesh.position,
         x: -rect.width,
-        duration: 1000,
-        easing: 'easeInOutExpo',
-        delay: 100 * (2 - index),
+        duration: option.duration,
+        easing: option.easing,
+        delay: option.delay * (2 - index),
       }).finished;
     })
   },

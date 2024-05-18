@@ -41,10 +41,19 @@ const props = withDefaults(defineProps<Props>(), {
   appear: false,
   type: () => ({
     shape: 'rect',
-    enter: 'slide-right',
-    leave: 'slide-right',
+    enter: {
+      action: 'slide-right',
+      delay: 100,
+      duration: 1000,
+      easing: 'easeInOutExpo',
+    },
+    leave: {
+      action: 'slide-right',
+      delay: 100,
+      duration: 1000,
+      easing: 'easeInOutExpo',
+    },
     colors: ['#FF0000', '#00FF00', '#0000FF'],
-    delay: 100,
   }),
 });
 
