@@ -14,7 +14,7 @@ export const animeInProviders: AnimeProvider[] = [
   // rect slide-right
   ({ rect, type, meshes }) => {
     const option = type.enter;
-    if (type.shape !== 'rect' || option.action !== 'slide-right')
+    if (type.name !== 'rect' || option.action !== 'slide-right')
       return;
 
     return pipe(meshes,
@@ -35,7 +35,7 @@ export const animeInProviders: AnimeProvider[] = [
   // rect slide-left
   ({ rect, type, meshes }) => {
     const option = type.enter;
-    if (type.shape !== 'rect' || option.action !== 'slide-left')
+    if (type.name !== 'rect' || option.action !== 'slide-left')
       return;
 
     return pipe(meshes,
@@ -56,7 +56,7 @@ export const animeInProviders: AnimeProvider[] = [
   // rect slide-up
   ({ rect, type, meshes }) => {
     const option = type.enter;
-    if (type.shape !== 'rect' || option.action !== 'slide-up')
+    if (type.name !== 'rect' || option.action !== 'slide-up')
       return;
 
     return pipe(meshes,
@@ -77,7 +77,7 @@ export const animeInProviders: AnimeProvider[] = [
   // rect slide-down
   ({ rect, type, meshes }) => {
     const option = type.enter;
-    if (type.shape !== 'rect' || option.action !== 'slide-down')
+    if (type.name !== 'rect' || option.action !== 'slide-down')
       return;
 
     return pipe(meshes,
@@ -98,7 +98,7 @@ export const animeInProviders: AnimeProvider[] = [
   // rect scale
   ({ type, meshes }) => {
     const option = type.enter;
-    if (type.shape !== 'rect' || option.action !== 'scale')
+    if (type.name !== 'rect' || option.action !== 'scale')
       return;
 
     return pipe(meshes,
@@ -119,7 +119,7 @@ export const animeInProviders: AnimeProvider[] = [
   // rect scale-x
   ({ type, meshes }) => {
     const option = type.enter;
-    if (type.shape !== 'rect' || option.action !== 'scale-x')
+    if (type.name !== 'rect' || option.action !== 'scale-x')
       return;
 
     return pipe(meshes,
@@ -140,7 +140,7 @@ export const animeInProviders: AnimeProvider[] = [
   // rect scale-y
   ({ type, meshes }) => {
     const option = type.enter;
-    if (type.shape !== 'rect' || option.action !== 'scale-y')
+    if (type.name !== 'rect' || option.action !== 'scale-y')
       return;
 
     return pipe(meshes,
@@ -163,7 +163,7 @@ export const animeOutProviders: AnimeProvider[] = [
   // rect slide-right
   ({ rect, type, meshes }) => {
     const option = type.leave;
-    if (type.shape !== 'rect' || option.action !== 'slide-right')
+    if (type.name !== 'rect' || option.action !== 'slide-right')
       return;
 
     return pipe(meshes,
@@ -184,7 +184,7 @@ export const animeOutProviders: AnimeProvider[] = [
   // rect slide-left
   ({ rect, type, meshes }) => {
     const option = type.leave;
-    if (type.shape !== 'rect' || option.action !== 'slide-left')
+    if (type.name !== 'rect' || option.action !== 'slide-left')
       return;
 
     return pipe(meshes,
@@ -205,7 +205,7 @@ export const animeOutProviders: AnimeProvider[] = [
   // rect slide-up
   ({ rect, type, meshes }) => {
     const option = type.leave;
-    if (type.shape !== 'rect' || option.action !== 'slide-up')
+    if (type.name !== 'rect' || option.action !== 'slide-up')
       return;
 
     return pipe(meshes,
@@ -226,7 +226,7 @@ export const animeOutProviders: AnimeProvider[] = [
   // rect slide-down
   ({ rect, type, meshes }) => {
     const option = type.leave;
-    if (type.shape !== 'rect' || option.action !== 'slide-down')
+    if (type.name !== 'rect' || option.action !== 'slide-down')
       return;
 
     return pipe(meshes,
@@ -247,7 +247,7 @@ export const animeOutProviders: AnimeProvider[] = [
   // rect scale
   ({ type, meshes }) => {
     const option = type.leave;
-    if (type.shape !== 'rect' || option.action !== 'scale')
+    if (type.name !== 'rect' || option.action !== 'scale')
       return;
 
     return pipe(meshes,
@@ -268,7 +268,7 @@ export const animeOutProviders: AnimeProvider[] = [
   // rect scale-x
   ({ type, meshes }) => {
     const option = type.leave;
-    if (type.shape !== 'rect' || option.action !== 'scale-x')
+    if (type.name !== 'rect' || option.action !== 'scale-x')
       return;
 
     return pipe(meshes,
@@ -288,7 +288,7 @@ export const animeOutProviders: AnimeProvider[] = [
   // rect scale-y
   ({ type, meshes }) => {
     const option = type.leave;
-    if (type.shape !== 'rect' || option.action !== 'scale-y')
+    if (type.name !== 'rect' || option.action !== 'scale-y')
       return;
 
     return pipe(meshes,

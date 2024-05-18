@@ -77,9 +77,7 @@ const { canvasRef } = useBabylonScene({
 const rectangleMeshes: Mesh[] = [];
 async function initRectangleMeshes(scene: Scene) {
   const type = props.type;
-  if (type.shape !== 'rect') {
-    return;
-  }
+  if (type.name !== 'rect') return;
 
   type.colors.forEach((color, index) => {
     const material = new StandardMaterial(`material-${index}`, scene);

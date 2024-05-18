@@ -10,7 +10,7 @@ export enum RectAction {
   SCALE_Y = 'scale-y',
 }
 export type TransitionType = {
-  shape: 'rect';
+  name: 'rect';
   enter: {
     action: `${RectAction}`,
     duration: number;

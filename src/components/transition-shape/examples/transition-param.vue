@@ -245,7 +245,7 @@ const easingOptions = [
   'easeInOutBounce',
 ];
 const transitionType = computed<TransitionType>(() => ({
-  shape: 'rect',
+  name: 'rect',
   enter: rectAction.value.enter,
   leave: rectAction.value.leave,
   colors: colors.value,

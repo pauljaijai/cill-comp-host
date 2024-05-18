@@ -44,7 +44,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   appear: false,
   type: () => ({
-    shape: 'rect',
+    name: 'rect',
     enter: {
       action: 'slide-right',
       delay: 100,
