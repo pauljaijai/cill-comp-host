@@ -152,7 +152,6 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   done();
 };
 const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
-  console.log(`🚀 ~ handleAfterLeave: `);
   leaveElRef.value = undefined;
 };
 

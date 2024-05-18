@@ -102,8 +102,11 @@ async function initRectangleMeshes(scene: Scene) {
 type AnimeProvider = (rect: DOMRect) => Promise<void>[] | undefined;
 /** 進入動畫 */
 const animeInProviders: AnimeProvider[] = [
+  // rect slide-right
   (rect) => {
-    if (props.type.shape !== 'rect') return;
+    const type = props.type;
+    if (type.shape !== 'rect' || type.enter !== 'slide-right')
+      return;
 
     return rectangleMeshes.map((mesh, index) => {
       return anime({
@@ -118,8 +121,11 @@ const animeInProviders: AnimeProvider[] = [
 ];
 /** 進入動畫 */
 const animeOutProviders: AnimeProvider[] = [
+  // rect slide-right
   (rect) => {
-    if (props.type.shape !== 'rect') return;
+    const type = props.type;
+    if (type.shape !== 'rect' || type.leave !== 'slide-right')
+      return;
 
     return rectangleMeshes.map((mesh, index) => {
       return anime({
