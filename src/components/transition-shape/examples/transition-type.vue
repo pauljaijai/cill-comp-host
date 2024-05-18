@@ -6,7 +6,7 @@
           進入動畫
         </div>
         <select
-          v-model="rectAction.enter"
+          v-model="rectAction.enter.action"
           class=" bg-slate-100 rounded flex-1 p-2"
         >
           <option
@@ -24,7 +24,7 @@
           離開動畫
         </div>
         <select
-          v-model="rectAction.leave"
+          v-model="rectAction.leave.action"
           class=" bg-slate-100 rounded flex-1 p-2"
         >
           <option
@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
-import { pipe, sample } from 'remeda';
+import anime from 'animejs';
 
 import TransitionShape, {
   RectAction,
@@ -78,27 +78,34 @@ function changeFish() {
 }
 
 const rectAction = ref<
-  Record<'enter' | 'leave', `${RectAction}`>
+  Record<'enter' | 'leave', {
+    action: `${RectAction}`;
+    easing: anime.EasingOptions;
+  }>
 >({
-  enter: 'slide-right',
-  leave: 'slide-right',
+  enter: {
+    action: 'slide-right',
+    easing: 'easeInOutExpo',
+  },
+  leave: {
+    action: 'slide-right',
+    easing: 'easeInOutExpo',
+  },
 });
 const rectActionOptions = Object.values(RectAction);
 
 const transitionType = computed<TransitionType>(() => ({
   shape: 'rect',
   enter: {
-    action: rectAction.value.enter,
+    ...rectAction.value.enter,
     delay: 100,
     duration: 1000,
-    easing: 'easeInOutExpo',
   },
   leave: {
-    action: rectAction.value.leave,
+    ...rectAction.value.leave,
     delay: 100,
     duration: 1000,
-    easing: 'easeInOutExpo',
   },
-  colors: ['#FF0000', '#00FF00', '#0000FF'],
+  colors: ['#7DC8FF', '#677580', '#374855'],
 }));
 </script>

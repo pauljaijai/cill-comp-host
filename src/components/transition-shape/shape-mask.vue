@@ -11,7 +11,6 @@ import {
   Color3, Color4, HemisphericLight, Mesh, MeshBuilder,
   Scene, StandardMaterial, Vector3
 } from '@babylonjs/core';
-import anime from 'animejs';
 import { computed, ref } from 'vue';
 import { until } from '@vueuse/core';
 import { TransitionType } from './type';

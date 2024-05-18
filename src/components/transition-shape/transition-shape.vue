@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
       duration: 1000,
       easing: 'easeInOutExpo',
     },
-    colors: ['#FF0000', '#00FF00', '#0000FF'],
+    colors: ['#EEF4FB', '#A5A9AD', '#84888B'],
   }),
 });
 
