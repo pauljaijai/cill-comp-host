@@ -96,7 +96,7 @@ export const animeInProviders: AnimeProvider[] = [
     )
   },
   // rect scale
-  ({ rect, type, meshes }) => {
+  ({ type, meshes }) => {
     const option = type.enter;
     if (type.shape !== 'rect' || option.action !== 'scale')
       return;
@@ -109,6 +109,47 @@ export const animeInProviders: AnimeProvider[] = [
         return anime({
           targets: mesh.scaling,
           x: [0, 1],
+          y: [0, 1],
+          ...option,
+          delay: option.delay * index,
+        }).finished;
+      })
+    )
+  },
+  // rect scale-x
+  ({ type, meshes }) => {
+    const option = type.enter;
+    if (type.shape !== 'rect' || option.action !== 'scale-x')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        mesh.position.setAll(0);
+
+        return anime({
+          targets: mesh.scaling,
+          x: [0, 1],
+          y: [1, 1],
+          ...option,
+          delay: option.delay * index,
+        }).finished;
+      })
+    )
+  },
+  // rect scale-y
+  ({ type, meshes }) => {
+    const option = type.enter;
+    if (type.shape !== 'rect' || option.action !== 'scale-y')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        mesh.position.setAll(0);
+
+        return anime({
+          targets: mesh.scaling,
           y: [0, 1],
           ...option,
           delay: option.delay * index,
@@ -204,7 +245,7 @@ export const animeOutProviders: AnimeProvider[] = [
     )
   },
   // rect scale
-  ({ rect, type, meshes }) => {
+  ({ type, meshes }) => {
     const option = type.leave;
     if (type.shape !== 'rect' || option.action !== 'scale')
       return;
@@ -217,6 +258,47 @@ export const animeOutProviders: AnimeProvider[] = [
         return anime({
           targets: mesh.scaling,
           x: [1, 0],
+          y: [1, 0],
+          ...option,
+          delay: option.delay * (type.colors.length - index),
+        }).finished;
+      })
+    )
+  },
+  // rect scale-x
+  ({ type, meshes }) => {
+    const option = type.leave;
+    if (type.shape !== 'rect' || option.action !== 'scale-x')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        mesh.position.setAll(0);
+
+        return anime({
+          targets: mesh.scaling,
+          x: [1, 0],
+          ...option,
+          delay: option.delay * (type.colors.length - index),
+        }).finished;
+      })
+    )
+  },
+  // rect scale-y
+  ({ type, meshes }) => {
+    const option = type.leave;
+    if (type.shape !== 'rect' || option.action !== 'scale-y')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        mesh.position.setAll(0);
+
+        return anime({
+          targets: mesh.scaling,
+          x: [1, 1],
           y: [1, 0],
           ...option,
           delay: option.delay * (type.colors.length - index),
