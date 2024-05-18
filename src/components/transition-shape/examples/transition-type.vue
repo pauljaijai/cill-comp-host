@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
     <div class="flex flex-col gap-2 w-full">
+      <!-- 進入 -->
       <div class="border flex flex-col items-center p-1 gap-1 w-full">
         <div class=" flex items-center p-1 gap-3 w-full">
           <div class=" flex-1 text-right">
@@ -8,7 +9,7 @@
           </div>
           <select
             v-model="rectAction.enter.action"
-            class=" bg-slate-100 rounded flex-1 p-2"
+            class=" bg-slate-200 rounded flex-1 p-2"
           >
             <option
               v-for="option in rectActionOptions"
@@ -22,11 +23,11 @@
 
         <div class=" flex items-center p-1 gap-3 w-full">
           <div class=" flex-1 text-right">
-            進入 easing
+            easing
           </div>
           <select
             v-model="rectAction.enter.easing"
-            class=" bg-slate-100 rounded flex-1 p-2"
+            class=" bg-slate-200 rounded flex-1 p-2"
           >
             <option
               v-for="option in easingOptions"
@@ -37,8 +38,31 @@
             </option>
           </select>
         </div>
+
+        <div class=" flex items-center p-1 gap-3 w-full">
+          <div class=" flex-1 text-right">
+            delay (ms)
+          </div>
+          <input
+            v-model.number="rectAction.enter.delay"
+            type="number"
+            class=" bg-slate-200 rounded min-w-0 flex-1 p-2"
+          >
+        </div>
+
+        <div class=" flex items-center p-1 gap-3 w-full">
+          <div class=" flex-1 text-right">
+            duration (ms)
+          </div>
+          <input
+            v-model.number="rectAction.enter.duration"
+            type="number"
+            class=" bg-slate-200 rounded min-w-0 flex-1 p-2"
+          >
+        </div>
       </div>
 
+      <!-- 離開 -->
       <div class="border flex flex-col items-center p-1 gap-1 w-full">
         <div class=" flex items-center p-1 gap-3 w-full">
           <div class=" flex-1 text-right">
@@ -46,7 +70,7 @@
           </div>
           <select
             v-model="rectAction.leave.action"
-            class=" bg-slate-100 rounded flex-1 p-2"
+            class=" bg-slate-200 rounded flex-1 p-2"
           >
             <option
               v-for="option in rectActionOptions"
@@ -60,11 +84,11 @@
 
         <div class=" flex items-center p-1 gap-3 w-full">
           <div class=" flex-1 text-right">
-            離開 easing
+            easing
           </div>
           <select
             v-model="rectAction.leave.easing"
-            class=" bg-slate-100 rounded flex-1 p-2"
+            class=" bg-slate-200 rounded flex-1 p-2"
           >
             <option
               v-for="option in easingOptions"
@@ -74,6 +98,28 @@
               {{ option }}
             </option>
           </select>
+        </div>
+
+        <div class=" flex items-center p-1 gap-3 w-full">
+          <div class=" flex-1 text-right">
+            delay (ms)
+          </div>
+          <input
+            v-model.number="rectAction.leave.delay"
+            type="number"
+            class=" bg-slate-200 rounded min-w-0 flex-1 p-2"
+          >
+        </div>
+
+        <div class=" flex items-center p-1 gap-3 w-full">
+          <div class=" flex-1 text-right">
+            duration (ms)
+          </div>
+          <input
+            v-model.number="rectAction.leave.duration"
+            type="number"
+            class=" bg-slate-200 rounded min-w-0 flex-1 p-2"
+          >
         </div>
       </div>
 
@@ -121,15 +167,21 @@ const rectAction = ref<
   Record<'enter' | 'leave', {
     action: `${RectAction}`;
     easing: anime.EasingOptions;
+    delay: number;
+    duration: number;
   }>
 >({
   enter: {
     action: 'slide-right',
     easing: 'easeInOutExpo',
+    delay: 100,
+    duration: 1000,
   },
   leave: {
     action: 'slide-right',
     easing: 'easeInOutExpo',
+    delay: 100,
+    duration: 1000,
   },
 });
 const rectActionOptions = Object.values(RectAction);
@@ -166,19 +218,10 @@ const easingOptions = [
   'easeOutBounce',
   'easeInOutBounce',
 ];
-
 const transitionType = computed<TransitionType>(() => ({
   shape: 'rect',
-  enter: {
-    ...rectAction.value.enter,
-    delay: 100,
-    duration: 1000,
-  },
-  leave: {
-    ...rectAction.value.leave,
-    delay: 100,
-    duration: 1000,
-  },
+  enter: rectAction.value.enter,
+  leave: rectAction.value.leave,
   colors: ['#7DC8FF', '#677580', '#374855'],
 }));
 </script>
