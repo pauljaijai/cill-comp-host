@@ -16,7 +16,7 @@
     </transition-shape>
 
     <div
-      class="border rounded px-4 py-2 cursor-pointer"
+      class="border rounded px-4 py-2 cursor-pointer w-full text-center"
       @click="changeFish()"
     >
       換魚

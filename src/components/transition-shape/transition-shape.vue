@@ -22,6 +22,10 @@
   />
 </template>
 
+<script lang="ts">
+export { RectAction } from './type';
+</script>
+
 <script setup lang="ts">
 import { computed, CSSProperties, nextTick, ref, TransitionProps } from 'vue';
 import { find, pipe } from 'remeda';

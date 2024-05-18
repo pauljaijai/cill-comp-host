@@ -1,13 +1,54 @@
 <template>
   <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
-    <div
-      class="border rounded px-4 py-2 cursor-pointer"
-      @click="changeFish()"
-    >
-      換魚
+    <div class="flex flex-col gap-2 w-full">
+      <div class="border flex items-center p-1 gap-3 w-full">
+        <div class=" flex-1 text-right">
+          進入動畫
+        </div>
+        <select
+          v-model="rectAction.enter"
+          class=" bg-slate-100 rounded flex-1 p-2"
+        >
+          <option
+            v-for="option in rectActionOptions"
+            :key="option"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </select>
+      </div>
+
+      <div class="border flex items-center p-1 gap-3 w-full">
+        <div class=" flex-1 text-right">
+          離開動畫
+        </div>
+        <select
+          v-model="rectAction.leave"
+          class=" bg-slate-100 rounded flex-1 p-2"
+        >
+          <option
+            v-for="option in rectActionOptions"
+            :key="option"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </select>
+      </div>
+
+      <div
+        class="border rounded px-4 py-2 cursor-pointer w-full text-center"
+        @click="changeFish()"
+      >
+        換魚
+      </div>
     </div>
 
-    <transition-shape appear>
+    <transition-shape
+      :type="transitionType"
+      appear
+    >
       <div
         :key="fishIndex"
         class="text-[10rem] w-full text-center"
@@ -19,13 +60,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { pipe, sample } from 'remeda';
 
-import BaseCheckbox from '../../base-checkbox.vue';
-import TransitionShape from '../transition-shape.vue';
-
-const state = ref(true);
+import TransitionShape, {
+  RectAction,
+} from '../transition-shape.vue';
+import { TransitionType } from '../type';
 
 const fishIndex = ref(0);
 const fishList = [
@@ -35,4 +76,29 @@ function changeFish() {
   fishIndex.value++;
   fishIndex.value %= fishList.length;
 }
+
+const rectAction = ref<
+  Record<'enter' | 'leave', `${RectAction}`>
+>({
+  enter: 'slide-right',
+  leave: 'slide-right',
+});
+const rectActionOptions = Object.values(RectAction);
+
+const transitionType = computed<TransitionType>(() => ({
+  shape: 'rect',
+  enter: {
+    action: rectAction.value.enter,
+    delay: 100,
+    duration: 1000,
+    easing: 'easeInOutExpo',
+  },
+  leave: {
+    action: rectAction.value.leave,
+    delay: 100,
+    duration: 1000,
+    easing: 'easeInOutExpo',
+  },
+  colors: ['#FF0000', '#00FF00', '#0000FF'],
+}));
 </script>

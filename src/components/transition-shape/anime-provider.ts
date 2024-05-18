@@ -23,8 +23,8 @@ export const animeInProviders: AnimeProvider[] = [
         return anime({
           targets: mesh.position,
           x: [rect.width, 0],
-          duration: option.duration,
-          easing: option.easing,
+          y: [0, 0],
+          ...option,
           delay: option.delay * index,
         }).finished;
       })
@@ -42,8 +42,46 @@ export const animeInProviders: AnimeProvider[] = [
         return anime({
           targets: mesh.position,
           x: [-rect.width, 0],
-          duration: option.duration,
-          easing: option.easing,
+          y: [0, 0],
+          ...option,
+          delay: option.delay * index,
+        }).finished;
+      })
+    )
+  },
+  // rect slide-up
+  ({ rect, type, meshes }) => {
+    const option = type.enter;
+    if (type.shape !== 'rect' || option.action !== 'slide-up')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        return anime({
+          targets: mesh.position,
+          x: [0, 0],
+          y: [-rect.height, 0],
+          ...option,
+          delay: option.delay * index,
+        }).finished;
+      })
+    )
+  },
+  // rect slide-down
+  ({ rect, type, meshes }) => {
+    const option = type.enter;
+    if (type.shape !== 'rect' || option.action !== 'slide-down')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        return anime({
+          targets: mesh.position,
+          x: [0, 0],
+          y: [rect.height, 0],
+          ...option,
           delay: option.delay * index,
         }).finished;
       })
@@ -63,9 +101,9 @@ export const animeOutProviders: AnimeProvider[] = [
       map.indexed((mesh, index) => {
         return anime({
           targets: mesh.position,
-          x: -rect.width,
-          duration: option.duration,
-          easing: option.easing,
+          x: [0, -rect.width],
+          y: [0, 0],
+          ...option,
           delay: option.delay * (type.colors.length - index),
         }).finished;
       })
@@ -82,9 +120,47 @@ export const animeOutProviders: AnimeProvider[] = [
       map.indexed((mesh, index) => {
         return anime({
           targets: mesh.position,
-          x: rect.width,
-          duration: option.duration,
-          easing: option.easing,
+          x: [0, rect.width],
+          y: [0, 0],
+          ...option,
+          delay: option.delay * (type.colors.length - index),
+        }).finished;
+      })
+    )
+  },
+  // rect slide-up
+  ({ rect, type, meshes }) => {
+    const option = type.leave;
+    if (type.shape !== 'rect' || option.action !== 'slide-up')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        return anime({
+          targets: mesh.position,
+          x: [0, 0],
+          y: [0, rect.height],
+          ...option,
+          delay: option.delay * (type.colors.length - index),
+        }).finished;
+      })
+    )
+  },
+  // rect slide-down
+  ({ rect, type, meshes }) => {
+    const option = type.leave;
+    if (type.shape !== 'rect' || option.action !== 'slide-down')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        return anime({
+          targets: mesh.position,
+          x: [0, 0],
+          y: [0, -rect.height],
+          ...option,
           delay: option.delay * (type.colors.length - index),
         }).finished;
       })

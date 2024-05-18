@@ -87,12 +87,11 @@ async function initRectangleMeshes(scene: Scene) {
     const material = new StandardMaterial(`material-${index}`, scene);
     material.diffuseColor = Color3.FromHexString(color);
 
-    const mesh = MeshBuilder.CreatePlane(`rect-${index}`, {
+    const mesh = MeshBuilder.CreateBox(`rect-${index}`, {
       width: props.width,
       height: props.height,
     }, scene);
-    mesh.rotation = new Vector3(0, Math.PI, 0);
-    mesh.position = new Vector3(props.width, 0, 0);
+    mesh.position = new Vector3(0, 0, 0);
 
     mesh.material = material;
 
