@@ -17,7 +17,7 @@ Motion Graphic 風格的 Transition 元件
 
 基於 Vue 內建的 Transition 元件。
 
-<basic-usage class="h-[50vh]"/>
+<basic-usage/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-shape/examples/basic-usage.vue
@@ -27,7 +27,7 @@ Motion Graphic 風格的 Transition 元件
 
 支援多種轉場類型。
 
-<transition-type class="h-[50vh]"/>
+<transition-type />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-shape/examples/transition-type.vue

@@ -1,40 +1,80 @@
 <template>
   <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
     <div class="flex flex-col gap-2 w-full">
-      <div class="border flex items-center p-1 gap-3 w-full">
-        <div class=" flex-1 text-right">
-          進入動畫
-        </div>
-        <select
-          v-model="rectAction.enter.action"
-          class=" bg-slate-100 rounded flex-1 p-2"
-        >
-          <option
-            v-for="option in rectActionOptions"
-            :key="option"
-            :value="option"
+      <div class="border flex flex-col items-center p-1 gap-1 w-full">
+        <div class=" flex items-center p-1 gap-3 w-full">
+          <div class=" flex-1 text-right">
+            進入 action
+          </div>
+          <select
+            v-model="rectAction.enter.action"
+            class=" bg-slate-100 rounded flex-1 p-2"
           >
-            {{ option }}
-          </option>
-        </select>
+            <option
+              v-for="option in rectActionOptions"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
+        <div class=" flex items-center p-1 gap-3 w-full">
+          <div class=" flex-1 text-right">
+            進入 easing
+          </div>
+          <select
+            v-model="rectAction.enter.easing"
+            class=" bg-slate-100 rounded flex-1 p-2"
+          >
+            <option
+              v-for="option in easingOptions"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </div>
       </div>
 
-      <div class="border flex items-center p-1 gap-3 w-full">
-        <div class=" flex-1 text-right">
-          離開動畫
-        </div>
-        <select
-          v-model="rectAction.leave.action"
-          class=" bg-slate-100 rounded flex-1 p-2"
-        >
-          <option
-            v-for="option in rectActionOptions"
-            :key="option"
-            :value="option"
+      <div class="border flex flex-col items-center p-1 gap-1 w-full">
+        <div class=" flex items-center p-1 gap-3 w-full">
+          <div class=" flex-1 text-right">
+            離開 action
+          </div>
+          <select
+            v-model="rectAction.leave.action"
+            class=" bg-slate-100 rounded flex-1 p-2"
           >
-            {{ option }}
-          </option>
-        </select>
+            <option
+              v-for="option in rectActionOptions"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
+        <div class=" flex items-center p-1 gap-3 w-full">
+          <div class=" flex-1 text-right">
+            離開 easing
+          </div>
+          <select
+            v-model="rectAction.leave.easing"
+            class=" bg-slate-100 rounded flex-1 p-2"
+          >
+            <option
+              v-for="option in easingOptions"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div
@@ -93,6 +133,39 @@ const rectAction = ref<
   },
 });
 const rectActionOptions = Object.values(RectAction);
+const easingOptions = [
+  'linear',
+  'easeInQuad',
+  'easeOutQuad',
+  'easeInOutQuad',
+  'easeInCubic',
+  'easeOutCubic',
+  'easeInOutCubic',
+  'easeInQuart',
+  'easeOutQuart',
+  'easeInOutQuart',
+  'easeInQuint',
+  'easeOutQuint',
+  'easeInOutQuint',
+  'easeInSine',
+  'easeOutSine',
+  'easeInOutSine',
+  'easeInExpo',
+  'easeOutExpo',
+  'easeInOutExpo',
+  'easeInCirc',
+  'easeOutCirc',
+  'easeInOutCirc',
+  'easeInBack',
+  'easeOutBack',
+  'easeInOutBack',
+  'easeInElastic',
+  'easeOutElastic',
+  'easeInOutElastic',
+  'easeInBounce',
+  'easeOutBounce',
+  'easeInOutBounce',
+];
 
 const transitionType = computed<TransitionType>(() => ({
   shape: 'rect',
