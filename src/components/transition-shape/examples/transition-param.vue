@@ -1,6 +1,29 @@
 <template>
   <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
     <div class="flex flex-col gap-2 w-full">
+      <div class="border flex items-center p-1 gap-3 w-full">
+        <div class=" flex-1 text-right">
+          顏色
+        </div>
+        <div class="flex flex-1 gap-1 p-2">
+          <input
+            v-model="colors[0]"
+            type="color"
+            class="flex-1 "
+          >
+          <input
+            v-model="colors[1]"
+            type="color"
+            class="flex-1"
+          >
+          <input
+            v-model="colors[2]"
+            type="color"
+            class="flex-1"
+          >
+        </div>
+      </div>
+
       <!-- 進入 -->
       <div class="border flex flex-col items-center p-1 gap-1 w-full">
         <div class=" flex items-center p-1 gap-3 w-full">
@@ -163,6 +186,9 @@ function changeFish() {
   fishIndex.value %= fishList.length;
 }
 
+const colors = ref<
+  [string, string, string]
+>(['#7DC8FF', '#677580', '#374855'])
 const rectAction = ref<
   Record<'enter' | 'leave', {
     action: `${RectAction}`;
@@ -175,13 +201,13 @@ const rectAction = ref<
     action: 'slide-right',
     easing: 'easeInOutExpo',
     delay: 100,
-    duration: 1000,
+    duration: 800,
   },
   leave: {
     action: 'slide-right',
     easing: 'easeInOutExpo',
     delay: 100,
-    duration: 1000,
+    duration: 800,
   },
 });
 const rectActionOptions = Object.values(RectAction);
@@ -222,6 +248,6 @@ const transitionType = computed<TransitionType>(() => ({
   shape: 'rect',
   enter: rectAction.value.enter,
   leave: rectAction.value.leave,
-  colors: ['#7DC8FF', '#677580', '#374855'],
+  colors: colors.value,
 }));
 </script>

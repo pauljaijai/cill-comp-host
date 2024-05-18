@@ -11,7 +11,7 @@ import {
   Color3, Color4, HemisphericLight, Mesh, MeshBuilder,
   Scene, StandardMaterial, Vector3
 } from '@babylonjs/core';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { until } from '@vueuse/core';
 import { TransitionType } from './type';
 
@@ -74,7 +74,6 @@ const { canvasRef } = useBabylonScene({
   },
 });
 
-
 const rectangleMeshes: Mesh[] = [];
 async function initRectangleMeshes(scene: Scene) {
   const type = props.type;
@@ -98,6 +97,19 @@ async function initRectangleMeshes(scene: Scene) {
     rectangleMeshes.push(mesh);
   });
 }
+// 顏色變化時，更新材質
+watch(() => props.type.colors, (colors) => {
+  if (rectangleMeshes.length === 0) return;
+  colors.forEach((color, index) => {
+    const mesh = rectangleMeshes[index];
+    if (!mesh || !mesh.material) return;
+    if (!(mesh.material instanceof StandardMaterial)) {
+      return;
+    }
+
+    mesh.material.diffuseColor = Color3.FromHexString(color);
+  });
+}, { deep: true });
 
 const isEntering = ref(false);
 async function enter(el: Element) {
