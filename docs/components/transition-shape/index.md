@@ -1,20 +1,20 @@
 ---
-description: 
+description: Motion Graphic 風格的 Transition 元件
 ---
 
 <script setup>
 import BasicUsage from '../../../src/components/transition-shape/examples/basic-usage.vue'
 </script>
 
-# 標題
+# 多邊形轉場
 
-說明說明
+Motion Graphic 風格的 Transition 元件
 
 ## 使用範例
 
 ### 基本用法
 
-當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+基於 Vue 內建的 Transition 元件。
 
 <basic-usage class="h-[30vh]"/>
 
@@ -23,6 +23,8 @@ import BasicUsage from '../../../src/components/transition-shape/examples/basic-
 :::
 
 ## 原理
+
+基於 Vue 內建的 Transition 元件，使用 babylon.js 產生，透過 Transition Event 來控制動畫的開始與結束。
 
 ## API
 

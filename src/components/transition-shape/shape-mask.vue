@@ -17,6 +17,7 @@ import { until } from '@vueuse/core';
 import { TransitionType } from './type';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
+import { animeInProviders, animeOutProviders } from './anime-provider';
 
 
 
@@ -99,48 +100,6 @@ async function initRectangleMeshes(scene: Scene) {
   });
 }
 
-type AnimeProvider = (rect: DOMRect) => Promise<void>[] | undefined;
-/** 進入動畫 */
-const animeInProviders: AnimeProvider[] = [
-  // rect slide-right
-  (rect) => {
-    const type = props.type;
-    const option = type.enter;
-    if (type.shape !== 'rect' || option.action !== 'slide-right')
-      return;
-
-    return rectangleMeshes.map((mesh, index) => {
-      return anime({
-        targets: mesh.position,
-        x: [rect.width, 0],
-        duration: option.duration,
-        easing: option.easing,
-        delay: option.delay * index,
-      }).finished;
-    })
-  },
-];
-/** 進入動畫 */
-const animeOutProviders: AnimeProvider[] = [
-  // rect slide-right
-  (rect) => {
-    const type = props.type;
-    const option = type.leave;
-    if (type.shape !== 'rect' || option.action !== 'slide-right')
-      return;
-
-    return rectangleMeshes.map((mesh, index) => {
-      return anime({
-        targets: mesh.position,
-        x: -rect.width,
-        duration: option.duration,
-        easing: option.easing,
-        delay: option.delay * (2 - index),
-      }).finished;
-    })
-  },
-];
-
 const isEntering = ref(false);
 async function enter(el: Element) {
   if (isEntering.value) {
@@ -152,7 +111,9 @@ async function enter(el: Element) {
   isEntering.value = true;
 
   for (const provider of animeInProviders) {
-    const result = provider(rect);
+    const result = provider({
+      rect, type: props.type, meshes: rectangleMeshes,
+    });
     if (!result) continue;
     await Promise.all(result);
     break;
@@ -171,7 +132,9 @@ async function leave(el: Element) {
   isLeaving.value = true;
 
   for (const provider of animeOutProviders) {
-    const result = provider(rect);
+    const result = provider({
+      rect, type: props.type, meshes: rectangleMeshes,
+    });
     if (!result) continue;
     await Promise.all(result);
     break;
