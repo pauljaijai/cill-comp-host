@@ -68,14 +68,14 @@ const { canvasRef } = useBabylonScene({
       defaultLight.groundColor = new Color3(1, 1, 1);
     }
 
-    await initRectangleMeshes(scene);
+    await initMeshes(scene);
     emit('init');
     initFinished.value = true;
   },
 });
 
-const rectangleMeshes: Mesh[] = [];
-async function initRectangleMeshes(scene: Scene) {
+const meshes: Mesh[] = [];
+async function initMeshes(scene: Scene) {
   const type = props.type;
   if (type.name !== 'rect') return;
 
@@ -92,14 +92,14 @@ async function initRectangleMeshes(scene: Scene) {
 
     mesh.material = material;
 
-    rectangleMeshes.push(mesh);
+    meshes.push(mesh);
   });
 }
 // 顏色變化時，更新材質
 watch(() => props.type.colors, (colors) => {
-  if (rectangleMeshes.length === 0) return;
+  if (meshes.length === 0) return;
   colors.forEach((color, index) => {
-    const mesh = rectangleMeshes[index];
+    const mesh = meshes[index];
     if (!mesh || !mesh.material) return;
     if (!(mesh.material instanceof StandardMaterial)) {
       return;
@@ -121,7 +121,7 @@ async function enter(el: Element) {
 
   for (const provider of animeEnterProviders) {
     const result = provider({
-      rect, type: props.type, meshes: rectangleMeshes,
+      rect, type: props.type, meshes: meshes,
     });
     if (!result) continue;
     await Promise.all(result);
@@ -142,7 +142,7 @@ async function leave(el: Element) {
 
   for (const provider of animeLeaveProviders) {
     const result = provider({
-      rect, type: props.type, meshes: rectangleMeshes,
+      rect, type: props.type, meshes: meshes,
     });
     if (!result) continue;
     await Promise.all(result);
