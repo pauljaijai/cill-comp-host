@@ -9,8 +9,9 @@ interface Param {
   meshes: Mesh[];
 }
 type AnimeProvider = (param: Param) => Promise<void>[] | undefined;
-/** 進入動畫 */
-export const animeInProviders: AnimeProvider[] = [
+
+// enter providers
+const rectEnterProviders: AnimeProvider[] = [
   // rect slide-right
   ({ rect, type, meshes }) => {
     const option = type.enter;
@@ -150,6 +151,7 @@ export const animeInProviders: AnimeProvider[] = [
 
         return anime({
           targets: mesh.scaling,
+          x: [1, 1],
           y: [0, 1],
           ...option,
           delay: option.delay * index,
@@ -157,9 +159,13 @@ export const animeInProviders: AnimeProvider[] = [
       })
     )
   },
+]
+export const animeEnterProviders: AnimeProvider[] = [
+  ...rectEnterProviders,
 ];
-/** 離開動畫 */
-export const animeOutProviders: AnimeProvider[] = [
+
+// leave providers
+const rectLeaveProviders: AnimeProvider[] = [
   // rect slide-right
   ({ rect, type, meshes }) => {
     const option = type.leave;
@@ -306,4 +312,7 @@ export const animeOutProviders: AnimeProvider[] = [
       })
     )
   },
+]
+export const animeLeaveProviders: AnimeProvider[] = [
+  ...rectLeaveProviders,
 ];

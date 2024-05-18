@@ -16,7 +16,7 @@ import { until } from '@vueuse/core';
 import { TransitionType } from './type';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
-import { animeInProviders, animeOutProviders } from './anime-provider';
+import { animeEnterProviders, animeLeaveProviders } from './anime-provider';
 
 
 
@@ -119,7 +119,7 @@ async function enter(el: Element) {
 
   isEntering.value = true;
 
-  for (const provider of animeInProviders) {
+  for (const provider of animeEnterProviders) {
     const result = provider({
       rect, type: props.type, meshes: rectangleMeshes,
     });
@@ -140,7 +140,7 @@ async function leave(el: Element) {
   const rect = el.getBoundingClientRect();
   isLeaving.value = true;
 
-  for (const provider of animeOutProviders) {
+  for (const provider of animeLeaveProviders) {
     const result = provider({
       rect, type: props.type, meshes: rectangleMeshes,
     });
