@@ -14,11 +14,15 @@ import {
 import anime from 'animejs';
 import { computed, ref } from 'vue';
 import { until } from '@vueuse/core';
+import { TransitionType } from './type';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
 
+
+
 // #region Props
 interface Props {
+  type: TransitionType;
   width?: number;
   height?: number;
 }
@@ -31,8 +35,6 @@ const props = withDefaults(defineProps<Props>(), {
 // #region Emits
 const emit = defineEmits<{
   (e: 'init'): void;
-  (e: 'run'): void;
-  (e: 'back'): void;
 }>();
 // #endregion Emits
 
@@ -75,20 +77,61 @@ const { canvasRef } = useBabylonScene({
 
 const rectangleMeshes: Mesh[] = [];
 async function initRectangleMeshes(scene: Scene) {
-  const rectangle = MeshBuilder.CreatePlane('rectangle', {
-    width: props.width,
-    height: props.height,
-  }, scene);
-  rectangle.rotation = new Vector3(0, Math.PI, 0);
-  rectangle.position = new Vector3(props.width, 0, 0);
+  const type = props.type;
+  if (type.shape !== 'rect') {
+    return;
+  }
 
-  const material = new StandardMaterial('material');
-  material.diffuseColor = new Color3(1, 0, 0);
+  type.colors.forEach((color, index) => {
+    const material = new StandardMaterial(`material-${index}`, scene);
+    material.diffuseColor = Color3.FromHexString(color);
 
-  rectangle.material = material;
+    const mesh = MeshBuilder.CreatePlane(`rect-${index}`, {
+      width: props.width,
+      height: props.height,
+    }, scene);
+    mesh.rotation = new Vector3(0, Math.PI, 0);
+    mesh.position = new Vector3(props.width, 0, 0);
 
-  rectangleMeshes.push(rectangle);
+    mesh.material = material;
+
+    rectangleMeshes.push(mesh);
+  });
 }
+
+type AnimeProvider = (rect: DOMRect) => Promise<void>[] | undefined;
+/** 進入動畫 */
+const animeInProviders: AnimeProvider[] = [
+  (rect) => {
+    if (props.type.shape !== 'rect') return;
+
+    return rectangleMeshes.map((mesh, index) => {
+      return anime({
+        targets: mesh.position,
+        x: [rect.width, 0],
+        duration: 1000,
+        easing: 'easeInOutExpo',
+        delay: 100 * index,
+      }).finished;
+    })
+  },
+];
+/** 進入動畫 */
+const animeOutProviders: AnimeProvider[] = [
+  (rect) => {
+    if (props.type.shape !== 'rect') return;
+
+    return rectangleMeshes.map((mesh, index) => {
+      return anime({
+        targets: mesh.position,
+        x: -rect.width,
+        duration: 1000,
+        easing: 'easeInOutExpo',
+        delay: 100 * (2 - index),
+      }).finished;
+    })
+  },
+];
 
 const isEntering = ref(false);
 async function enter(el: Element) {
@@ -96,19 +139,16 @@ async function enter(el: Element) {
     return until(isEntering).toBe(false);
   }
 
-  const first = rectangleMeshes[0];
-  if (!first) return;
-
   const rect = el.getBoundingClientRect();
 
   isEntering.value = true;
 
-  await anime({
-    targets: first.position,
-    x: [rect.width, 0],
-    duration: 1000,
-    easing: 'easeInOutExpo',
-  }).finished;
+  for (const provider of animeInProviders) {
+    const result = provider(rect);
+    if (!result) continue;
+    await Promise.all(result);
+    break;
+  }
 
   isEntering.value = false;
 }
@@ -119,18 +159,15 @@ async function leave(el: Element) {
     return until(isLeaving).toBe(false);
   }
 
-  const first = rectangleMeshes[0];
-  if (!first) return;
-
   const rect = el.getBoundingClientRect();
   isLeaving.value = true;
 
-  await anime({
-    targets: first.position,
-    x: -rect.width,
-    duration: 1000,
-    easing: 'easeInOutExpo',
-  }).finished;
+  for (const provider of animeOutProviders) {
+    const result = provider(rect);
+    if (!result) continue;
+    await Promise.all(result);
+    break;
+  }
 
   isLeaving.value = false;
 }

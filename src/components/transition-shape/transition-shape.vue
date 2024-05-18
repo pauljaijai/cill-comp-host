@@ -16,6 +16,7 @@
     ref="maskRef"
     class=" fixed"
     :style="maskStyle"
+    :type="props.type"
     :width="enterElBounding.width.value"
     :height="enterElBounding.height.value"
   />
@@ -24,6 +25,7 @@
 <script setup lang="ts">
 import { computed, CSSProperties, nextTick, ref, TransitionProps } from 'vue';
 import { find, pipe } from 'remeda';
+import { TransitionType } from './type';
 
 import ShapeMask from './shape-mask.vue';
 
@@ -32,10 +34,18 @@ import { useElementBounding } from '@vueuse/core';
 // #region Props
 interface Props {
   appear?: boolean;
+  type: TransitionType;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   appear: false,
+  type: () => ({
+    shape: 'rect',
+    enter: 'slide-right',
+    leave: 'slide-right',
+    colors: ['#FF0000', '#00FF00', '#0000FF'],
+    delay: 100,
+  }),
 });
 
 // #region Emits
@@ -122,6 +132,9 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   // nextTick 才能同時取得 enterElRef 和 leaveElRef
   await nextTick();
   console.log(`🚀 ~ handleLeave: `);
+  // console.log(`🚀 ~ enterElRef: `, enterElRef);
+  // console.log(`🚀 ~ leaveElRef: `, leaveElRef);
+
   if (!(el instanceof HTMLElement)) {
     return done()
   }
@@ -139,6 +152,7 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   done();
 };
 const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
+  console.log(`🚀 ~ handleAfterLeave: `);
   leaveElRef.value = undefined;
 };
 
