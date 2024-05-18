@@ -90,6 +90,7 @@ async function initRectangleMeshes(scene: Scene) {
     const mesh = MeshBuilder.CreateBox(`rect-${index}`, {
       width: props.width,
       height: props.height,
+      depth: 0,
     }, scene);
     mesh.position = new Vector3(0, 0, 0);
 

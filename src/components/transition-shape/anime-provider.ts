@@ -20,6 +20,8 @@ export const animeInProviders: AnimeProvider[] = [
     return pipe(meshes,
       filter((item) => item.name.includes('rect')),
       map.indexed((mesh, index) => {
+        mesh.scaling.setAll(1);
+
         return anime({
           targets: mesh.position,
           x: [rect.width, 0],
@@ -39,6 +41,8 @@ export const animeInProviders: AnimeProvider[] = [
     return pipe(meshes,
       filter((item) => item.name.includes('rect')),
       map.indexed((mesh, index) => {
+        mesh.scaling.setAll(1);
+
         return anime({
           targets: mesh.position,
           x: [-rect.width, 0],
@@ -58,6 +62,8 @@ export const animeInProviders: AnimeProvider[] = [
     return pipe(meshes,
       filter((item) => item.name.includes('rect')),
       map.indexed((mesh, index) => {
+        mesh.scaling.setAll(1);
+
         return anime({
           targets: mesh.position,
           x: [0, 0],
@@ -77,10 +83,33 @@ export const animeInProviders: AnimeProvider[] = [
     return pipe(meshes,
       filter((item) => item.name.includes('rect')),
       map.indexed((mesh, index) => {
+        mesh.scaling.setAll(1);
+
         return anime({
           targets: mesh.position,
           x: [0, 0],
           y: [rect.height, 0],
+          ...option,
+          delay: option.delay * index,
+        }).finished;
+      })
+    )
+  },
+  // rect scale
+  ({ rect, type, meshes }) => {
+    const option = type.enter;
+    if (type.shape !== 'rect' || option.action !== 'scale')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        mesh.position.setAll(0);
+
+        return anime({
+          targets: mesh.scaling,
+          x: [0, 1],
+          y: [0, 1],
           ...option,
           delay: option.delay * index,
         }).finished;
@@ -99,6 +128,8 @@ export const animeOutProviders: AnimeProvider[] = [
     return pipe(meshes,
       filter((item) => item.name.includes('rect')),
       map.indexed((mesh, index) => {
+        mesh.scaling.setAll(1);
+
         return anime({
           targets: mesh.position,
           x: [0, -rect.width],
@@ -118,6 +149,8 @@ export const animeOutProviders: AnimeProvider[] = [
     return pipe(meshes,
       filter((item) => item.name.includes('rect')),
       map.indexed((mesh, index) => {
+        mesh.scaling.setAll(1);
+
         return anime({
           targets: mesh.position,
           x: [0, rect.width],
@@ -137,6 +170,8 @@ export const animeOutProviders: AnimeProvider[] = [
     return pipe(meshes,
       filter((item) => item.name.includes('rect')),
       map.indexed((mesh, index) => {
+        mesh.scaling.setAll(1);
+
         return anime({
           targets: mesh.position,
           x: [0, 0],
@@ -156,10 +191,33 @@ export const animeOutProviders: AnimeProvider[] = [
     return pipe(meshes,
       filter((item) => item.name.includes('rect')),
       map.indexed((mesh, index) => {
+        mesh.scaling.setAll(1);
+
         return anime({
           targets: mesh.position,
           x: [0, 0],
           y: [0, -rect.height],
+          ...option,
+          delay: option.delay * (type.colors.length - index),
+        }).finished;
+      })
+    )
+  },
+  // rect scale
+  ({ rect, type, meshes }) => {
+    const option = type.leave;
+    if (type.shape !== 'rect' || option.action !== 'scale')
+      return;
+
+    return pipe(meshes,
+      filter((item) => item.name.includes('rect')),
+      map.indexed((mesh, index) => {
+        mesh.position.setAll(0);
+
+        return anime({
+          targets: mesh.scaling,
+          x: [1, 0],
+          y: [1, 0],
           ...option,
           delay: option.delay * (type.colors.length - index),
         }).finished;

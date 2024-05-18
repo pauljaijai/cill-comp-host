@@ -5,6 +5,7 @@ export enum RectAction {
   SLIDE_LEFT = 'slide-left',
   SLIDE_UP = 'slide-up',
   SLIDE_DOWN = 'slide-down',
+  SCALE = 'scale',
 }
 export type TransitionType = {
   shape: 'rect';
