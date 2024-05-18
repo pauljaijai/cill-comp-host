@@ -15,12 +15,19 @@
       </div>
     </transition-shape>
 
+    <div
+      class="border rounded px-4 py-2 cursor-pointer"
+      @click="changeFish()"
+    >
+      換魚
+    </div>
+
     <transition-shape appear>
       <div
-        :key="fish"
+        :key="fishIndex"
         class="text-3xl"
       >
-        {{ fish }}
+        {{ fishList[fishIndex] }}
       </div>
     </transition-shape>
   </div>
@@ -28,22 +35,19 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { pipe, sample } from 'remeda';
 
 import BaseCheckbox from '../../base-checkbox.vue';
 import TransitionShape from '../transition-shape.vue';
-import { pipe, sample } from 'remeda';
 
 const state = ref(true);
 
-const fish = ref('🐟');
+const fishIndex = ref(0);
 const fishList = [
   '🐟', '🐋', '🐠', '🐡'
 ];
-watch(state, () => {
-  fish.value = pipe(
-    fishList,
-    sample(1),
-    ([value]) => value ?? fishList[0]!
-  );
-});
+function changeFish() {
+  fishIndex.value++;
+  fishIndex.value %= fishList.length;
+}
 </script>

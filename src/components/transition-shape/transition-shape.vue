@@ -1,7 +1,7 @@
 <template>
   <transition
-    mode="out-in"
     :appear="props.appear"
+    :css="false"
     @before-enter="handleBeforeEnter"
     @enter="handleEnter"
     @after-enter="handleAfterEnter"
@@ -22,11 +22,12 @@
 </template>
 
 <script setup lang="ts">
-import { useElementBounding } from '@vueuse/core';
 import { computed, CSSProperties, ref, TransitionProps } from 'vue';
 import { find, pipe } from 'remeda';
 
 import ShapeMask from './shape-mask.vue';
+
+import { useElementBounding } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -46,12 +47,21 @@ const slots = defineSlots<{
 
 const enterElRef = ref<HTMLElement>();
 const enterElBounding = useElementBounding(enterElRef);
+/* 切換元素時，需要獨立調整元素 **/
+const enterElClassObject = ref({
+  position: '',
+  display: '',
+});
 
 const leaveElRef = ref<HTMLElement>();
 const leaveElBounding = useElementBounding(leaveElRef);
+const leaveElClassObject = ref({
+  position: '',
+  display: '',
+});
 
 const maskRef = ref<InstanceType<typeof ShapeMask>>();
-const maskVisible = ref(false);
+const maskVisible = ref(true);
 const maskStyle = computed<CSSProperties>(() => pipe(
   [enterElBounding, leaveElBounding],
   find(({ width }) => width.value > 0),
@@ -69,16 +79,15 @@ const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
   if (!(el instanceof HTMLElement)) return;
   el.style.opacity = '0';
 
-  maskVisible.value = true;
   enterElRef.value = el;
 }
 const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
-  console.log(`🚀 ~ handleEnter el:`, el);
+  console.log(`🚀 ~ handleEnter: `);
   if (!(el instanceof HTMLElement)) {
     return done()
   }
 
-  // appear 情況時，需要等待 mask 初始化完成
+  // appear 時，需要等待 mask 初始化完成
   await maskRef.value?.initFinished();
 
   await maskRef.value?.enter(el);
@@ -86,22 +95,19 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
 
   await maskRef.value?.leave(el);
 
-
   done()
 }
 const handleAfterEnter: TransitionProps['onAfterEnter'] = (el) => {
-  maskVisible.value = false;
   enterElRef.value = undefined;
 };
 
 // 離開事件
 const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
   if (!(el instanceof HTMLElement)) return;
-  maskVisible.value = true;
   leaveElRef.value = el;
 };
 const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
-  console.log(`🚀 ~ handleLeave el:`, el);
+  console.log(`🚀 ~ handleLeave: `);
   if (!(el instanceof HTMLElement)) {
     return done()
   }
@@ -114,8 +120,6 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   done();
 };
 const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
-  // console.log('handleAfterLeave')
-  maskVisible.value = false;
   leaveElRef.value = undefined;
 };
 
@@ -123,5 +127,11 @@ const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
 
 </script>
 
-<style scoped lang="sass">
+<style lang="sass">
+.enter-el
+  position: v-bind('enterElClassObject.position') !important
+  display: v-bind('enterElClassObject.display') !important
+.leave-el
+  position: v-bind('leaveElClassObject.position') !important
+  display: v-bind('leaveElClassObject.display') !important
 </style>

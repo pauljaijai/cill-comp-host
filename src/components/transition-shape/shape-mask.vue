@@ -90,38 +90,53 @@ async function initRectangleMeshes(scene: Scene) {
   rectangleMeshes.push(rectangle);
 }
 
+const isEntering = ref(false);
 async function enter(el: Element) {
+  if (isEntering.value) {
+    return until(isEntering).toBe(false);
+  }
+
   const first = rectangleMeshes[0];
   if (!first) return;
 
   const rect = el.getBoundingClientRect();
 
-  return anime({
+  isEntering.value = true;
+  await anime({
     targets: first.position,
     x: [rect.width, 0],
     duration: 1000,
     easing: 'easeInOutExpo',
   }).finished;
+  isEntering.value = false;
 }
 
+const isLeaving = ref(false);
 async function leave(el: Element) {
+  if (isLeaving.value) {
+    return until(isLeaving).toBe(false);
+  }
+
   const first = rectangleMeshes[0];
   if (!first) return;
 
   const rect = el.getBoundingClientRect();
+  isLeaving.value = true;
 
-  return anime({
+  await anime({
     targets: first.position,
     x: -rect.width,
     duration: 1000,
     easing: 'easeInOutExpo',
-  }).finished;
+  }).finished
+  isLeaving.value = false;
 }
 
 defineExpose({
   async initFinished() {
     await until(initFinished).toBe(true);
   },
+  isLeaving,
   enter,
   leave,
 });
