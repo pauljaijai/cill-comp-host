@@ -10,309 +10,317 @@ interface Param {
 }
 type AnimeProvider = (param: Param) => Promise<void>[] | undefined;
 
-// enter providers
-const rectEnterProviders: AnimeProvider[] = [
+/** rect [enter, leave] */
+const rectProviders: [AnimeProvider, AnimeProvider][] = [
   // rect slide-right
-  ({ rect, type, meshes }) => {
-    const option = type.enter;
-    if (type.name !== 'rect' || option.action !== 'slide-right')
-      return;
+  [
+    ({ rect, type, meshes }) => {
+      const option = type.enter;
+      if (type.name !== 'rect' || option.action !== 'slide-right')
+        return;
 
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1);
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.scaling.setAll(1);
 
-        return anime({
-          targets: mesh.position,
-          x: [rect.width, 0],
-          y: [0, 0],
-          ...option,
-          delay: option.delay * index,
-        }).finished;
-      })
-    )
-  },
+          return anime({
+            targets: mesh.position,
+            x: [rect.width, 0],
+            y: [0, 0],
+            ...option,
+            delay: option.delay * index,
+          }).finished;
+        })
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const option = type.leave;
+      if (type.name !== 'rect' || option.action !== 'slide-right')
+        return;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.scaling.setAll(1);
+
+          return anime({
+            targets: mesh.position,
+            x: [0, -rect.width],
+            y: [0, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished;
+        })
+      )
+    },
+  ],
   // rect slide-left
-  ({ rect, type, meshes }) => {
-    const option = type.enter;
-    if (type.name !== 'rect' || option.action !== 'slide-left')
-      return;
+  [
+    ({ rect, type, meshes }) => {
+      const option = type.enter;
+      if (type.name !== 'rect' || option.action !== 'slide-left')
+        return;
 
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1);
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.scaling.setAll(1);
 
-        return anime({
-          targets: mesh.position,
-          x: [-rect.width, 0],
-          y: [0, 0],
-          ...option,
-          delay: option.delay * index,
-        }).finished;
-      })
-    )
-  },
+          return anime({
+            targets: mesh.position,
+            x: [-rect.width, 0],
+            y: [0, 0],
+            ...option,
+            delay: option.delay * index,
+          }).finished;
+        })
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const option = type.leave;
+      if (type.name !== 'rect' || option.action !== 'slide-left')
+        return;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.scaling.setAll(1);
+
+          return anime({
+            targets: mesh.position,
+            x: [0, rect.width],
+            y: [0, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished;
+        })
+      )
+    },
+  ],
   // rect slide-up
-  ({ rect, type, meshes }) => {
-    const option = type.enter;
-    if (type.name !== 'rect' || option.action !== 'slide-up')
-      return;
+  [
+    ({ rect, type, meshes }) => {
+      const option = type.enter;
+      if (type.name !== 'rect' || option.action !== 'slide-up')
+        return;
 
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1);
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.scaling.setAll(1);
 
-        return anime({
-          targets: mesh.position,
-          x: [0, 0],
-          y: [-rect.height, 0],
-          ...option,
-          delay: option.delay * index,
-        }).finished;
-      })
-    )
-  },
+          return anime({
+            targets: mesh.position,
+            x: [0, 0],
+            y: [-rect.height, 0],
+            ...option,
+            delay: option.delay * index,
+          }).finished;
+        })
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const option = type.leave;
+      if (type.name !== 'rect' || option.action !== 'slide-up')
+        return;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.scaling.setAll(1);
+
+          return anime({
+            targets: mesh.position,
+            x: [0, 0],
+            y: [0, rect.height],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished;
+        })
+      )
+    },
+  ],
   // rect slide-down
-  ({ rect, type, meshes }) => {
-    const option = type.enter;
-    if (type.name !== 'rect' || option.action !== 'slide-down')
-      return;
+  [
+    ({ rect, type, meshes }) => {
+      const option = type.enter;
+      if (type.name !== 'rect' || option.action !== 'slide-down')
+        return;
 
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1);
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.scaling.setAll(1);
 
-        return anime({
-          targets: mesh.position,
-          x: [0, 0],
-          y: [rect.height, 0],
-          ...option,
-          delay: option.delay * index,
-        }).finished;
-      })
-    )
-  },
+          return anime({
+            targets: mesh.position,
+            x: [0, 0],
+            y: [rect.height, 0],
+            ...option,
+            delay: option.delay * index,
+          }).finished;
+        })
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const option = type.leave;
+      if (type.name !== 'rect' || option.action !== 'slide-down')
+        return;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.scaling.setAll(1);
+
+          return anime({
+            targets: mesh.position,
+            x: [0, 0],
+            y: [0, -rect.height],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished;
+        })
+      )
+    },
+  ],
   // rect scale
-  ({ type, meshes }) => {
-    const option = type.enter;
-    if (type.name !== 'rect' || option.action !== 'scale')
-      return;
+  [
+    ({ type, meshes }) => {
+      const option = type.enter;
+      if (type.name !== 'rect' || option.action !== 'scale')
+        return;
 
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.position.setAll(0);
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
 
-        return anime({
-          targets: mesh.scaling,
-          x: [0, 1],
-          y: [0, 1],
-          ...option,
-          delay: option.delay * index,
-        }).finished;
-      })
-    )
-  },
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1],
+            y: [0, 1],
+            ...option,
+            delay: option.delay * index,
+          }).finished;
+        })
+      )
+    },
+    ({ type, meshes }) => {
+      const option = type.leave;
+      if (type.name !== 'rect' || option.action !== 'scale')
+        return;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
+
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 0],
+            y: [1, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished;
+        })
+      )
+    },
+  ],
   // rect scale-x
-  ({ type, meshes }) => {
-    const option = type.enter;
-    if (type.name !== 'rect' || option.action !== 'scale-x')
-      return;
+  [
+    ({ type, meshes }) => {
+      const option = type.enter;
+      if (type.name !== 'rect' || option.action !== 'scale-x')
+        return;
 
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.position.setAll(0);
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
 
-        return anime({
-          targets: mesh.scaling,
-          x: [0, 1],
-          y: [1, 1],
-          ...option,
-          delay: option.delay * index,
-        }).finished;
-      })
-    )
-  },
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1],
+            y: [1, 1],
+            ...option,
+            delay: option.delay * index,
+          }).finished;
+        })
+      )
+    },
+    ({ type, meshes }) => {
+      const option = type.leave;
+      if (type.name !== 'rect' || option.action !== 'scale-x')
+        return;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
+
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished;
+        })
+      )
+    },
+  ],
   // rect scale-y
-  ({ type, meshes }) => {
-    const option = type.enter;
-    if (type.name !== 'rect' || option.action !== 'scale-y')
-      return;
+  [
+    ({ type, meshes }) => {
+      const option = type.enter;
+      if (type.name !== 'rect' || option.action !== 'scale-y')
+        return;
 
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.position.setAll(0);
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
 
-        return anime({
-          targets: mesh.scaling,
-          x: [1, 1],
-          y: [0, 1],
-          ...option,
-          delay: option.delay * index,
-        }).finished;
-      })
-    )
-  },
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 1],
+            y: [0, 1],
+            ...option,
+            delay: option.delay * index,
+          }).finished;
+        })
+      )
+    },
+    ({ type, meshes }) => {
+      const option = type.leave;
+      if (type.name !== 'rect' || option.action !== 'scale-y')
+        return;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'rect'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
+
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 1],
+            y: [1, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished;
+        })
+      )
+    },
+  ],
 ]
-export const animeEnterProviders: AnimeProvider[] = [
-  ...rectEnterProviders,
-];
+
+export const animeEnterProviders: AnimeProvider[] = pipe(
+  rectProviders,
+  map(([enter]) => enter),
+);
 
 // leave providers
-const rectLeaveProviders: AnimeProvider[] = [
-  // rect slide-right
-  ({ rect, type, meshes }) => {
-    const option = type.leave;
-    if (type.name !== 'rect' || option.action !== 'slide-right')
-      return;
-
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1);
-
-        return anime({
-          targets: mesh.position,
-          x: [0, -rect.width],
-          y: [0, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished;
-      })
-    )
-  },
-  // rect slide-left
-  ({ rect, type, meshes }) => {
-    const option = type.leave;
-    if (type.name !== 'rect' || option.action !== 'slide-left')
-      return;
-
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1);
-
-        return anime({
-          targets: mesh.position,
-          x: [0, rect.width],
-          y: [0, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished;
-      })
-    )
-  },
-  // rect slide-up
-  ({ rect, type, meshes }) => {
-    const option = type.leave;
-    if (type.name !== 'rect' || option.action !== 'slide-up')
-      return;
-
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1);
-
-        return anime({
-          targets: mesh.position,
-          x: [0, 0],
-          y: [0, rect.height],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished;
-      })
-    )
-  },
-  // rect slide-down
-  ({ rect, type, meshes }) => {
-    const option = type.leave;
-    if (type.name !== 'rect' || option.action !== 'slide-down')
-      return;
-
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1);
-
-        return anime({
-          targets: mesh.position,
-          x: [0, 0],
-          y: [0, -rect.height],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished;
-      })
-    )
-  },
-  // rect scale
-  ({ type, meshes }) => {
-    const option = type.leave;
-    if (type.name !== 'rect' || option.action !== 'scale')
-      return;
-
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.position.setAll(0);
-
-        return anime({
-          targets: mesh.scaling,
-          x: [1, 0],
-          y: [1, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished;
-      })
-    )
-  },
-  // rect scale-x
-  ({ type, meshes }) => {
-    const option = type.leave;
-    if (type.name !== 'rect' || option.action !== 'scale-x')
-      return;
-
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.position.setAll(0);
-
-        return anime({
-          targets: mesh.scaling,
-          x: [1, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished;
-      })
-    )
-  },
-  // rect scale-y
-  ({ type, meshes }) => {
-    const option = type.leave;
-    if (type.name !== 'rect' || option.action !== 'scale-y')
-      return;
-
-    return pipe(meshes,
-      filter((item) => item.name === 'rect'),
-      map.indexed((mesh, index) => {
-        mesh.position.setAll(0);
-
-        return anime({
-          targets: mesh.scaling,
-          x: [1, 1],
-          y: [1, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished;
-      })
-    )
-  },
-]
-export const animeLeaveProviders: AnimeProvider[] = [
-  ...rectLeaveProviders,
-];
+export const animeLeaveProviders: AnimeProvider[] = pipe(
+  rectProviders,
+  map(([, leave]) => leave),
+);

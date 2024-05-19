@@ -35,6 +35,7 @@ export enum RoundAction {
   SLIDE_RT = 'slide-rt',
   SLIDE_RB = 'slide-rb',
   SCALE = 'scale',
+  
 }
 interface TransitionRound {
   name: 'round';
