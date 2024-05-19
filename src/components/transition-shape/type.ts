@@ -25,8 +25,8 @@ interface TransitionRect {
     delay: number;
     easing: EasingOptions;
   };
-  /** 顏色數量等同 shape 數量 */
-  colors: string[];
+  /** HEX 格式。顏色數量等同 shape 數量，至少需要一個 */
+  colors: [string, ...string[]];
 }
 
 export enum RoundAction {
@@ -35,7 +35,7 @@ export enum RoundAction {
   SCALE_RT = 'scale-rt',
   SCALE_RB = 'scale-rb',
   SCALE = 'scale',
-  
+
 }
 interface TransitionRound {
   name: 'round';
@@ -53,8 +53,8 @@ interface TransitionRound {
     delay: number;
     easing: EasingOptions;
   };
-  /** 顏色數量等同 shape 數量 */
-  colors: string[];
+  /** HEX 格式。顏色數量等同 shape 數量，至少需要一個 */
+  colors: [string, ...string[]];
 }
 
 /** name 初始化後不可變更，其餘參數皆可調整 */

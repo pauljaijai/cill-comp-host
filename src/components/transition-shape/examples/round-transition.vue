@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { debounce } from 'lodash-es';
-import { map, pipe, reverse, shuffle } from 'remeda';
+import { hasAtLeast, map, pipe, reverse, shuffle } from 'remeda';
 
 import TransitionShape, {
   TransitionType, RoundAction
@@ -75,6 +75,11 @@ const list: Item[] = pipe(
   map.indexed((action, i) => {
     const targetAction = reverseActions[i] ?? action;
 
+    const colors = shuffle(['#BDF2ED', '#F2CEBD', '#B39689']);
+    if (!hasAtLeast(colors, 1)) {
+      throw new Error('At least one color is required');
+    }
+
     const result: Item = {
       key: action,
       name: 'round',
@@ -90,7 +95,7 @@ const list: Item[] = pipe(
         delay: 200,
         easing: 'easeInOutExpo',
       },
-      colors: shuffle(['#BDF2ED', '#F2CEBD', '#B39689']),
+      colors,
     }
 
     return result;
