@@ -1,7 +1,7 @@
 <template>
   <div
     ref="boxRef"
-    class="flex flex-wrap justify-center gap-4 w-full border border-gray-300 p-6"
+    class="flex flex-col justify-center gap-4 w-full border border-gray-300 p-6"
   >
     <div
       v-for="item in list"
@@ -14,7 +14,7 @@
       >
         <div
           :key="fishIndex"
-          class="text-[5rem] text-center"
+          class="text-[5rem] text-center w-full"
         >
           {{ fishList[fishIndex] }}
         </div>
@@ -64,8 +64,8 @@ const startInterval = debounce(() => {
   )
 }, 1000);
 
-// const actions = Object.values(FenceAction);
-const actions = [FenceAction.SPREAD_RIGHT];
+const actions = Object.values(FenceAction);
+// const actions = [FenceAction.SPREAD_RIGHT];
 const reverseActions = pipe(actions, reverse());
 
 type Item = TransitionType & {
@@ -82,13 +82,13 @@ const list: Item[] = pipe(
       enter: {
         action,
         duration: 800,
-        delay: 100,
+        delay: 200,
         easing: 'easeInOutQuad',
       },
       leave: {
         action: targetAction,
         duration: 800,
-        delay: 100,
+        delay: 200,
         easing: 'easeInOutQuad',
       },
       colors: [

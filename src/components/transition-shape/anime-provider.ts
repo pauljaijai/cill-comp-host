@@ -648,6 +648,7 @@ const fenceProviders: [AnimeProvider, AnimeProvider][] = [
 
       const { width } = rect;
       const eachWidth = width / type.colors.length;
+      const oriX = width / 2 + eachWidth / 2;
 
       return pipe(meshes,
         filter((item) => item.name === name),
@@ -656,15 +657,15 @@ const fenceProviders: [AnimeProvider, AnimeProvider][] = [
           mesh.scaling.setAll(1);
 
           const x = [
+            oriX,
             i * eachWidth - width / 2 + eachWidth / 2,
-            -width / 2 + eachWidth / 2,
           ];
 
           return anime({
             targets: mesh.position,
             x,
             ...option,
-            delay: option.delay * i,
+            delay: option.delay * (type.colors.length - i),
           }).finished;
         })
       )
@@ -677,6 +678,7 @@ const fenceProviders: [AnimeProvider, AnimeProvider][] = [
 
       const { width } = rect;
       const eachWidth = width / type.colors.length;
+      const oriX = width / 2 + eachWidth / 2;
 
       return pipe(meshes,
         filter((item) => item.name === name),
@@ -684,16 +686,11 @@ const fenceProviders: [AnimeProvider, AnimeProvider][] = [
           mesh.position.y = 0;
           mesh.scaling.setAll(1);
 
-          const x = [
-            -width / 2 + eachWidth / 2,
-            i * eachWidth - width / 2 + eachWidth / 2,
-          ];
-
           return anime({
             targets: mesh.position,
-            x,
+            x: oriX,
             ...option,
-            delay: option.delay * (type.colors.length - i),
+            delay: option.delay * i,
           }).finished;
         })
       )
@@ -710,7 +707,6 @@ const fenceProviders: [AnimeProvider, AnimeProvider][] = [
       const { width } = rect;
       const eachWidth = width / type.colors.length;
       const oriX = width / 2 + eachWidth / 2;
-      console.log("🚀 ~ oriX:", oriX)
 
       return pipe(meshes,
         filter((item) => item.name === name),
@@ -719,8 +715,8 @@ const fenceProviders: [AnimeProvider, AnimeProvider][] = [
           mesh.scaling.setAll(1);
 
           const x = [
-            i * eachWidth - width / 2 + eachWidth / 2,
             -oriX,
+            i * eachWidth - width / 2 + eachWidth / 2,
           ];
 
           return anime({
@@ -748,14 +744,9 @@ const fenceProviders: [AnimeProvider, AnimeProvider][] = [
           mesh.position.y = 0;
           mesh.scaling.setAll(1);
 
-          const x = [
-            -oriX,
-            i * eachWidth - width / 2 + eachWidth / 2,
-          ];
-
           return anime({
             targets: mesh.position,
-            x,
+            x: -oriX,
             ...option,
             delay: option.delay * (type.colors.length - i),
           }).finished;
