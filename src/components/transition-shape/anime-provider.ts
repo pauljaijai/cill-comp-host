@@ -319,7 +319,7 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
   // scale
   [
     ({ type, meshes }) => {
-      if (type.name !== 'round' || type.enter.action === 'scale')
+      if (type.name !== 'round' || type.enter.action !== 'scale')
         return;
       const option = type.enter;
 
@@ -339,7 +339,7 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
     ({ type, meshes }) => {
-      if (type.name !== 'round' || type.leave.action === 'scale')
+      if (type.name !== 'round' || type.leave.action !== 'scale')
         return;
       const option = type.leave;
 
@@ -363,7 +363,7 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action === 'scale-lb')
+      if (type.name !== name || type.enter.action !== 'scale-lb')
         return;
       const option = type.enter;
 
@@ -396,7 +396,74 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
     },
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.leave.action === 'scale-lb')
+      if (type.name !== name || type.leave.action !== 'scale-lb')
+        return;
+      const option = type.leave;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, index) => {
+          const delay = option.delay * (type.colors.length - index)
+
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [1, 0],
+              y: [1, 0],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: [0, rect.width / 2],
+              y: [0, -rect.height / 2],
+              ...option,
+              delay,
+            }).finished
+          ];
+        }),
+        flatten(),
+      )
+    },
+  ],
+  // scale-lt
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.enter.action !== 'scale-lt')
+        return;
+      const option = type.enter;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, index) => {
+          mesh.position.x = rect.width / 2;
+          mesh.position.y = rect.height / 2;
+          const delay = option.delay * index;
+
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [0, 1],
+              y: [0, 1],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished
+          ];
+        }),
+        flatten(),
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.leave.action !== 'scale-lt')
         return;
       const option = type.leave;
 
@@ -405,7 +472,147 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
         map.indexed((mesh, index) => {
           const [x, y] = [
             rect.width / 2,
+            rect.height / 2
+          ]
+          const delay = option.delay * (type.colors.length - index)
+
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [1, 0],
+              y: [1, 0],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x, y,
+              ...option,
+              delay,
+            }).finished
+          ];
+        }),
+        flatten(),
+      )
+    },
+  ],
+  // scale-rb
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.enter.action !== 'scale-rb')
+        return;
+      const option = type.enter;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, index) => {
+          mesh.position.x = -rect.width / 2;
+          mesh.position.y = -rect.height / 2;
+          const delay = option.delay * index;
+
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [0, 1],
+              y: [0, 1],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished
+          ];
+        }),
+        flatten(),
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.leave.action !== 'scale-rb')
+        return;
+      const option = type.leave;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, index) => {
+          const [x, y] = [
+            -rect.width / 2,
             -rect.height / 2
+          ]
+          const delay = option.delay * (type.colors.length - index)
+
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [1, 0],
+              y: [1, 0],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x, y,
+              ...option,
+              delay,
+            }).finished
+          ];
+        }),
+        flatten(),
+      )
+    },
+  ],
+  // scale-rt
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.enter.action !== 'scale-rt')
+        return;
+      const option = type.enter;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, index) => {
+          mesh.position.x = -rect.width / 2;
+          mesh.position.y = rect.height / 2;
+          const delay = option.delay * index;
+
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [0, 1],
+              y: [0, 1],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished
+          ];
+        }),
+        flatten(),
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.leave.action !== 'scale-rt')
+        return;
+      const option = type.leave;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, index) => {
+          const [x, y] = [
+            -rect.width / 2,
+            rect.height / 2
           ]
           const delay = option.delay * (type.colors.length - index)
 
