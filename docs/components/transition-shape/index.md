@@ -34,7 +34,7 @@ Motion Graphic 風格的 Transition 元件
 <<< ../../../src/components/transition-shape/examples/transition-param.vue
 :::
 
-### round 轉場
+### Round 轉場
 
 <round-transition />
 

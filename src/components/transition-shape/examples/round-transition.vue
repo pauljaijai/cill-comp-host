@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
+  <div class="flex flex-wrap justify-center gap-4 w-full border border-gray-300 p-6">
     <div
       v-for="item in list"
       :key="item.key"
-      class="w-full"
+      class="w-1/3"
     >
       <transition-shape
         :type="item"
@@ -11,7 +11,7 @@
       >
         <div
           :key="fishIndex"
-          class="text-[10rem] w-full text-center"
+          class="text-[6rem] text-center"
         >
           {{ fishList[fishIndex] }}
         </div>
@@ -22,14 +22,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { debounce } from 'lodash-es';
+import { map, pipe, reverse, shuffle } from 'remeda';
 
 import TransitionShape, {
-  TransitionType
+  TransitionType, RoundAction
 } from '../transition-shape.vue';
 
 import { useIntervalFn } from '@vueuse/core';
-import { nanoid } from 'nanoid';
-import { debounce } from 'lodash-es';
 
 const fishIndex = ref(0);
 const fishList = [
@@ -46,45 +46,38 @@ const startInterval = debounce(() => {
   useIntervalFn(() => {
     changeFish();
   }, 4000);
-}, 500);
+}, 1000);
+
+const actions = Object.values(RoundAction);
+const reverseActions = pipe(actions, reverse());
 
 type Item = TransitionType & {
   key: string;
 }
-const list: Item[] = [
-  {
-    key: nanoid(),
-    name: 'round',
-    enter: {
-      action: 'scale',
-      duration: 1000,
-      delay: 100,
-      easing: 'easeInOutExpo',
-    },
-    leave: {
-      action: 'scale',
-      duration: 1000,
-      delay: 100,
-      easing: 'easeInOutExpo',
-    },
-    colors: ['#BDF2ED', '#B39689', '#F2CEBD', '#6C9D98'],
-  },
-  {
-    key: nanoid(),
-    name: 'round',
-    enter: {
-      action: 'scale-lb',
-      duration: 1000,
-      delay: 200,
-      easing: 'easeInOutExpo',
-    },
-    leave: {
-      action: 'scale-lb',
-      duration: 1000,
-      delay: 200,
-      easing: 'easeInOutExpo',
-    },
-    colors: ['#BDE6F2', '#BDF2DB', '#F2CEBD'],
-  },
-]
+const list: Item[] = pipe(
+  actions,
+  map.indexed((action, i) => {
+    const targetAction = reverseActions[i] ?? action;
+
+    const result: Item = {
+      key: action,
+      name: 'round',
+      enter: {
+        action,
+        duration: 1000,
+        delay: 200,
+        easing: 'easeInOutExpo',
+      },
+      leave: {
+        action: targetAction,
+        duration: 1000,
+        delay: 200,
+        easing: 'easeInOutExpo',
+      },
+      colors: shuffle(['#BDF2ED', '#F2CEBD', '#B39689']),
+    }
+
+    return result;
+  }),
+);
 </script>
