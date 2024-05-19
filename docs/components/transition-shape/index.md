@@ -11,13 +11,26 @@ import FenceTransition from '../../../src/components/transition-shape/examples/f
 
 # 多邊形轉場
 
-Motion Graphic 風格的 Transition 元件
+Motion Graphic 風格的 Transition 元件。
+
+甚麼是 Motion Graphic 過場效果？可以看看這個影片：
+
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/jlR2J_Ztl4Y?si=MxcKRt7FjFnM4vvR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+Motion Graphic 過場在影片製作其實很常見，不過網頁中就沒那麼常見了。
+
+所以我就嘗試把效果搬上網頁了！ˋ( ° ▽、° )
+
+雖然目前稍微有一點點瑕疵，不過基本功能與效果都已經實現，剩下的改天再來慢慢改進吧。(。・∀・)ノ
 
 ## 使用範例
 
 ### 基本用法
 
-基於 Vue 內建的 Transition 元件。
+基於 Vue 內建的 Transition 元件，不過目前連續切換會壞掉，請先手下留情。
+（〃｀ 3′〃）
+
+即使新舊元素尺寸不同也可以用呦！ˋ( ° ▽、° )
 
 <basic-usage/>
 
@@ -37,6 +50,8 @@ Motion Graphic 風格的 Transition 元件
 
 ### Round 轉場
 
+要等一下下才會開始轉場。(´・ω・`)
+
 <round-transition />
 
 ::: details 查看範例原始碼
@@ -44,6 +59,8 @@ Motion Graphic 風格的 Transition 元件
 :::
 
 ### Fence 轉場
+
+稍等一丟丟，轉場馬上開始。(๑•̀ㅂ•́)و✧
 
 <fence-transition />
 
