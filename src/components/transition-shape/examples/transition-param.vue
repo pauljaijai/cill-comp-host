@@ -169,13 +169,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
+import { ref, computed } from 'vue';
 import anime from 'animejs';
 
 import TransitionShape, {
-  RectAction,
+  RectAction, TransitionType,
 } from '../transition-shape.vue';
-import { TransitionType } from '../type';
 
 const fishIndex = ref(0);
 const fishList = [

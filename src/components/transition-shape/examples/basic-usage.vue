@@ -34,8 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { pipe, sample } from 'remeda';
+import { ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
 import TransitionShape from '../transition-shape.vue';

@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-export { RectAction } from './type';
+export * from './type';
 </script>
 
 <script setup lang="ts">
