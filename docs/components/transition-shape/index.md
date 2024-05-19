@@ -5,6 +5,7 @@ description: Motion Graphic 風格的 Transition 元件
 <script setup>
 import BasicUsage from '../../../src/components/transition-shape/examples/basic-usage.vue'
 import TransitionParam from '../../../src/components/transition-shape/examples/transition-param.vue'
+import RoundTransition from '../../../src/components/transition-shape/examples/round-transition.vue'
 </script>
 
 # 多邊形轉場
@@ -31,6 +32,14 @@ Motion Graphic 風格的 Transition 元件
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-shape/examples/transition-param.vue
+:::
+
+### round 轉場
+
+<round-transition />
+
+::: details 查看範例原始碼
+<<< ../../../src/components/transition-shape/examples/round-transition.vue
 :::
 
 ## 原理
