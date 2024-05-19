@@ -12,7 +12,7 @@ type AnimeProvider = (param: Param) => Promise<void>[] | undefined;
 
 /** rect [enter, leave] */
 const rectProviders: [AnimeProvider, AnimeProvider][] = [
-  // rect slide-right
+  // slide-right
   [
     ({ rect, type, meshes }) => {
       const option = type.enter;
@@ -55,7 +55,7 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
-  // rect slide-left
+  // slide-left
   [
     ({ rect, type, meshes }) => {
       const option = type.enter;
@@ -98,7 +98,7 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
-  // rect slide-up
+  // slide-up
   [
     ({ rect, type, meshes }) => {
       const option = type.enter;
@@ -141,7 +141,7 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
-  // rect slide-down
+  // slide-down
   [
     ({ rect, type, meshes }) => {
       const option = type.enter;
@@ -184,7 +184,7 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
-  // rect scale
+  // scale
   [
     ({ type, meshes }) => {
       const option = type.enter;
@@ -227,7 +227,7 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
-  // rect scale-x
+  // scale-x
   [
     ({ type, meshes }) => {
       const option = type.enter;
@@ -269,7 +269,7 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
-  // rect scale-y
+  // scale-y
   [
     ({ type, meshes }) => {
       const option = type.enter;
@@ -314,13 +314,62 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
   ],
 ]
 
+/** round [enter, leave] */
+const roundProviders: [AnimeProvider, AnimeProvider][] = [
+  // scale
+  [
+    ({ type, meshes }) => {
+      const option = type.enter;
+      if (type.name !== 'round' || option.action !== 'scale')
+        return;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'round'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
+
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1],
+            y: [0, 1],
+            ...option,
+            delay: option.delay * index,
+          }).finished;
+        })
+      )
+    },
+    ({ type, meshes }) => {
+      const option = type.leave;
+      if (type.name !== 'round' || option.action !== 'scale')
+        return;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'round'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
+
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 0],
+            y: [1, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished;
+        })
+      )
+    },
+  ],
+]
+
+const list = [
+  ...rectProviders,
+  ...roundProviders,
+]
 export const animeEnterProviders: AnimeProvider[] = pipe(
-  rectProviders,
+  list,
   map(([enter]) => enter),
 );
-
-// leave providers
 export const animeLeaveProviders: AnimeProvider[] = pipe(
-  rectProviders,
+  list,
   map(([, leave]) => leave),
 );

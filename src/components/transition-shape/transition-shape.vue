@@ -1,6 +1,6 @@
 <template>
   <transition
-    :appear="props.appear"
+    appear
     :css="false"
     @before-enter="handleBeforeEnter"
     @enter="handleEnter"
@@ -37,12 +37,12 @@ import { useElementBounding } from '@vueuse/core';
 
 // #region Props
 interface Props {
-  appear?: boolean;
-  type: TransitionType;
+  // appear?: boolean;
+  type?: TransitionType;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  appear: false,
+  // appear: false,
   type: () => ({
     name: 'rect',
     enter: {
