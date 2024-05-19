@@ -15,9 +15,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
   // slide-right
   [
     ({ rect, type, meshes }) => {
-      const option = type.enter;
-      if (type.name !== 'rect' || option.action !== 'slide-right')
+      if (type.name !== 'rect' || type.enter.action !== 'slide-right')
         return;
+      const option = type.enter;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -35,9 +35,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
     ({ rect, type, meshes }) => {
-      const option = type.leave;
-      if (type.name !== 'rect' || option.action !== 'slide-right')
+      if (type.name !== 'rect' || type.leave.action !== 'slide-right')
         return;
+      const option = type.leave;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -58,9 +58,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
   // slide-left
   [
     ({ rect, type, meshes }) => {
-      const option = type.enter;
-      if (type.name !== 'rect' || option.action !== 'slide-left')
+      if (type.name !== 'rect' || type.enter.action !== 'slide-left')
         return;
+      const option = type.enter;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -78,9 +78,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
     ({ rect, type, meshes }) => {
-      const option = type.leave;
-      if (type.name !== 'rect' || option.action !== 'slide-left')
+      if (type.name !== 'rect' || type.leave.action !== 'slide-left')
         return;
+      const option = type.leave;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -101,9 +101,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
   // slide-up
   [
     ({ rect, type, meshes }) => {
-      const option = type.enter;
-      if (type.name !== 'rect' || option.action !== 'slide-up')
+      if (type.name !== 'rect' || type.enter.action !== 'slide-up')
         return;
+      const option = type.enter;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -121,9 +121,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
     ({ rect, type, meshes }) => {
-      const option = type.leave;
-      if (type.name !== 'rect' || option.action !== 'slide-up')
+      if (type.name !== 'rect' || type.leave.action !== 'slide-up')
         return;
+      const option = type.leave;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -144,9 +144,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
   // slide-down
   [
     ({ rect, type, meshes }) => {
-      const option = type.enter;
-      if (type.name !== 'rect' || option.action !== 'slide-down')
+      if (type.name !== 'rect' || type.enter.action !== 'slide-down')
         return;
+      const option = type.enter;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -164,9 +164,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
     ({ rect, type, meshes }) => {
-      const option = type.leave;
-      if (type.name !== 'rect' || option.action !== 'slide-down')
+      if (type.name !== 'rect' || type.leave.action !== 'slide-down')
         return;
+      const option = type.leave;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -187,9 +187,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
   // scale
   [
     ({ type, meshes }) => {
-      const option = type.enter;
-      if (type.name !== 'rect' || option.action !== 'scale')
+      if (type.name !== 'rect' || type.enter.action !== 'scale')
         return;
+      const option = type.enter;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -230,9 +230,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
   // scale-x
   [
     ({ type, meshes }) => {
-      const option = type.enter;
-      if (type.name !== 'rect' || option.action !== 'scale-x')
+      if (type.name !== 'rect' || type.enter.action !== 'scale-x')
         return;
+      const option = type.enter;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -250,9 +250,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
     ({ type, meshes }) => {
-      const option = type.leave;
-      if (type.name !== 'rect' || option.action !== 'scale-x')
+      if (type.name !== 'rect' || type.leave.action !== 'scale-x')
         return;
+      const option = type.leave;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -272,9 +272,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
   // scale-y
   [
     ({ type, meshes }) => {
-      const option = type.enter;
-      if (type.name !== 'rect' || option.action !== 'scale-y')
+      if (type.name !== 'rect' || type.enter.action !== 'scale-y')
         return;
+      const option = type.enter;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -292,9 +292,9 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
     ({ type, meshes }) => {
-      const option = type.leave;
-      if (type.name !== 'rect' || option.action !== 'scale-y')
+      if (type.name !== 'rect' || type.leave.action !== 'scale-y')
         return;
+      const option = type.leave;
 
       return pipe(meshes,
         filter((item) => item.name === 'rect'),
@@ -319,9 +319,52 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
   // scale
   [
     ({ type, meshes }) => {
-      const option = type.enter;
-      if (type.name !== 'round' || option.action !== 'scale')
+      if (type.name !== 'round' || type.enter.action === 'scale')
         return;
+      const option = type.enter;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'round'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
+
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1],
+            y: [0, 1],
+            ...option,
+            delay: option.delay * index,
+          }).finished;
+        })
+      )
+    },
+    ({ type, meshes }) => {
+      if (type.name !== 'round' || type.leave.action === 'scale')
+        return;
+      const option = type.leave;
+
+      return pipe(meshes,
+        filter((item) => item.name === 'round'),
+        map.indexed((mesh, index) => {
+          mesh.position.setAll(0);
+
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 0],
+            y: [1, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished;
+        })
+      )
+    },
+  ],
+  // scale
+  [
+    ({ type, meshes }) => {
+      if (type.name !== 'round' || type.enter.action === 'slide-lb')
+        return;
+      const option = type.enter;
 
       return pipe(meshes,
         filter((item) => item.name === 'round'),

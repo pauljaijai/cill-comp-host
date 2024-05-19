@@ -40,14 +40,14 @@ export enum RoundAction {
 interface TransitionRound {
   name: 'round';
   enter: {
-    action: `${RectAction}`,
+    action: `${RoundAction}`,
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
   leave: {
-    action: `${RectAction}`,
+    action: `${RoundAction}`,
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
