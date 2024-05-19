@@ -6,7 +6,7 @@
     <div
       v-for="item in list"
       :key="item.key"
-      class="w-1/3"
+      class="w-full"
     >
       <transition-shape
         :type="item"
@@ -14,7 +14,7 @@
       >
         <div
           :key="fishIndex"
-          class="text-[6rem] text-center"
+          class="py-6 text-[4rem] text-center w-full"
         >
           {{ fishList[fishIndex] }}
         </div>
@@ -29,7 +29,7 @@ import { debounce } from 'lodash-es';
 import { hasAtLeast, map, pipe, reverse, shuffle } from 'remeda';
 
 import TransitionShape, {
-  TransitionType, RoundAction
+  TransitionType, RoundEnterAction, RoundBaseAction
 } from '../transition-shape.vue';
 
 import { useIntersectionObserver, useIntervalFn } from '@vueuse/core';
@@ -64,16 +64,22 @@ const startInterval = debounce(() => {
   )
 }, 1000);
 
-const actions = Object.values(RoundAction);
-const reverseActions = pipe(actions, reverse());
+const leaveActions = Object.values(RoundBaseAction);
+const enterActions = [
+  ...Object.values(RoundEnterAction),
+  ...leaveActions,
+];
 
 type Item = TransitionType & {
   key: string;
 }
 const list: Item[] = pipe(
-  actions,
+  enterActions,
   map.indexed((action, i) => {
-    const targetAction = reverseActions[i] ?? action;
+    const leaveAction = leaveActions[i % leaveActions.length];
+    if (!leaveAction) {
+      throw new Error('Leave action is required');
+    }
 
     const colors = shuffle(['#BDF2ED', '#F2CEBD', '#B39689']);
     if (!hasAtLeast(colors, 1)) {
@@ -90,7 +96,7 @@ const list: Item[] = pipe(
         easing: 'easeInOutExpo',
       },
       leave: {
-        action: targetAction,
+        action: leaveAction,
         duration: 1000,
         delay: 200,
         easing: 'easeInOutExpo',
@@ -101,6 +107,7 @@ const list: Item[] = pipe(
     return result;
   }),
 );
+console.log("🚀 ~ list:", list)
 
 
 </script>

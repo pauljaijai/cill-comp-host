@@ -115,7 +115,7 @@ const meshProviders: MeshProvider[] = [
 
       const mesh = MeshBuilder.CreateDisc(`round`, {
         radius,
-        tessellation: 32,
+        tessellation: 48,
       }, scene);
       mesh.position = new Vector3(0, 0, 0);
       mesh.rotation = new Vector3(Math.PI, 0, 0);

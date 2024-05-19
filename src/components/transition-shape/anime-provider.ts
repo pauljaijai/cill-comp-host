@@ -1,7 +1,7 @@
 import { Mesh } from "@babylonjs/core";
 import { TransitionType } from "./type";
 import anime from "animejs";
-import { filter, flatten, map, pipe } from "remeda";
+import { filter, flatten, isTruthy, map, pipe } from "remeda";
 
 interface Param {
   rect: DOMRect;
@@ -9,9 +9,12 @@ interface Param {
   meshes: Mesh[];
 }
 type AnimeProvider = (param: Param) => Promise<void>[] | undefined;
+type Providers = (
+  [AnimeProvider, AnimeProvider] | [AnimeProvider]
+)[]
 
 /** rect [enter, leave] */
-const rectProviders: [AnimeProvider, AnimeProvider][] = [
+const rectProviders: Providers = [
   // slide-right
   [
     ({ rect, type, meshes }) => {
@@ -314,7 +317,7 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
   ],
 ]
 /** round [enter, leave] */
-const roundProviders: [AnimeProvider, AnimeProvider][] = [
+const roundProviders: Providers = [
   // scale
   [
     ({ type, meshes }) => {
@@ -349,8 +352,8 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
 
           return anime({
             targets: mesh.scaling,
-            x: [1, 0],
-            y: [1, 0],
+            x: 0,
+            y: 0,
             ...option,
             delay: option.delay * (type.colors.length - index),
           }).finished;
@@ -407,15 +410,15 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
           return [
             anime({
               targets: mesh.scaling,
-              x: [1, 0],
-              y: [1, 0],
+              x: 0,
+              y: 0,
               ...option,
               delay,
             }).finished,
             anime({
               targets: mesh.position,
-              x: [0, rect.width / 2],
-              y: [0, -rect.height / 2],
+              x: rect.width / 2,
+              y: -rect.height / 2,
               ...option,
               delay,
             }).finished
@@ -478,8 +481,8 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
           return [
             anime({
               targets: mesh.scaling,
-              x: [1, 0],
-              y: [1, 0],
+              x: 0,
+              y: 0,
               ...option,
               delay,
             }).finished,
@@ -548,8 +551,8 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
           return [
             anime({
               targets: mesh.scaling,
-              x: [1, 0],
-              y: [1, 0],
+              x: 0,
+              y: 0,
               ...option,
               delay,
             }).finished,
@@ -618,8 +621,8 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
           return [
             anime({
               targets: mesh.scaling,
-              x: [1, 0],
-              y: [1, 0],
+              x: 0,
+              y: 0,
               ...option,
               delay,
             }).finished,
@@ -635,9 +638,76 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
+
+  // spread-left
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.enter.action !== 'spread-left')
+        return;
+      const option = type.enter;
+
+      /** 外接圓直徑 */
+      const diameter = Math.sqrt(
+        rect.width ** 2 + rect.height ** 2
+      );
+
+      const offset = diameter / type.colors.length;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          mesh.scaling.setAll(1);
+          mesh.position.y = 0;
+
+          const delay = option.delay * i;
+
+          return anime({
+            targets: mesh.position,
+            x: [-diameter, -i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
+    },
+  ],
+  // spread-right
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.enter.action !== 'spread-right')
+        return;
+      const option = type.enter;
+
+      /** 外接圓直徑 */
+      const diameter = Math.sqrt(
+        rect.width ** 2 + rect.height ** 2
+      );
+
+      const offset = diameter / type.colors.length;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          mesh.scaling.setAll(1);
+          mesh.position.y = 0;
+
+          const delay = option.delay * i;
+
+          return anime({
+            targets: mesh.position,
+            x: [diameter, i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
+    },
+  ],
 ]
 /** fence [enter, leave] */
-const fenceProviders: [AnimeProvider, AnimeProvider][] = [
+const fenceProviders: Providers = [
   // spread-left
   [
     ({ rect, type, meshes }) => {
@@ -852,8 +922,11 @@ const list = [
   ...fenceProviders,
 ]
 export const animeEnterProviders: AnimeProvider[] = pipe(
-  list, map(([enter]) => enter),
+  list,
+  map(([enter]) => enter),
 );
 export const animeLeaveProviders: AnimeProvider[] = pipe(
-  list, map(([, leave]) => leave),
+  list,
+  map(([, leave]) => leave),
+  filter(isTruthy),
 );

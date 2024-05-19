@@ -29,25 +29,28 @@ interface TransitionRect {
   colors: [string, ...string[]];
 }
 
-export enum RoundAction {
+export enum RoundEnterAction {
+  SPREAD_LEFT = 'spread-left',
+  SPREAD_RIGHT = 'spread-right',
+}
+export enum RoundBaseAction {
   SCALE_LT = 'scale-lt',
   SCALE_LB = 'scale-lb',
   SCALE_RT = 'scale-rt',
   SCALE_RB = 'scale-rb',
   SCALE = 'scale',
-
 }
 interface TransitionRound {
   name: 'round';
   enter: {
-    action: `${RoundAction}`,
+    action: `${RoundBaseAction}` | `${RoundEnterAction}`,
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
   leave: {
-    action: `${RoundAction}`,
+    action: `${RoundBaseAction}`,
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
