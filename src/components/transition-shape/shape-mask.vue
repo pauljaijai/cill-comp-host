@@ -15,6 +15,7 @@ import { computed, ref, watch } from 'vue';
 import { until } from '@vueuse/core';
 import { TransitionType } from './type';
 import { animeEnterProviders, animeLeaveProviders } from './anime-provider';
+import { pipe, range, map } from 'remeda';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
 
@@ -118,6 +119,33 @@ const meshProviders: MeshProvider[] = [
       }, scene);
       mesh.position = new Vector3(0, 0, 0);
       mesh.rotation = new Vector3(Math.PI, 0, 0);
+
+      mesh.material = material;
+
+      return mesh;
+    });
+  },
+  // fence
+  ({ scene, type, width, height }) => {
+    if (type.name !== 'fence') return;
+
+    const eachWidth = width / type.colors.length;
+
+    const xList = pipe(
+      range(0, type.colors.length),
+      map((i) => i * eachWidth - width / 2 + eachWidth / 2),
+    );
+
+    return type.colors.map((color, i) => {
+      const material = new StandardMaterial(`material-${i}`, scene);
+      material.diffuseColor = Color3.FromHexString(color);
+
+      const mesh = MeshBuilder.CreateBox(`fence`, {
+        width: eachWidth,
+        height,
+        depth: 0,
+      }, scene);
+      mesh.position = new Vector3(xList[i], 0, 0);
 
       mesh.material = material;
 

@@ -636,10 +636,139 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
     },
   ],
 ]
+/** fence [enter, leave] */
+const fenceProviders: [AnimeProvider, AnimeProvider][] = [
+  // spread-left
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'fence';
+      if (type.name !== name || type.enter.action !== 'spread-left')
+        return;
+      const option = type.enter;
+
+      const { width } = rect;
+      const eachWidth = width / type.colors.length;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          mesh.position.y = 0;
+          mesh.scaling.setAll(1);
+
+          const x = [
+            i * eachWidth - width / 2 + eachWidth / 2,
+            -width / 2 + eachWidth / 2,
+          ];
+
+          return anime({
+            targets: mesh.position,
+            x,
+            ...option,
+            delay: option.delay * i,
+          }).finished;
+        })
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const name = 'fence';
+      if (type.name !== name || type.leave.action !== 'spread-left')
+        return;
+      const option = type.leave;
+
+      const { width } = rect;
+      const eachWidth = width / type.colors.length;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          mesh.position.y = 0;
+          mesh.scaling.setAll(1);
+
+          const x = [
+            -width / 2 + eachWidth / 2,
+            i * eachWidth - width / 2 + eachWidth / 2,
+          ];
+
+          return anime({
+            targets: mesh.position,
+            x,
+            ...option,
+            delay: option.delay * (type.colors.length - i),
+          }).finished;
+        })
+      )
+    },
+  ],
+  // spread-right
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'fence';
+      if (type.name !== name || type.enter.action !== 'spread-right')
+        return;
+      const option = type.enter;
+
+      const { width } = rect;
+      const eachWidth = width / type.colors.length;
+      const oriX = width / 2 + eachWidth / 2;
+      console.log("🚀 ~ oriX:", oriX)
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          mesh.position.y = 0;
+          mesh.scaling.setAll(1);
+
+          const x = [
+            i * eachWidth - width / 2 + eachWidth / 2,
+            -oriX,
+          ];
+
+          return anime({
+            targets: mesh.position,
+            x,
+            ...option,
+            delay: option.delay * i,
+          }).finished;
+        })
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const name = 'fence';
+      if (type.name !== name || type.leave.action !== 'spread-right')
+        return;
+      const option = type.leave;
+
+      const { width } = rect;
+      const eachWidth = width / type.colors.length;
+      const oriX = width / 2 + eachWidth / 2;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          mesh.position.y = 0;
+          mesh.scaling.setAll(1);
+
+          const x = [
+            -oriX,
+            i * eachWidth - width / 2 + eachWidth / 2,
+          ];
+
+          return anime({
+            targets: mesh.position,
+            x,
+            ...option,
+            delay: option.delay * (type.colors.length - i),
+          }).finished;
+        })
+      )
+    },
+  ],
+]
 
 const list = [
   ...rectProviders,
   ...roundProviders,
+  ...fenceProviders,
 ]
 export const animeEnterProviders: AnimeProvider[] = pipe(
   list, map(([enter]) => enter),

@@ -64,14 +64,14 @@ export enum FenceAction {
 interface TransitionFence {
   name: 'fence';
   enter: {
-    action: `${RoundAction}`,
+    action: `${FenceAction}`,
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
   leave: {
-    action: `${RoundAction}`,
+    action: `${FenceAction}`,
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
