@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-wrap justify-center gap-4 w-full border border-gray-300 p-6">
+  <div
+    ref="boxRef"
+    class="flex flex-wrap justify-center gap-4 w-full border border-gray-300 p-6"
+  >
     <div
       v-for="item in list"
       :key="item.key"
@@ -21,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { debounce } from 'lodash-es';
 import { map, pipe, reverse, shuffle } from 'remeda';
 
@@ -29,7 +32,7 @@ import TransitionShape, {
   TransitionType, RoundAction
 } from '../transition-shape.vue';
 
-import { useIntervalFn } from '@vueuse/core';
+import { useIntersectionObserver, useIntervalFn } from '@vueuse/core';
 
 const fishIndex = ref(0);
 const fishList = [
@@ -41,10 +44,24 @@ function changeFish() {
   fishIndex.value %= fishList.length;
 }
 
+const { pause, resume } = useIntervalFn(() => {
+  changeFish();
+}, 4000);
+pause()
+
+const boxRef = ref();
+
 const startInterval = debounce(() => {
-  useIntervalFn(() => {
-    changeFish();
-  }, 4000);
+  useIntersectionObserver(
+    boxRef,
+    ([item]) => {
+      if (item?.isIntersecting) {
+        resume();
+      } else {
+        pause();
+      }
+    },
+  )
 }, 1000);
 
 const actions = Object.values(RoundAction);
@@ -79,4 +96,6 @@ const list: Item[] = pipe(
     return result;
   }),
 );
+
+
 </script>
