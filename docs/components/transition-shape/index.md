@@ -44,7 +44,14 @@ Motion Graphic 風格的 Transition 元件
 
 ## 原理
 
-基於 Vue 內建的 Transition 元件，使用 babylon.js 產生，透過 Transition Event 來控制動畫的開始與結束。
+基於 Vue 內建的 Transition 元件，使用 babylon.js 產生形狀遮罩，接著透過 Transition Event 控制動畫的開始與結束。
+
+可以處理以下情境：
+
+- v-if 條件渲染
+- 變更元素 key
+
+暫時不考慮 v-show 的情境。
 
 ## API
 
