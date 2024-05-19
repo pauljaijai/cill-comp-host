@@ -30,10 +30,10 @@ interface TransitionRect {
 }
 
 export enum RoundAction {
-  SLIDE_LT = 'slide-lt',
-  SLIDE_LB = 'slide-lb',
-  SLIDE_RT = 'slide-rt',
-  SLIDE_RB = 'slide-rb',
+  SCALE_LT = 'scale-lt',
+  SCALE_LB = 'scale-lb',
+  SCALE_RT = 'scale-rt',
+  SCALE_RB = 'scale-rb',
   SCALE = 'scale',
   
 }

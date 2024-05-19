@@ -73,13 +73,13 @@ const list: Item[] = [
     key: nanoid(),
     name: 'round',
     enter: {
-      action: 'slide-lb',
+      action: 'scale-lb',
       duration: 1000,
       delay: 200,
       easing: 'easeInOutExpo',
     },
     leave: {
-      action: 'slide-lb',
+      action: 'scale-lb',
       duration: 1000,
       delay: 200,
       easing: 'easeInOutExpo',

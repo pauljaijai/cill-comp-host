@@ -359,24 +359,20 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
-  // slide-lb
+  // scale-lb
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action === 'slide-lb')
+      if (type.name !== name || type.enter.action === 'scale-lb')
         return;
       const option = type.enter;
-
-      /** 外接圓半徑 */
-      const radius = Math.sqrt(rect.width ** 2 + rect.height ** 2) / 2;
-      /** 半徑於 XY 軸投影分量 */
-      const { x, y } = { x: rect.width / 2, y: -rect.height / 2 };
 
       return pipe(meshes,
         filter((item) => item.name === name),
         map.indexed((mesh, index) => {
           mesh.position.x = rect.width / 2;
           mesh.position.y = -rect.height / 2;
+          const delay = option.delay * index;
 
           return [
             anime({
@@ -384,39 +380,52 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
               x: [0, 1],
               y: [0, 1],
               ...option,
-              delay: option.delay * index,
+              delay,
             }).finished,
             anime({
               targets: mesh.position,
               x: 0,
               y: 0,
               ...option,
-              delay: option.delay * index,
+              delay,
             }).finished
           ];
         }),
         flatten(),
       )
     },
-    ({ type, meshes }) => {
+    ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.leave.action === 'slide-lb')
+      if (type.name !== name || type.leave.action === 'scale-lb')
         return;
       const option = type.leave;
 
       return pipe(meshes,
         filter((item) => item.name === name),
         map.indexed((mesh, index) => {
-          mesh.position.setAll(0);
+          const [x, y] = [
+            rect.width / 2,
+            -rect.height / 2
+          ]
+          const delay = option.delay * (type.colors.length - index)
 
-          return anime({
-            targets: mesh.scaling,
-            x: [1, 0],
-            y: [1, 0],
-            ...option,
-            delay: option.delay * (type.colors.length - index),
-          }).finished;
-        })
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [1, 0],
+              y: [1, 0],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x, y,
+              ...option,
+              delay,
+            }).finished
+          ];
+        }),
+        flatten(),
       )
     },
   ],
