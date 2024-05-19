@@ -60,6 +60,7 @@ interface TransitionRound {
 export enum FenceAction {
   SPREAD_RIGHT = 'spread-right',
   SPREAD_LEFT = 'spread-left',
+  SCALE_X = 'scale-x',
   SCALE_Y = 'scale-y',
 }
 interface TransitionFence {
