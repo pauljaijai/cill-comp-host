@@ -105,7 +105,7 @@ const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
 const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   // nextTick 才能同時取得 enterElRef 和 leaveElRef
   await nextTick();
-  console.log(`🚀 ~ handleEnter: `);
+  // console.log(`🚀 ~ handleEnter: `);
 
   if (!(el instanceof HTMLElement)) {
     return done()
@@ -113,7 +113,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
 
   // 如果有 leaveElRef，表示為切換動畫
   if (leaveElRef.value) {
-    el.style.position = 'absolute';
+    el.style.position = 'fixed';
   }
 
   // appear 時，需要等待 mask 初始化完成
@@ -144,7 +144,7 @@ const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
 const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   // nextTick 才能同時取得 enterElRef 和 leaveElRef
   await nextTick();
-  console.log(`🚀 ~ handleLeave: `);
+  // console.log(`🚀 ~ handleLeave: `);
   // console.log(`🚀 ~ enterElRef: `, enterElRef);
   // console.log(`🚀 ~ leaveElRef: `, leaveElRef);
 
@@ -157,7 +157,7 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   el.style.opacity = '0';
   // 如果有 enterElRef，表示為切換動畫
   if (enterElRef.value) {
-    el.style.position = 'absolute';
+    el.style.position = 'fixed';
   }
 
   await maskRef.value?.leave(el);
