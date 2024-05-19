@@ -113,6 +113,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
 
   // 如果有 leaveElRef，表示為切換動畫
   if (leaveElRef.value) {
+    // 將 enterEl 先脫離佔位
     el.style.position = 'fixed';
   }
 
@@ -123,7 +124,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
 
   el.style.opacity = '1';
   if (leaveElRef.value) {
-    el.style.position = '';
+    el.style.position = undefined;
     // 提早移除 leaveEl 以免影響定位
     leaveElRef.value = undefined;
   }
@@ -157,6 +158,7 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   el.style.opacity = '0';
   // 如果有 enterElRef，表示為切換動畫
   if (enterElRef.value) {
+    // 將 leaveEl 脫離佔位
     el.style.position = 'fixed';
   }
 
