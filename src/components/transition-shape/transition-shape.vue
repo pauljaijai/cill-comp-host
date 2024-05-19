@@ -14,7 +14,7 @@
 
   <shape-mask
     ref="maskRef"
-    class=" fixed"
+    class="shape-mask fixed"
     :style="maskStyle"
     :type="props.type"
     :width="enterElBounding.width.value"
@@ -33,7 +33,7 @@ import { TransitionType } from './type';
 
 import ShapeMask from './shape-mask.vue';
 
-import { useElementBounding } from '@vueuse/core';
+import { promiseTimeout, useElementBounding } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -74,6 +74,15 @@ const slots = defineSlots<{
 }>();
 // #endregion Slots
 
+/** 當新舊元素尺寸不同時，會導致 mask 尺寸變化。
+ * 
+ * 為了防止視覺跳動，使用 CSS transition 過渡，所以 canvas 動畫也要有對應延遲。
+ */
+const SIZE_CHANGE_DELAY_SEC = ref(0.2);
+const maskCssTransitionValue = computed(() => {
+  const sec = SIZE_CHANGE_DELAY_SEC.value;
+  return `width ${sec}s ease-in-out, height ${sec}s ease-in-out`
+});
 
 const enterElRef = ref<HTMLElement>();
 const enterElBounding = useElementBounding(enterElRef);
@@ -122,12 +131,16 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
 
   await maskRef.value?.enter(el);
 
-  el.style.opacity = '1';
+  // 如果有 leaveElRef，表示為切換動畫
   if (leaveElRef.value) {
     el.style.position = '';
     // 提早移除 leaveEl 以免影響定位
     leaveElRef.value = undefined;
+
+    // 等待可能的 canvas 尺寸變化，同 .shape-mask 定義的 transition-duration
+    await promiseTimeout(200);
   }
+  el.style.opacity = '1';
 
   await maskRef.value?.leave(el);
 
@@ -170,9 +183,9 @@ const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
   leaveElRef.value = undefined;
 };
 
-
-
 </script>
 
 <style lang="sass">
+.shape-mask
+  transition: v-bind(maskCssTransitionValue) !important
 </style>
