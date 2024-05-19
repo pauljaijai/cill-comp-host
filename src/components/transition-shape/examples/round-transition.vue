@@ -42,7 +42,6 @@ function changeFish() {
 }
 
 const startInterval = debounce(() => {
-  console.log("🚀 ~ startInterval:")
   useIntervalFn(() => {
     changeFish();
   }, 4000);
