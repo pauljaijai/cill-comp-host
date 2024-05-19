@@ -83,11 +83,11 @@ const slots = defineSlots<{
  * 
  * 為了防止視覺跳動，使用 CSS transition 過渡，所以 canvas 動畫也要有對應延遲。
  */
-const SIZE_CHANGE_DELAY_SEC = 0.2;
+const SIZE_CHANGE_DELAY_SEC = 0.3;
 const maskCssTransitionValue = computed(() => {
   return [
-    `width ${SIZE_CHANGE_DELAY_SEC}s ease-in-out`,
-    `height ${SIZE_CHANGE_DELAY_SEC}s ease-in-out`,
+    `width ${SIZE_CHANGE_DELAY_SEC}s cubic-bezier(0.5, 0, 0, 1.2)`,
+    `height ${SIZE_CHANGE_DELAY_SEC}s cubic-bezier(0.5, 0, 0, 1.2)`,
   ].join(', ')
 });
 
