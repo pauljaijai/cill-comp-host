@@ -181,6 +181,7 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
     // 將 leaveEl 脫離佔位
     el.style.position = 'fixed';
 
+    // 同 handleEnter
     await promiseTimeout(SIZE_CHANGE_DELAY_SEC * 1000);
   }
 
