@@ -28,7 +28,10 @@ export * from './type';
 </script>
 
 <script setup lang="ts">
-import { computed, CSSProperties, nextTick, ref, TransitionProps } from 'vue';
+import {
+  computed, CSSProperties,
+  nextTick, ref, TransitionProps
+} from 'vue';
 import { find, pipe } from 'remeda';
 import { TransitionType } from './type';
 
@@ -80,10 +83,12 @@ const slots = defineSlots<{
  * 
  * 為了防止視覺跳動，使用 CSS transition 過渡，所以 canvas 動畫也要有對應延遲。
  */
-const SIZE_CHANGE_DELAY_SEC = ref(0.2);
+const SIZE_CHANGE_DELAY_SEC = 0.2;
 const maskCssTransitionValue = computed(() => {
-  const sec = SIZE_CHANGE_DELAY_SEC.value;
-  return `width ${sec}s ease-in-out, height ${sec}s ease-in-out`
+  return [
+    `width ${SIZE_CHANGE_DELAY_SEC}s ease-in-out`,
+    `height ${SIZE_CHANGE_DELAY_SEC}s ease-in-out`,
+  ].join(', ')
 });
 
 const enterElRef = ref<HTMLElement>();
@@ -140,7 +145,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
     leaveElRef.value = undefined;
 
     // 等待可能的 canvas 尺寸變化，同 .shape-mask 定義的 transition-duration
-    await promiseTimeout(200);
+    await promiseTimeout(SIZE_CHANGE_DELAY_SEC * 1000);
   }
   el.style.opacity = '1';
 
@@ -175,6 +180,8 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   if (enterElRef.value) {
     // 將 leaveEl 脫離佔位
     el.style.position = 'fixed';
+
+    await promiseTimeout(SIZE_CHANGE_DELAY_SEC * 1000);
   }
 
   await maskRef.value?.leave(el);
