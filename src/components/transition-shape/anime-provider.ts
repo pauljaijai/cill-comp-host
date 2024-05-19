@@ -313,7 +313,6 @@ const rectProviders: [AnimeProvider, AnimeProvider][] = [
     },
   ],
 ]
-
 /** round [enter, leave] */
 const roundProviders: [AnimeProvider, AnimeProvider][] = [
   // scale
@@ -643,10 +642,8 @@ const list = [
   ...roundProviders,
 ]
 export const animeEnterProviders: AnimeProvider[] = pipe(
-  list,
-  map(([enter]) => enter),
+  list, map(([enter]) => enter),
 );
 export const animeLeaveProviders: AnimeProvider[] = pipe(
-  list,
-  map(([, leave]) => leave),
+  list, map(([, leave]) => leave),
 );
