@@ -66,8 +66,9 @@ const startInterval = debounce(() => {
 
 const leaveActions = Object.values(RoundBaseAction);
 const enterActions = [
-  ...Object.values(RoundEnterAction),
-  ...leaveActions,
+  RoundEnterAction.SPREAD_LEFT,
+  RoundBaseAction.SCALE,
+  RoundBaseAction.SCALE_LB,
 ];
 
 type Item = TransitionType & {
@@ -107,7 +108,4 @@ const list: Item[] = pipe(
     return result;
   }),
 );
-console.log("🚀 ~ list:", list)
-
-
 </script>
