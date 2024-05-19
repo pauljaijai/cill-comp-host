@@ -754,6 +754,50 @@ const fenceProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
+  // scale-y
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'fence';
+      if (type.name !== name || type.enter.action !== 'scale-y')
+        return;
+      const option = type.enter;
+
+      const { width } = rect;
+      const eachWidth = width / type.colors.length;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          mesh.position.x = i * eachWidth - width / 2 + eachWidth / 2;
+
+          return anime({
+            targets: mesh.scaling,
+            y: [0, 1],
+            ...option,
+            delay: option.delay * i,
+          }).finished;
+        })
+      )
+    },
+    ({ rect, type, meshes }) => {
+      const name = 'fence';
+      if (type.name !== name || type.leave.action !== 'scale-y')
+        return;
+      const option = type.leave;
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          return anime({
+            targets: mesh.scaling,
+            y: 0,
+            ...option,
+            delay: option.delay * (type.colors.length - i),
+          }).finished;
+        })
+      )
+    },
+  ],
 ]
 
 const list = [
