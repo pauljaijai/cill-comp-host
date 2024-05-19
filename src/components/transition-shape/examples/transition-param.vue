@@ -154,10 +154,7 @@
       </div>
     </div>
 
-    <transition-shape
-      :type="transitionType"
-      appear
-    >
+    <transition-shape :type="transitionType">
       <div
         :key="fishIndex"
         class="text-[10rem] w-full text-center"

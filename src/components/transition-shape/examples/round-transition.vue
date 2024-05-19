@@ -1,17 +1,22 @@
 <template>
   <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
-    <transition-shape
-      v-for="type, i in typeList"
-      :key="i"
-      :type="type"
+    <div
+      v-for="item in list"
+      :key="item.key"
+      class="w-full"
     >
-      <div
-        :key="fishIndex"
-        class="text-[10rem] w-full text-center"
+      <transition-shape
+        :type="item"
+        @init="startInterval()"
       >
-        {{ fishList[fishIndex] }}
-      </div>
-    </transition-shape>
+        <div
+          :key="fishIndex"
+          class="text-[10rem] w-full text-center"
+        >
+          {{ fishList[fishIndex] }}
+        </div>
+      </transition-shape>
+    </div>
   </div>
 </template>
 
@@ -23,6 +28,8 @@ import TransitionShape, {
 } from '../transition-shape.vue';
 
 import { useIntervalFn } from '@vueuse/core';
+import { nanoid } from 'nanoid';
+import { debounce } from 'lodash-es';
 
 const fishIndex = ref(0);
 const fishList = [
@@ -34,12 +41,19 @@ function changeFish() {
   fishIndex.value %= fishList.length;
 }
 
-useIntervalFn(() => {
-  changeFish();
-}, 3000);
+const startInterval = debounce(() => {
+  console.log("🚀 ~ startInterval:")
+  useIntervalFn(() => {
+    changeFish();
+  }, 4000);
+}, 500);
 
-const typeList: TransitionType[] = [
+type Item = TransitionType & {
+  key: string;
+}
+const list: Item[] = [
   {
+    key: nanoid(),
     name: 'round',
     enter: {
       action: 'scale',
@@ -53,7 +67,24 @@ const typeList: TransitionType[] = [
       delay: 100,
       easing: 'easeInOutExpo',
     },
-    colors: ['#FF0000', '#00FF00', '#0000FF'],
+    colors: ['#BDF2ED', '#B39689', '#F2CEBD', '#6C9D98'],
+  },
+  {
+    key: nanoid(),
+    name: 'round',
+    enter: {
+      action: 'slide-lb',
+      duration: 1000,
+      delay: 200,
+      easing: 'easeInOutExpo',
+    },
+    leave: {
+      action: 'slide-lb',
+      duration: 1000,
+      delay: 200,
+      easing: 'easeInOutExpo',
+    },
+    colors: ['#BDE6F2', '#BDF2DB', '#F2CEBD'],
   },
 ]
 </script>

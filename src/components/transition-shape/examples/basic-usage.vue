@@ -6,7 +6,7 @@
       class=" border p-4 rounded w-full"
     />
 
-    <transition-shape appear>
+    <transition-shape>
       <div
         v-if="state"
         class="text-xl"
@@ -22,7 +22,7 @@
       換魚
     </div>
 
-    <transition-shape appear>
+    <transition-shape>
       <div
         :key="fishIndex"
         class="text-[6rem]"

@@ -19,6 +19,7 @@
     :type="props.type"
     :width="enterElBounding.width.value"
     :height="enterElBounding.height.value"
+    @init="() => emit('init')"
   />
 </template>
 
@@ -63,8 +64,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 // #region Emits
 const emit = defineEmits<{
-  (e: 'before-transition'): void;
-  (e: 'after-transition'): void;
+  (e: 'init'): void;
+  // (e: 'before-transition'): void;
+  // (e: 'after-transition'): void;
 }>();
 // #endregion Emits
 

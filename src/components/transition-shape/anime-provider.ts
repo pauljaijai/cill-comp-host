@@ -1,7 +1,7 @@
 import { Mesh } from "@babylonjs/core";
 import { TransitionType } from "./type";
 import anime from "animejs";
-import { filter, map, pipe } from "remeda";
+import { filter, flatten, map, pipe } from "remeda";
 
 interface Param {
   rect: DOMRect;
@@ -359,35 +359,53 @@ const roundProviders: [AnimeProvider, AnimeProvider][] = [
       )
     },
   ],
-  // scale
+  // slide-lb
   [
-    ({ type, meshes }) => {
-      if (type.name !== 'round' || type.enter.action === 'slide-lb')
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.enter.action === 'slide-lb')
         return;
       const option = type.enter;
 
-      return pipe(meshes,
-        filter((item) => item.name === 'round'),
-        map.indexed((mesh, index) => {
-          mesh.position.setAll(0);
+      /** 外接圓半徑 */
+      const radius = Math.sqrt(rect.width ** 2 + rect.height ** 2) / 2;
+      /** 半徑於 XY 軸投影分量 */
+      const { x, y } = { x: rect.width / 2, y: -rect.height / 2 };
 
-          return anime({
-            targets: mesh.scaling,
-            x: [0, 1],
-            y: [0, 1],
-            ...option,
-            delay: option.delay * index,
-          }).finished;
-        })
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, index) => {
+          mesh.position.x = rect.width / 2;
+          mesh.position.y = -rect.height / 2;
+
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [0, 1],
+              y: [0, 1],
+              ...option,
+              delay: option.delay * index,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: 0,
+              y: 0,
+              ...option,
+              delay: option.delay * index,
+            }).finished
+          ];
+        }),
+        flatten(),
       )
     },
     ({ type, meshes }) => {
-      const option = type.leave;
-      if (type.name !== 'round' || option.action !== 'scale')
+      const name = 'round'
+      if (type.name !== name || type.leave.action === 'slide-lb')
         return;
+      const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === 'round'),
+        filter((item) => item.name === name),
         map.indexed((mesh, index) => {
           mesh.position.setAll(0);
 
