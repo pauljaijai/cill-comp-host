@@ -14,11 +14,9 @@ import {
 import { computed, ref, watch } from 'vue';
 import { until } from '@vueuse/core';
 import { TransitionType } from './type';
-
-import { useBabylonScene } from '../../composables/use-babylon-scene';
 import { animeEnterProviders, animeLeaveProviders } from './anime-provider';
 
-
+import { useBabylonScene } from '../../composables/use-babylon-scene';
 
 // #region Props
 interface Props {
@@ -39,7 +37,7 @@ const emit = defineEmits<{
 // #endregion Emits
 
 const initFinished = ref(false);
-const { canvasRef, scene } = useBabylonScene({
+const { canvasRef } = useBabylonScene({
   createCamera(scene) {
     const camera = new ArcRotateCamera(
       'camera',

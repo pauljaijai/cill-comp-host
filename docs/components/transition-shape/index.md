@@ -6,6 +6,7 @@ description: Motion Graphic 風格的 Transition 元件
 import BasicUsage from '../../../src/components/transition-shape/examples/basic-usage.vue'
 import TransitionParam from '../../../src/components/transition-shape/examples/transition-param.vue'
 import RoundTransition from '../../../src/components/transition-shape/examples/round-transition.vue'
+import FenceTransition from '../../../src/components/transition-shape/examples/fence-transition.vue'
 </script>
 
 # 多邊形轉場
@@ -40,6 +41,14 @@ Motion Graphic 風格的 Transition 元件
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-shape/examples/round-transition.vue
+:::
+
+### Fence 轉場
+
+<fence-transition />
+
+::: details 查看範例原始碼
+<<< ../../../src/components/transition-shape/examples/fence-transition.vue
 :::
 
 ## 原理

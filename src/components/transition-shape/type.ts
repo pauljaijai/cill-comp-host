@@ -57,5 +57,31 @@ interface TransitionRound {
   colors: [string, ...string[]];
 }
 
-/** name 初始化後不可變更，其餘參數皆可調整 */
-export type TransitionType = TransitionRect | TransitionRound;
+export enum FenceAction {
+  SPREAD_RIGHT = 'spread-right',
+  SPREAD_LEFT = 'spread-left',
+}
+interface TransitionFence {
+  name: 'fence';
+  enter: {
+    action: `${RoundAction}`,
+    duration: number;
+    /** 每個 shape 延遲間距  */
+    delay: number;
+    easing: EasingOptions;
+  };
+  leave: {
+    action: `${RoundAction}`,
+    duration: number;
+    /** 每個 shape 延遲間距  */
+    delay: number;
+    easing: EasingOptions;
+  };
+  /** HEX 格式。顏色數量等同 shape 數量，至少需要一個 */
+  colors: [string, ...string[]];
+}
+
+/** 初始化後 name 變更會被忽略，其餘參數皆可動態調整 */
+export type TransitionType = TransitionRect
+  | TransitionRound
+  | TransitionFence
