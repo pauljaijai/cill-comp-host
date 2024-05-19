@@ -124,7 +124,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
 
   el.style.opacity = '1';
   if (leaveElRef.value) {
-    el.style.position = undefined;
+    el.style.position = '';
     // 提早移除 leaveEl 以免影響定位
     leaveElRef.value = undefined;
   }
