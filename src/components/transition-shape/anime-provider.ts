@@ -3,6 +3,23 @@ import { TransitionType } from "./type";
 import anime from "animejs";
 import { filter, flatten, isTruthy, map, pipe } from "remeda";
 
+export function isTypeName<
+  Data extends TransitionType,
+  Name extends Data['name'],
+>(data: Data, name: Name): data is Extract<
+  Data, { name: Name; }
+> {
+  return data.name === name
+}
+export function isEnterAction<
+  Data extends TransitionType['enter'],
+  Action extends Data['action'],
+>(data: Data, action: Action): data is Extract<
+  Data, { action: Action; }
+> {
+  return data.action === action
+}
+
 interface Param {
   rect: DOMRect;
   type: TransitionType;
