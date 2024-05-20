@@ -7,7 +7,7 @@
     >
       <transition-shape
         :type="item"
-        @init="toggleReady(true)"
+        @init="handleInit()"
       >
         <div
           :key="fishIndex"
@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { throttle } from 'lodash-es';
+import { debounce, throttle } from 'lodash-es';
 import { hasAtLeast, map, pipe, shuffle } from 'remeda';
 
 import TransitionShape, {
@@ -44,6 +44,10 @@ function changeFish() {
 
 const [isReady, toggleReady] = useToggle(false);
 
+const handleInit = debounce(() => {
+  toggleReady(true);
+}, 500);
+
 const handleClick = throttle(() => {
   if (!isReady.value) {
     handleClick.cancel();
@@ -51,7 +55,7 @@ const handleClick = throttle(() => {
   }
 
   changeFish();
-}, 4000, {
+}, 3500, {
   leading: true,
   trailing: false,
 });
@@ -59,6 +63,7 @@ const handleClick = throttle(() => {
 const leaveActions = Object.values(RoundBaseAction);
 const enterActions = [
   RoundEnterAction.SPREAD_LEFT,
+  RoundEnterAction.SPREAD_UP,
   RoundBaseAction.SCALE,
   RoundBaseAction.SCALE_LB,
 ];
