@@ -3,17 +3,26 @@ import { TransitionType } from "./type";
 import anime from "animejs";
 import { filter, flatten, isTruthy, map, pipe } from "remeda";
 
-export function isTypeName<Name extends TransitionType['name']>(
+export function isTypeName<
+  Name extends TransitionType['name']
+>(
   data: TransitionType,
   name: Name
-): data is Extract<TransitionType, { name: Name }> {
+): data is Extract<
+  TransitionType, { name: Name }
+> {
   return data.name === name;
 }
 
-export function isEnterAction<Action extends TransitionType['enter']['action']>(
-  data: TransitionType['enter'],
+export function isEnterAction<
+  Data extends { action: string },
+  Action extends Data['action']
+>(
+  data: Data,
   action: Action
-): data is Extract<TransitionType['enter'], { action: Action }> {
+): data is Extract<
+  Data, { action: Action }
+> {
   return data.action === action;
 }
 
@@ -32,15 +41,11 @@ const rectProviders: Providers = [
   // slide-right
   [
     ({ rect, type, meshes }) => {
-      if (isTypeName(type, 'rect')) {
-        const enter = type.enter;
-        if (!isEnterAction(enter, 'slide-right')) {
-          type
-          enter
-          return;
-        }
+      if (isTypeName(type, 'rect') && isEnterAction(type.enter, 'slide-right')) {
         type
-        enter
+        type.enter
+
+        return;
       }
 
       if (type.name !== 'rect' || type.enter.action !== 'slide-right')
