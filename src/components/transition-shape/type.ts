@@ -32,6 +32,8 @@ interface TransitionRect {
 export enum RoundEnterAction {
   SPREAD_LEFT = 'spread-left',
   SPREAD_RIGHT = 'spread-right',
+  SPREAD_UP = 'spread-up',
+  SPREAD_DOWN = 'spread-down',
 }
 export enum RoundBaseAction {
   SCALE_LT = 'scale-lt',

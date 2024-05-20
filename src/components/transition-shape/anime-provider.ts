@@ -705,6 +705,72 @@ const roundProviders: Providers = [
       )
     },
   ],
+  // spread-up
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.enter.action !== 'spread-up')
+        return;
+      const option = type.enter;
+
+      /** 外接圓直徑 */
+      const diameter = Math.sqrt(
+        rect.width ** 2 + rect.height ** 2
+      );
+
+      const offset = diameter / (type.colors.length + 1);
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          mesh.scaling.setAll(1);
+          mesh.position.x = 0;
+
+          const delay = option.delay * i;
+
+          return anime({
+            targets: mesh.position,
+            y: [diameter, i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
+    },
+  ],
+  // spread-down
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.enter.action !== 'spread-down')
+        return;
+      const option = type.enter;
+
+      /** 外接圓直徑 */
+      const diameter = Math.sqrt(
+        rect.width ** 2 + rect.height ** 2
+      );
+
+      const offset = diameter / (type.colors.length + 1);
+
+      return pipe(meshes,
+        filter((item) => item.name === name),
+        map.indexed((mesh, i) => {
+          mesh.scaling.setAll(1);
+          mesh.position.x = 0;
+
+          const delay = option.delay * i;
+
+          return anime({
+            targets: mesh.position,
+            y: [-diameter, -i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
+    },
+  ],
 ]
 /** fence [enter, leave] */
 const fenceProviders: Providers = [
