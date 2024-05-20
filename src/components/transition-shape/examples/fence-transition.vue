@@ -10,11 +10,12 @@
     >
       <transition-shape
         :type="item"
-        @init="startInterval()"
+        @init="toggleReady(true)"
       >
         <div
           :key="fishIndex"
-          class="text-[5rem] text-center w-full"
+          class="text-[5rem] text-center w-full cursor-pointer"
+          @click="handleClick()"
         >
           {{ fishList[fishIndex] }}
         </div>
@@ -24,15 +25,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { debounce } from 'lodash-es';
-import { hasAtLeast, map, pipe, reverse, shuffle } from 'remeda';
+import { ref } from 'vue';
+import { throttle } from 'lodash-es';
+import { map, pipe, reverse } from 'remeda';
 
 import TransitionShape, {
   TransitionType, FenceAction
 } from '../transition-shape.vue';
 
-import { useIntersectionObserver, useIntervalFn } from '@vueuse/core';
+import { useToggle } from '@vueuse/core';
 
 const fishIndex = ref(0);
 const fishList = [
@@ -44,25 +45,19 @@ function changeFish() {
   fishIndex.value %= fishList.length;
 }
 
-const { pause, resume } = useIntervalFn(() => {
+const [isReady, toggleReady] = useToggle(false);
+
+const handleClick = throttle(() => {
+  if (!isReady.value) {
+    handleClick.cancel();
+    return;
+  }
+
   changeFish();
-}, 4000);
-pause()
-
-const boxRef = ref();
-
-const startInterval = debounce(() => {
-  useIntersectionObserver(
-    boxRef,
-    ([item]) => {
-      if (item?.isIntersecting) {
-        resume();
-      } else {
-        pause();
-      }
-    },
-  )
-}, 1000);
+}, 4000, {
+  leading: true,
+  trailing: false,
+});
 
 const actions = Object.values(FenceAction);
 // const actions = [FenceAction.SPREAD_RIGHT];

@@ -1,8 +1,5 @@
 <template>
-  <div
-    ref="boxRef"
-    class="flex flex-wrap justify-center gap-4 w-full border border-gray-300 p-6"
-  >
+  <div class="flex flex-wrap justify-center gap-4 w-full border border-gray-300 p-6">
     <div
       v-for="item in list"
       :key="item.key"
@@ -10,11 +7,12 @@
     >
       <transition-shape
         :type="item"
-        @init="startInterval()"
+        @init="toggleReady(true)"
       >
         <div
           :key="fishIndex"
-          class="py-6 text-[4rem] text-center w-full"
+          class="py-6 text-[4rem] text-center w-full cursor-pointer"
+          @click="handleClick()"
         >
           {{ fishList[fishIndex] }}
         </div>
@@ -24,15 +22,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { debounce } from 'lodash-es';
-import { hasAtLeast, map, pipe, reverse, shuffle } from 'remeda';
+import { ref } from 'vue';
+import { throttle } from 'lodash-es';
+import { hasAtLeast, map, pipe, shuffle } from 'remeda';
 
 import TransitionShape, {
   TransitionType, RoundEnterAction, RoundBaseAction
 } from '../transition-shape.vue';
 
-import { useIntersectionObserver, useIntervalFn } from '@vueuse/core';
+import { useToggle } from '@vueuse/core';
 
 const fishIndex = ref(0);
 const fishList = [
@@ -44,25 +42,19 @@ function changeFish() {
   fishIndex.value %= fishList.length;
 }
 
-const { pause, resume } = useIntervalFn(() => {
+const [isReady, toggleReady] = useToggle(false);
+
+const handleClick = throttle(() => {
+  if (!isReady.value) {
+    handleClick.cancel();
+    return;
+  }
+
   changeFish();
-}, 4000);
-pause()
-
-const boxRef = ref();
-
-const startInterval = debounce(() => {
-  useIntersectionObserver(
-    boxRef,
-    ([item]) => {
-      if (item?.isIntersecting) {
-        resume();
-      } else {
-        pause();
-      }
-    },
-  )
-}, 1000);
+}, 4000, {
+  leading: true,
+  trailing: false,
+});
 
 const leaveActions = Object.values(RoundBaseAction);
 const enterActions = [
