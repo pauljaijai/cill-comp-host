@@ -186,12 +186,10 @@ watch(() => props.type.colors, (colors) => {
 // }, { deep: true });
 
 const isEntering = ref(false);
-async function enter(el: Element) {
+async function enter(rect: DOMRect) {
   if (isEntering.value) {
     return until(isEntering).toBe(false);
   }
-
-  const rect = el.getBoundingClientRect();
 
   isEntering.value = true;
 
@@ -208,12 +206,11 @@ async function enter(el: Element) {
 }
 
 const isLeaving = ref(false);
-async function leave(el: Element) {
+async function leave(rect: DOMRect) {
   if (isLeaving.value) {
     return until(isLeaving).toBe(false);
   }
 
-  const rect = el.getBoundingClientRect();
   isLeaving.value = true;
 
   for (const provider of animeLeaveProviders) {

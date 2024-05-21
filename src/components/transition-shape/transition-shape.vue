@@ -83,7 +83,7 @@ const slots = defineSlots<{
  * 
  * 為了防止視覺跳動，使用 CSS transition 過渡，所以 canvas 動畫也要有對應延遲。
  */
-const SIZE_CHANGE_DELAY_SEC = 0.3;
+const SIZE_CHANGE_DELAY_SEC = 0.6;
 const maskCssTransitionValue = computed(() => {
   return [
     `width ${SIZE_CHANGE_DELAY_SEC}s cubic-bezier(0.5, 0, 0, 1.2)`,
@@ -111,6 +111,15 @@ const maskStyle = computed<CSSProperties>(() => pipe(
   })
 ));
 
+function isSizeChanged(aBounding?: DOMRect, bBounding?: DOMRect) {
+  if (!aBounding || !bBounding) {
+    return false;
+  }
+
+  return aBounding.width !== bBounding.width
+    || aBounding.height !== bBounding.height;
+}
+
 // 進入事件
 const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
   if (!(el instanceof HTMLElement)) return;
@@ -127,6 +136,9 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
     return done()
   }
 
+  const enterElBounding = el.getBoundingClientRect();
+  const leaveElBounding = leaveElRef.value?.getBoundingClientRect();
+
   // 如果有 leaveElRef，表示為切換動畫
   if (leaveElRef.value) {
     // 將 enterEl 先脫離佔位
@@ -136,7 +148,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   // appear 時，需要等待 mask 初始化完成
   await maskRef.value?.initFinished();
 
-  await maskRef.value?.enter(el);
+  await maskRef.value?.enter(enterElBounding);
 
   // 如果有 leaveElRef，表示為切換動畫
   if (leaveElRef.value) {
@@ -144,12 +156,14 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
     // 提早移除 leaveEl 以免影響定位
     leaveElRef.value = undefined;
 
-    // 等待可能的 canvas 尺寸變化，同 .shape-mask 定義的 transition-duration
-    await promiseTimeout(SIZE_CHANGE_DELAY_SEC * 1000);
+    if (isSizeChanged(leaveElBounding, enterElBounding)) {
+      // 等待 canvas 尺寸變化，同 .shape-mask 定義的 transition-duration
+      await promiseTimeout(SIZE_CHANGE_DELAY_SEC * 1000);
+    }
   }
   el.style.opacity = '1';
 
-  await maskRef.value?.leave(el);
+  await maskRef.value?.leave(enterElBounding);
 
   done()
 }
@@ -173,7 +187,10 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
     return done()
   }
 
-  await maskRef.value?.enter(el);
+  const enterElBounding = enterElRef.value?.getBoundingClientRect();
+  const leaveElBounding = el.getBoundingClientRect();
+
+  await maskRef.value?.enter(leaveElBounding);
 
   el.style.opacity = '0';
   // 如果有 enterElRef，表示為切換動畫
@@ -181,11 +198,12 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
     // 將 leaveEl 脫離佔位
     el.style.position = 'fixed';
 
-    // 同 handleEnter
-    await promiseTimeout(SIZE_CHANGE_DELAY_SEC * 1000);
+    if (isSizeChanged(leaveElBounding, enterElBounding)) {
+      await promiseTimeout(SIZE_CHANGE_DELAY_SEC * 1000);
+    }
   }
 
-  await maskRef.value?.leave(el);
+  await maskRef.value?.leave(leaveElBounding);
 
   done();
 };
