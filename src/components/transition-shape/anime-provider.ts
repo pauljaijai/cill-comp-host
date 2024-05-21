@@ -14,6 +14,7 @@ export function isTypeName<
   return data.name === name;
 }
 
+/** TODO: 不知道為甚麼會導致 type.enter 變成 never  */
 export function isEnterAction<
   Data extends { action: string },
   Action extends Data['action']
@@ -41,12 +42,12 @@ const rectProviders: Providers = [
   // slide-right
   [
     ({ rect, type, meshes }) => {
-      if (isTypeName(type, 'rect') && isEnterAction(type.enter, 'slide-right')) {
-        type
-        type.enter
+      // if (isTypeName(type, 'rect') && isEnterAction(type.enter, 'slide-right')) {
+      //   type
+      //   type.enter
 
-        return;
-      }
+      //   return;
+      // }
 
       if (type.name !== 'rect' || type.enter.action !== 'slide-right')
         return;
