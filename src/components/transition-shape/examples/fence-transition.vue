@@ -58,7 +58,7 @@ const handleClick = throttle(() => {
   }
 
   changeFish();
-}, 4000, {
+}, 3000, {
   leading: true,
   trailing: false,
 });
@@ -80,14 +80,14 @@ const list: Item[] = pipe(
       name: 'fence',
       enter: {
         action,
-        duration: 800,
-        delay: 200,
+        duration: 600,
+        delay: 100,
         easing: 'easeInOutQuad',
       },
       leave: {
         action: targetAction,
-        duration: 800,
-        delay: 200,
+        duration: 600,
+        delay: 100,
         easing: 'easeInOutQuad',
       },
       colors: [
