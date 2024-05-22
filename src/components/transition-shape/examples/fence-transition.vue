@@ -10,7 +10,7 @@
     >
       <transition-shape
         :type="item"
-        @init="handleInit()"
+        @after-transition="handleInit()"
       >
         <div
           :key="fishIndex"
@@ -49,7 +49,7 @@ const [isReady, toggleReady] = useToggle(false);
 
 const handleInit = debounce(() => {
   toggleReady(true);
-}, 500);
+}, 1000);
 
 const handleClick = throttle(() => {
   if (!isReady.value) {

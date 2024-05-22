@@ -34,6 +34,8 @@ const props = withDefaults(defineProps<Props>(), {
 // #region Emits
 const emit = defineEmits<{
   (e: 'init'): void;
+  (e: 'before-transition'): void;
+  (e: 'after-transition'): void;
 }>();
 // #endregion Emits
 
@@ -82,13 +84,14 @@ type MeshProvider = (param: MeshProviderParam) => Mesh[] | undefined;
 const meshProviders: MeshProvider[] = [
   // rect
   ({ scene, type, width, height }) => {
-    if (type.name !== 'rect') return;
+    const name = 'rect';
+    if (type.name !== name) return;
 
     return type.colors.map((color, index) => {
       const material = new StandardMaterial(`material-${index}`, scene);
       material.diffuseColor = Color3.FromHexString(color);
 
-      const mesh = MeshBuilder.CreateBox(`rect`, {
+      const mesh = MeshBuilder.CreateBox(name, {
         width,
         height,
         depth: 0,
@@ -102,7 +105,8 @@ const meshProviders: MeshProvider[] = [
   },
   // round
   ({ scene, type, width, height }) => {
-    if (type.name !== 'round') return;
+    const name = 'round';
+    if (type.name !== name) return;
 
     return type.colors.map((color, index) => {
       const material = new StandardMaterial(`material-${index}`, scene);
@@ -113,7 +117,7 @@ const meshProviders: MeshProvider[] = [
         Math.pow(width / 2, 2) + Math.pow(height / 2, 2)
       );
 
-      const mesh = MeshBuilder.CreateDisc(`round`, {
+      const mesh = MeshBuilder.CreateDisc(name, {
         radius,
         tessellation: 48,
       }, scene);
@@ -127,7 +131,8 @@ const meshProviders: MeshProvider[] = [
   },
   // fence
   ({ scene, type, width, height }) => {
-    if (type.name !== 'fence') return;
+    const name = 'fence';
+    if (type.name !== name) return;
 
     const eachWidth = width / type.colors.length;
 
@@ -140,7 +145,7 @@ const meshProviders: MeshProvider[] = [
       const material = new StandardMaterial(`material-${i}`, scene);
       material.diffuseColor = Color3.FromHexString(color);
 
-      const mesh = MeshBuilder.CreateBox(`fence`, {
+      const mesh = MeshBuilder.CreateBox(name, {
         width: eachWidth,
         height,
         depth: 0,
@@ -187,6 +192,8 @@ watch(() => props.type.colors, (colors) => {
 
 const isEntering = ref(false);
 async function enter(rect: DOMRect) {
+  emit('before-transition');
+
   if (isEntering.value) {
     return until(isEntering).toBe(false);
   }
@@ -223,6 +230,8 @@ async function leave(rect: DOMRect) {
   }
 
   isLeaving.value = false;
+
+  emit('after-transition');
 }
 
 const isTransition = computed(
