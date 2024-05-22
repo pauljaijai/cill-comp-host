@@ -91,9 +91,9 @@ const list: Item[] = pipe(
         easing: 'easeInOutQuad',
       },
       colors: [
-        '#D4F9FF', '#97D7E2',
-        '#5CAAB8', '#2F7F8D',
-        '#105663',
+        '#27A4F2', '#44C1F2',
+        '#85DEF2', '#DCEEF2',
+        '#91E9F2',
       ],
     }
 
