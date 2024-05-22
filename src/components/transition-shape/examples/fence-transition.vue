@@ -80,15 +80,15 @@ const list: Item[] = pipe(
       name: 'fence',
       enter: {
         action,
-        duration: 600,
+        duration: 800,
         delay: 100,
-        easing: 'easeInOutQuad',
+        easing: 'easeInOutExpo',
       },
       leave: {
         action: targetAction,
-        duration: 600,
+        duration: 800,
         delay: 100,
-        easing: 'easeInOutQuad',
+        easing: 'easeInOutExpo',
       },
       colors: [
         '#27A4F2', '#44C1F2',
