@@ -103,6 +103,34 @@ const meshProviders: MeshProvider[] = [
       return mesh;
     });
   },
+  // converging-rect
+  ({ scene, type, width, height }) => {
+    const name: TransitionType['name'] = 'converging-rect';
+    if (type.name !== name) return;
+
+    return type.colors.map((color, index) => {
+      const material = new StandardMaterial(`material-${index}`, scene);
+      material.diffuseColor = Color3.FromHexString(color);
+
+      /** 每種顏色建立 2 個 mesh */
+      const meshes = pipe([0, 1],
+        map(() => {
+          const mesh = MeshBuilder.CreateBox(name, {
+            width: width / 2,
+            height,
+            depth: 0,
+          }, scene)
+
+          mesh.position = new Vector3(0, 0, 0);
+          mesh.material = material;
+
+          return mesh;
+        }),
+      );
+
+      return meshes;
+    }).flat();
+  },
   // round
   ({ scene, type, width, height }) => {
     const name = 'round';
