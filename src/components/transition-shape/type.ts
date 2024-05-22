@@ -29,6 +29,32 @@ interface TransitionRect {
   colors: [string, ...string[]];
 }
 
+export enum ConvergingRectAction {
+  SLIDE_X = 'slide-x',
+  SLIDE_Y = 'slide-y',
+}
+interface TransitionConvergingRect {
+  name: 'converging-rect';
+  enter: {
+    action: `${RectAction}`,
+    /** 0~45 度 */
+    angle: number;
+    duration: number;
+    /** 每個 shape 延遲間距  */
+    delay: number;
+    easing: EasingOptions;
+  };
+  leave: {
+    action: `${RectAction}`,
+    duration: number;
+    /** 每個 shape 延遲間距  */
+    delay: number;
+    easing: EasingOptions;
+  };
+  /** HEX 格式。顏色數量等同 shape 數量，至少需要一個 */
+  colors: [string, ...string[]];
+}
+
 export enum RoundEnterAction {
   SPREAD_LEFT = 'spread-left',
   SPREAD_RIGHT = 'spread-right',
@@ -89,6 +115,9 @@ interface TransitionFence {
 }
 
 /** 初始化後 name 變更會被忽略，其餘參數皆可動態調整 */
-export type TransitionType = TransitionRect
+export type TransitionType =
+  TransitionRect
+  | TransitionConvergingRect
+
   | TransitionRound
   | TransitionFence
