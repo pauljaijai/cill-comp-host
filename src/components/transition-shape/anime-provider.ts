@@ -817,7 +817,6 @@ const roundProviders: Providers = [
       const option = type.enter;
 
       const offset = 1 / type.colors.length;
-      console.log(`🚀 ~ offset:`, offset);
 
       return pipe(meshes,
         filter(isMeshName(name)),
@@ -825,8 +824,6 @@ const roundProviders: Providers = [
           mesh.position.setAll(0);
 
           const delay = option.delay * i;
-          const target = 1 - i * offset;
-          console.log(`🚀 ~ target:`, target);
 
           return anime({
             targets: mesh.scaling,
