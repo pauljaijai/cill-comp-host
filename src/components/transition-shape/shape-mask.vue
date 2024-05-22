@@ -82,13 +82,14 @@ type MeshProvider = (param: MeshProviderParam) => Mesh[] | undefined;
 const meshProviders: MeshProvider[] = [
   // rect
   ({ scene, type, width, height }) => {
-    if (type.name !== 'rect') return;
+    const name = 'rect';
+    if (type.name !== name) return;
 
     return type.colors.map((color, index) => {
       const material = new StandardMaterial(`material-${index}`, scene);
       material.diffuseColor = Color3.FromHexString(color);
 
-      const mesh = MeshBuilder.CreateBox(`rect`, {
+      const mesh = MeshBuilder.CreateBox(name, {
         width,
         height,
         depth: 0,
@@ -102,7 +103,8 @@ const meshProviders: MeshProvider[] = [
   },
   // round
   ({ scene, type, width, height }) => {
-    if (type.name !== 'round') return;
+    const name = 'round';
+    if (type.name !== name) return;
 
     return type.colors.map((color, index) => {
       const material = new StandardMaterial(`material-${index}`, scene);
@@ -113,7 +115,7 @@ const meshProviders: MeshProvider[] = [
         Math.pow(width / 2, 2) + Math.pow(height / 2, 2)
       );
 
-      const mesh = MeshBuilder.CreateDisc(`round`, {
+      const mesh = MeshBuilder.CreateDisc(name, {
         radius,
         tessellation: 48,
       }, scene);
@@ -127,7 +129,8 @@ const meshProviders: MeshProvider[] = [
   },
   // fence
   ({ scene, type, width, height }) => {
-    if (type.name !== 'fence') return;
+    const name = 'fence';
+    if (type.name !== name) return;
 
     const eachWidth = width / type.colors.length;
 
@@ -140,7 +143,7 @@ const meshProviders: MeshProvider[] = [
       const material = new StandardMaterial(`material-${i}`, scene);
       material.diffuseColor = Color3.FromHexString(color);
 
-      const mesh = MeshBuilder.CreateBox(`fence`, {
+      const mesh = MeshBuilder.CreateBox(name, {
         width: eachWidth,
         height,
         depth: 0,

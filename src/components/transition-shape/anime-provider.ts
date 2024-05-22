@@ -37,6 +37,12 @@ type Providers = (
   [AnimeProvider, AnimeProvider] | [AnimeProvider]
 )[]
 
+function isMeshName(name: TransitionType['name']) {
+  return (mesh: Mesh) => {
+    return mesh.name === name;
+  }
+};
+
 /** rect [enter, leave] */
 const rectProviders: Providers = [
   // slide-right
@@ -54,7 +60,7 @@ const rectProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.scaling.setAll(1);
 
@@ -74,7 +80,7 @@ const rectProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.scaling.setAll(1);
 
@@ -97,7 +103,7 @@ const rectProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.scaling.setAll(1);
 
@@ -117,7 +123,7 @@ const rectProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.scaling.setAll(1);
 
@@ -140,7 +146,7 @@ const rectProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.scaling.setAll(1);
 
@@ -160,7 +166,7 @@ const rectProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.scaling.setAll(1);
 
@@ -183,7 +189,7 @@ const rectProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.scaling.setAll(1);
 
@@ -203,7 +209,7 @@ const rectProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.scaling.setAll(1);
 
@@ -226,7 +232,7 @@ const rectProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.position.setAll(0);
 
@@ -246,7 +252,7 @@ const rectProviders: Providers = [
         return;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.position.setAll(0);
 
@@ -269,7 +275,7 @@ const rectProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.position.setAll(0);
 
@@ -289,7 +295,7 @@ const rectProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.position.setAll(0);
 
@@ -311,7 +317,7 @@ const rectProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.position.setAll(0);
 
@@ -331,7 +337,7 @@ const rectProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === 'rect'),
+        filter(isMeshName('rect')),
         map.indexed((mesh, index) => {
           mesh.position.setAll(0);
 
@@ -401,7 +407,7 @@ const roundProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, index) => {
           mesh.position.x = rect.width / 2;
           mesh.position.y = -rect.height / 2;
@@ -434,7 +440,7 @@ const roundProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, index) => {
           const delay = option.delay * (type.colors.length - index)
 
@@ -468,7 +474,7 @@ const roundProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, index) => {
           mesh.position.x = rect.width / 2;
           mesh.position.y = rect.height / 2;
@@ -501,7 +507,7 @@ const roundProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, index) => {
           const [x, y] = [
             rect.width / 2,
@@ -538,7 +544,7 @@ const roundProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, index) => {
           mesh.position.x = -rect.width / 2;
           mesh.position.y = -rect.height / 2;
@@ -571,7 +577,7 @@ const roundProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, index) => {
           const [x, y] = [
             -rect.width / 2,
@@ -608,7 +614,7 @@ const roundProviders: Providers = [
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, index) => {
           mesh.position.x = -rect.width / 2;
           mesh.position.y = rect.height / 2;
@@ -641,7 +647,7 @@ const roundProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, index) => {
           const [x, y] = [
             -rect.width / 2,
@@ -686,7 +692,7 @@ const roundProviders: Providers = [
       const offset = diameter / type.colors.length;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.scaling.setAll(1);
           mesh.position.y = 0;
@@ -719,7 +725,7 @@ const roundProviders: Providers = [
       const offset = diameter / type.colors.length;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.scaling.setAll(1);
           mesh.position.y = 0;
@@ -752,7 +758,7 @@ const roundProviders: Providers = [
       const offset = diameter / (type.colors.length + 1);
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.scaling.setAll(1);
           mesh.position.x = 0;
@@ -785,7 +791,7 @@ const roundProviders: Providers = [
       const offset = diameter / (type.colors.length + 1);
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.scaling.setAll(1);
           mesh.position.x = 0;
@@ -818,7 +824,7 @@ const fenceProviders: Providers = [
       const oriX = width / 2 + eachWidth / 2;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.position.y = 0;
           mesh.scaling.setAll(1);
@@ -848,7 +854,7 @@ const fenceProviders: Providers = [
       const oriX = width / 2 + eachWidth / 2;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.position.y = 0;
           mesh.scaling.setAll(1);
@@ -876,7 +882,7 @@ const fenceProviders: Providers = [
       const oriX = width / 2 + eachWidth / 2;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.position.y = 0;
           mesh.scaling.setAll(1);
@@ -906,7 +912,7 @@ const fenceProviders: Providers = [
       const oriX = width / 2 + eachWidth / 2;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.position.y = 0;
           mesh.scaling.setAll(1);
@@ -933,7 +939,7 @@ const fenceProviders: Providers = [
       const eachWidth = width / type.colors.length;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.position.x = i * eachWidth - width / 2 + eachWidth / 2;
           mesh.scaling.x = 1;
@@ -954,7 +960,7 @@ const fenceProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           return anime({
             targets: mesh.scaling,
@@ -978,7 +984,7 @@ const fenceProviders: Providers = [
       const eachWidth = width / type.colors.length;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           mesh.position.x = i * eachWidth - width / 2 + eachWidth / 2;
           mesh.scaling.y = 1;
@@ -999,7 +1005,7 @@ const fenceProviders: Providers = [
       const option = type.leave;
 
       return pipe(meshes,
-        filter((item) => item.name === name),
+        filter(isMeshName(name)),
         map.indexed((mesh, i) => {
           return anime({
             targets: mesh.scaling,
