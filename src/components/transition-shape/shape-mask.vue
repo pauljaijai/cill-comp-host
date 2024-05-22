@@ -34,6 +34,8 @@ const props = withDefaults(defineProps<Props>(), {
 // #region Emits
 const emit = defineEmits<{
   (e: 'init'): void;
+  (e: 'before-transition'): void;
+  (e: 'after-transition'): void;
 }>();
 // #endregion Emits
 
@@ -190,6 +192,8 @@ watch(() => props.type.colors, (colors) => {
 
 const isEntering = ref(false);
 async function enter(rect: DOMRect) {
+  emit('before-transition');
+
   if (isEntering.value) {
     return until(isEntering).toBe(false);
   }
@@ -226,6 +230,8 @@ async function leave(rect: DOMRect) {
   }
 
   isLeaving.value = false;
+
+  emit('after-transition');
 }
 
 const isTransition = computed(

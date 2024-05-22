@@ -20,6 +20,8 @@
     :width="enterElBounding.width.value"
     :height="enterElBounding.height.value"
     @init="() => emit('init')"
+    @before-transition="() => emit('before-transition')"
+    @after-transition="() => emit('after-transition')"
   />
 </template>
 
@@ -68,8 +70,8 @@ const props = withDefaults(defineProps<Props>(), {
 // #region Emits
 const emit = defineEmits<{
   (e: 'init'): void;
-  // (e: 'before-transition'): void;
-  // (e: 'after-transition'): void;
+  (e: 'before-transition'): void;
+  (e: 'after-transition'): void;
 }>();
 // #endregion Emits
 
