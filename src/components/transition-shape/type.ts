@@ -60,6 +60,7 @@ export enum RoundEnterAction {
   SPREAD_RIGHT = 'spread-right',
   SPREAD_UP = 'spread-up',
   SPREAD_DOWN = 'spread-down',
+  SPREAD_SCALE = 'spread-scale',
 }
 export enum RoundBaseAction {
   SCALE_LT = 'scale-lt',

@@ -808,6 +808,37 @@ const roundProviders: Providers = [
       )
     },
   ],
+  // spread-scale
+  [
+    ({ rect, type, meshes }) => {
+      const name = 'round'
+      if (type.name !== name || type.enter.action !== 'spread-scale')
+        return;
+      const option = type.enter;
+
+      const offset = 1 / type.colors.length;
+      console.log(`🚀 ~ offset:`, offset);
+
+      return pipe(meshes,
+        filter(isMeshName(name)),
+        map.indexed((mesh, i) => {
+          mesh.position.setAll(0);
+
+          const delay = option.delay * i;
+          const target = 1 - i * offset;
+          console.log(`🚀 ~ target:`, target);
+
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1 - i * offset],
+            y: [0, 1 - i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
+    },
+  ],
 ]
 /** fence [enter, leave] */
 const fenceProviders: Providers = [
