@@ -55,7 +55,7 @@ const handleClick = throttle(() => {
   }
 
   changeFish();
-}, 3500, {
+}, 4000, {
   leading: true,
   trailing: false,
 });
@@ -63,7 +63,7 @@ const handleClick = throttle(() => {
 const leaveActions = Object.values(RoundBaseAction);
 const enterActions = [
   RoundEnterAction.SPREAD_LEFT,
-  RoundEnterAction.SPREAD_UP,
+  RoundEnterAction.SPREAD_SCALE,
   RoundBaseAction.SCALE,
   RoundBaseAction.SCALE_LB,
 ];
@@ -79,7 +79,7 @@ const list: Item[] = pipe(
       throw new Error('Leave action is required');
     }
 
-    const colors = shuffle(['#BDF2ED', '#F2CEBD', '#B39689']);
+    const colors = shuffle(['#27A4F2', '#44C1F2', '#85DEF2', '#DCEEF2', '#91E9F2',]);
     if (!hasAtLeast(colors, 1)) {
       throw new Error('At least one color is required');
     }
@@ -89,13 +89,13 @@ const list: Item[] = pipe(
       name: 'round',
       enter: {
         action,
-        duration: 1000,
+        duration: 900,
         delay: 200,
         easing: 'easeInOutExpo',
       },
       leave: {
         action: leaveAction,
-        duration: 1000,
+        duration: 900,
         delay: 200,
         easing: 'easeInOutExpo',
       },
