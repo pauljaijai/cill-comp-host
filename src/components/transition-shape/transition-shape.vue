@@ -105,7 +105,7 @@ const currentBounding = computed(() => pipe(
 ));
 
 const maskRef = ref<InstanceType<typeof ShapeMask>>();
-const maskVisible = ref(true);
+const maskVisible = computed(() => !!enterElRef.value || !!leaveElRef.value);
 
 const maskStyle = computed<CSSProperties>(() => pipe(
   currentBounding.value,
