@@ -13,11 +13,11 @@ import FenceTransition from '../../../src/components/transition-shape/examples/f
 
 Motion Graphic 風格的 Transition 元件。
 
-甚麼是 Motion Graphic 過場效果？可以看看這個影片：
+甚麼是 Motion Graphic 轉場效果？可以看看這個影片：
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/jlR2J_Ztl4Y?si=MxcKRt7FjFnM4vvR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-Motion Graphic 過場在影片製作其實很常見，不過網頁中就沒那麼常見了。
+Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那麼常見了。
 
 所以我就嘗試把效果搬上網頁了！ˋ( ° ▽、° )
 
