@@ -17,8 +17,8 @@
     class="shape-mask fixed"
     :style="maskStyle"
     :type="props.type"
-    :width="enterElBounding.width.value"
-    :height="enterElBounding.height.value"
+    :width="currentBounding?.width.value"
+    :height="currentBounding?.height.value"
     @init="() => emit('init')"
     @before-transition="() => emit('before-transition')"
     @after-transition="() => emit('after-transition')"
@@ -99,11 +99,16 @@ const enterElBounding = useElementBounding(enterElRef);
 const leaveElRef = ref<HTMLElement>();
 const leaveElBounding = useElementBounding(leaveElRef);
 
-const maskRef = ref<InstanceType<typeof ShapeMask>>();
-const maskVisible = ref(true);
-const maskStyle = computed<CSSProperties>(() => pipe(
+const currentBounding = computed(() => pipe(
   [leaveElBounding, enterElBounding],
   find(({ width }) => width.value > 0),
+));
+
+const maskRef = ref<InstanceType<typeof ShapeMask>>();
+const maskVisible = ref(true);
+
+const maskStyle = computed<CSSProperties>(() => pipe(
+  currentBounding.value,
   (bounding) => ({
     top: `${bounding?.top.value}px`,
     left: `${bounding?.left.value}px`,
