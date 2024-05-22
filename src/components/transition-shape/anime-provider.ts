@@ -41,7 +41,7 @@ function isMeshName(name: TransitionType['name']) {
   return (mesh: Mesh) => {
     return mesh.name === name;
   }
-};
+}
 
 /** rect [enter, leave] */
 const rectProviders: Providers = [
