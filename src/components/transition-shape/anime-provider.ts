@@ -3,37 +3,41 @@ import { TransitionType } from "./type";
 import anime from "animejs";
 import { filter, flatten, isTruthy, map, pipe } from "remeda";
 
-export function isTypeName<
+/** TODO: action 沒辦法先根據 name 收束，但是結果已經正確了 */
+export function isTypeEnter<
   Name extends TransitionType['name'],
+  Action extends TransitionType['enter']['action']
 >(
   data: TransitionType,
   name: Name,
-): data is Extract<
-  TransitionType, { name: Name }
-> {
-  return data.name === name;
+  action: Action
+): data is (TransitionType & {
+  name: Name
+  enter: { action: Action }
+}) {
+  return data.name === name && data.enter.action === action;
 }
-/** TODO: 沒有完全成功，enter 為 union type 時沒辦法有效收束 */
-export function isEnterAction<
-  Enter extends { action: string },
+
+export function isTypeLeave<
+  Data extends TransitionType,
+  Name extends Data['name'],
+  Action extends Data['leave']['action']
 >(
-  enter: Enter,
-  action: Enter['action']
-): enter is Extract<
-  Enter, { action: Enter['action'] }
-> {
-  return enter.action === action;
+  data: Data,
+  name: Name,
+  action: Action
+): data is (Data & {
+  name: Name
+  leave: { action: Action }
+}) {
+  return data.name === name && data.enter.action === action;
 }
-// export function isLeaveAction<
-//   Leave extends { action: string },
-// >(
-//   leave: Leave,
-//   action: Leave['action']
-// ): leave is Extract<
-//   Leave, { action: Leave['action'] }
-// > {
-//   return leave.action === action;
+
+// const testData = {} as TransitionType;
+// if (isTypeEnter(testData, 'converging-rect', 'test')) {
+//   testData.enter
 // }
+
 
 interface Param {
   rect: DOMRect;
