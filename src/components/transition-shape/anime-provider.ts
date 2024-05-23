@@ -4,27 +4,36 @@ import anime from "animejs";
 import { filter, flatten, isTruthy, map, pipe } from "remeda";
 
 export function isTypeName<
-  Name extends TransitionType['name']
+  Name extends TransitionType['name'],
 >(
   data: TransitionType,
-  name: Name
+  name: Name,
 ): data is Extract<
   TransitionType, { name: Name }
 > {
   return data.name === name;
 }
 
-/** TODO: 不知道為甚麼會導致 type.enter 變成 never  */
 export function isEnterAction<
-  Data extends { action: string },
-  Action extends Data['action']
+  Enter extends { action: string },
 >(
-  data: Data,
-  action: Action
-): data is Extract<
-  Data, { action: Action }
+  enter: Enter,
+  action: Enter['action']
+): enter is Extract<
+  Enter, { action: Enter['action'] }
 > {
-  return data.action === action;
+  return enter.action === action;
+}
+
+export function isLeaveAction<
+  Leave extends { action: string },
+>(
+  leave: Leave,
+  action: Leave['action']
+): leave is Extract<
+  Leave, { action: Leave['action'] }
+> {
+  return leave.action === action;
 }
 
 interface Param {
@@ -48,12 +57,15 @@ const rectProviders: Providers = [
   // slide-right
   [
     ({ rect, type, meshes }) => {
-      // if (isTypeName(type, 'rect') && isEnterAction(type.enter, 'slide-right')) {
-      //   type
-      //   type.enter
+      if (isTypeName(type, 'converging-rect')) {
+        type
 
-      //   return;
-      // }
+        if (isEnterAction(type.enter, 'slide-down')) {
+          type.enter
+        }
+
+        return;
+      }
 
       if (type.name !== 'rect' || type.enter.action !== 'slide-right')
         return;
