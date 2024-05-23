@@ -21,7 +21,6 @@ interface TransitionRect {
   leave: {
     action: `${RectAction}`,
     duration: number;
-    /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
@@ -50,7 +49,6 @@ interface TransitionConvergingRect {
   leave: {
     action: `${ConvergingRectAction}`,
     duration: number;
-    /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
@@ -84,7 +82,6 @@ interface TransitionRound {
   leave: {
     action: `${RoundBaseAction}`,
     duration: number;
-    /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
@@ -110,7 +107,6 @@ interface TransitionFence {
   leave: {
     action: `${FenceAction}`,
     duration: number;
-    /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
