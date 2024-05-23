@@ -195,13 +195,13 @@ const rectAction = ref<
 >({
   enter: {
     action: 'slide-right',
-    easing: 'easeInOutExpo',
+    easing: 'easeOutExpo',
     delay: 100,
     duration: 800,
   },
   leave: {
     action: 'slide-right',
-    easing: 'easeInOutExpo',
+    easing: 'easeInExpo',
     delay: 100,
     duration: 800,
   },
