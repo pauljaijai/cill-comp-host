@@ -82,13 +82,13 @@ const list: Item[] = pipe(
         action,
         duration: 800,
         delay: 100,
-        easing: 'easeInOutExpo',
+        easing: 'easeOutExpo',
       },
       leave: {
         action: targetAction,
         duration: 800,
         delay: 100,
-        easing: 'easeInOutExpo',
+        easing: 'easeInExpo',
       },
       colors: [
         '#27A4F2', '#44C1F2',

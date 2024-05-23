@@ -91,13 +91,13 @@ const list: Item[] = pipe(
         action,
         duration: 900,
         delay: 200,
-        easing: 'easeInOutExpo',
+        easing: 'easeOutExpo',
       },
       leave: {
         action: leaveAction,
         duration: 900,
         delay: 200,
-        easing: 'easeInOutExpo',
+        easing: 'easeInExpo',
       },
       colors,
     }

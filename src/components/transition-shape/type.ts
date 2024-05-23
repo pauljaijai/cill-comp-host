@@ -36,16 +36,19 @@ export enum ConvergingRectAction {
 interface TransitionConvergingRect {
   name: 'converging-rect';
   enter: {
-    action: `${RectAction}`,
-    /** 0~45 度 */
-    angle: number;
+    action: `${ConvergingRectAction}`,
+    /** 0~30 度
+     * 
+     * @default 0
+     */
+    angle?: number;
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
   leave: {
-    action: `${RectAction}`,
+    action: `${ConvergingRectAction}`,
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
@@ -119,6 +122,5 @@ interface TransitionFence {
 export type TransitionType =
   TransitionRect
   | TransitionConvergingRect
-
   | TransitionRound
   | TransitionFence

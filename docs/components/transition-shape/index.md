@@ -69,7 +69,7 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 <<< ../../../src/components/transition-shape/examples/fence-transition.vue
 :::
 
-### converging-rect 轉場
+### Converging Rect 轉場
 
 點擊任意魚，開始轉場。(≧∇≦)ﾉ
 
