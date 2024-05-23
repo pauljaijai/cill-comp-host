@@ -1,7 +1,7 @@
 import { Mesh } from "@babylonjs/core";
 import { TransitionType } from "./type";
 import anime from "animejs";
-import { filter, flatten, isTruthy, map, pipe } from "remeda";
+import { chunk, filter, flatten, isTruthy, map, pipe } from "remeda";
 
 export function isTypeEnter<
   Name extends TransitionType['name'],
@@ -36,6 +36,11 @@ export function isTypeLeave<
 //   testData.enter
 // }
 
+function isMeshName(name: TransitionType['name']) {
+  return (mesh: Mesh) => {
+    return mesh.name === name;
+  }
+}
 
 interface Param {
   rect: DOMRect;
@@ -46,12 +51,6 @@ type AnimeProvider = (param: Param) => Promise<void>[] | undefined;
 type Providers = (
   [AnimeProvider, AnimeProvider] | [AnimeProvider]
 )[]
-
-function isMeshName(name: TransitionType['name']) {
-  return (mesh: Mesh) => {
-    return mesh.name === name;
-  }
-}
 
 /** rect [enter, leave] */
 const rectProviders: Providers = [
@@ -363,44 +362,92 @@ const convergingRectProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name: TransitionType['name'] = 'converging-rect';
-
-      if (type.name !== name || type.enter.action !== 'slide-x')
+      if (!isTypeEnter(type, name, 'slide-x'))
         return;
+
       const option = type.enter;
+
+      const startX = rect.width + rect.width / 2;
+      const endX = rect.width / 4;
 
       return pipe(meshes,
         filter(isMeshName(name)),
-        map.indexed((mesh, index) => {
-          mesh.scaling.setAll(1);
+        chunk(2),
+        map.indexed(([mesh01, mesh02], index) => {
+          const delay = option.delay * index;
 
-          return anime({
-            targets: mesh.position,
-            x: [rect.width, 0],
-            y: [0, 0],
-            ...option,
-            delay: option.delay * index,
-          }).finished;
-        })
+          mesh01.scaling.setAll(1);
+          mesh01.position.y = 0;
+
+          const result = [
+            anime({
+              targets: mesh01.position,
+              x: [-startX, -endX],
+              ...option,
+              delay,
+            }).finished,
+          ]
+
+          if (mesh02) {
+            mesh02.scaling.setAll(1);
+            mesh02.position.y = 0;
+            result.push(
+              anime({
+                targets: mesh02.position,
+                x: [startX, endX],
+                ...option,
+                delay,
+              }).finished
+            );
+          }
+
+          return result;
+        }),
+        flatten(),
       )
     },
     ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'slide-right')
+      const name: TransitionType['name'] = 'converging-rect';
+      if (!isTypeLeave(type, name, 'slide-x'))
         return;
+
       const option = type.leave;
+      const endX = rect.width + rect.width / 2;
 
       return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.scaling.setAll(1);
+        filter(isMeshName(name)),
+        chunk(2),
+        map.indexed(([mesh01, mesh02], index) => {
+          const delay = option.delay * (type.colors.length - index)
 
-          return anime({
-            targets: mesh.position,
-            x: [0, -rect.width],
-            y: [0, 0],
-            ...option,
-            delay: option.delay * (type.colors.length - index),
-          }).finished;
-        })
+          mesh01.scaling.setAll(1);
+          mesh01.position.y = 0;
+
+          const result = [
+            anime({
+              targets: mesh01.position,
+              x: -endX,
+              ...option,
+              delay,
+            }).finished,
+          ]
+
+          if (mesh02) {
+            mesh02.scaling.setAll(1);
+            mesh02.position.y = 0;
+            result.push(
+              anime({
+                targets: mesh02.position,
+                x: endX,
+                ...option,
+                delay,
+              }).finished
+            );
+          }
+
+          return result;
+        }),
+        flatten(),
       )
     },
   ],
