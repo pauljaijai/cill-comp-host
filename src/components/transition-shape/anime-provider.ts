@@ -3,10 +3,9 @@ import { TransitionType } from "./type";
 import anime from "animejs";
 import { filter, flatten, isTruthy, map, pipe } from "remeda";
 
-/** TODO: action 沒辦法先根據 name 收束，但是結果已經正確了 */
 export function isTypeEnter<
   Name extends TransitionType['name'],
-  Action extends TransitionType['enter']['action']
+  Action extends (TransitionType & { name: Name })['enter']['action']
 >(
   data: TransitionType,
   name: Name,
@@ -19,22 +18,21 @@ export function isTypeEnter<
 }
 
 export function isTypeLeave<
-  Data extends TransitionType,
-  Name extends Data['name'],
-  Action extends Data['leave']['action']
+  Name extends TransitionType['name'],
+  Action extends (TransitionType & { name: Name })['leave']['action']
 >(
-  data: Data,
+  data: TransitionType,
   name: Name,
   action: Action
-): data is (Data & {
+): data is (TransitionType & {
   name: Name
   leave: { action: Action }
 }) {
-  return data.name === name && data.enter.action === action;
+  return data.name === name && data.leave.action === action;
 }
 
 // const testData = {} as TransitionType;
-// if (isTypeEnter(testData, 'converging-rect', 'test')) {
+// if (isTypeEnter(testData, 'fence', 'scale-x')) {
 //   testData.enter
 // }
 
@@ -399,263 +397,6 @@ const convergingRectProviders: Providers = [
             targets: mesh.position,
             x: [0, -rect.width],
             y: [0, 0],
-            ...option,
-            delay: option.delay * (type.colors.length - index),
-          }).finished;
-        })
-      )
-    },
-  ],
-  // slide-left
-  [
-    ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'slide-left')
-        return;
-      const option = type.enter;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.scaling.setAll(1);
-
-          return anime({
-            targets: mesh.position,
-            x: [-rect.width, 0],
-            y: [0, 0],
-            ...option,
-            delay: option.delay * index,
-          }).finished;
-        })
-      )
-    },
-    ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'slide-left')
-        return;
-      const option = type.leave;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.scaling.setAll(1);
-
-          return anime({
-            targets: mesh.position,
-            x: [0, rect.width],
-            y: [0, 0],
-            ...option,
-            delay: option.delay * (type.colors.length - index),
-          }).finished;
-        })
-      )
-    },
-  ],
-  // slide-up
-  [
-    ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'slide-up')
-        return;
-      const option = type.enter;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.scaling.setAll(1);
-
-          return anime({
-            targets: mesh.position,
-            x: [0, 0],
-            y: [-rect.height, 0],
-            ...option,
-            delay: option.delay * index,
-          }).finished;
-        })
-      )
-    },
-    ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'slide-up')
-        return;
-      const option = type.leave;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.scaling.setAll(1);
-
-          return anime({
-            targets: mesh.position,
-            x: [0, 0],
-            y: [0, rect.height],
-            ...option,
-            delay: option.delay * (type.colors.length - index),
-          }).finished;
-        })
-      )
-    },
-  ],
-  // slide-down
-  [
-    ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'slide-down')
-        return;
-      const option = type.enter;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.scaling.setAll(1);
-
-          return anime({
-            targets: mesh.position,
-            x: [0, 0],
-            y: [rect.height, 0],
-            ...option,
-            delay: option.delay * index,
-          }).finished;
-        })
-      )
-    },
-    ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'slide-down')
-        return;
-      const option = type.leave;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.scaling.setAll(1);
-
-          return anime({
-            targets: mesh.position,
-            x: [0, 0],
-            y: [0, -rect.height],
-            ...option,
-            delay: option.delay * (type.colors.length - index),
-          }).finished;
-        })
-      )
-    },
-  ],
-  // scale
-  [
-    ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'scale')
-        return;
-      const option = type.enter;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.position.setAll(0);
-
-          return anime({
-            targets: mesh.scaling,
-            x: [0, 1],
-            y: [0, 1],
-            ...option,
-            delay: option.delay * index,
-          }).finished;
-        })
-      )
-    },
-    ({ type, meshes }) => {
-      const option = type.leave;
-      if (type.name !== 'rect' || option.action !== 'scale')
-        return;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.position.setAll(0);
-
-          return anime({
-            targets: mesh.scaling,
-            x: [1, 0],
-            y: [1, 0],
-            ...option,
-            delay: option.delay * (type.colors.length - index),
-          }).finished;
-        })
-      )
-    },
-  ],
-  // scale-x
-  [
-    ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'scale-x')
-        return;
-      const option = type.enter;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.position.setAll(0);
-
-          return anime({
-            targets: mesh.scaling,
-            x: [0, 1],
-            y: [1, 1],
-            ...option,
-            delay: option.delay * index,
-          }).finished;
-        })
-      )
-    },
-    ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'scale-x')
-        return;
-      const option = type.leave;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.position.setAll(0);
-
-          return anime({
-            targets: mesh.scaling,
-            x: [1, 0],
-            ...option,
-            delay: option.delay * (type.colors.length - index),
-          }).finished;
-        })
-      )
-    },
-  ],
-  // scale-y
-  [
-    ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'scale-y')
-        return;
-      const option = type.enter;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.position.setAll(0);
-
-          return anime({
-            targets: mesh.scaling,
-            x: [1, 1],
-            y: [0, 1],
-            ...option,
-            delay: option.delay * index,
-          }).finished;
-        })
-      )
-    },
-    ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'scale-y')
-        return;
-      const option = type.leave;
-
-      return pipe(meshes,
-        filter(isMeshName('rect')),
-        map.indexed((mesh, index) => {
-          mesh.position.setAll(0);
-
-          return anime({
-            targets: mesh.scaling,
-            x: [1, 1],
-            y: [1, 0],
             ...option,
             delay: option.delay * (type.colors.length - index),
           }).finished;
@@ -1361,6 +1102,7 @@ const fenceProviders: Providers = [
 
 const list = [
   ...rectProviders,
+  ...convergingRectProviders,
   ...roundProviders,
   ...fenceProviders,
 ]
