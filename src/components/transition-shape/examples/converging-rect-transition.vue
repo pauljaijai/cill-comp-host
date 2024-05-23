@@ -30,7 +30,7 @@ import { throttle, debounce } from 'lodash-es';
 import { map, pipe, reverse } from 'remeda';
 
 import TransitionShape, {
-  TransitionType, FenceAction
+  TransitionType, ConvergingRectAction,
 } from '../transition-shape.vue';
 
 import { useToggle } from '@vueuse/core';
@@ -63,8 +63,9 @@ const handleClick = throttle(() => {
   trailing: false,
 });
 
-const actions = Object.values(FenceAction);
-// const actions = [FenceAction.SPREAD_RIGHT];
+const actions = [
+  ConvergingRectAction.SLIDE_X
+];
 const reverseActions = pipe(actions, reverse());
 
 type Item = TransitionType & {
@@ -77,7 +78,7 @@ const list: Item[] = pipe(
 
     const result: Item = {
       key: action,
-      name: 'fence',
+      name: 'converging-rect',
       enter: {
         action,
         duration: 800,
