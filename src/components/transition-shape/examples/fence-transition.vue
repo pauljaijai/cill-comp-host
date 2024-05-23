@@ -26,8 +26,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { throttle, debounce } from 'lodash-es';
-import { map, pipe, reverse } from 'remeda';
+import { throttle, debounce, shuffle } from 'lodash-es';
+import { hasAtLeast, map, pipe, reverse } from 'remeda';
 
 import TransitionShape, {
   TransitionType, FenceAction
@@ -75,6 +75,11 @@ const list: Item[] = pipe(
   map.indexed((action, i) => {
     const targetAction = reverseActions[i] ?? action;
 
+    const colors = shuffle(['#27A4F2', '#44C1F2', '#85DEF2', '#DCEEF2', '#91E9F2',]);
+    if (!hasAtLeast(colors, 1)) {
+      throw new Error('At least one color is required');
+    }
+
     const result: Item = {
       key: action,
       name: 'fence',
@@ -90,11 +95,7 @@ const list: Item[] = pipe(
         delay: 100,
         easing: 'easeInExpo',
       },
-      colors: [
-        '#27A4F2', '#44C1F2',
-        '#85DEF2', '#DCEEF2',
-        '#91E9F2',
-      ],
+      colors,
     }
 
     return result;
