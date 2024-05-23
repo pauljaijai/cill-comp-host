@@ -13,7 +13,7 @@ export function isTypeName<
 > {
   return data.name === name;
 }
-/** TODO: 沒有完全成功，enter 為 union type 沒辦法有效收束 */
+/** TODO: 沒有完全成功，enter 為 union type 時沒辦法有效收束 */
 export function isEnterAction<
   Enter extends { action: string },
 >(
