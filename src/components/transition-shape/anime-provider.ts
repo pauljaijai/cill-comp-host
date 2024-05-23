@@ -13,7 +13,7 @@ export function isTypeName<
 > {
   return data.name === name;
 }
-
+/** TODO: 沒有完全成功，enter 為 union type 沒辦法有效收束 */
 export function isEnterAction<
   Enter extends { action: string },
 >(
@@ -24,17 +24,16 @@ export function isEnterAction<
 > {
   return enter.action === action;
 }
-
-export function isLeaveAction<
-  Leave extends { action: string },
->(
-  leave: Leave,
-  action: Leave['action']
-): leave is Extract<
-  Leave, { action: Leave['action'] }
-> {
-  return leave.action === action;
-}
+// export function isLeaveAction<
+//   Leave extends { action: string },
+// >(
+//   leave: Leave,
+//   action: Leave['action']
+// ): leave is Extract<
+//   Leave, { action: Leave['action'] }
+// > {
+//   return leave.action === action;
+// }
 
 interface Param {
   rect: DOMRect;
@@ -57,18 +56,9 @@ const rectProviders: Providers = [
   // slide-right
   [
     ({ rect, type, meshes }) => {
-      if (isTypeName(type, 'converging-rect')) {
-        type
-
-        if (isEnterAction(type.enter, 'slide-down')) {
-          type.enter
-        }
-
-        return;
-      }
-
       if (type.name !== 'rect' || type.enter.action !== 'slide-right')
         return;
+
       const option = type.enter;
 
       return pipe(meshes,
