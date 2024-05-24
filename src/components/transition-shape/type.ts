@@ -35,10 +35,6 @@ interface TransitionConvergingRect {
   name: 'converging-rect';
   enter: {
     action: `${ConvergingRectAction}`,
-    /** 0~30 度
-     * 
-     * @default 0
-     */
     angle?: number;
     duration: number;
     /** 每個 shape 延遲間距  */
@@ -113,9 +109,34 @@ interface TransitionFence {
   colors: [string, ...string[]];
 }
 
+export enum SequentialLineAction {
+  DEFAULT = 'default',
+}
+interface TransitionSequentialLine {
+  name: 'sequential-line';
+  enter: {
+    action: `${SequentialLineAction}`,
+    /** @default 0 */
+    angle?: number;
+    duration: number;
+    /** 每個 shape 延遲間距  */
+    delay: number;
+    easing: EasingOptions;
+  };
+  leave: {
+    action: `${SequentialLineAction}`,
+    duration: number;
+    delay: number;
+    easing: EasingOptions;
+  };
+  /** HEX 格式。至少需要 2 個 */
+  colors: [string, string, ...string[]];
+}
+
 /** 初始化後 name 變更會被忽略，其餘參數皆可動態調整 */
 export type TransitionType =
   TransitionRect
   | TransitionConvergingRect
   | TransitionRound
   | TransitionFence
+  | TransitionSequentialLine

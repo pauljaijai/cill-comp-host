@@ -8,6 +8,8 @@ import TransitionParam from '../../../src/components/transition-shape/examples/t
 import RoundTransition from '../../../src/components/transition-shape/examples/round-transition.vue'
 import FenceTransition from '../../../src/components/transition-shape/examples/fence-transition.vue'
 import ConvergingRectTransition from '../../../src/components/transition-shape/examples/converging-rect-transition.vue'
+import SequentialLineTransition from '../../../src/components/transition-shape/examples/sequential-line-transition.vue'
+
 </script>
 
 # 多邊形轉場
@@ -77,6 +79,16 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-shape/examples/converging-rect-transition.vue
+:::
+
+### Sequential Line 轉場
+
+點擊任意魚，開始轉場。(≧∇≦)ﾉ
+
+<sequential-line-transition />
+
+::: details 查看範例原始碼
+<<< ../../../src/components/transition-shape/examples/sequential-line-transition.vue
 :::
 
 ## 原理
