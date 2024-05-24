@@ -113,16 +113,19 @@ const meshProviders: MeshProvider[] = [
       material.diffuseColor = Color3.FromHexString(color);
 
       /** 每種顏色建立 2 個 mesh */
-      const meshes = pipe([0, 1],
-        map(() => {
+      const meshes = pipe([-1, 1],
+        map((value) => {
+          const meshHight = height * 10;
           const mesh = MeshBuilder.CreateBox(name, {
-            width: width / 2,
-            height,
-            depth: 0,
+            width, height: meshHight, depth: 0,
           }, scene)
+          mesh.material = material;
+
+          mesh.setPivotPoint(
+            new Vector3((width / 2) * value, meshHight / 2, 0)
+          );
 
           mesh.position = new Vector3(0, 0, 0);
-          mesh.material = material;
 
           return mesh;
         }),

@@ -63,38 +63,33 @@ const handleClick = throttle(() => {
   trailing: false,
 });
 
-const actions = [
-  ConvergingRectAction.SLIDE_X
-];
-const reverseActions = pipe(actions, reverse());
-
 type Item = TransitionType & {
   key: string;
 }
 const list: Item[] = pipe(
-  actions,
-  map.indexed((action, i) => {
-    const targetAction = reverseActions[i] ?? action;
+  [0, 5, 30],
+  map((angle) => {
+    const action = ConvergingRectAction.SLIDE;
 
     const result: Item = {
       key: action,
       name: 'converging-rect',
       enter: {
         action,
+        angle,
         duration: 800,
         delay: 100,
         easing: 'easeOutExpo',
       },
       leave: {
-        action: targetAction,
+        action,
         duration: 800,
         delay: 100,
         easing: 'easeInExpo',
       },
       colors: [
-        '#27A4F2', '#44C1F2',
-        '#85DEF2', '#DCEEF2',
-        '#91E9F2',
+        '#27A4F2', '#44C1F2', '#85DEF2',
+        '#DCEEF2', '#91E9F2',
       ],
     }
 

@@ -29,8 +29,7 @@ interface TransitionRect {
 }
 
 export enum ConvergingRectAction {
-  SLIDE_X = 'slide-x',
-  SLIDE_Y = 'slide-y',
+  SLIDE = 'slide',
 }
 interface TransitionConvergingRect {
   name: 'converging-rect';

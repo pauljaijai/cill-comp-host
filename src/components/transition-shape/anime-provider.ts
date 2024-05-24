@@ -1,4 +1,4 @@
-import { Mesh } from "@babylonjs/core";
+import { Angle, Mesh } from "@babylonjs/core";
 import { TransitionType } from "./type";
 import anime from "animejs";
 import { chunk, filter, flatten, isTruthy, map, pipe } from "remeda";
@@ -358,17 +358,18 @@ const rectProviders: Providers = [
 ]
 /** convergingRect [enter, leave] */
 const convergingRectProviders: Providers = [
-  // slide-x
+  // slide
   [
     ({ rect, type, meshes }) => {
       const name: TransitionType['name'] = 'converging-rect';
-      if (!isTypeEnter(type, name, 'slide-x'))
+      if (!isTypeEnter(type, name, 'slide'))
         return;
 
       const option = type.enter;
 
+      const rotate = Angle.FromDegrees(type.enter.angle ?? 0).radians();
       const startX = rect.width + rect.width / 2;
-      const endX = rect.width / 4;
+      const endX = rect.width / 2;
 
       return pipe(meshes,
         filter(isMeshName(name)),
@@ -378,6 +379,7 @@ const convergingRectProviders: Providers = [
 
           mesh01.scaling.setAll(1);
           mesh01.position.y = 0;
+          mesh01.rotation.z = rotate;
 
           const result = [
             anime({
@@ -391,6 +393,8 @@ const convergingRectProviders: Providers = [
           if (mesh02) {
             mesh02.scaling.setAll(1);
             mesh02.position.y = 0;
+            mesh02.rotation.z = rotate;
+
             result.push(
               anime({
                 targets: mesh02.position,
@@ -408,7 +412,7 @@ const convergingRectProviders: Providers = [
     },
     ({ rect, type, meshes }) => {
       const name: TransitionType['name'] = 'converging-rect';
-      if (!isTypeLeave(type, name, 'slide-x'))
+      if (!isTypeLeave(type, name, 'slide'))
         return;
 
       const option = type.leave;
