@@ -122,7 +122,7 @@ const meshProviders: MeshProvider[] = [
           mesh.material = material;
 
           mesh.setPivotPoint(
-            new Vector3((width / 2) * value, meshHight / 2, 0)
+            new Vector3((width / 2) * value, 0, 0)
           );
 
           mesh.position = new Vector3(0, 0, 0);

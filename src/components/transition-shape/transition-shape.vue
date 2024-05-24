@@ -32,7 +32,8 @@ export * from './type';
 <script setup lang="ts">
 import {
   computed, CSSProperties,
-  nextTick, ref, TransitionProps
+  nextTick, ref, TransitionProps,
+  watch
 } from 'vue';
 import { find, pipe } from 'remeda';
 import { TransitionType } from './type';
@@ -114,7 +115,7 @@ const maskStyle = computed<CSSProperties>(() => pipe(
     left: `${bounding?.left.value}px`,
     width: `${bounding?.width.value}px`,
     height: `${bounding?.height.value}px`,
-    opacity: maskVisible.value ? 1 : 0,
+    // opacity: maskVisible.value ? 1 : 0,
   })
 ));
 
@@ -149,7 +150,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   // 如果有 leaveElRef，表示為切換動畫
   if (leaveElRef.value) {
     // 將 enterEl 先脫離佔位
-    el.style.position = 'fixed';
+    el.style.display = 'none';
   }
 
   // appear 時，需要等待 mask 初始化完成
@@ -159,7 +160,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
 
   // 如果有 leaveElRef，表示為切換動畫
   if (leaveElRef.value) {
-    el.style.position = '';
+    el.style.display = '';
     // 提早移除 leaveEl 以免影響定位
     leaveElRef.value = undefined;
 
@@ -203,7 +204,7 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   // 如果有 enterElRef，表示為切換動畫
   if (enterElRef.value) {
     // 將 leaveEl 脫離佔位
-    el.style.position = 'fixed';
+    el.style.display = 'none';
 
     if (isSizeChanged(leaveElBounding, enterElBounding)) {
       await promiseTimeout(SIZE_CHANGE_DELAY_SEC * 1000);

@@ -14,7 +14,7 @@
       >
         <div
           :key="fishIndex"
-          class="text-[5rem] text-center w-full cursor-pointer"
+          class="text-[6rem] py-6 text-center w-full cursor-pointer"
           @click="handleClick()"
         >
           {{ fishList[fishIndex] }}
@@ -87,13 +87,13 @@ const list: Item[] = pipe(
         action,
         duration: 800,
         delay: 100,
-        easing: 'easeOutExpo',
+        easing: 'easeOutQuart',
       },
       leave: {
         action: targetAction,
         duration: 800,
         delay: 100,
-        easing: 'easeInExpo',
+        easing: 'easeInQuart',
       },
       colors,
     }

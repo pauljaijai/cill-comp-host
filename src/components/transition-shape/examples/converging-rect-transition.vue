@@ -14,7 +14,7 @@
       >
         <div
           :key="fishIndex"
-          class="text-[5rem] text-center w-full cursor-pointer"
+          class="text-[5rem] py-5 text-center w-full cursor-pointer"
           @click="handleClick()"
         >
           {{ fishList[fishIndex] }}
@@ -67,7 +67,7 @@ type Item = TransitionType & {
   key: string;
 }
 const list: Item[] = pipe(
-  [0, 5, 30],
+  [0, 10, -30],
   map((angle) => {
     const action = ConvergingRectAction.SLIDE;
 

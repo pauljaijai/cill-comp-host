@@ -11,7 +11,7 @@
       >
         <div
           :key="fishIndex"
-          class="py-6 text-[4rem] text-center w-full cursor-pointer"
+          class="py-6 text-[5rem] text-center w-full cursor-pointer"
           @click="handleClick()"
         >
           {{ fishList[fishIndex] }}
