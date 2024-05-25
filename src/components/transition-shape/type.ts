@@ -139,4 +139,4 @@ export type TransitionType =
   | TransitionConvergingRect
   | TransitionRound
   | TransitionFence
-  | TransitionSequentialLine
+  // | TransitionSequentialLine
