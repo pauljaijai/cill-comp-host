@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
     <div
-      class="border rounded px-4 py-2 cursor-pointer w-full text-center"
+      class="border rounded px-4 py-2 cursor-pointer select-none w-full text-center"
       @click="change()"
     >
       更換
@@ -9,7 +9,10 @@
 
     <div class="w-full flex flex-col gap-4 border bg-slate-100 rounded p-6 overflow-hidden">
       <div class="flex justify-center">
-        <transition-shape :type="imgTransition">
+        <transition-shape
+          :type="imgTransition"
+          @after-transition="handleReady"
+        >
           <img
             :key="index"
             :src="profile"
@@ -20,7 +23,10 @@
 
       <div class=" text-2xl font-bold flex flex-col justify-center items-center gap-2">
         鱈魚
-        <transition-shape :type="fishTransition">
+        <transition-shape
+          :type="fishTransition"
+          @after-transition="handleReady"
+        >
           <div
             :key="index"
             class="p-2 px-4 text-3xl"
@@ -30,7 +36,10 @@
         </transition-shape>
       </div>
 
-      <transition-shape :type="textTransition">
+      <transition-shape
+        :type="textTransition"
+        @after-transition="handleReady"
+      >
         <div
           :key="index"
           class=" p-8 "
@@ -47,6 +56,7 @@ import { computed, ref } from 'vue';
 import { hasAtLeast, piped, reverse } from 'remeda';
 
 import TransitionShape, { TransitionType } from '../transition-shape.vue';
+import { debounce } from 'lodash-es';
 
 const index = ref(0);
 
@@ -70,8 +80,14 @@ const introductionList = [
 ]
 const introduction = computed(() => introductionList[index.value % introductionList.length]);
 
+const isReady = ref(false);
+const handleReady = debounce(() => {
+  isReady.value = true;
+}, 1000);
 
 function change() {
+  if (!isReady.value) return;
+  isReady.value = false;
   index.value++;
 }
 
