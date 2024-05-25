@@ -53,6 +53,8 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 
 ### Round 轉場
 
+由圓形組成。
+
 點擊任意魚，開始轉場。(≧∇≦)ﾉ
 
 <round-transition />
@@ -62,6 +64,8 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 :::
 
 ### Fence 轉場
+
+向柵欄一般，由多個矩形組成。
 
 點擊任意魚，開始轉場。(≧∇≦)ﾉ
 
@@ -73,6 +77,8 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 
 ### Converging Rect 轉場
 
+由多個矩形向中心匯聚，可以設定傾斜角度。
+
 點擊任意魚，開始轉場。(≧∇≦)ﾉ
 
 <converging-rect-transition />
@@ -82,6 +88,8 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 :::
 
 ### Sequential Line 轉場
+
+由多條線條組成。
 
 點擊任意魚，開始轉場。(≧∇≦)ﾉ
 
