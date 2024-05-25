@@ -116,6 +116,24 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 
 <<< ../../../src/components/transition-shape/transition-shape.vue/#Props
 
+<<< ../../../src/components/transition-shape/type.ts/#TransitionType
+
+::: details TransitionRect
+<<< ../../../src/components/transition-shape/type.ts/#TransitionRect
+:::
+
+::: details TransitionConvergingRect
+<<< ../../../src/components/transition-shape/type.ts/#TransitionConvergingRect
+:::
+
+::: details TransitionRound
+<<< ../../../src/components/transition-shape/type.ts/#TransitionRound
+:::
+
+::: details TransitionFence
+<<< ../../../src/components/transition-shape/type.ts/#TransitionFence
+:::
+
 ### Emits
 
 <<< ../../../src/components/transition-shape/transition-shape.vue/#Emits

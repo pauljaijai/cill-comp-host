@@ -1,5 +1,6 @@
 import { EasingOptions } from "animejs";
 
+// #region TransitionRect
 export enum RectAction {
   SLIDE_RIGHT = 'slide-right',
   SLIDE_LEFT = 'slide-left',
@@ -27,7 +28,9 @@ interface TransitionRect {
   /** HEX 格式。顏色數量等同 shape 數量，至少需要一個 */
   colors: [string, ...string[]];
 }
+// #endregion TransitionRect
 
+// #region ConvergingRectAction
 export enum ConvergingRectAction {
   SLIDE = 'slide',
 }
@@ -50,7 +53,9 @@ interface TransitionConvergingRect {
   /** HEX 格式。顏色數量等同 shape 數量，至少需要一個 */
   colors: [string, ...string[]];
 }
+// #endregion ConvergingRectAction
 
+// #region TransitionRound
 export enum RoundEnterAction {
   SPREAD_LEFT = 'spread-left',
   SPREAD_RIGHT = 'spread-right',
@@ -83,7 +88,9 @@ interface TransitionRound {
   /** HEX 格式。顏色數量等同 shape 數量，至少需要一個 */
   colors: [string, ...string[]];
 }
+// #endregion TransitionRound
 
+// #region TransitionFence
 export enum FenceAction {
   SPREAD_RIGHT = 'spread-right',
   SPREAD_LEFT = 'spread-left',
@@ -108,6 +115,7 @@ interface TransitionFence {
   /** HEX 格式。顏色數量等同 shape 數量，至少需要一個 */
   colors: [string, ...string[]];
 }
+// #endregion TransitionFence
 
 export enum SequentialLineAction {
   DEFAULT = 'default',
@@ -133,10 +141,11 @@ interface TransitionSequentialLine {
   colors: [string, string, ...string[]];
 }
 
+// #region TransitionType
 /** 初始化後 name 變更會被忽略，其餘參數皆可動態調整 */
 export type TransitionType =
   TransitionRect
   | TransitionConvergingRect
   | TransitionRound
   | TransitionFence
-  // | TransitionSequentialLine
+// #endregion TransitionType

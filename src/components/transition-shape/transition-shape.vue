@@ -33,7 +33,6 @@ export * from './type';
 import {
   computed, CSSProperties,
   nextTick, ref, TransitionProps,
-  watch
 } from 'vue';
 import { find, pipe } from 'remeda';
 import { TransitionType } from './type';
@@ -44,7 +43,6 @@ import { promiseTimeout, useElementBounding } from '@vueuse/core';
 
 // #region Props
 interface Props {
-  // appear?: boolean;
   type?: TransitionType;
 }
 // #endregion Props
