@@ -57,13 +57,13 @@ const rectProviders: Providers = [
   // slide-right
   [
     ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'slide-right')
-        return;
+      const name = 'rect'
+      if (!isTypeEnter(type, name, 'slide-right')) return;
 
       const option = type.enter;
 
       return pipe(meshes,
-        filter(isMeshName('rect')),
+        filter(isMeshName(name)),
         map.indexed((mesh, index) => {
           mesh.scaling.setAll(1);
 
@@ -78,8 +78,9 @@ const rectProviders: Providers = [
       )
     },
     ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'slide-right')
-        return;
+      const name = 'rect'
+      if (!isTypeLeave(type, name, 'slide-right')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -101,8 +102,10 @@ const rectProviders: Providers = [
   // slide-left
   [
     ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'slide-left')
+      if (!isTypeEnter(type, 'rect', 'slide-left')) {
         return;
+      }
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -121,8 +124,9 @@ const rectProviders: Providers = [
       )
     },
     ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'slide-left')
-        return;
+      const name = 'rect'
+      if (!isTypeLeave(type, name, 'slide-left')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -144,8 +148,10 @@ const rectProviders: Providers = [
   // slide-up
   [
     ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'slide-up')
+      if (!isTypeEnter(type, 'rect', 'slide-up')) {
         return;
+      }
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -164,8 +170,9 @@ const rectProviders: Providers = [
       )
     },
     ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'slide-up')
-        return;
+      const name = 'rect'
+      if (!isTypeLeave(type, name, 'slide-up')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -187,8 +194,10 @@ const rectProviders: Providers = [
   // slide-down
   [
     ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'slide-down')
+      if (!isTypeEnter(type, 'rect', 'slide-down')) {
         return;
+      }
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -207,8 +216,9 @@ const rectProviders: Providers = [
       )
     },
     ({ rect, type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'slide-down')
-        return;
+      const name = 'rect'
+      if (!isTypeLeave(type, name, 'slide-down')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -230,8 +240,10 @@ const rectProviders: Providers = [
   // scale
   [
     ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'scale')
+      if (!isTypeEnter(type, 'rect', 'scale')) {
         return;
+      }
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -250,9 +262,10 @@ const rectProviders: Providers = [
       )
     },
     ({ type, meshes }) => {
+      const name = 'rect'
+      if (!isTypeLeave(type, name, 'scale')) return;
+
       const option = type.leave;
-      if (type.name !== 'rect' || option.action !== 'scale')
-        return;
 
       return pipe(meshes,
         filter(isMeshName('rect')),
@@ -273,8 +286,8 @@ const rectProviders: Providers = [
   // scale-x
   [
     ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'scale-x')
-        return;
+      if (!isTypeEnter(type, 'rect', 'scale-x')) return;
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -293,8 +306,9 @@ const rectProviders: Providers = [
       )
     },
     ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'scale-x')
-        return;
+      const name = 'rect'
+      if (!isTypeLeave(type, name, 'scale-x')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -315,8 +329,8 @@ const rectProviders: Providers = [
   // scale-y
   [
     ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.enter.action !== 'scale-y')
-        return;
+      if (!isTypeEnter(type, 'rect', 'scale-y')) return;
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -335,8 +349,9 @@ const rectProviders: Providers = [
       )
     },
     ({ type, meshes }) => {
-      if (type.name !== 'rect' || type.leave.action !== 'scale-y')
-        return;
+      const name = 'rect'
+      if (!isTypeLeave(type, name, 'scale-y')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -362,8 +377,7 @@ const convergingRectProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name: TransitionType['name'] = 'converging-rect';
-      if (!isTypeEnter(type, name, 'slide'))
-        return;
+      if (!isTypeEnter(type, name, 'slide')) return;
 
       const option = type.enter;
 
@@ -462,12 +476,13 @@ const roundProviders: Providers = [
   // scale
   [
     ({ type, meshes }) => {
-      if (type.name !== 'round' || type.enter.action !== 'scale')
-        return;
+      const name = 'round'
+      if (!isTypeEnter(type, name, 'scale')) return;
+
       const option = type.enter;
 
       return pipe(meshes,
-        filter((item) => item.name === 'round'),
+        filter((item) => item.name === name),
         map.indexed((mesh, index) => {
           mesh.position.setAll(0);
 
@@ -482,8 +497,9 @@ const roundProviders: Providers = [
       )
     },
     ({ type, meshes }) => {
-      if (type.name !== 'round' || type.leave.action !== 'scale')
-        return;
+      const name = 'round'
+      if (!isTypeLeave(type, name, 'scale')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -506,8 +522,8 @@ const roundProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action !== 'scale-lb')
-        return;
+      if (!isTypeEnter(type, name, 'scale-lb')) return;
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -539,8 +555,8 @@ const roundProviders: Providers = [
     },
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.leave.action !== 'scale-lb')
-        return;
+      if (!isTypeLeave(type, name, 'scale-lb')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -573,8 +589,8 @@ const roundProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action !== 'scale-lt')
-        return;
+      if (!isTypeEnter(type, name, 'scale-lt')) return;
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -606,8 +622,8 @@ const roundProviders: Providers = [
     },
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.leave.action !== 'scale-lt')
-        return;
+      if (!isTypeLeave(type, name, 'scale-lt')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -643,8 +659,8 @@ const roundProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action !== 'scale-rb')
-        return;
+      if (!isTypeEnter(type, name, 'scale-rb')) return;
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -676,8 +692,8 @@ const roundProviders: Providers = [
     },
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.leave.action !== 'scale-rb')
-        return;
+      if (!isTypeLeave(type, name, 'scale-rb')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -713,8 +729,8 @@ const roundProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action !== 'scale-rt')
-        return;
+      if (!isTypeEnter(type, name, 'scale-rt')) return;
+
       const option = type.enter;
 
       return pipe(meshes,
@@ -746,8 +762,8 @@ const roundProviders: Providers = [
     },
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.leave.action !== 'scale-rt')
-        return;
+      if (!isTypeLeave(type, name, 'scale-rt')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -784,8 +800,8 @@ const roundProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action !== 'spread-left')
-        return;
+      if (!isTypeEnter(type, name, 'spread-left')) return;
+
       const option = type.enter;
 
       /** 外接圓直徑 */
@@ -817,8 +833,8 @@ const roundProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action !== 'spread-right')
-        return;
+      if (!isTypeEnter(type, name, 'spread-right')) return;
+
       const option = type.enter;
 
       /** 外接圓直徑 */
@@ -850,8 +866,8 @@ const roundProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action !== 'spread-up')
-        return;
+      if (!isTypeEnter(type, name, 'spread-up')) return;
+
       const option = type.enter;
 
       /** 外接圓直徑 */
@@ -883,8 +899,8 @@ const roundProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action !== 'spread-down')
-        return;
+      if (!isTypeEnter(type, name, 'spread-down')) return;
+
       const option = type.enter;
 
       /** 外接圓直徑 */
@@ -916,8 +932,8 @@ const roundProviders: Providers = [
   [
     ({ rect, type, meshes }) => {
       const name = 'round'
-      if (type.name !== name || type.enter.action !== 'spread-scale')
-        return;
+      if (!isTypeEnter(type, name, 'spread-scale')) return;
+
       const option = type.enter;
 
       const offset = 1 / type.colors.length;
@@ -946,9 +962,9 @@ const fenceProviders: Providers = [
   // spread-left
   [
     ({ rect, type, meshes }) => {
-      const name = 'fence';
-      if (type.name !== name || type.enter.action !== 'spread-left')
-        return;
+      const name = 'fence'
+      if (!isTypeEnter(type, name, 'spread-left')) return;
+
       const option = type.enter;
 
       const { width } = rect;
@@ -976,9 +992,9 @@ const fenceProviders: Providers = [
       )
     },
     ({ rect, type, meshes }) => {
-      const name = 'fence';
-      if (type.name !== name || type.leave.action !== 'spread-left')
-        return;
+      const name = 'fence'
+      if (!isTypeLeave(type, name, 'spread-left')) return;
+
       const option = type.leave;
 
       const { width } = rect;
@@ -1004,9 +1020,9 @@ const fenceProviders: Providers = [
   // spread-right
   [
     ({ rect, type, meshes }) => {
-      const name = 'fence';
-      if (type.name !== name || type.enter.action !== 'spread-right')
-        return;
+      const name = 'fence'
+      if (!isTypeEnter(type, name, 'spread-right')) return;
+
       const option = type.enter;
 
       const { width } = rect;
@@ -1034,9 +1050,9 @@ const fenceProviders: Providers = [
       )
     },
     ({ rect, type, meshes }) => {
-      const name = 'fence';
-      if (type.name !== name || type.leave.action !== 'spread-right')
-        return;
+      const name = 'fence'
+      if (!isTypeLeave(type, name, 'spread-right')) return;
+
       const option = type.leave;
 
       const { width } = rect;
@@ -1062,9 +1078,9 @@ const fenceProviders: Providers = [
   // scale-y
   [
     ({ rect, type, meshes }) => {
-      const name = 'fence';
-      if (type.name !== name || type.enter.action !== 'scale-y')
-        return;
+      const name = 'fence'
+      if (!isTypeEnter(type, name, 'scale-y')) return;
+
       const option = type.enter;
 
       const { width } = rect;
@@ -1086,9 +1102,9 @@ const fenceProviders: Providers = [
       )
     },
     ({ rect, type, meshes }) => {
-      const name = 'fence';
-      if (type.name !== name || type.leave.action !== 'scale-y')
-        return;
+      const name = 'fence'
+      if (!isTypeLeave(type, name, 'scale-y')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
@@ -1107,9 +1123,9 @@ const fenceProviders: Providers = [
   // scale-x
   [
     ({ rect, type, meshes }) => {
-      const name = 'fence';
-      if (type.name !== name || type.enter.action !== 'scale-x')
-        return;
+      const name = 'fence'
+      if (!isTypeEnter(type, name, 'scale-x')) return;
+
       const option = type.enter;
 
       const { width } = rect;
@@ -1132,8 +1148,8 @@ const fenceProviders: Providers = [
     },
     ({ rect, type, meshes }) => {
       const name = 'fence';
-      if (type.name !== name || type.leave.action !== 'scale-x')
-        return;
+      if (!isTypeLeave(type, name, 'scale-x')) return;
+
       const option = type.leave;
 
       return pipe(meshes,
