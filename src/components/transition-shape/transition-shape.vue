@@ -43,11 +43,12 @@ import { promiseTimeout, useElementBounding } from '@vueuse/core';
 
 // #region Props
 interface Props {
+  appear?: boolean;
   type?: TransitionType;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  // appear: false,
+  appear: false,
   type: () => ({
     name: 'rect',
     enter: {
@@ -91,6 +92,9 @@ const maskCssTransitionValue = computed(() => {
     `height ${SIZE_CHANGE_DELAY_SEC}s cubic-bezier(0.5, 0, 0, 1.2)`,
   ].join(', ')
 });
+
+/** 如果 appear 為 false，則需快速結束第一次動畫 */
+let isFirst = true;
 
 const enterElRef = ref<HTMLElement>();
 const enterElBounding = useElementBounding(enterElRef);
@@ -145,14 +149,21 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   const enterElBounding = el.getBoundingClientRect();
   const leaveElBounding = leaveElRef.value?.getBoundingClientRect();
 
+  // 初始化 mask
+  await maskRef.value?.init(enterElBounding);
+
+  if (isFirst && !props.appear) {
+    isFirst = false;
+    el.style.opacity = '1';
+    emit('after-transition')
+    return done()
+  }
+
   // 如果有 leaveElRef，表示為切換動畫
   if (leaveElRef.value) {
     // 將 enterEl 先脫離佔位
     el.style.display = 'none';
   }
-
-  // appear 時，需要等待 mask 初始化完成
-  await maskRef.value?.initFinished();
 
   await maskRef.value?.enter(enterElBounding);
 
@@ -186,8 +197,6 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   // nextTick 才能同時取得 enterElRef 和 leaveElRef
   await nextTick();
   // console.log(`🚀 ~ handleLeave: `);
-  // console.log(`🚀 ~ enterElRef: `, enterElRef);
-  // console.log(`🚀 ~ leaveElRef: `, leaveElRef);
 
   if (!(el instanceof HTMLElement)) {
     return done()

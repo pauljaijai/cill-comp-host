@@ -37,6 +37,7 @@
       </div>
 
       <transition-shape
+        appear
         :type="textTransition"
         @after-transition="handleReady"
       >
@@ -83,7 +84,7 @@ const introduction = computed(() => introductionList[index.value % introductionL
 const isReady = ref(false);
 const handleReady = debounce(() => {
   isReady.value = true;
-}, 1000);
+}, 500);
 
 function change() {
   if (!isReady.value) return;

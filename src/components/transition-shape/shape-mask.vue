@@ -39,8 +39,7 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-const initFinished = ref(false);
-const { canvasRef } = useBabylonScene({
+const { canvasRef, scene } = useBabylonScene({
   createCamera(scene) {
     const camera = new ArcRotateCamera(
       'camera',
@@ -68,12 +67,23 @@ const { canvasRef } = useBabylonScene({
       defaultLight.diffuse = new Color3(1, 1, 1);
       defaultLight.groundColor = new Color3(1, 1, 1);
     }
-
-    await initMeshes(scene);
-    emit('init');
-    initFinished.value = true;
   },
 });
+
+const initFinished = ref(false);
+async function init(rect: DOMRect) {
+  if (initFinished.value) return;
+
+  await until(scene).toBeTruthy();
+
+  if (!scene.value) {
+    throw new Error('scene is not ready');
+  }
+
+  await initMeshes(scene.value, rect);
+  emit('init');
+  initFinished.value = true;
+}
 
 const meshes: Mesh[] = [];
 
@@ -99,6 +109,7 @@ const meshProviders: MeshProvider[] = [
       mesh.position = new Vector3(0, 0, 0);
 
       mesh.material = material;
+      mesh.isVisible = false;
 
       return mesh;
     });
@@ -126,6 +137,7 @@ const meshProviders: MeshProvider[] = [
           );
 
           mesh.position = new Vector3(0, 0, 0);
+          mesh.isVisible = false;
 
           return mesh;
         }),
@@ -156,6 +168,7 @@ const meshProviders: MeshProvider[] = [
       mesh.rotation = new Vector3(Math.PI, 0, 0);
 
       mesh.material = material;
+      mesh.isVisible = false;
 
       return mesh;
     });
@@ -181,17 +194,23 @@ const meshProviders: MeshProvider[] = [
         height,
         depth: 0,
       }, scene);
-      mesh.position = new Vector3(xList[i], 0, 0);
+      mesh.position = new Vector3(0, 0, 0);
 
       mesh.material = material;
+      mesh.isVisible = false;
 
       return mesh;
     });
   },
 ];
-async function initMeshes(scene: Scene) {
+async function initMeshes(scene: Scene, rect: DOMRect) {
   for (const provider of meshProviders) {
-    const result = provider({ scene, ...props });
+    const result = provider({
+      scene,
+      type: props.type,
+      width: rect.width,
+      height: rect.height,
+    });
     if (!result) continue;
     meshes.push(...result);
   }
@@ -236,6 +255,11 @@ async function enter(rect: DOMRect) {
       rect, type: props.type, meshes: meshes,
     });
     if (!result) continue;
+    
+    meshes.forEach((mesh) => {
+      mesh.isVisible = true;
+    });
+
     await Promise.all(result);
     break;
   }
@@ -257,6 +281,10 @@ async function leave(rect: DOMRect) {
     });
     if (!result) continue;
     await Promise.all(result);
+
+    meshes.forEach((mesh) => {
+      mesh.isVisible = false;
+    });
     break;
   }
 
@@ -270,9 +298,7 @@ const isTransition = computed(
 );
 
 defineExpose({
-  async initFinished() {
-    await until(initFinished).toBe(true);
-  },
+  init,
   isTransition,
   enter,
   leave,
@@ -280,6 +306,4 @@ defineExpose({
 </script>
 
 <style scoped lang="sass">
-.shape-mask
-  transition-duration: width 0.1s, height 0.1s !important
 </style>
