@@ -8,6 +8,8 @@ import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-
 import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interactive-effect.vue';
 import WrapperKirbyMouthfulMode from '../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue';
 
+import TransitionShape from '../../src/components/transition-shape/examples/basic-usage.vue';
+
 import UtilPartyPopper from '../../src/components/util-party-popper/examples/emit-position.vue';
 
 </script>
@@ -73,6 +75,14 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡• )
 
 <wrapper-kirby-mouthful-mode class="h-[70vh]" />
+
+## 轉場
+
+### [多邊形轉場](./transition-shape/) <Badge type="info" text="transition" />
+
+Motion Graphic 風格的 Transition 元件
+
+<transition-shape class="h-[70vh]" />
 
 ## 實用
 

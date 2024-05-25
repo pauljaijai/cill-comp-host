@@ -66,7 +66,7 @@ const profile = computed(() => profileList[index.value % profileList.length]);
 const introductionList = [
   `一隻熱愛程式的魚，但是沒有手指可以打鍵盤，更買不到能在水裡用的電腦。('◉◞⊖◟◉\` )`,
   '最擅長的球類是地瓜球，一打十輕輕鬆鬆。( •̀ ω •́ )✧',
-  `不知道是不是在水裡躺平躺久了，最近喝水也會胖。_(: 3」ㄥ)_`,
+  `不知道是不是在水裡躺平躺久了，最近喝水也會胖。\n_(:3」ㄥ)_`,
 ]
 const introduction = computed(() => introductionList[index.value % introductionList.length]);
 
