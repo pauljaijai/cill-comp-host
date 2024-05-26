@@ -103,7 +103,7 @@ const leaveElRef = ref<HTMLElement>();
 const leaveElBounding = useElementBounding(leaveElRef);
 
 const currentBounding = computed(() => pipe(
-  [leaveElBounding, enterElBounding],
+  [enterElBounding, leaveElBounding],
   find(({ width }) => width.value > 0),
 ));
 

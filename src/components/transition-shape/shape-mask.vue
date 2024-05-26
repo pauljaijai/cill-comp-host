@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import {
   ArcRotateCamera, Camera,
-  Color3, Color4, HemisphericLight, Mesh, MeshBuilder,
+  Color3, Color4, Engine, HemisphericLight, Mesh, MeshBuilder,
   Scene, StandardMaterial, Vector3
 } from '@babylonjs/core';
 import { computed, ref, watch } from 'vue';
@@ -39,7 +39,16 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-const { canvasRef, scene } = useBabylonScene({
+const {
+  canvasRef,
+  scene,
+  engine,
+} = useBabylonScene({
+  async createEngine(canvas) {
+    return new Engine(canvas, true, {
+      alpha: true,
+    });
+  },
   createCamera(scene) {
     const camera = new ArcRotateCamera(
       'camera',
@@ -69,21 +78,6 @@ const { canvasRef, scene } = useBabylonScene({
     }
   },
 });
-
-const initFinished = ref(false);
-async function init(rect: DOMRect) {
-  if (initFinished.value) return;
-
-  await until(scene).toBeTruthy();
-
-  if (!scene.value) {
-    throw new Error('scene is not ready');
-  }
-
-  await initMeshes(scene.value, rect);
-  emit('init');
-  initFinished.value = true;
-}
 
 const meshes: Mesh[] = [];
 
@@ -203,13 +197,13 @@ const meshProviders: MeshProvider[] = [
     });
   },
 ];
-async function initMeshes(scene: Scene, rect: DOMRect) {
+async function initMeshes(scene: Scene, size: { width: number, height: number }) {
   for (const provider of meshProviders) {
     const result = provider({
       scene,
       type: props.type,
-      width: rect.width,
-      height: rect.height,
+      width: size.width,
+      height: size.height,
     });
     if (!result) continue;
     meshes.push(...result);
@@ -228,17 +222,28 @@ watch(() => props.type.colors, (colors) => {
     mesh.material.diffuseColor = Color3.FromHexString(color);
   });
 }, { deep: true });
-// // 寬高發生變化時，更新 mesh
-// watch(() => [props.width, props.height], ([width, height]) => {
-//   if (!width || !height) return;
-//   if (!scene.value) return;
+// 寬高發生變化時，resize
+watch(() => [props.width, props.height], ([width, height]) => {
+  if (!width || !height) return;
 
-//   meshes.forEach(mesh => {
-//     mesh.dispose();
-//   });
+  engine.value?.resize();
+}, { deep: true });
 
-//   initMeshes(scene.value);
-// }, { deep: true });
+const initFinished = ref(false);
+async function init(rect: DOMRect) {
+  if (initFinished.value) return;
+
+  await until(scene).toBeTruthy();
+
+  if (!scene.value) {
+    throw new Error('scene is not ready');
+  }
+
+  await initMeshes(scene.value, rect);
+  emit('init');
+  initFinished.value = true;
+  engine.value?.resize();
+}
 
 const isEntering = ref(false);
 async function enter(rect: DOMRect) {
@@ -252,10 +257,12 @@ async function enter(rect: DOMRect) {
 
   for (const provider of animeEnterProviders) {
     const result = provider({
-      rect, type: props.type, meshes: meshes,
+      rect,
+      type: props.type,
+      meshes: meshes,
     });
     if (!result) continue;
-    
+
     meshes.forEach((mesh) => {
       mesh.isVisible = true;
     });
@@ -277,7 +284,9 @@ async function leave(rect: DOMRect) {
 
   for (const provider of animeLeaveProviders) {
     const result = provider({
-      rect, type: props.type, meshes: meshes,
+      rect,
+      type: props.type,
+      meshes: meshes,
     });
     if (!result) continue;
     await Promise.all(result);
@@ -302,6 +311,12 @@ defineExpose({
   isTransition,
   enter,
   leave,
+  /** 如果 mask 形狀異常，可能是因為初始化時尺寸發生變化，
+   * 可以呼叫 resize 嘗試重新調整 mask 形狀
+   */
+  resize() {
+    engine.value?.resize();
+  },
 });
 </script>
 
