@@ -30,7 +30,7 @@ interface TransitionRect {
 }
 // #endregion TransitionRect
 
-// #region ConvergingRectAction
+// #region TransitionConvergingRect
 export enum ConvergingRectAction {
   SLIDE = 'slide',
 }
@@ -53,7 +53,7 @@ interface TransitionConvergingRect {
   /** HEX 格式。顏色數量等同 shape 數量，至少需要一個 */
   colors: [string, ...string[]];
 }
-// #endregion ConvergingRectAction
+// #endregion TransitionConvergingRect
 
 // #region TransitionRound
 export enum RoundEnterAction {
