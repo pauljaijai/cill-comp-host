@@ -16,7 +16,7 @@
           <img
             :key="index"
             :src="profile"
-            class=" w-60 rounded-full object-cover shadow-md border-[0.5rem] border-white"
+            class=" w-60 h-60 rounded-full object-cover shadow-md border-[0.5rem] border-white"
           >
         </transition-shape>
       </div>
