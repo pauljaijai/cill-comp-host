@@ -9,25 +9,22 @@
       <div class=" w-full h-full flex flex-col justify-center items-center gap-6">
         <div class="flex gap-6">
           <div
-            ref="ltBtnRef"
             class=" text-4xl rounded p-4 select-none cursor-pointer -rotate-90"
-            @click="emit(ltBtnBounding, 'lt')"
+            @click="(event) => emit(event, 'lt')"
           >
             🎉
           </div>
 
           <div
-            ref="tBtnRef"
             class=" text-4xl rounded p-4 select-none cursor-pointer -rotate-45"
-            @click="emit(tBtnRefBounding, 't')"
+            @click="(event) => emit(event, 't')"
           >
             🎉
           </div>
 
           <div
-            ref="rtBtn01Ref"
             class=" text-4xl rounded p-4 select-none cursor-pointer"
-            @click="emit(rtBtn01Bounding, 'rt')"
+            @click="(event) => emit(event, 'rt')"
           >
             🎉
           </div>
@@ -35,26 +32,23 @@
 
         <div class="flex gap-10">
           <div
-            ref="lBtnRef"
             class=" text-4xl rounded p-4 select-none cursor-pointer -rotate-[135deg]"
-            @click="emit(lBtnRefBounding, 'l')"
+            @click="(event) => emit(event, 'l')"
           >
             🎉
           </div>
 
           <div
-            ref="rBtnRef"
             class=" text-4xl rounded p-4 select-none cursor-pointer rotate-45"
-            @click="emit(rBtnRefBounding, 'r')"
+            @click="(event) => emit(event, 'r')"
           >
             🎉
           </div>
         </div>
 
         <div
-          ref="sparkBtnRef"
           class=" text-4xl rounded p-4 select-none cursor-pointer"
-          @click="emit(sparkBtnBounding)"
+          @click="emit"
         >
           🎇
         </div>
@@ -79,33 +73,20 @@ import { useElementBounding } from '@vueuse/core';
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
 const popperBounding = useElementBounding(popperRef);
 
-const rtBtn01Ref = ref<HTMLDivElement>();
-const rtBtn01Bounding = useElementBounding(rtBtn01Ref);
-
-const ltBtnRef = ref<HTMLDivElement>();
-const ltBtnBounding = useElementBounding(ltBtnRef);
-
-const tBtnRef = ref<HTMLDivElement>();
-const tBtnRefBounding = useElementBounding(tBtnRef);
-
-const rBtnRef = ref<HTMLDivElement>();
-const rBtnRefBounding = useElementBounding(rBtnRef);
-
-const lBtnRef = ref<HTMLDivElement>();
-const lBtnRefBounding = useElementBounding(lBtnRef);
-
-const sparkBtnRef = ref<HTMLDivElement>();
-const sparkBtnBounding = useElementBounding(sparkBtnRef);
-
 type Direction = 'rt' | 'lt' | 't' | 'l' | 'r';
 
 function emit(
-  bounding: ReturnType<typeof useElementBounding>,
+  payload: MouseEvent,
   direction?: Direction,
 ) {
+  const target = payload.target;
+  if (!(target instanceof Element)) return;
+
+  const bounding = target.getBoundingClientRect();
+
   const position = {
-    x: bounding.left.value + bounding.width.value / 2 - popperBounding.left.value,
-    y: bounding.top.value + bounding.height.value / 2 - popperBounding.top.value,
+    x: bounding.left + bounding.width / 2 - popperBounding.left.value,
+    y: bounding.top + bounding.height / 2 - popperBounding.top.value,
   }
 
   const velocityRange = { min: 2, max: 8 }

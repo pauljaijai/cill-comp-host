@@ -84,6 +84,12 @@ export default defineConfig({
             ]
           },
           {
+            text: '轉場',
+            items: [
+              { text: '多邊形轉場', link: '/components/transition-shape/' },
+            ]
+          },
+          {
             text: '實用',
             items: [
               { text: '拉炮', link: '/components/util-party-popper/' },

@@ -13,8 +13,10 @@
       ref="popperRef"
       :confetti="confettiList"
       class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
-      :quantity-of-per-emit="50"
+      :quantity-of-per-emit="20"
       :max-concurrency="50"
+      :max-angular-velocity="Math.PI / 100"
+      :color="{ r: 1, g: 1, b: 1 }"
     />
   </div>
 </template>
@@ -36,50 +38,47 @@ type Confetti = ExtractArrayType<
 >;
 const confettiList: Confetti[] = [
   {
-    shape: 'plane',
-    width: 10,
-    height: 10,
+    shape: 'text',
+    width: 40,
+    height: 40,
+    char: '🐟',
   },
   {
-    shape: 'cylinder',
-    diameter: 10,
-    height: 1,
+    shape: 'text',
+    width: 40,
+    height: 20,
+    char: '肥魚',
   },
   {
-    shape: 'disc',
-    radius: 10,
-    tessellation: 3,
-    arc: 1,
+    shape: 'text',
+    width: 80,
+    height: 40,
+    char: '2 KG！',
   },
   {
-    shape: 'disc',
-    radius: 8,
-    tessellation: 8,
-    arc: 1,
-  },
-  {
-    shape: 'torus',
-    diameter: 12,
-    thickness: 2,
+    shape: 'text',
+    width: 30,
+    height: 30,
+    char: '✨',
   },
 ]
 
 function emit() {
   popperRef.value?.emit(() => ({
     x: 0,
-    y: popperBounding.height.value,
+    y: Scalar.RandomRange(0, popperBounding.height.value),
     velocity: {
       x: -Scalar.RandomRange(5, 10),
-      y: Scalar.RandomRange(10, 20),
+      y: Scalar.RandomRange(-5, 5),
     },
   }));
 
   popperRef.value?.emit(() => ({
     x: popperBounding.width.value,
-    y: popperBounding.height.value,
+    y: Scalar.RandomRange(0, popperBounding.height.value),
     velocity: {
       x: Scalar.RandomRange(5, 10),
-      y: Scalar.RandomRange(10, 20),
+      y: Scalar.RandomRange(-5, 5),
     },
   }));
 }

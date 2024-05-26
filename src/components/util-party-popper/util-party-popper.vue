@@ -15,8 +15,8 @@ import { computed, ref, shallowRef, toRefs } from 'vue';
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import {
   ArcRotateCamera, Camera,
-  Color3, Color4, HemisphericLight, Mesh, MeshBuilder, Scalar,
-  SolidParticle, SolidParticleSystem, Vector3
+  Color3, Color4, DynamicTexture, HemisphericLight, Mesh, MeshBuilder, Scalar,
+  SolidParticle, SolidParticleSystem, StandardMaterial, Vector3
 } from '@babylonjs/core';
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
 import { constant, pipe, piped, range, sample } from 'remeda';
@@ -36,10 +36,9 @@ interface Color {
 
 // #region Props
 type Confetti = {
-  shape: 'box',
+  shape: 'plane',
   width: number;
   height: number;
-  depth: number;
 } | {
   shape: 'cylinder',
   height: number;
@@ -67,6 +66,11 @@ type Confetti = {
   sizeX?: number;
   sizeY?: number;
   sizeZ?: number;
+} | {
+  shape: 'text',
+  width: number;
+  height: number;
+  char: string;
 }
 
 interface Props {
@@ -112,10 +116,9 @@ interface Props {
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   confetti: () => ({
-    shape: 'box',
+    shape: 'plane',
     width: 10,
     height: 10,
-    depth: 1,
   }),
   quantityOfPerEmit: 20,
   maxConcurrency: 10,
@@ -178,7 +181,7 @@ const {
       defaultLight.intensity = 1;
       defaultLight.direction = new Vector3(0.5, 1, 0);
 
-      defaultLight.diffuse = new Color3(1, 0.8, 0.8);
+      defaultLight.diffuse = new Color3(1, 1, 1);
       defaultLight.groundColor = new Color3(1, 1, 1);
     }
 
@@ -191,7 +194,7 @@ const totalAmount = props.quantityOfPerEmit * props.maxConcurrency;
 const numberOfMeshType = pipe(props.confetti,
   (data) => Array.isArray(data) ? data.length : 1
 );
-const numberOfEachMesh = totalAmount / numberOfMeshType;
+const numberOfEachMesh = Math.floor(totalAmount / numberOfMeshType);
 
 const fps = ref(0);
 useIntervalFn(() => {
@@ -216,7 +219,7 @@ const meshProviders: (
   (param: Confetti) => Mesh | undefined
 )[] = [
     (data) => {
-      if (data.shape !== 'box') return;
+      if (data.shape !== 'plane') return;
       return MeshBuilder.CreateBox('mesh', data);
     },
     (data) => {
@@ -241,12 +244,45 @@ const meshProviders: (
       if (data.shape !== 'polyhedron') return;
       return MeshBuilder.CreatePolyhedron('mesh', data);
     },
+    (data) => {
+      if (data.shape !== 'text') return;
+      const mesh = MeshBuilder.CreatePlane('text', data);
+
+      const texture = new DynamicTexture('text', {
+        width: data.width,
+        height: data.height,
+      });
+
+      // 量測文字寬度
+      const ctx = texture.getContext();
+      const size = 12;
+      ctx.font = `${size}px monospace`;
+      const textWidth = ctx.measureText(data.char).width;
+      const ratio = textWidth / size;
+      const fontSize = Math.floor(data.width / ratio);
+
+      texture.drawText(data.char, null, null, `${fontSize}px monospace`, 'black', 'white', true);
+
+      const material = new StandardMaterial('material');
+      material.diffuseTexture = texture;
+
+      mesh.material = material;
+
+      return mesh;
+    },
   ]
 
 
 
 async function initParticles({ scene }: InitParam) {
-  const spSystem = new SolidParticleSystem('SPS', scene);
+  const useModelMaterial = pipe(props.confetti,
+    (data) => Array.isArray(data) ? data : [data],
+    (data) => data.some(({ shape }) => shape === 'text'),
+  );
+
+  const spSystem = new SolidParticleSystem('SPS', scene, {
+    useModelMaterial,
+  });
 
   const list = Array.isArray(confetti.value)
     ? confetti.value : [confetti.value];
@@ -262,8 +298,8 @@ async function initParticles({ scene }: InitParam) {
           return result;
         }
       },
-      (data) => data ?? MeshBuilder.CreateBox('box', {
-        width: 10, height: 10, depth: 1
+      (data) => data ?? MeshBuilder.CreatePlane('mesh', {
+        width: 10, height: 10
       }),
     );
 
@@ -281,7 +317,7 @@ async function initParticles({ scene }: InitParam) {
             return param(particle.idx);
           }
 
-          return {
+          return param ?? {
             r: 1,
             g: Scalar.RandomRange(0.4, 1),
             b: 0,
@@ -394,7 +430,7 @@ function initParticle(particle: SolidParticle) {
 }
 
 let groupIndex = 0;
-/** 要平均每個 mesh，預先建立 index 映射表，用查表法取得目前 groupIndex 對應之 particle index */
+/** 要平均取得每個 mesh。預先建立 index 映射表，用查表法取得目前 groupIndex 對應之 particle index */
 const particleIndexMapList = pipe(
   range(0, totalAmount),
   (list) => {
@@ -473,6 +509,3 @@ defineExpose({
 });
 // #endregion Methods
 </script>
-
-<style scoped lang="sass">
-</style>

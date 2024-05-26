@@ -7,6 +7,7 @@ import BasicUsage from '../../../src/components/util-party-popper/examples/basic
 import EmitPosition from '../../../src/components/util-party-popper/examples/emit-position.vue'
 import MousePopper from '../../../src/components/util-party-popper/examples/mouse-popper.vue'
 import ConfettiShape from '../../../src/components/util-party-popper/examples/confetti-shape.vue'
+import CustomText from '../../../src/components/util-party-popper/examples/custom-text.vue'
 </script>
 
 # 拉炮
@@ -39,16 +40,6 @@ import ConfettiShape from '../../../src/components/util-party-popper/examples/co
 <<< ../../../src/components/util-party-popper/examples/emit-position.vue
 :::
 
-### 滑鼠拉炮
-
-勞贖嘉年華！ᕕ( ﾟ ∀。)ᕗ
-
-<mouse-popper/>
-
-::: details 查看範例原始碼
-<<< ../../../src/components/util-party-popper/examples/mouse-popper.vue
-:::
-
 ### 各種形狀
 
 不只是方形，還有各種形狀可以選擇。
@@ -57,6 +48,30 @@ import ConfettiShape from '../../../src/components/util-party-popper/examples/co
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/util-party-popper/examples/confetti-shape.vue
+:::
+
+### 使用文字
+
+不只形狀，還可以使用文字，有更多理由可以慶祝了。
+
+例如鱈魚又胖了 2 公斤！(/≧▽≦)/
+
+<custom-text/>
+
+鱈魚：「這種事別拿出來慶祝啊！╭(°A ,°`)╮」
+
+::: details 查看範例原始碼
+<<< ../../../src/components/util-party-popper/examples/custom-text.vue
+:::
+
+### 勞贖嘉年華
+
+勞贖！滿滿的勞贖！Σ(ˊДˋ;)
+
+<mouse-popper/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/util-party-popper/examples/mouse-popper.vue
 :::
 
 ## 原理
