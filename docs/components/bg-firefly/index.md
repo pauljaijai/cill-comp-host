@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/bg-firefly/examples/basic-usage.
 
 當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
 
-<basic-usage/>
+<basic-usage class="h-[60vh]"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/bg-firefly/examples/basic-usage.vue
@@ -39,15 +39,3 @@ import BasicUsage from '../../../src/components/bg-firefly/examples/basic-usage.
 ### Props
 
 <<< ../../../src/components/bg-firefly/bg-firefly.vue/#Props
-
-### Emits
-
-<<< ../../../src/components/bg-firefly/bg-firefly.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/bg-firefly/bg-firefly.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/bg-firefly/bg-firefly.vue/#Slots
