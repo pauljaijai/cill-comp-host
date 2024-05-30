@@ -78,6 +78,12 @@ export default defineConfig({
             ]
           },
           {
+            text: '背景',
+            items: [
+              { text: '螢火蟲', link: '/components/bg-firefly/' },
+            ]
+          },
+          {
             text: '轉場',
             items: [
               { text: '多邊形轉場', link: '/components/transition-shape/' },
