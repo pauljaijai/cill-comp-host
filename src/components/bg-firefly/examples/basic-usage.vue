@@ -1,6 +1,13 @@
 <template>
   <div class="flex flex-col gap-4 w-full border border-gray-300">
-    <bg-firefly class="bg w-full h-full" />
+    <bg-firefly
+      v-slot="{ fps }"
+      class="bg w-full h-full"
+    >
+      <div class="text-white absolute top-0 left-0 p-4">
+        {{ fps }}
+      </div>
+    </bg-firefly>
   </div>
 </template>
 

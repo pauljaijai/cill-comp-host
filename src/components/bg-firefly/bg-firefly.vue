@@ -1,8 +1,12 @@
 <template>
-  <canvas
-    ref="canvasRef"
-    class="pointer-events-none"
-  />
+  <div class="view relative pointer-events-none">
+    <canvas
+      ref="canvasRef"
+      class=" absolute left-0 top-0 w-full h-full"
+    />
+
+    <slot :fps="fps" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +14,7 @@ import { ref } from 'vue';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
 import { ArcRotateCamera, Color3, Color4, GPUParticleSystem, HemisphericLight, Scene, Texture, Vector3 } from '@babylonjs/core';
+import { useIntervalFn } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -20,7 +25,18 @@ const props = withDefaults(defineProps<Props>(), {
   quantity: 5000,
 });
 
-const { canvasRef } = useBabylonScene({
+// #region Slots
+defineSlots<{
+  default?: (data: { fps: number }) => unknown;
+}>();
+// #endregion Slots
+
+const fps = ref(0);
+useIntervalFn(() => {
+  fps.value = Math.floor(engine.value?.getFps() ?? 0);
+}, 100);
+
+const { canvasRef, engine } = useBabylonScene({
   createCamera(scene) {
     const camera = new ArcRotateCamera(
       'camera',
@@ -72,6 +88,13 @@ async function initParticleSystem(scene: Scene) {
 
   particleSystem.start();
 }
+
+// #region Methods
+defineExpose({
+  /** 目前畫面 FPS */
+  fps,
+});
+// #endregion Methods
 </script>
 
 <style scoped lang="sass">
