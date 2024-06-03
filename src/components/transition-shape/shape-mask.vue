@@ -39,6 +39,7 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
+
 const {
   canvasRef,
   scene,
