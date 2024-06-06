@@ -76,7 +76,7 @@ async function initParticleSystem(scene: Scene) {
   );
 
   particleSystem.particleTexture = new Texture('/textures/flare.png');
-  particleSystem.emitter = Vector3.Zero();
+  particleSystem.emitter = new Vector3(0, -10, 0);
 
   particleSystem.minSize = 0.5;
   particleSystem.maxSize = 1;
@@ -86,7 +86,7 @@ async function initParticleSystem(scene: Scene) {
 
   particleSystem.createBoxEmitter(
     new Vector3(5, 5, 5), new Vector3(-5, 1, -5),
-    new Vector3(10, -10, 0), new Vector3(-10, -10, 0)
+    new Vector3(10, 0, 0), new Vector3(-10, 0, 0)
   );
 
   particleSystem.start();
