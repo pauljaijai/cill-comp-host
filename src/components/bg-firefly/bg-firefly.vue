@@ -13,7 +13,7 @@
 import { ref } from 'vue';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
-import { ArcRotateCamera, Color3, Color4, GPUParticleSystem, HemisphericLight, Scene, Texture, Vector3 } from '@babylonjs/core';
+import { ArcRotateCamera, Color3, Color4, Effect, GPUParticleSystem, HemisphericLight, Scene, Texture, Vector3 } from '@babylonjs/core';
 import { useIntervalFn } from '@vueuse/core';
 
 // #region Props
@@ -68,7 +68,6 @@ const { canvasRef, engine } = useBabylonScene({
   },
 });
 
-
 async function initParticleSystem(scene: Scene) {
   const particleSystem = new GPUParticleSystem(
     'fireflies',
@@ -76,14 +75,18 @@ async function initParticleSystem(scene: Scene) {
     scene
   );
 
-  particleSystem.particleTexture = new Texture("textures/flare.png");
+  particleSystem.particleTexture = new Texture('/textures/flare.png');
   particleSystem.emitter = Vector3.Zero();
 
   particleSystem.minSize = 0.5;
   particleSystem.maxSize = 1;
+
+  particleSystem.maxLifeTime = 10;
+  particleSystem.minLifeTime = 10;
+
   particleSystem.createBoxEmitter(
-    new Vector3(-5, 2, 1), new Vector3(5, 2, -1),
-    new Vector3(-1, -2, -2.5), new Vector3(1, 2, 2.5)
+    new Vector3(5, 5, 5), new Vector3(-5, 1, -5),
+    new Vector3(10, -10, 0), new Vector3(-10, -10, 0)
   );
 
   particleSystem.start();
