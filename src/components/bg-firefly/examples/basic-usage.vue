@@ -20,7 +20,7 @@
           class="flex-1 "
           :min="100"
           :step="1"
-          :max="100000"
+          :max="10000"
         />
 
         <base-input
@@ -30,7 +30,7 @@
           class="flex-1 "
           :min="100"
           :step="1"
-          :max="50000"
+          :max="5000"
         />
       </div>
 
@@ -48,6 +48,7 @@
       v-slot="{ fps }"
       class="bg w-full h-full"
       :color="color"
+      :quantity="quantity"
       :emit-rate="emitRate"
     >
       <div class="text-white absolute top-0 left-0 p-4">

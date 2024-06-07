@@ -8,13 +8,15 @@ import FullBackground from '../../../src/components/bg-firefly/examples/full-bac
 
 </script>
 
-# 標題
+# 螢火蟲
 
 說明說明
 
 ## 使用範例
 
 ### 基本用法
+
+設定基本參數。
 
 <basic-usage class="h-[60vh]"/>
 
@@ -33,6 +35,8 @@ import FullBackground from '../../../src/components/bg-firefly/examples/full-bac
 :::
 
 ## 原理
+
+使用 WebGPU 與 babylon 的粒子系統，性能超棒棒。( •̀ ω •́ )✧
 
 ## API
 
