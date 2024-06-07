@@ -18,7 +18,10 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "babylonjs",
+    ],
   },
   "include": [
     "src/**/*.ts",
