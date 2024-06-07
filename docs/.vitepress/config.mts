@@ -32,7 +32,6 @@ export default defineConfig({
   markdown: {
     lineNumbers: true
   },
-  appearance: false,
 
   themeConfig: {
     footer: {

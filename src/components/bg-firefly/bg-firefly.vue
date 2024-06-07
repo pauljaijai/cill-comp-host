@@ -13,16 +13,26 @@
 import { ref } from 'vue';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
-import { ArcRotateCamera, Color3, Color4, Effect, GPUParticleSystem, HemisphericLight, Scene, Texture, Vector3 } from '@babylonjs/core';
+import {
+  ArcRotateCamera, Color3, Color4, Effect,
+  GPUParticleSystem, HemisphericLight,
+  ParticleSystem, Scene, Texture, Vector3
+} from '@babylonjs/core';
 import { useIntervalFn } from '@vueuse/core';
+import { forEach, pipe, range } from 'remeda';
 
 // #region Props
 interface Props {
   quantity?: number;
+  /** 每一幀最大發射數量 */
+  emitRate?: number;
+  color?: Record<'r' | 'g' | 'b', number> | string;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   quantity: 5000,
+  emitRate: 100,
+  color: () => ({ r: 0.5, g: 1, b: 0.2 })
 });
 
 // #region Slots
@@ -69,25 +79,70 @@ const { canvasRef, engine } = useBabylonScene({
 });
 
 async function initParticleSystem(scene: Scene) {
-  const particleSystem = new GPUParticleSystem(
+  // const particleSystem = new GPUParticleSystem(
+  //   'fireflies',
+  //   { capacity: props.quantity, randomTextureSize: 4096 },
+  //   scene
+  // );
+
+  const particleSystem = new ParticleSystem(
     'fireflies',
-    { capacity: props.quantity },
+    props.quantity,
     scene
   );
 
   particleSystem.particleTexture = new Texture('/textures/flare.png');
   particleSystem.emitter = new Vector3(0, -10, 0);
+  particleSystem.emitRate = props.emitRate;
 
-  particleSystem.minSize = 0.5;
-  particleSystem.maxSize = 1;
+  particleSystem.minSize = 0.1;
+  particleSystem.maxSize = 0.4;
 
-  particleSystem.maxLifeTime = 10;
+  particleSystem.maxLifeTime = 20;
   particleSystem.minLifeTime = 10;
 
   particleSystem.createBoxEmitter(
-    new Vector3(5, 5, 5), new Vector3(-5, 1, -5),
+    new Vector3(2, 3, 4), new Vector3(-1, 0, -4),
     new Vector3(10, 0, 0), new Vector3(-10, 0, 0)
   );
+
+  // 阻力
+  const dragMaxStep = 50;
+  pipe(
+    range(0, dragMaxStep),
+    forEach.indexed((value, i) => {
+      const gradient = value / dragMaxStep;
+      const factor = Math.sin(i / 3) * 0.5;
+
+      particleSystem.addDragGradient(gradient, factor);
+    }),
+  );
+
+  const color = pipe(
+    props.color,
+    (value) => {
+      if (typeof value === 'string') {
+        return Color3.FromHexString(value).toColor4()
+      }
+
+      const { r, g, b } = value;
+      return new Color4(r, g, b, 1);
+    },
+  );
+
+  // 閃爍效果
+  const blinkMaxStep = 50;
+  const hideColor = new Color4();
+  pipe(
+    range(0, blinkMaxStep),
+    forEach.indexed((value, i) => {
+      const gradient = value / blinkMaxStep;
+      const color1 = i % 4 ? color : hideColor;
+
+      particleSystem.addColorGradient(gradient, color1);
+    }),
+  );
+  particleSystem.addColorGradient(1, hideColor);
 
   particleSystem.start();
 }
