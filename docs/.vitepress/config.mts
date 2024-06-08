@@ -1,5 +1,5 @@
 import { defineConfig, HeadConfig } from 'vitepress';
-import packageJson from '../../package.json';
+import { version } from '../../package.json';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -35,7 +35,7 @@ export default defineConfig({
 
   themeConfig: {
     footer: {
-      message: `v${packageJson.version}`,
+      message: `v${version}`,
       copyright: 'Copyright © 2024-present <a href="https://gitlab.com/codfish2140">Codfish</a>'
     },
     outline: {
