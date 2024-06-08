@@ -42,7 +42,7 @@ import FullBackground from '../../../src/components/bg-firefly/examples/full-bac
 
 ### 背景
 
-靜下心來，享受夜晚的寧靜吧。( ´ ▽ ` )ﾉ
+靜下心，享受夜晚的寧靜吧。( ´ ▽ ` )ﾉ
 
 <full-background />
 
