@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { useBabylonScene } from '../../composables/use-babylon-scene';
+import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import {
   ArcRotateCamera, Color3, Color4, Effect,
   GPUParticleSystem, HemisphericLight,
@@ -47,12 +47,14 @@ useIntervalFn(() => {
 }, 100);
 
 const { canvasRef, engine } = useBabylonScene({
-  createCamera({ scene }) {
+  createCamera({ scene, canvas }) {
+    const rect = canvas.getBoundingClientRect();
+
     const camera = new ArcRotateCamera(
       'camera',
       Math.PI / 2,
       Math.PI / 2,
-      20,
+      Math.min(rect.width, rect.height),
       new Vector3(0, 0, 0),
       scene
     );
@@ -74,11 +76,14 @@ const { canvasRef, engine } = useBabylonScene({
       defaultLight.groundColor = new Color3(1, 1, 1);
     }
 
-    await initParticleSystem(scene);
+    await initParticleSystem(param);
   },
 });
 
-async function initParticleSystem(scene: Scene) {
+async function initParticleSystem({ scene, canvas }: InitParam) {
+  const rect = canvas.getBoundingClientRect();
+  const { width, height } = rect;
+
   // const particleSystem = new GPUParticleSystem(
   //   'fireflies',
   //   { capacity: props.quantity, randomTextureSize: 4096 },
@@ -92,18 +97,21 @@ async function initParticleSystem(scene: Scene) {
   );
 
   particleSystem.particleTexture = new Texture('/textures/flare.png');
-  particleSystem.emitter = new Vector3(0, -10, 0);
+  particleSystem.emitter = new Vector3(0, -height / 2, 0);
   particleSystem.emitRate = props.emitRate;
 
-  particleSystem.minSize = 0.1;
-  particleSystem.maxSize = 0.4;
+  const size = Math.max(width, height) / 100;
+  particleSystem.minSize = size / 5;
+  particleSystem.maxSize = size;
 
   particleSystem.maxLifeTime = 20;
   particleSystem.minLifeTime = 10;
 
+  const maxSpeed = height / 5;
+  const x = width / 2;
   particleSystem.createBoxEmitter(
-    new Vector3(2, 3, 4), new Vector3(-1, 0, -4),
-    new Vector3(10, 0, 0), new Vector3(-10, 0, 0)
+    new Vector3(maxSpeed / 2, maxSpeed, maxSpeed / 2), new Vector3(-maxSpeed / 2, 0, -maxSpeed / 2),
+    new Vector3(x, 0, 0), new Vector3(-x, 0, 0)
   );
 
   // 阻力
