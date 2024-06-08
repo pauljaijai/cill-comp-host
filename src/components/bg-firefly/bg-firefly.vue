@@ -24,6 +24,7 @@ import { forEach, map, pipe, range } from 'remeda';
 // #region Props
 type Size = number | Record<'max' | 'min', number>;
 type CanvasSize = Record<'width' | 'height', number>;
+/** string 請使用包含 # 之 HEX 格式 */
 type Color = Record<'r' | 'g' | 'b', number> | string;
 
 interface Props {
