@@ -107,10 +107,10 @@ async function initParticleSystem({ scene, canvas }: InitParam) {
   particleSystem.maxLifeTime = 20;
   particleSystem.minLifeTime = 10;
 
-  const maxSpeed = height / 5;
+  const maxSpeed = height / 10;
   const x = width / 2;
   particleSystem.createBoxEmitter(
-    new Vector3(maxSpeed / 2, maxSpeed, maxSpeed / 2), new Vector3(-maxSpeed / 2, 0, -maxSpeed / 2),
+    new Vector3(maxSpeed, maxSpeed / 2, maxSpeed), new Vector3(-maxSpeed, 0, -maxSpeed),
     new Vector3(x, 0, 0), new Vector3(-x, 0, 0)
   );
 
