@@ -19,20 +19,28 @@ import {
   ParticleSystem, Scene, Texture, Vector3
 } from '@babylonjs/core';
 import { useIntervalFn } from '@vueuse/core';
-import { forEach, pipe, range } from 'remeda';
+import { forEach, map, pipe, range } from 'remeda';
 
 // #region Props
+type Size = number | Record<'max' | 'min', number>;
+type CanvasSize = Record<'width' | 'height', number>;
+type Color = Record<'r' | 'g' | 'b', number> | string;
+
 interface Props {
-  quantity?: number;
+  /** 粒子容量。同時存活的最大粒子數量 */
+  capacity?: number;
   /** 每一幀最大發射數量 */
   emitRate?: number;
-  color?: Record<'r' | 'g' | 'b', number> | string;
+  /** 如果設定兩種顏色，則會隨機取兩色之間的顏色 */
+  color?: Color | [Color, Color];
+  size?: Size | ((canvasSize: CanvasSize) => Size)
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  quantity: 5000,
+  capacity: 5000,
   emitRate: 100,
-  color: () => ({ r: 0.5, g: 1, b: 0.2 })
+  color: () => ['#5af522', '#abf522'],
+  size: () => ({ min: 4, max: 10 })
 });
 
 // #region Slots
@@ -92,7 +100,7 @@ async function initParticleSystem({ scene, canvas }: InitParam) {
 
   const particleSystem = new ParticleSystem(
     'fireflies',
-    props.quantity,
+    props.capacity,
     scene
   );
 
@@ -100,9 +108,27 @@ async function initParticleSystem({ scene, canvas }: InitParam) {
   particleSystem.emitter = new Vector3(0, -height / 2, 0);
   particleSystem.emitRate = props.emitRate;
 
-  const size = Math.max(width, height) / 100;
-  particleSystem.minSize = size / 5;
-  particleSystem.maxSize = size;
+  // 設定尺寸
+  pipe(
+    props.size,
+    (sizeParam) => {
+      if (typeof sizeParam === 'function') {
+        return sizeParam({ width, height });
+      }
+
+      return sizeParam;
+    },
+    (size) => {
+      if (typeof size === 'number') {
+        particleSystem.minSize = size;
+        particleSystem.maxSize = size;
+        return;
+      }
+
+      particleSystem.minSize = size.min;
+      particleSystem.maxSize = size.max;
+    }
+  )
 
   particleSystem.maxLifeTime = 20;
   particleSystem.minLifeTime = 10;
@@ -126,16 +152,22 @@ async function initParticleSystem({ scene, canvas }: InitParam) {
     }),
   );
 
-  const color = pipe(
+  const [color1, color2] = pipe(
     props.color,
-    (value) => {
+    (colorValue) => {
+      if (Array.isArray(colorValue)) {
+        return colorValue;
+      }
+      return [colorValue] as const;
+    },
+    map.strict((value) => {
       if (typeof value === 'string') {
         return Color3.FromHexString(value).toColor4()
       }
 
       const { r, g, b } = value;
       return new Color4(r, g, b, 1);
-    },
+    }),
   );
 
   // 閃爍效果
@@ -145,9 +177,12 @@ async function initParticleSystem({ scene, canvas }: InitParam) {
     range(0, blinkMaxStep),
     forEach.indexed((value, i) => {
       const gradient = value / blinkMaxStep;
-      const color1 = i % 4 ? color : hideColor;
+      if (i % 4) {
+        particleSystem.addColorGradient(gradient, color1, color2);
+        return;
+      }
 
-      particleSystem.addColorGradient(gradient, color1);
+      particleSystem.addColorGradient(gradient, hideColor);
     }),
   );
   particleSystem.addColorGradient(1, hideColor);

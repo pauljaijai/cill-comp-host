@@ -1,14 +1,19 @@
 <template>
   <div class="flex flex-col gap-4 w-full py-2">
-    <div class="flex flex-col border p-4">
+    <div class="flex flex-col gap-2 border p-4">
       <div class="flex gap-6 ">
         <div class="flex flex-col">
           <label class=" text-sm font-bold">
-            主色
+            顏色
           </label>
 
           <input
-            v-model="color"
+            v-model="color1"
+            type="color"
+          >
+
+          <input
+            v-model="color2"
             type="color"
           >
         </div>
@@ -47,8 +52,8 @@
       :key="key"
       v-slot="{ fps }"
       class="bg w-full h-full"
-      :color="color"
-      :quantity="quantity"
+      :color="[color1, color2]"
+      :capacity="quantity"
       :emit-rate="emitRate"
     >
       <div class="text-white absolute top-0 left-0 p-4">
@@ -64,7 +69,8 @@ import { ref } from 'vue';
 import BaseInput from '../../base-input.vue';
 import BgFirefly from '../bg-firefly.vue';
 
-const color = ref('#a4f522');
+const color1 = ref('#22f534');
+const color2 = ref('#b3ff00');
 const quantity = ref(5000);
 const emitRate = ref(100);
 
