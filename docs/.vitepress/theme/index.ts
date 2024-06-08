@@ -5,9 +5,8 @@ import DefaultTheme from 'vitepress/theme'
 import './style.css'
 import './tailwind.css'
 
-import VConsole from 'vconsole';
-
-const vConsole = new VConsole();
+// import VConsole from 'vconsole';
+// const vConsole = new VConsole();
 
 export default {
   extends: DefaultTheme,

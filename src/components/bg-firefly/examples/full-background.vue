@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount } from 'vue';
+
 import BaseCheckbox from '../../base-checkbox.vue';
 import BgFirefly from '../bg-firefly.vue';
 
