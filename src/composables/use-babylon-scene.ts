@@ -1,6 +1,7 @@
 import { defaults } from 'lodash-es';
 import {
   ArcRotateCamera,
+  Camera,
   Engine, HemisphericLight, Scene, Vector3,
   WebGPUEngine,
 } from '@babylonjs/core';
@@ -12,17 +13,17 @@ export interface InitParam {
   canvas: HTMLCanvasElement;
   engine: BabylonEngine;
   scene: Scene;
-  camera: ArcRotateCamera;
+  camera: Camera;
 }
 
-interface UseBabylonSceneParams {
-  createEngine?: (canvas: HTMLCanvasElement) => Promise<BabylonEngine>;
-  createScene?: (engine: BabylonEngine) => Scene;
-  createCamera?: (scene: Scene) => ArcRotateCamera;
-  init?: (params: InitParam) => Promise<void>;
+interface UseBabylonSceneParam {
+  createEngine?: (param: Omit<InitParam, 'camera' | 'scene' | 'engine'>) => Promise<BabylonEngine>;
+  createScene?: (param: Omit<InitParam, 'camera' | 'scene'>) => Scene;
+  createCamera?: (param: Omit<InitParam, 'camera'>) => ArcRotateCamera;
+  init?: (param: InitParam) => Promise<void>;
 }
-const defaultParams: Required<UseBabylonSceneParams> = {
-  async createEngine(canvas) {
+const defaultParam: Required<UseBabylonSceneParam> = {
+  async createEngine({ canvas }) {
     const webGPUSupported = await WebGPUEngine.IsSupportedAsync;
     if (webGPUSupported) {
       const engine = new WebGPUEngine(canvas, {
@@ -37,7 +38,7 @@ const defaultParams: Required<UseBabylonSceneParams> = {
       alpha: true,
     });
   },
-  createScene(engine) {
+  createScene({ engine }) {
     const scene = new Scene(engine);
     /** 使用預設光源 */
     scene.createDefaultLight();
@@ -48,7 +49,7 @@ const defaultParams: Required<UseBabylonSceneParams> = {
 
     return scene;
   },
-  createCamera(scene: Scene) {
+  createCamera({ scene }) {
     const camera = new ArcRotateCamera(
       'camera',
       Math.PI / 2,
@@ -63,7 +64,7 @@ const defaultParams: Required<UseBabylonSceneParams> = {
   init: () => Promise.resolve(),
 }
 
-export function useBabylonScene(params?: UseBabylonSceneParams) {
+export function useBabylonScene(param?: UseBabylonSceneParam) {
   const canvasRef = ref<HTMLCanvasElement>();
 
   const engine = shallowRef<BabylonEngine>();
@@ -72,16 +73,25 @@ export function useBabylonScene(params?: UseBabylonSceneParams) {
 
   const {
     createEngine, createScene, createCamera, init
-  } = defaults(params, defaultParams);
+  } = defaults(param, defaultParam);
 
   onMounted(async () => {
     if (!canvasRef.value) {
       console.error('無法取得 canvas DOM');
       return;
     }
-    engine.value = await createEngine(canvasRef.value);
-    scene.value = createScene(engine.value);
-    camera.value = createCamera(scene.value);
+    engine.value = await createEngine({
+      canvas: canvasRef.value,
+    });
+    scene.value = createScene({
+      canvas: canvasRef.value,
+      engine: engine.value
+    });
+    camera.value = createCamera({
+      canvas: canvasRef.value,
+      engine: engine.value,
+      scene: scene.value,
+    });
 
     window.addEventListener('resize', handleResize);
 

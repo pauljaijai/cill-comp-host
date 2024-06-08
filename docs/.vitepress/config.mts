@@ -1,5 +1,5 @@
 import { defineConfig, HeadConfig } from 'vitepress';
-import packageJson from '../../package.json';
+import { version } from '../../package.json';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -32,11 +32,10 @@ export default defineConfig({
   markdown: {
     lineNumbers: true
   },
-  appearance: false,
 
   themeConfig: {
     footer: {
-      message: `v${packageJson.version}`,
+      message: `v${version}`,
       copyright: 'Copyright © 2024-present <a href="https://gitlab.com/codfish2140">Codfish</a>'
     },
     outline: {
@@ -81,6 +80,12 @@ export default defineConfig({
             text: '輪播',
             items: [
               { text: 'carousel-colorful-particles', link: '/components/carousel-colorful-particles/' },
+            ]
+          },
+          {
+            text: '背景',
+            items: [
+              { text: '螢火蟲', link: '/components/bg-firefly/' },
             ]
           },
           {

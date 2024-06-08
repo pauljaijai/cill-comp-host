@@ -1,23 +1,31 @@
 <template>
   <div class="flex flex-wrap justify-center gap-4 w-full border border-gray-300 p-6">
-    <div
-      v-for="item in list"
-      :key="item.key"
-      class="w-full"
-    >
-      <transition-shape
-        :type="item"
-        @after-transition="handleInit()"
+    <base-checkbox
+      v-model="visible"
+      label="顯示"
+      class="w-full border rounded p-4"
+    />
+
+    <template v-if="visible">
+      <div
+        v-for="item in list"
+        :key="item.key"
+        class="w-full"
       >
-        <div
-          :key="fishIndex"
-          class="py-6 text-[5rem] text-center w-full cursor-pointer"
-          @click="handleClick()"
+        <transition-shape
+          :type="item"
+          @after-transition="handleInit()"
         >
-          {{ fishList[fishIndex] }}
-        </div>
-      </transition-shape>
-    </div>
+          <div
+            :key="fishIndex"
+            class="py-6 text-[5rem] text-center w-full cursor-pointer"
+            @click="handleClick()"
+          >
+            {{ fishList[fishIndex] }}
+          </div>
+        </transition-shape>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -26,11 +34,14 @@ import { ref } from 'vue';
 import { debounce, throttle } from 'lodash-es';
 import { hasAtLeast, map, pipe, shuffle } from 'remeda';
 
+import BaseCheckbox from '../../base-checkbox.vue';
 import TransitionShape, {
   TransitionType, RoundEnterAction, RoundBaseAction
 } from '../transition-shape.vue';
 
 import { useToggle } from '@vueuse/core';
+
+const visible = ref(false);
 
 const fishIndex = ref(0);
 const fishList = [

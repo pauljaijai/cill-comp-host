@@ -39,17 +39,18 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
+
 const {
   canvasRef,
   scene,
   engine,
 } = useBabylonScene({
-  async createEngine(canvas) {
+  async createEngine({ canvas }) {
     return new Engine(canvas, true, {
       alpha: true,
     });
   },
-  createCamera(scene) {
+  createCamera({ scene }) {
     const camera = new ArcRotateCamera(
       'camera',
       Math.PI / 2,
