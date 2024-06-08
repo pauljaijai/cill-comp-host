@@ -1,11 +1,10 @@
 <template>
   <div class="flex flex-col gap-4 w-full py-2">
-    <div class="border p-4">
-      <base-checkbox
-        v-model="isDark"
-        label="顯示"
-      />
-    </div>
+    <base-checkbox
+      v-model="isDark"
+      label="關燈"
+      class="border rounded p-4"
+    />
 
     <bg-firefly
       v-if="isDark"

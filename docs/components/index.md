@@ -10,8 +10,9 @@ import WrapperKirbyMouthfulMode from '../../src/components/wrapper-kirby-mouthfu
 
 import TransitionShape from '../../src/components/transition-shape/examples/basic-usage.vue';
 
-import UtilPartyPopper from '../../src/components/util-party-popper/examples/emit-position.vue';
+import BgFirefly from '../../src/components/bg-firefly/examples/full-background.vue';
 
+import UtilPartyPopper from '../../src/components/util-party-popper/examples/emit-position.vue';
 </script>
 
 # 元件清單
@@ -76,7 +77,19 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 
 <wrapper-kirby-mouthful-mode class="h-[70vh]" />
 
+## 背景
+
+讓生成式藝術藝術點綴網頁吧！ヾ(◍'౪`◍)ﾉﾞ
+
+### [螢火蟲](./bg-firefly/) <Badge type="info" text="bg" />
+
+靜下心，享受夜晚的寧靜。(´,,•ω•,,)
+
+<bg-firefly class="h-[70vh]" />
+
 ## 轉場
+
+特殊的轉場元件
 
 ### [多邊形轉場](./transition-shape/) <Badge type="info" text="transition" />
 
