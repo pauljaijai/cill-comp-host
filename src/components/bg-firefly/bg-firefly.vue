@@ -14,9 +14,9 @@ import { ref } from 'vue';
 
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import {
-  ArcRotateCamera, Color3, Color4, Effect,
-  GPUParticleSystem, HemisphericLight,
-  ParticleSystem, Scene, Texture, Vector3
+  ArcRotateCamera, Color3, Color4,
+  HemisphericLight,
+  ParticleSystem, Texture, Vector3
 } from '@babylonjs/core';
 import { useIntervalFn } from '@vueuse/core';
 import { forEach, map, pipe, range } from 'remeda';
@@ -33,6 +33,7 @@ interface Props {
   emitRate?: number;
   /** 如果設定兩種顏色，則會隨機取兩色之間的顏色 */
   color?: Color | [Color, Color];
+  /** 可以依 canvas 尺寸設定粒子尺寸 */
   size?: Size | ((canvasSize: CanvasSize) => Size)
 }
 // #endregion Props
