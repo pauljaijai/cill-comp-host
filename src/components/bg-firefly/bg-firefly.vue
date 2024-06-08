@@ -47,7 +47,7 @@ useIntervalFn(() => {
 }, 100);
 
 const { canvasRef, engine } = useBabylonScene({
-  createCamera(scene) {
+  createCamera({ scene }) {
     const camera = new ArcRotateCamera(
       'camera',
       Math.PI / 2,
