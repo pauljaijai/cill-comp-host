@@ -50,6 +50,7 @@ import {
   DefaultRenderingPipeline,
   DepthOfFieldEffectBlurLevel,
   HemisphericLight,
+  NoiseProceduralTexture,
   ParticleSystem, Texture, Vector3
 } from '@babylonjs/core';
 import { forEach, map, pipe, range } from 'remeda';
@@ -200,18 +201,17 @@ async function initParticleSystem({ scene, canvas }: InitParam) {
     new Vector3(x, 0, 0), new Vector3(-x, 0, 0)
   );
 
-  // 阻力
-  const dragMaxStep = 50;
-  pipe(
-    range(0, dragMaxStep),
-    forEach.indexed((value, i) => {
-      const gradient = value / dragMaxStep;
-      const factor = Math.sin(i / 3) * 0.5;
+  // 隨機移動
+  var noiseTexture = new NoiseProceduralTexture('noise', 256, scene);
+  noiseTexture.octaves = 6;
+  noiseTexture.persistence = 2;
+  noiseTexture.animationSpeedFactor = 2;
+  noiseTexture.brightness = 0.5;
 
-      particleSystem.addDragGradient(gradient, factor);
-    }),
-  );
+  particleSystem.noiseTexture = noiseTexture;
+  particleSystem.noiseStrength = new Vector3(50, 0, 50);
 
+  // 顏色
   const [color1, color2] = pipe(
     props.color,
     (colorValue) => {
