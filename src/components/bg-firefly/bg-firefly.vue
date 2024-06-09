@@ -15,7 +15,10 @@ import { ref } from 'vue';
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import {
   ArcRotateCamera, Color3, Color4,
+  DefaultRenderingPipeline,
+  DepthOfFieldEffectBlurLevel,
   HemisphericLight,
+  LensRenderingPipeline,
   ParticleSystem, Texture, Vector3
 } from '@babylonjs/core';
 import { useIntervalFn } from '@vueuse/core';
@@ -72,7 +75,7 @@ const { canvasRef, engine } = useBabylonScene({
     return camera;
   },
   async init(param) {
-    const { scene } = param;
+    const { scene, camera } = param;
     // 背景透明
     scene.clearColor = new Color4(0, 0, 0, 0);
 
@@ -85,6 +88,18 @@ const { canvasRef, engine } = useBabylonScene({
       defaultLight.diffuse = new Color3(1, 1, 1);
       defaultLight.groundColor = new Color3(1, 1, 1);
     }
+
+    const pipeline = new DefaultRenderingPipeline(
+      'defaultPipeline',
+      true,
+      scene,
+      [camera]
+    );
+    pipeline.depthOfFieldEnabled = true;
+    pipeline.depthOfField.focusDistance = 800;
+    pipeline.depthOfField.focalLength = 30;
+    pipeline.depthOfField.fStop = 8;
+    pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
 
     await initParticleSystem(param);
   },
