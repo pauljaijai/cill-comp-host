@@ -1,5 +1,37 @@
 <template>
   <div class="view relative pointer-events-none">
+    <!-- <div
+      v-if="pipeline"
+      class=" pointer-events-auto text-white"
+    >
+      <base-input
+        v-model="pipeline.depthOfField.focusDistance"
+        :label="`focusDistance: ${pipeline.depthOfField.focusDistance}`"
+        type="range"
+        :min="0"
+        :step="0.1"
+        :max="1000000"
+      />
+
+      <base-input
+        v-model="pipeline.depthOfField.focalLength"
+        :label="`focalLength: ${pipeline.depthOfField.focalLength}`"
+        type="range"
+        :min="0"
+        :step="1"
+        :max="5000"
+      />
+
+      <base-input
+        v-model="pipeline.depthOfField.fStop"
+        :label="`fStop: ${pipeline.depthOfField.fStop}`"
+        type="range"
+        :min="0.1"
+        :step="0.1"
+        :max="16"
+      />
+    </div> -->
+
     <canvas
       ref="canvasRef"
       class=" absolute left-0 top-0 w-full h-full"
@@ -18,11 +50,13 @@ import {
   DefaultRenderingPipeline,
   DepthOfFieldEffectBlurLevel,
   HemisphericLight,
-  LensRenderingPipeline,
   ParticleSystem, Texture, Vector3
 } from '@babylonjs/core';
-import { useIntervalFn } from '@vueuse/core';
 import { forEach, map, pipe, range } from 'remeda';
+
+import BaseInput from '../base-input.vue';
+
+import { useIntervalFn } from '@vueuse/core';
 
 // #region Props
 type Size = number | Record<'max' | 'min', number>;
@@ -59,6 +93,8 @@ useIntervalFn(() => {
   fps.value = Math.floor(engine.value?.getFps() ?? 0);
 }, 100);
 
+const pipeline = ref<DefaultRenderingPipeline>();
+
 const { canvasRef, engine } = useBabylonScene({
   createCamera({ scene, canvas }) {
     const rect = canvas.getBoundingClientRect();
@@ -76,6 +112,7 @@ const { canvasRef, engine } = useBabylonScene({
   },
   async init(param) {
     const { scene, camera } = param;
+
     // 背景透明
     scene.clearColor = new Color4(0, 0, 0, 0);
 
@@ -89,21 +126,36 @@ const { canvasRef, engine } = useBabylonScene({
       defaultLight.groundColor = new Color3(1, 1, 1);
     }
 
-    const pipeline = new DefaultRenderingPipeline(
-      'defaultPipeline',
-      true,
-      scene,
-      [camera]
-    );
-    pipeline.depthOfFieldEnabled = true;
-    pipeline.depthOfField.focusDistance = 800;
-    pipeline.depthOfField.focalLength = 30;
-    pipeline.depthOfField.fStop = 8;
-    pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
-
+    pipeline.value = initRenderingPipeline(param);
     await initParticleSystem(param);
   },
 });
+
+function initRenderingPipeline(
+  { scene, canvas, camera }: InitParam
+) {
+  const rect = canvas.getBoundingClientRect();
+
+  const pipeline = new DefaultRenderingPipeline(
+    'defaultPipeline',
+    true,
+    scene,
+    [camera]
+  );
+
+  // 單位是毫米，所以要乘以 1000
+  const focusDistance = Math.min(rect.width, rect.height) * 1000;
+
+  pipeline.depthOfFieldEnabled = true;
+  pipeline.depthOfField.focusDistance = focusDistance
+  /** 相機焦距 */
+  pipeline.depthOfField.focalLength = 800;
+  /** 光圈 */
+  pipeline.depthOfField.fStop = 0.5;
+  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
+
+  return pipeline;
+}
 
 async function initParticleSystem({ scene, canvas }: InitParam) {
   const rect = canvas.getBoundingClientRect();
