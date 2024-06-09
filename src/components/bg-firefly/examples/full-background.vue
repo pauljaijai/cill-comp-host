@@ -9,7 +9,7 @@
     <bg-firefly
       v-if="isDark"
       class="!fixed top-0 left-0 w-full h-full z-50"
-      :color="['#3cff00', '#caff69']"
+      color="#3cff00"
     />
   </div>
 </template>
