@@ -82,7 +82,7 @@ export default defineConfig({
           {
             text: '輪播',
             items: [
-              { text: 'carousel-colorful-particles', link: '/components/carousel-colorful-particles/' },
+              { text: '彩色粒子輪播', link: '/components/carousel-colorful-particles/' },
             ]
           },
           {
