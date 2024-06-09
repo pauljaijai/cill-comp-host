@@ -96,22 +96,13 @@ useIntervalFn(() => {
 const pipeline = ref<DefaultRenderingPipeline>();
 
 const { canvasRef, engine } = useBabylonScene({
-  createCamera({ scene, canvas }) {
-    const rect = canvas.getBoundingClientRect();
-
-    const camera = new ArcRotateCamera(
-      'camera',
-      Math.PI / 2,
-      Math.PI / 2,
-      Math.min(rect.width, rect.height),
-      new Vector3(0, 0, 0),
-      scene
-    );
-
-    return camera;
-  },
   async init(param) {
-    const { scene, camera } = param;
+    const { scene, camera, canvas } = param;
+
+    if (camera instanceof ArcRotateCamera) {
+      const rect = canvas.getBoundingClientRect();
+      camera.radius = Math.min(rect.width, rect.height);
+    }
 
     // 背景透明
     scene.clearColor = new Color4(0, 0, 0, 0);
