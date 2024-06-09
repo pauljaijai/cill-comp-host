@@ -55,7 +55,7 @@ const defaultParam: Required<UseBabylonSceneParam> = {
       Math.PI / 2,
       Math.PI / 2,
       10,
-      new Vector3(0, 0, 50),
+      new Vector3(0, 0, 0),
       scene
     );
 
