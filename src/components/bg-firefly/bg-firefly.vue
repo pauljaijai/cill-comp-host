@@ -202,7 +202,7 @@ async function initParticleSystem({ scene, canvas }: InitParam) {
   );
 
   // 隨機移動
-  var noiseTexture = new NoiseProceduralTexture('noise', 256, scene);
+  const noiseTexture = new NoiseProceduralTexture('noise', 256, scene);
   noiseTexture.octaves = 6;
   noiseTexture.persistence = 2;
   noiseTexture.animationSpeedFactor = 2;
