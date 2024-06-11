@@ -40,6 +40,7 @@ import { TransitionType } from './type';
 import ShapeMask from './shape-mask.vue';
 
 import { promiseTimeout, useElementBounding } from '@vueuse/core';
+import { nanoid } from 'nanoid';
 
 // #region Props
 interface Props {
@@ -134,6 +135,7 @@ function isSizeChanged(aBounding?: DOMRect, bBounding?: DOMRect) {
 const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
   if (!(el instanceof HTMLElement)) return;
   el.style.opacity = '0';
+  el.classList.add('anchor');
 
   enterElRef.value = el;
 }
@@ -191,6 +193,8 @@ const handleAfterEnter: TransitionProps['onAfterEnter'] = (el) => {
 // 離開事件
 const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
   if (!(el instanceof HTMLElement)) return;
+  el.classList.add('anchor');
+
   leaveElRef.value = el;
 };
 const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
@@ -226,9 +230,22 @@ const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
   leaveElRef.value = undefined;
 };
 
+const anchorName = ref(`--${nanoid()}`);
 </script>
 
 <style lang="sass">
 .shape-mask
   transition: v-bind(maskCssTransitionValue) !important
+  position-anchor: v-bind(anchorName)
+  top: anchor(top) !important
+  left: anchor(left) !important
+
+.anchor
+  anchor-name: v-bind(anchorName)
+
+@supports (anchor-name: test) 
+  .shape-mask
+    position-anchor: v-bind(anchorName)
+    top: anchor(top) !important
+    left: anchor(left) !important
 </style>
