@@ -243,9 +243,9 @@ const anchorName = ref(`--${nanoid()}`);
 .anchor
   anchor-name: v-bind(anchorName)
 
-@supports (anchor-name: test) 
-  .shape-mask
-    position-anchor: v-bind(anchorName)
-    top: anchor(top) !important
-    left: anchor(left) !important
+// @supports (anchor-name: test) 
+//   .shape-mask
+//     position-anchor: v-bind(anchorName)
+//     top: anchor(top) !important
+//     left: anchor(left) !important
 </style>
