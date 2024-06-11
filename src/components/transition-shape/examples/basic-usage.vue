@@ -1,11 +1,10 @@
 <template>
   <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
-    <div
-      class="border rounded px-4 py-2 cursor-pointer select-none w-full text-center"
+    <base-btn
+      class="w-full"
+      label="更換"
       @click="change()"
-    >
-      更換
-    </div>
+    />
 
     <div class="w-full flex flex-col gap-4 border bg-slate-100 rounded p-6 overflow-hidden">
       <div class="flex justify-center">
@@ -55,9 +54,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { hasAtLeast, piped, reverse } from 'remeda';
-
-import TransitionShape, { TransitionType } from '../transition-shape.vue';
 import { debounce } from 'lodash-es';
+
+import BaseBtn from '../../base-btn.vue';
+import TransitionShape, { TransitionType } from '../transition-shape.vue';
 
 const index = ref(0);
 

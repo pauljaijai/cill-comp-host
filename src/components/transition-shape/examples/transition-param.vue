@@ -146,12 +146,11 @@
         </div>
       </div>
 
-      <div
-        class="w-full text-center border rounded px-4 py-2 cursor-pointer "
+      <base-btn
+        class="w-full "
+        label="換魚"
         @click="changeFish()"
-      >
-        換魚
-      </div>
+      />
     </div>
 
     <transition-shape :type="transitionType">
@@ -169,6 +168,7 @@
 import { ref, computed } from 'vue';
 import anime from 'animejs';
 
+import BaseBtn from '../../base-btn.vue';
 import TransitionShape, {
   RectAction, TransitionType,
 } from '../transition-shape.vue';

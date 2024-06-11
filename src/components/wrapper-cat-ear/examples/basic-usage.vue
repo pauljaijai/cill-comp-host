@@ -1,11 +1,10 @@
 <template>
   <div class="w-full py-16 border border-gray-300 flex flex-col gap-16 justify-center items-center">
     <wrapper-cat-ear main-color="#AAA">
-      <div class="border border-[#AAA] rounded  bg-white">
-        <button class="px-4 p-2">
-          按鈕
-        </button>
-      </div>
+      <base-btn
+        class=""
+        label="按鈕"
+      />
     </wrapper-cat-ear>
 
     <wrapper-cat-ear main-color="#AAA">
@@ -37,5 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
+import BaseBtn from '../../base-btn.vue';
+import WrapperCatEar from '../wrapper-cat-ear.vue';
 </script>

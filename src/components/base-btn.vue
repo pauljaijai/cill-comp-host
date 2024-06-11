@@ -4,13 +4,13 @@
     type="button"
     @click="emit('click')"
   >
-    {{ props.label }}
+    <slot>
+      {{ props.label }}
+    </slot>
   </button>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-
 interface Props {
   label?: string;
 }
@@ -30,7 +30,10 @@ const emit = defineEmits<{
   border-radius: 0.25rem
   background-color: #FEFEFE
   cursor: pointer
-  transition: background-color 0.1s
+  transition: background-color 0.1s, scale 0.4s
+  scale: 1
   &:active
     background-color: #F0F0F0
+    transition: scale 0.01s
+    scale: 0.995
 </style>
