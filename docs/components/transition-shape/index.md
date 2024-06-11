@@ -110,6 +110,14 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 
 暫時不考慮 v-show 的情境。
 
+### 定位問題
+
+原本使用 fixed 配合頁面滾動事件來定位 canvas 位置，但是在快速滾動畫面時 sharp 還是會稍微偏移。
+
+苦惱之際發現了 CSS Anchor Positioning API 這個神奇酷炫的東西，完美解決此問題！(๑•̀ㅂ•́)و✧
+
+📚 [CSS Anchor Positioning API](https://developer.chrome.com/blog/anchor-positioning-api?hl=zh-tw#core_concepts_anchors_and_positioned_elements)
+
 ## API
 
 ### Props
