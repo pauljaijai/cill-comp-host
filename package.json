@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "vitepress dev docs --force --host",
     "check": "vue-tsc --noEmit --skipLibCheck",
-    "version:minor": "npm version minor --no-commit-hooks",
-    "version:patch": "npm version patch --no-commit-hooks",
+    "version:minor": "npm version minor",
+    "version:patch": "npm version patch",
     "build": "vue-tsc --noEmit --skipLibCheck && vite build",
     "preview": "vite preview",
     "test": "vitest",
