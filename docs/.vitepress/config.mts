@@ -80,12 +80,6 @@ export default defineConfig({
             ]
           },
           {
-            text: '輪播',
-            items: [
-              { text: '彩色粒子輪播', link: '/components/carousel-colorful-particles/' },
-            ]
-          },
-          {
             text: '背景',
             items: [
               { text: '螢火蟲', link: '/components/bg-firefly/' },
