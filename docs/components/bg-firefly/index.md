@@ -1,5 +1,5 @@
 ---
-description: 靜下心，享受夜晚的寧靜。(´,,•ω•,,)
+description: 讓網頁充滿漫天飛舞的小小螢火
 ---
 
 <script setup>
@@ -10,13 +10,15 @@ import FullBackground from '../../../src/components/bg-firefly/examples/full-bac
 
 # 螢火蟲
 
+讓網頁充滿漫天飛舞的小小螢火。ヾ(◍'౪`◍)ﾉﾞ
+
 大家有沒有看過螢火蟲海呢？
 
 我原本也想說不過就是會亮亮的小蟲蟲，應該沒什麼吧？(´・ω・`)
 
 直到自己親臨現場，才感受到那種彷彿沐浴在銀河中的那種浪漫。
 
-照片感受不到現場的感覺，推薦大家還是可以去個一次看看。( ´ ▽ ` )ﾉ
+照片感受不到現場的感覺，推薦大家可以去個一次看看。( ´ ▽ ` )ﾉ
 
 <a data-flickr-embed="true" data-header="true" data-footer="true" href="https://www.flickr.com/photos/coodfish/17364014109/in/dateposted/" title="IMG_71867"><img src="https://live.staticflickr.com/5330/17364014109_811ea8a4cc_k.jpg" width="2048" height="1365" alt="IMG_71867"/></a>
 
@@ -47,7 +49,7 @@ import FullBackground from '../../../src/components/bg-firefly/examples/full-bac
 <full-background />
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/bg-firefly/examples/basic-usage.vue
+<<< ../../../src/components/bg-firefly/examples/full-background.vue
 :::
 
 ## 原理
