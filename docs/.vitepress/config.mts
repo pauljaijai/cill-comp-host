@@ -80,6 +80,12 @@ export default defineConfig({
             ]
           },
           {
+            text: '游標',
+            items: [
+              { text: '游標小跟班', link: '/components/cursor-sidekick/' },
+            ]
+          },
+          {
             text: '背景',
             items: [
               { text: '螢火蟲', link: '/components/bg-firefly/' },

@@ -3,7 +3,7 @@ description:
 ---
 
 <script setup>
-import BasicUsage from '../../../src/components/carousel-colorful-particles/examples/basic-usage.vue'
+import BasicUsage from '../../../src/components/cursor-sidekick/examples/basic-usage.vue'
 </script>
 
 # 標題
@@ -19,7 +19,7 @@ import BasicUsage from '../../../src/components/carousel-colorful-particles/exam
 <basic-usage/>
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/carousel-colorful-particles/examples/basic-usage.vue
+<<< ../../../src/components/cursor-sidekick/examples/basic-usage.vue
 :::
 
 ## 原理
@@ -38,12 +38,16 @@ import BasicUsage from '../../../src/components/carousel-colorful-particles/exam
 
 ### Props
 
-<<< ../../../src/components/carousel-colorful-particles/carousel-colorful-particles.vue/#Props
+<<< ../../../src/components/cursor-sidekick/cursor-sidekick.vue/#Props
 
 ### Emits
 
-<<< ../../../src/components/carousel-colorful-particles/carousel-colorful-particles.vue/#Emits
+<<< ../../../src/components/cursor-sidekick/cursor-sidekick.vue/#Emits
 
 ### Methods
 
-<<< ../../../src/components/carousel-colorful-particles/carousel-colorful-particles.vue/#Methods
+<<< ../../../src/components/cursor-sidekick/cursor-sidekick.vue/#Methods
+
+### Slots
+
+<<< ../../../src/components/cursor-sidekick/cursor-sidekick.vue/#Slots
