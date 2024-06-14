@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed left-0 top-0 w-0 h-0 ">
+  <div class="container fixed left-0 top-0 w-0 h-0 ">
     <the-sidekick v-bind="sidekickProp" />
   </div>
 </template>
@@ -49,8 +49,8 @@ const mouseInfo = useMouse({
 })
 
 const position = ref({
-  x: 800,
-  y: 500,
+  x: 0,
+  y: 0,
 });
 
 const style = computed<CSSProperties>(() => {
@@ -64,33 +64,33 @@ const displacement = ref(0);
 /** 速率。px/ms */
 const velocity = ref(0);
 
-// useRafFn(({ delta: deltaTime }) => {
-//   const delta = {
-//     x: mouseInfo.x.value - position.value.x,
-//     y: mouseInfo.y.value - position.value.y,
-//   }
+useRafFn(({ delta: deltaTime }) => {
+  const delta = {
+    x: mouseInfo.x.value - position.value.x,
+    y: mouseInfo.y.value - position.value.y,
+  }
 
-//   const deltaPosition = {
-//     x: delta.x / 20,
-//     y: delta.y / 20,
-//   }
-//   if (Math.abs(deltaPosition.x) < 0.1 && Math.abs(deltaPosition.y) < 0.1) {
-//     displacement.value = 0;
-//     velocity.value = 0;
-//     return;
-//   }
+  const deltaPosition = {
+    x: delta.x / 20,
+    y: delta.y / 20,
+  }
+  if (Math.abs(deltaPosition.x) < 0.1 && Math.abs(deltaPosition.y) < 0.1) {
+    displacement.value = 0;
+    velocity.value = 0;
+    return;
+  }
 
-//   displacement.value = getVectorLength(deltaPosition);
-//   velocity.value = displacement.value / deltaTime;
+  displacement.value = getVectorLength(deltaPosition);
+  velocity.value = displacement.value / deltaTime;
 
-//   if (velocity.value > props.maxVelocity) {
-//     deltaPosition.x /= velocity.value / props.maxVelocity;
-//     deltaPosition.y /= velocity.value / props.maxVelocity;
-//   }
+  if (velocity.value > props.maxVelocity) {
+    deltaPosition.x /= velocity.value / props.maxVelocity;
+    deltaPosition.y /= velocity.value / props.maxVelocity;
+  }
 
-//   position.value.x += deltaPosition.x;
-//   position.value.y += deltaPosition.y;
-// })
+  position.value.x += deltaPosition.x;
+  position.value.y += deltaPosition.y;
+})
 
 const sidekickProp = computed<SidekickProp>(() => ({
   ...props,

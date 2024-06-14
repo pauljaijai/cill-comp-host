@@ -79,6 +79,10 @@ const faceStyle = computed<CSSProperties>(() => {
   }
 });
 
+const faceTransformOrigin = computed(() => {
+  return `50% 50% ${Math.max(svgSize.width.value, svgSize.height.value) * 3}px`;
+});
+
 // #region Methods
 defineExpose({});
 // #endregion Methods
@@ -89,5 +93,5 @@ defineExpose({});
   perspective: 10rem
 
 .face
-  transform-origin: 50% 50% 10rem
+  transform-origin: v-bind(faceTransformOrigin)
 </style>
