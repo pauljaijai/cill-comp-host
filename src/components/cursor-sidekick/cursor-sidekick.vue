@@ -1,41 +1,15 @@
 <template>
-  <div class="sidekick fixed left-0 top-0 ">
-    <svg
-      :width="props.size"
-      :height="props.size"
-      viewBox="0 0 465 465"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      :style="style"
-      class=" "
-    >
-      <circle
-        cx="232.5"
-        cy="232.5"
-        r="232.5"
-        :fill="props.color"
-      />
-      <ellipse
-        cx="170"
-        cy="165.5"
-        rx="24"
-        ry="67.5"
-        fill="white"
-      />
-      <ellipse
-        cx="296"
-        cy="165.5"
-        rx="24"
-        ry="67.5"
-        fill="white"
-      />
-    </svg>
+  <div class="sidekick fixed left-0 top-0 pointer-events-none">
+    <the-sidekick v-bind="sidekickProp" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, computed, ref } from 'vue';
+import { CSSProperties, computed, ref, watchEffect } from 'vue';
 import { throttleFilter, useMouse, useRafFn } from '@vueuse/core';
+import { getVectorLength } from '../../common/utils';
+
+import TheSidekick from './the-sidekick.vue';
 
 // #region Props
 interface Props {
@@ -44,11 +18,16 @@ interface Props {
    * @default '#515151'
    */
   color?: string;
+  /** 最大速度。越慢小跟班越悠哉。單位 px/ms
+   * @default 1
+   */
+  maxVelocity?: number;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   size: '3rem',
   color: '#515151',
+  maxVelocity: 2,
 });
 
 // #region Emits
@@ -59,6 +38,7 @@ const emit = defineEmits<{
 
 const mouseInfo = useMouse({
   eventFilter: throttleFilter(15),
+  type: 'client',
 })
 
 const position = ref({
@@ -72,14 +52,46 @@ const style = computed<CSSProperties>(() => {
   }
 });
 
-useRafFn(() => {
+const sidekickProp = computed(() => ({
+  ...props,
+  style: style.value,
+}));
+
+/** 位移 */
+const displacement = ref(0);
+/** 速率。px/ms */
+const velocity = ref(0);
+watchEffect(() => {
+  console.log('velocity:', velocity.value);
+});
+
+useRafFn(({ delta: deltaTime }) => {
   const delta = {
     x: mouseInfo.x.value - position.value.x,
     y: mouseInfo.y.value - position.value.y,
   }
 
-  position.value.x += delta.x / 5;
-  position.value.y += delta.y / 5;
+  const deltaPosition = {
+    x: delta.x / 5,
+    y: delta.y / 5,
+  }
+  if (Math.abs(deltaPosition.x) < 0.1 && Math.abs(deltaPosition.y) < 0.1) {
+    displacement.value = 0;
+    velocity.value = 0;
+    return;
+  }
+
+
+  displacement.value = getVectorLength(deltaPosition);
+  velocity.value = displacement.value / deltaTime;
+
+  if (velocity.value > props.maxVelocity) {
+    deltaPosition.x /= velocity.value / props.maxVelocity;
+    deltaPosition.y /= velocity.value / props.maxVelocity;
+  }
+
+  position.value.x += deltaPosition.x;
+  position.value.y += deltaPosition.y;
 })
 
 
