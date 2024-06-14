@@ -1,5 +1,5 @@
 <template>
-  <div class="sidekick fixed left-0 top-0 pointer-events-none">
+  <div class="fixed left-0 top-0 w-0 h-0 ">
     <the-sidekick v-bind="sidekickProp" />
   </div>
 </template>
@@ -8,8 +8,15 @@
 import { CSSProperties, computed, ref, watchEffect } from 'vue';
 import { throttleFilter, useMouse, useRafFn } from '@vueuse/core';
 import { getVectorLength } from '../../common/utils';
+import { ExtractComponentParam } from '../../types';
 
 import TheSidekick from './the-sidekick.vue';
+
+type SidekickProp = InstanceType<typeof TheSidekick>['$props'];
+
+/**
+ * 此元件負責控制人物移動，情緒和互動交給 the-sidekick 處理
+ */
 
 // #region Props
 interface Props {
@@ -42,8 +49,8 @@ const mouseInfo = useMouse({
 })
 
 const position = ref({
-  x: 0,
-  y: 0,
+  x: 800,
+  y: 500,
 });
 
 const style = computed<CSSProperties>(() => {
@@ -52,49 +59,52 @@ const style = computed<CSSProperties>(() => {
   }
 });
 
-const sidekickProp = computed(() => ({
-  ...props,
-  style: style.value,
-}));
-
 /** 位移 */
 const displacement = ref(0);
 /** 速率。px/ms */
 const velocity = ref(0);
-watchEffect(() => {
-  console.log('velocity:', velocity.value);
-});
 
-useRafFn(({ delta: deltaTime }) => {
-  const delta = {
-    x: mouseInfo.x.value - position.value.x,
-    y: mouseInfo.y.value - position.value.y,
-  }
+// useRafFn(({ delta: deltaTime }) => {
+//   const delta = {
+//     x: mouseInfo.x.value - position.value.x,
+//     y: mouseInfo.y.value - position.value.y,
+//   }
 
-  const deltaPosition = {
-    x: delta.x / 5,
-    y: delta.y / 5,
-  }
-  if (Math.abs(deltaPosition.x) < 0.1 && Math.abs(deltaPosition.y) < 0.1) {
-    displacement.value = 0;
-    velocity.value = 0;
-    return;
-  }
+//   const deltaPosition = {
+//     x: delta.x / 20,
+//     y: delta.y / 20,
+//   }
+//   if (Math.abs(deltaPosition.x) < 0.1 && Math.abs(deltaPosition.y) < 0.1) {
+//     displacement.value = 0;
+//     velocity.value = 0;
+//     return;
+//   }
 
+//   displacement.value = getVectorLength(deltaPosition);
+//   velocity.value = displacement.value / deltaTime;
 
-  displacement.value = getVectorLength(deltaPosition);
-  velocity.value = displacement.value / deltaTime;
+//   if (velocity.value > props.maxVelocity) {
+//     deltaPosition.x /= velocity.value / props.maxVelocity;
+//     deltaPosition.y /= velocity.value / props.maxVelocity;
+//   }
 
-  if (velocity.value > props.maxVelocity) {
-    deltaPosition.x /= velocity.value / props.maxVelocity;
-    deltaPosition.y /= velocity.value / props.maxVelocity;
-  }
+//   position.value.x += deltaPosition.x;
+//   position.value.y += deltaPosition.y;
+// })
 
-  position.value.x += deltaPosition.x;
-  position.value.y += deltaPosition.y;
-})
-
-
+const sidekickProp = computed<SidekickProp>(() => ({
+  ...props,
+  style: style.value,
+  velocity: velocity.value,
+  position: {
+    x: position.value.x,
+    y: position.value.y,
+  },
+  targetPosition: {
+    x: mouseInfo.x.value,
+    y: mouseInfo.y.value,
+  },
+}));
 
 // #region Methods
 defineExpose({});
@@ -102,6 +112,4 @@ defineExpose({});
 </script>
 
 <style scoped lang="sass">
-.sidekick
-  transform: translate(-50%, -50%)
 </style>
