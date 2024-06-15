@@ -25,7 +25,10 @@
 
       <hr>
 
-      <base-checkbox label="檢核方塊" />
+      <base-checkbox
+        label="檢核方塊"
+        class="py-1 px-2 border rounded"
+      />
 
       <hr>
 
