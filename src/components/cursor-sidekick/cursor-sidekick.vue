@@ -2,10 +2,13 @@
   <div class="container fixed left-0 top-0 w-0 h-0 ">
     <the-sidekick
       v-bind="sidekickProp"
-      :style="style"
+      :style="sidekickStyle"
     />
 
-    <sidekick-tooltip v-bind="sidekickProp" />
+    <sidekick-tooltip
+      v-bind="sidekickProp"
+      :style="tooltipStyle"
+    />
   </div>
 </template>
 
@@ -212,7 +215,7 @@ useRafFn(({ delta: deltaTime }) => {
   position.value.y += deltaPosition.y;
 })
 
-const style = computed<CSSProperties>(() => ({
+const sidekickStyle = computed<CSSProperties>(() => ({
   transform: `translate(${position.value.x}px, ${position.value.y}px)`
 }));
 
@@ -238,6 +241,17 @@ const sidekickProp = computed(() => {
   }
 
   return result;
+});
+
+const tooltipStyle = computed<CSSProperties>(() => {
+  const [x, y] = [
+    targetElementBounding.x.value + targetElementBounding.width.value / 2 - props.size / 2,
+    targetElementBounding.y.value + targetElementBounding.height.value / 2 - props.size / 2,
+  ]
+
+  return {
+    transform: `translate(${x}px, ${y}px)`
+  }
 });
 
 // #region Methods

@@ -1,9 +1,5 @@
 <template>
-  <div
-    ref="tooltipRef"
-    class=" fixed"
-    :style="tooltipStyle"
-  >
+  <div ref="tooltipRef">
     <div class="flex flex-col border rounded p-4">
       安安
     </div>
