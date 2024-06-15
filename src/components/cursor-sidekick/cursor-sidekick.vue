@@ -174,7 +174,7 @@ const maxVelocity = computed(() => {
 /** 阻力，讓移動有加速度效果，特殊事件則無限制 */
 const resistance = computed(() => {
   if (targetElement.value || selectionState.text.value) {
-    return 4;
+    return 5;
   }
 
   return 20;

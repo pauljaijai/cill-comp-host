@@ -110,7 +110,6 @@ watch(() => props.targetElement, (el) => {
   }
 })
 watch(() => props.selectionState?.text, () => {
-  console.log(`🚀 ~ selectionState:`);
   const state = props.selectionState;
 
   const bodyEl = bodyRef.value;
@@ -164,8 +163,10 @@ const faceStyle = computed<CSSProperties>(() => {
   const rotationX = Math.sin(angle) * FACE_MAX_ANGLE;
   const rotationY = -Math.cos(angle) * FACE_MAX_ANGLE;
 
+  const opacityDelay = hasTarget.value ? 0 : 0.4;
   return {
     transform: `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`,
+    transition: `opacity 0.4s ${opacityDelay}s`,
     opacity: hasTarget.value ? 0 : 1,
   }
 });
@@ -220,7 +221,6 @@ defineExpose({});
 
 .face
   transform-origin: v-bind(faceTransformOrigin)
-  transition: opacity 0.4s
 .eye
   transform-origin: 50% 50%
 
