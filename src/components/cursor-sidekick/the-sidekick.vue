@@ -144,8 +144,8 @@ const bodyAngle = computed(() => {
   return Math.atan2(y, x);
 });
 
-/** 速度越快身體越扁 */
 const bodyStyle = computed<CSSProperties>(() => {
+  // 速度越快身體越扁
   const scaleX = mapNumber(props.velocity, 0, 1, 1, 1.4);
 
   return {
