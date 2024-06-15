@@ -1,8 +1,8 @@
 <template>
   <svg
     ref="sidekickRef"
-    :width="props.size"
-    :height="props.size"
+    :width="props.width"
+    :height="props.height"
     viewBox="0 0 703 703"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,8 @@ interface Position {
 
 // #region Props
 interface Props {
-  size: string;
+  width: string;
+  height: string;
   color: string;
   /** 目前速度 */
   velocity: number;
@@ -63,10 +64,13 @@ interface Props {
   cursorPosition: Position;
   /** 目標元素 */
   targetElement?: HTMLElement;
+  /** 已選取文字 */
+  selectedText?: string;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   targetElement: undefined,
+  selectedText: undefined,
 });
 
 const sidekickRef = ref<SVGElement>();
