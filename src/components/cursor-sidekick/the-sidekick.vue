@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <svg
       ref="sidekickRef"
       v-bind="size"
@@ -48,7 +48,8 @@ import { CSSProperties, computed, ref, watch } from 'vue';
 import { mapNumber } from '../../common/utils';
 import anime from 'animejs';
 
-import { useElementBounding, useElementSize } from '@vueuse/core';
+import { useElementBounding } from '@vueuse/core';
+import { pipe } from 'remeda';
 
 interface Position {
   x: number;
@@ -68,12 +69,15 @@ interface Props {
   /** 目標元素 */
   targetElement?: HTMLElement;
   /** 已選取文字 */
-  selectedText?: string;
+  selectionState?: {
+    rect?: DOMRect;
+    text: string;
+  };
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   targetElement: undefined,
-  selectedText: undefined,
+  selectionState: undefined,
 });
 
 const sidekickRef = ref<SVGElement>();
@@ -90,29 +94,49 @@ watch(() => props.targetElement, (el) => {
   const bodyEl = bodyRef.value;
   if (!bodyEl) return;
 
+  anime.remove(bodyEl);
   if (el) {
-    anime.remove(bodyEl);
     anime({
       targets: bodyEl,
       d: 'M691 20.4999C711 40.5 705 681 691 695C677 709 32.0003 714 13 695C-6.00038 676 -13.0001 46.5 12.9999 20.5C38.9999 -5.50002 671 0.499857 691 20.4999Z',
       duration: 800,
     })
   } else {
-    anime.remove(bodyEl);
     anime({
       targets: bodyEl,
       d: 'M584 351.5C584 479.906 485.5 584 351.5 584C217.5 584 119 479.906 119 351.5C119 223.094 223.094 119 351.5 119C479.906 119 584 223.094 584 351.5Z',
       duration: 500,
     })
   }
+})
+watch(() => props.selectionState?.text, () => {
+  console.log(`🚀 ~ selectionState:`);
+  const state = props.selectionState;
 
-  // console.log(`🚀 ~ value:`, value);
+  const bodyEl = bodyRef.value;
+  if (!bodyEl) return;
+
+  anime.remove(bodyEl);
+  if (state?.text) {
+    anime({
+      targets: bodyEl,
+      d: 'M691 20.4999C711 40.5 705 681 691 695C677 709 32.0003 714 13 695C-6.00038 676 -13.0001 46.5 12.9999 20.5C38.9999 -5.50002 671 0.499857 691 20.4999Z',
+      duration: 800,
+    })
+  } else {
+    anime({
+      targets: bodyEl,
+      d: 'M584 351.5C584 479.906 485.5 584 351.5 584C217.5 584 119 479.906 119 351.5C119 223.094 223.094 119 351.5 119C479.906 119 584 223.094 584 351.5Z',
+      duration: 500,
+    })
+  }
 })
 
+const hasTarget = computed(() => props.targetElement || props.selectionState?.text);
 
 /** 根據目標位置計算身體旋轉角度，以 +x 為 0 度 */
 const bodyAngle = computed(() => {
-  if (props.targetElement) return 0;
+  if (hasTarget.value) return 0;
 
   const size = props.size;
   const [x, y] = [
@@ -142,7 +166,7 @@ const faceStyle = computed<CSSProperties>(() => {
 
   return {
     transform: `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`,
-    opacity: props.targetElement ? 0 : 1,
+    opacity: hasTarget.value ? 0 : 1,
   }
 });
 
@@ -151,16 +175,32 @@ const faceTransformOrigin = computed(
 );
 
 const sidekickStyle = computed<CSSProperties>(() => {
-  if (!props.targetElement) return {};
+  if (!hasTarget.value) return {};
 
-  const [x, y] = [
-    targetElementBounding.width.value / props.size,
-    targetElementBounding.height.value / props.size,
-  ]
+  const [x, y] = pipe(null,
+    () => {
+      if (props.targetElement) {
+        return [
+          targetElementBounding.width.value / props.size,
+          targetElementBounding.height.value / props.size,
+        ]
+      }
+
+      const rect = props.selectionState?.rect;
+      if (props.selectionState?.text && rect) {
+        return [
+          rect.width / props.size,
+          rect.height / props.size,
+        ]
+      }
+
+      return [1, 1];
+    }
+  )
 
   return {
     transform: `scale(${x}, ${y})`,
-    opacity: props.targetElement ? 0.1 : 1,
+    opacity: hasTarget.value ? 0.1 : 1,
   }
 });
 

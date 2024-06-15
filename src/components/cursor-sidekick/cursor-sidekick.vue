@@ -130,9 +130,23 @@ const position = ref({ x: 0, y: 0 });
 /** 一般狀態為 cursor 位置，所有目標則為目標位置 */
 const targetPosition = computed(() => {
   if (targetElement.value) {
+    // 移動至目標元素中心
     return {
       x: targetElementBounding.x.value + targetElementBounding.width.value / 2 - props.size / 2,
       y: targetElementBounding.y.value + targetElementBounding.height.value / 2 - props.size / 2,
+    }
+  }
+
+  if (selectionState.text.value) {
+    const rect = selectionState.rects.value[0];
+    if (!rect) return {
+      x: mouseInfo.x.value,
+      y: mouseInfo.y.value,
+    }
+
+    return {
+      x: rect.left + rect.width / 2 - props.size / 2,
+      y: rect.top + rect.height / 2 - props.size / 2,
     }
   }
 
@@ -213,7 +227,10 @@ const sidekickProp = computed(() => {
       y: mouseInfo.y.value,
     },
     targetElement: targetElement.value,
-    selectedText: selectionState.text.value,
+    selectionState: {
+      text: selectionState.text.value,
+      rect: selectionState.rects.value[0],
+    },
   }
 
   return result;
