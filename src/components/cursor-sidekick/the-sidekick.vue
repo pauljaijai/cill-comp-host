@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class=" w-0 h-0">
     <svg
       ref="sidekickRef"
       v-bind="size"

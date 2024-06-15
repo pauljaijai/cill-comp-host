@@ -6,7 +6,7 @@
     />
 
     <sidekick-tooltip
-      v-bind="sidekickProp"
+      v-bind="tooltipProp"
       :style="tooltipStyle"
     />
   </div>
@@ -26,6 +26,7 @@ import {
 } from '@vueuse/core';
 
 type SidekickProp = InstanceType<typeof TheSidekick>['$props'];
+type TooltipProp = InstanceType<typeof SidekickTooltip>['$props'];
 
 /**
  * 此元件負責控制人物移動與目標檢測，情緒和互動交給 the-sidekick 處理
@@ -245,13 +246,31 @@ const sidekickProp = computed(() => {
 
 const tooltipStyle = computed<CSSProperties>(() => {
   const [x, y] = [
-    targetElementBounding.x.value + targetElementBounding.width.value / 2 - props.size / 2,
-    targetElementBounding.y.value + targetElementBounding.height.value / 2 - props.size / 2,
+    targetElementBounding.x.value + targetElementBounding.width.value / 2,
+    targetElementBounding.y.value + targetElementBounding.height.value / 2,
   ]
 
   return {
-    transform: `translate(${x}px, ${y}px)`
+    transform: [
+      `translateX(${x}px)`,
+      `translateX(-50%)`,
+      `translateY(${y}px)`,
+      `translateY(-50%)`,
+    ].join(' ')
   }
+});
+
+const tooltipProp = computed(() => {
+  const result: TooltipProp = {
+    targetElement: targetElement.value,
+    targetElementBounding,
+    selectionState: {
+      text: selectionState.text.value,
+      rect: selectionState.rects.value[0],
+    },
+  }
+
+  return result;
 });
 
 // #region Methods

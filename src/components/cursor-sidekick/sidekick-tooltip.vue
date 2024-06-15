@@ -1,5 +1,8 @@
 <template>
-  <div ref="tooltipRef">
+  <div
+    ref="tooltipRef"
+    class=" absolute"
+  >
     <div class="flex flex-col border rounded p-4">
       安安
     </div>
