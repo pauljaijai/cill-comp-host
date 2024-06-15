@@ -47,9 +47,9 @@
 import { CSSProperties, computed, ref, watch } from 'vue';
 import { mapNumber } from '../../common/utils';
 import anime from 'animejs';
+import { pipe } from 'remeda';
 
 import { useElementBounding } from '@vueuse/core';
-import { pipe } from 'remeda';
 
 interface Position {
   x: number;
@@ -68,6 +68,7 @@ interface Props {
   cursorPosition: Position;
   /** 目標元素 */
   targetElement?: HTMLElement;
+  targetElementBounding: ReturnType<typeof useElementBounding>;
   /** 已選取文字 */
   selectionState?: {
     rect?: DOMRect;
@@ -87,9 +88,7 @@ const size = computed(() => ({
   height: props.size,
 }));
 
-const targetElementBounding = useElementBounding(() => props.targetElement, {
-  reset: false,
-});
+const targetElementBounding = computed(() => props.targetElementBounding);
 watch(() => props.targetElement, (el) => {
   const bodyEl = bodyRef.value;
   if (!bodyEl) return;
@@ -178,12 +177,16 @@ const faceTransformOrigin = computed(
 const sidekickStyle = computed<CSSProperties>(() => {
   if (!hasTarget.value) return {};
 
+  const {
+    width, height
+  } = targetElementBounding.value;
+
   const [x, y] = pipe(null,
     () => {
       if (props.targetElement) {
         return [
-          targetElementBounding.width.value / props.size,
-          targetElementBounding.height.value / props.size,
+          width.value / props.size,
+          height.value / props.size,
         ]
       }
 

@@ -4,6 +4,8 @@
       v-bind="sidekickProp"
       :style="style"
     />
+
+    <sidekick-tooltip v-bind="sidekickProp" />
   </div>
 </template>
 
@@ -12,6 +14,7 @@ import { CSSProperties, computed, ref, watch, watchEffect } from 'vue';
 import { getVectorLength } from '../../common/utils';
 
 import TheSidekick from './the-sidekick.vue';
+import SidekickTooltip from './sidekick-tooltip.vue';
 
 import {
   throttleFilter, useActiveElement,
@@ -227,6 +230,7 @@ const sidekickProp = computed(() => {
       y: mouseInfo.y.value,
     },
     targetElement: targetElement.value,
+    targetElementBounding,
     selectionState: {
       text: selectionState.text.value,
       rect: selectionState.rects.value[0],
