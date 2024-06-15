@@ -33,9 +33,7 @@ interface Props {
    * @default 1
    */
   maxVelocity?: number;
-  /** 目標元素被包裹時，會被移至比此值更大值
-   * @default 100
-   */
+  /**  @default 100 */
   zIndex?: number;
 }
 // #endregion Props
@@ -199,7 +197,6 @@ const style = computed<CSSProperties>(() => ({
 
 const sidekickProp = computed(() => {
   const result: SidekickProp = {
-    zIndex: props.zIndex,
     size: props.size,
     color: props.color,
     velocity: velocity.value,

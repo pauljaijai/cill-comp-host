@@ -57,7 +57,6 @@ interface Position {
 
 // #region Props
 interface Props {
-  zIndex: number;
   size: number;
   color: string;
   /** 目前速度 */
