@@ -13,7 +13,10 @@
       cy="232.5"
       r="232.5"
       :fill="props.color"
+      :style="bodyStyle"
+      class="body"
     />
+
     <g
       :style="faceStyle"
       class="face"
@@ -38,13 +41,15 @@
 
 <script setup lang="ts">
 import { CSSProperties, computed, ref, watch, watchEffect } from 'vue';
-import { getUnitVector } from '../../common/utils';
+import { getUnitVector, mapNumber } from '../../common/utils';
 import { useElementSize } from '@vueuse/core';
 
 // #region Props
 interface Props {
   size: string;
   color: string;
+  /** 目前速度 */
+  velocity: number;
   /** 人物目前位置 */
   position: { x: number; y: number };
   /** 目標位置 */
@@ -63,6 +68,15 @@ const bodyAngle = computed(() => {
     props.targetPosition.y - props.position.y - svgSize.height.value / 2,
   ]
   return Math.atan2(y, x);
+});
+
+/** 速度越快身體越扁 */
+const bodyStyle = computed<CSSProperties>(() => {
+  const scaleY = mapNumber(props.velocity, 0, 1, 1, 0.8);
+
+  return {
+    transform: `rotate(${bodyAngle.value}rad) scaleY(${scaleY}) `,
+  }
 });
 
 const FACE_MAX_ANGLE = 30;
@@ -91,6 +105,10 @@ defineExpose({});
 <style scoped lang="sass">
 .sidekick
   perspective: 10rem
+
+.body
+  transform-origin: 50% 50%
+
 
 .face
   transform-origin: v-bind(faceTransformOrigin)
