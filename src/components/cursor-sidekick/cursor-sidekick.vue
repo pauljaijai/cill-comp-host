@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { CSSProperties, computed, ref, watch, watchEffect } from 'vue';
-import { throttleFilter, useActiveElement, useElementByPoint, useMouse, useRafFn, useTextSelection } from '@vueuse/core';
+import { throttleFilter, useActiveElement, useElementBounding, useElementByPoint, useMouse, useRafFn, useTextSelection } from '@vueuse/core';
 import { getVectorLength } from '../../common/utils';
 import { pipe, piped } from 'remeda';
 
@@ -23,7 +23,8 @@ type SidekickProp = InstanceType<typeof TheSidekick>['$props'];
 
 // #region Props
 interface Props {
-  size?: string;
+  /** 單位 px */
+  size?: number;
   /** \# 前綴之 HEX 格式
    * @default '#515151'
    */
@@ -39,7 +40,7 @@ interface Props {
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  size: '3rem',
+  size: 48,
   color: '#515151',
   maxVelocity: 2,
   zIndex: 100,
@@ -113,15 +114,34 @@ const targetElement = computed(() => {
 
   return undefined;
 });
+const targetElementBounding = useElementBounding(targetElement, {
+  reset: false,
+});
+watchEffect(() => {
+  // console.log('targetElement: ', targetElement.value);
+})
 
 // --- 人物基礎參數
 
-/** 人物目前位置 */
+/** 目前位置 */
 const position = ref({ x: 0, y: 0 });
-const size = ref({
-  width: props.size,
-  height: props.size,
+/** 一般狀態為 cursor 位置，所有目標則為目標位置 */
+const targetPosition = computed(() => {
+  if (targetElement.value) {
+    return {
+      x: targetElementBounding.x.value,
+      y: targetElementBounding.y.value,
+    }
+  }
+
+  return {
+    x: mouseInfo.x.value,
+    y: mouseInfo.y.value,
+  }
 });
+watchEffect(() => {
+  // console.log('targetPosition: ', targetPosition.value);
+})
 
 /** 位移 */
 const displacement = ref(0);
@@ -147,8 +167,8 @@ const resistance = computed(() => {
 // 計算位移與速率
 useRafFn(({ delta: deltaTime }) => {
   const delta = {
-    x: mouseInfo.x.value - position.value.x,
-    y: mouseInfo.y.value - position.value.y,
+    x: targetPosition.value.x - position.value.x,
+    y: targetPosition.value.y - position.value.y,
   }
 
   const deltaPosition = {
@@ -177,22 +197,26 @@ const style = computed<CSSProperties>(() => ({
   transform: `translate(${position.value.x}px, ${position.value.y}px)`
 }));
 
-const sidekickProp = computed<SidekickProp>(() => ({
-  width: size.value.width,
-  height: size.value.height,
-  color: props.color,
-  velocity: velocity.value,
-  position: {
-    x: position.value.x,
-    y: position.value.y,
-  },
-  cursorPosition: {
-    x: mouseInfo.x.value,
-    y: mouseInfo.y.value,
-  },
-  targetElement: targetElement.value,
-  selectedText: selectionState.text.value,
-}));
+const sidekickProp = computed(() => {
+  const result: SidekickProp = {
+    zIndex: props.zIndex,
+    size: props.size,
+    color: props.color,
+    velocity: velocity.value,
+    position: {
+      x: position.value.x,
+      y: position.value.y,
+    },
+    cursorPosition: {
+      x: mouseInfo.x.value,
+      y: mouseInfo.y.value,
+    },
+    targetElement: targetElement.value,
+    selectedText: selectionState.text.value,
+  }
+
+  return result;
+});
 
 // #region Methods
 defineExpose({});
