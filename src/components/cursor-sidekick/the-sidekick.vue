@@ -3,14 +3,14 @@
     ref="sidekickRef"
     :width="props.size"
     :height="props.size"
-    viewBox="0 0 465 465"
+    viewBox="0 0 703 703"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     class="sidekick pointer-events-none"
   >
     <circle
-      cx="232.5"
-      cy="232.5"
+      cx="351.5"
+      cy="351.5"
       r="232.5"
       :fill="props.color"
       :style="bodyStyle"
@@ -22,18 +22,20 @@
       class="face"
     >
       <ellipse
-        cx="170"
-        cy="165.5"
+        cx="289"
+        cy="284.5"
         rx="24"
         ry="67.5"
         fill="white"
+        class="eye"
       />
       <ellipse
-        cx="296"
-        cy="165.5"
+        cx="415"
+        cy="284.5"
         rx="24"
         ry="67.5"
         fill="white"
+        class="eye"
       />
     </g>
   </svg>
@@ -85,10 +87,10 @@ const bodyAngle = computed(() => {
 
 /** 速度越快身體越扁 */
 const bodyStyle = computed<CSSProperties>(() => {
-  const scaleY = mapNumber(props.velocity, 0, 1, 1, 0.8);
+  const scaleX = mapNumber(props.velocity, 0, 1, 1, 1.4);
 
   return {
-    transform: `rotate(${bodyAngle.value}rad) scaleY(${scaleY}) `,
+    transform: `rotate(${bodyAngle.value}rad) scaleX(${scaleX}) `,
   }
 });
 
@@ -124,4 +126,12 @@ defineExpose({});
 
 .face
   transform-origin: v-bind(faceTransformOrigin)
+.eye
+  transform-origin: 50% 50%
+
+@keyframes blink 
+  0%, 98%, 100%
+    opacity: 1
+  99%
+    opacity: 0
 </style>
