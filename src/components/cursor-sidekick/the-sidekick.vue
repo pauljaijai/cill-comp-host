@@ -173,8 +173,7 @@ defineExpose({});
 .sidekick
   perspective: 10rem
   transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
-  transform-origin: 0% 0%
-  image-rendering: auto
+  transform-origin: 50% 50%
 
 .body
   transform-origin: 50% 50%

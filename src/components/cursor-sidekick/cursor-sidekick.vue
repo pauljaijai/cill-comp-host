@@ -9,16 +9,20 @@
 
 <script setup lang="ts">
 import { CSSProperties, computed, ref, watch, watchEffect } from 'vue';
-import { throttleFilter, useActiveElement, useElementBounding, useElementByPoint, useMouse, useRafFn, useTextSelection } from '@vueuse/core';
 import { getVectorLength } from '../../common/utils';
-import { pipe, piped } from 'remeda';
 
 import TheSidekick from './the-sidekick.vue';
+
+import {
+  throttleFilter, useActiveElement,
+  useElementBounding, useElementByPoint,
+  useMouse, useRafFn, useTextSelection
+} from '@vueuse/core';
 
 type SidekickProp = InstanceType<typeof TheSidekick>['$props'];
 
 /**
- * 此元件負責控制人物移動、尺寸與目標檢測與，情緒和互動交給 the-sidekick 處理
+ * 此元件負責控制人物移動與目標檢測，情緒和互動交給 the-sidekick 處理
  */
 
 // #region Props
@@ -127,8 +131,8 @@ const position = ref({ x: 0, y: 0 });
 const targetPosition = computed(() => {
   if (targetElement.value) {
     return {
-      x: targetElementBounding.x.value,
-      y: targetElementBounding.y.value,
+      x: targetElementBounding.x.value + targetElementBounding.width.value / 2 - props.size / 2,
+      y: targetElementBounding.y.value + targetElementBounding.height.value / 2 - props.size / 2,
     }
   }
 
