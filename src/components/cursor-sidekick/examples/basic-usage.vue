@@ -14,6 +14,19 @@
       <hr>
 
       <base-input label="文字輸入框" />
+      <div class="p-2 border rounded">
+        <textarea
+          placeholder="多行文字"
+          class="w-full h-full"
+        />
+      </div>
+
+      <div
+        contenteditable
+        class="p-2 border rounded"
+      >
+        可編輯的 div
+      </div>
 
       <hr>
 

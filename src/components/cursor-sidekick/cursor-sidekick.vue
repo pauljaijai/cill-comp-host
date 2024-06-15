@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { CSSProperties, computed, ref, watchEffect } from 'vue';
-import { throttleFilter, useMouse, useRafFn } from '@vueuse/core';
+import { throttleFilter, useActiveElement, useElementByPoint, useMouse, useRafFn } from '@vueuse/core';
 import { getVectorLength } from '../../common/utils';
 import { ExtractComponentParam } from '../../types';
 
@@ -15,7 +15,7 @@ import TheSidekick from './the-sidekick.vue';
 type SidekickProp = InstanceType<typeof TheSidekick>['$props'];
 
 /**
- * 此元件負責控制人物移動，情緒和互動交給 the-sidekick 處理
+ * 此元件負責控制人物移動與目標檢測，情緒和互動交給 the-sidekick 處理
  */
 
 // #region Props
@@ -29,12 +29,17 @@ interface Props {
    * @default 1
    */
   maxVelocity?: number;
+  /** 目標元素被包裹時，會被移至比此值更大值
+   * @default 100
+   */
+  zIndex?: number;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   size: '3rem',
   color: '#515151',
   maxVelocity: 2,
+  zIndex: 100,
 });
 
 // #region Emits
@@ -48,22 +53,22 @@ const mouseInfo = useMouse({
   type: 'client',
 })
 
+/** 人物目前位置 */
 const position = ref({
   x: 0,
   y: 0,
 });
 
-const style = computed<CSSProperties>(() => {
-  return {
-    transform: `translate(${position.value.x}px, ${position.value.y}px)`,
-  }
-});
+const style = computed<CSSProperties>(() => ({
+  transform: `translate(${position.value.x}px, ${position.value.y}px)`
+}));
 
 /** 位移 */
 const displacement = ref(0);
 /** 速率。px/ms */
 const velocity = ref(0);
 
+// 計算位移與速率
 useRafFn(({ delta: deltaTime }) => {
   const delta = {
     x: mouseInfo.x.value - position.value.x,
@@ -92,6 +97,37 @@ useRafFn(({ delta: deltaTime }) => {
   position.value.y += deltaPosition.y;
 })
 
+
+const activeElement = useActiveElement();
+const { element } = useElementByPoint(mouseInfo);
+
+/** 是否為可編輯的元素 */
+function isContentEditable(el?: HTMLElement | null) {
+  if (el instanceof HTMLInputElement) {
+    const inputTypes = ['text', 'number', 'email', 'password', 'search', 'tel', 'url'];
+    return inputTypes.includes(el.type);
+  }
+
+  if (el instanceof HTMLTextAreaElement) {
+    return true
+  }
+
+  if (['true', 'plaintext-only'].includes(el?.contentEditable ?? '')) {
+    return true;
+  }
+
+  return false;
+}
+
+/** 目標 element */
+const targetElement = computed(() => {
+  if (isContentEditable(activeElement.value)) {
+    return activeElement.value ?? undefined;
+  }
+
+  return element.value ?? undefined;
+});
+
 const sidekickProp = computed<SidekickProp>(() => ({
   ...props,
   style: style.value,
@@ -100,10 +136,11 @@ const sidekickProp = computed<SidekickProp>(() => ({
     x: position.value.x,
     y: position.value.y,
   },
-  targetPosition: {
+  cursorPosition: {
     x: mouseInfo.x.value,
     y: mouseInfo.y.value,
   },
+  targetElement: targetElement.value,
 }));
 
 // #region Methods
@@ -112,4 +149,6 @@ defineExpose({});
 </script>
 
 <style scoped lang="sass">
+.container
+  z-index: v-bind('props.zIndex')
 </style>

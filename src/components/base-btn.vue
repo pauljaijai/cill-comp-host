@@ -3,7 +3,6 @@
     class="base-btn"
     :class="classes"
     type="button"
-    :disabled="props.disabled"
     @click="handleClick()"
   >
     <slot>
@@ -35,7 +34,7 @@ const classes = computed(() => {
   const result: string[] = [];
 
   if (props.disabled) {
-    result.push('cursor-not-allowed');
+    result.push('!cursor-not-allowed');
   } else {
     result.push('cursor-pointer');
   }

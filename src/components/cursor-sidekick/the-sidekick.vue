@@ -6,7 +6,7 @@
     viewBox="0 0 465 465"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    class="sidekick"
+    class="sidekick pointer-events-none"
   >
     <circle
       cx="232.5"
@@ -40,9 +40,14 @@
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, computed, ref, watch, watchEffect } from 'vue';
-import { getUnitVector, mapNumber } from '../../common/utils';
+import { CSSProperties, computed, ref, watch } from 'vue';
+import { mapNumber } from '../../common/utils';
 import { useElementSize } from '@vueuse/core';
+
+interface Position {
+  x: number;
+  y: number;
+}
 
 // #region Props
 interface Props {
@@ -51,21 +56,29 @@ interface Props {
   /** 目前速度 */
   velocity: number;
   /** 人物目前位置 */
-  position: { x: number; y: number };
-  /** 目標位置 */
-  targetPosition: { x: number; y: number };
+  position: Position;
+  /** 游標位置 */
+  cursorPosition: Position;
+  /** 目標元素 */
+  targetElement?: HTMLElement;
 }
 // #endregion Props
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {
+  targetElement: undefined,
+});
 
 const sidekickRef = ref<SVGElement>();
 const svgSize = useElementSize(sidekickRef);
 
+watch(() => props.targetElement, (value) => {
+  // console.log(`🚀 ~ value:`, value);
+}, { deep: true })
+
 /** 根據目標位置計算身體旋轉角度，以 +x 為 0 度 */
 const bodyAngle = computed(() => {
   const [x, y] = [
-    props.targetPosition.x - props.position.x - svgSize.width.value / 2,
-    props.targetPosition.y - props.position.y - svgSize.height.value / 2,
+    props.cursorPosition.x - props.position.x - svgSize.width.value / 2,
+    props.cursorPosition.y - props.position.y - svgSize.height.value / 2,
   ]
   return Math.atan2(y, x);
 });
@@ -93,9 +106,9 @@ const faceStyle = computed<CSSProperties>(() => {
   }
 });
 
-const faceTransformOrigin = computed(() => {
-  return `50% 50% ${Math.max(svgSize.width.value, svgSize.height.value) * 3}px`;
-});
+const faceTransformOrigin = computed(
+  () => `50% 50% ${Math.max(svgSize.width.value, svgSize.height.value) * 3}px`
+);
 
 // #region Methods
 defineExpose({});
@@ -108,7 +121,6 @@ defineExpose({});
 
 .body
   transform-origin: 50% 50%
-
 
 .face
   transform-origin: v-bind(faceTransformOrigin)
