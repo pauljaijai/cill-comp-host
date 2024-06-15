@@ -84,7 +84,7 @@ function isContentEditable(el?: HTMLElement | null) {
 
   return false;
 }
-/** 是否為有效的元素。以下為目前支援的元素：
+/** 是否為有效的元素。目前支援的元素為：
  * 
  * - 連結
  * - 內有 checkbox 的 label
@@ -183,7 +183,7 @@ const resistance = computed(() => {
   return 20;
 });
 
-// 計算位移與速率
+// 更新位移與速率
 useRafFn(({ delta: deltaTime }) => {
   const delta = {
     x: targetPosition.value.x - position.value.x,
