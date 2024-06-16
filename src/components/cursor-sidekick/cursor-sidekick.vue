@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, computed, ref, watch, watchEffect } from 'vue';
+import { CSSProperties, computed, ref, shallowRef, watch, watchEffect } from 'vue';
 import { getVectorLength } from '../../common/utils';
 
 import TheSidekick from './the-sidekick.vue';
@@ -24,6 +24,7 @@ import {
   useElementBounding, useElementByPoint,
   useMouse, useRafFn, useTextSelection
 } from '@vueuse/core';
+import { isNullish } from 'remeda';
 
 type SidekickProp = InstanceType<typeof TheSidekick>['$props'];
 type TooltipProp = InstanceType<typeof SidekickTooltip>['$props'];
@@ -67,7 +68,16 @@ const mouseInfo = useMouse({
 })
 
 // 判斷目標元素或文字選取
+const currentActiveElement = shallowRef<HTMLElement | null>()
 const activeElement = useActiveElement();
+watch(activeElement, (el) => {
+  if (!isNullish(el?.getAttribute('data-sidekick-ignore'))) {
+    return;
+  }
+
+  currentActiveElement.value = el;
+})
+
 const { element } = useElementByPoint(mouseInfo);
 const selectionState = useTextSelection();
 
@@ -95,8 +105,14 @@ function isContentEditable(el?: HTMLElement | null) {
  * - 內有 radio 的 label
  * - 內有 select 的 label
  * - button 或 role 為 button 的元素
+ * 
+ * 若加入 data-sidekick-ignore 屬性則忽略
  */
 function isValidElement(el?: HTMLElement | null) {
+  if (!isNullish(el?.getAttribute('data-sidekick-ignore'))) {
+    return false;
+  }
+
   // a 連結
   if (el instanceof HTMLLinkElement) {
     return true;
@@ -113,8 +129,8 @@ function isValidElement(el?: HTMLElement | null) {
 
 /** 目標 element */
 const targetElement = computed(() => {
-  if (isContentEditable(activeElement.value)) {
-    return activeElement.value ?? undefined;
+  if (isContentEditable(currentActiveElement.value)) {
+    return currentActiveElement.value ?? undefined;
   }
 
   if (isValidElement(element.value)) {

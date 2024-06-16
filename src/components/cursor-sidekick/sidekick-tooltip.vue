@@ -1,23 +1,40 @@
 <template>
-  <div class="absolute">
+  <transition name="tooltip">
     <div
-      ref="tooltipRef"
-      :style="tooltipStyle"
+      v-if="hasTarget"
+      class="tooltip-wrapper pointer-events-none"
     >
-      <div class="flex flex-col border rounded p-2">
-        安安
+      <div
+        ref="tooltipRef"
+        :style="tooltipStyle"
+        class="tooltip pointer-events-auto"
+      >
+        <div class="flex flex-col border rounded p-2">
+          <base-btn
+            v-for="(btn, i) in btnList"
+            :key="i"
+            :label="btn.label"
+            data-sidekick-ignore
+            class=" text-nowrap"
+            @click="btn.onClick(props)"
+          />
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script setup lang="ts">
 import { CSSProperties, computed, ref, watch } from 'vue';
-import { mapNumber } from '../../common/utils';
-import anime from 'animejs';
-import { pipe } from 'remeda';
 
-import { useElementBounding, useParentElement } from '@vueuse/core';
+import BaseBtn from '../base-btn.vue';
+
+import { useElementBounding } from '@vueuse/core';
+
+interface BtnOption {
+  label: string;
+  onClick: (param: Props) => void;
+}
 
 // #region Props
 interface Props {
@@ -45,8 +62,22 @@ watch(() => props.selectionState?.text, () => {
 
 const hasTarget = computed(() => props.targetElement || props.selectionState?.text);
 
-const btnList = computed(() => {
-  return {}
+const btnList = computed<BtnOption[]>(() => {
+  return [
+    {
+      label: '清空',
+      onClick(param) {
+        const { targetElement } = param;
+        if (
+          targetElement instanceof HTMLInputElement ||
+          targetElement instanceof HTMLTextAreaElement
+        ) {
+          targetElement.value = '';
+          targetElement.focus();
+        }
+      },
+    },
+  ]
 });
 
 const tooltipRef = ref<HTMLDivElement>();
@@ -77,4 +108,16 @@ defineExpose({});
 </script>
 
 <style scoped lang="sass">
+.tooltip-wrapper
+  position: absolute
+  transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.6s
+  opacity: 1
+  
+.tooltip
+  background: rgba(white, 0.2)
+  backdrop-filter: blur(5px)
+  transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15)
+
+.tooltip-enter-from, .tooltip-leave-to
+  opacity: 0 !important
 </style>
