@@ -14,10 +14,10 @@
       <hr>
 
       <base-input label="文字輸入框" />
-      <div class="p-2 border rounded w-1/2 h-[20vh]">
+      <div class=" border rounded w-1/2 h-[20vh]">
         <textarea
           placeholder="多行文字"
-          class="w-full h-full"
+          class="w-full h-full p-2"
         />
       </div>
 

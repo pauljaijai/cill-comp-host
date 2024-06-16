@@ -1,10 +1,12 @@
 <template>
-  <div
-    ref="tooltipRef"
-    class=" absolute"
-  >
-    <div class="flex flex-col border rounded p-4">
-      安安
+  <div class="absolute">
+    <div
+      ref="tooltipRef"
+      :style="tooltipStyle"
+    >
+      <div class="flex flex-col border rounded p-2">
+        安安
+      </div>
     </div>
   </div>
 </template>
@@ -54,16 +56,18 @@ const tooltipBounding = useElementBounding(tooltipRef, {
 
 const gap = 10;
 const tooltipStyle = computed<CSSProperties>(() => {
-  const { x, y, width, height } = targetElementBounding.value;
+  const { width, height } = targetElementBounding.value;
 
-  const [top, left] = [
-    x.value + width.value + gap,
-    y.value + height.value / 2 - tooltipBounding.height.value / 2,
+  const [x, y] = [
+    width.value / 2 + tooltipBounding.width.value / 2 + gap,
+    0,
   ]
 
   return {
-    top: `${top}px`,
-    left: `${left}px`,
+    transform: [
+      `translateX(${x}px)`,
+      `translateY(${y}px)`,
+    ].join(' '),
   }
 });
 
