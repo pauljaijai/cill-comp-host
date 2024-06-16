@@ -13,9 +13,13 @@
 
       <hr>
 
-      <base-input label="文字輸入框" />
+      <base-input
+        v-model="text"
+        label="文字輸入框"
+      />
       <div class=" border rounded w-1/2 h-[20vh]">
         <textarea
+          v-model="text"
           placeholder="多行文字"
           class="w-full h-full p-2"
         />
@@ -62,4 +66,6 @@ import BaseCheckbox from '../../base-checkbox.vue';
 import BaseInput from '../../base-input.vue';
 import BaseBtn from '../../base-btn.vue';
 import CursorSidekick from '../cursor-sidekick.vue';
+
+const text = ref('');
 </script>

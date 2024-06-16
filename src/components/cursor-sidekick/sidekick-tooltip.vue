@@ -167,6 +167,13 @@ const btnList = computed(() => {
         targetElement instanceof HTMLTextAreaElement
       ) {
         targetElement.value = '';
+        // 觸發 input 事件
+        const event = new Event('input', {
+          bubbles: true,
+          cancelable: false
+        });
+        targetElement.dispatchEvent(event);
+
         targetElement.focus();
       }
     },
