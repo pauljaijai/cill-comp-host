@@ -5,6 +5,7 @@
       class=" tooltip-container pointer-events-none select-none "
     >
       <div
+        ref="tooltipRef"
         class="tooltip border rounded p-2 duration-500"
         :style="tooltipStyle"
       >
@@ -13,7 +14,6 @@
           mode="out-in"
         >
           <div
-            ref="tooltipRef"
             :key="key"
             class="pointer-events-auto"
           >
@@ -77,7 +77,7 @@ const tooltipBounding = useElementBounding(tooltipRef, {
   reset: false,
 });
 
-const gap = 20;
+const gap = 10;
 const tooltipStyle = computed<CSSProperties>(() => {
   const [x, y] = pipe(null,
     () => {
