@@ -2,20 +2,20 @@
   <transition name="tooltip">
     <div
       v-if="hasTarget"
-      class="tooltip-wrapper pointer-events-none"
+      class="tooltip-wrapper pointer-events-none select-none"
     >
       <div
         ref="tooltipRef"
         :style="tooltipStyle"
         class="tooltip pointer-events-auto"
       >
-        <div class="flex flex-col border rounded p-2">
+        <div class="flex flex-col gap-2 border rounded p-2">
           <base-btn
             v-for="(btn, i) in btnList"
             :key="i"
             :label="btn.label"
             data-sidekick-ignore
-            class=" text-nowrap"
+            class=" text-nowrap text-sm"
             @click="btn.onClick(props)"
           />
         </div>
@@ -29,7 +29,8 @@ import { CSSProperties, computed, ref, watch } from 'vue';
 
 import BaseBtn from '../base-btn.vue';
 
-import { useElementBounding } from '@vueuse/core';
+import { useClipboard, useElementBounding } from '@vueuse/core';
+import { pipe } from 'remeda';
 
 interface BtnOption {
   label: string;
@@ -60,26 +61,6 @@ watch(() => props.targetElement, (el) => {
 watch(() => props.selectionState?.text, () => {
 })
 
-const hasTarget = computed(() => props.targetElement || props.selectionState?.text);
-
-const btnList = computed<BtnOption[]>(() => {
-  return [
-    {
-      label: '清空',
-      onClick(param) {
-        const { targetElement } = param;
-        if (
-          targetElement instanceof HTMLInputElement ||
-          targetElement instanceof HTMLTextAreaElement
-        ) {
-          targetElement.value = '';
-          targetElement.focus();
-        }
-      },
-    },
-  ]
-});
-
 const tooltipRef = ref<HTMLDivElement>();
 const tooltipBounding = useElementBounding(tooltipRef, {
   reset: false,
@@ -87,12 +68,27 @@ const tooltipBounding = useElementBounding(tooltipRef, {
 
 const gap = 10;
 const tooltipStyle = computed<CSSProperties>(() => {
-  const { width, height } = targetElementBounding.value;
+  const [x, y] = pipe(null,
+    () => {
+      if (props.selectionState?.text && props.selectionState.rect) {
+        return {
+          width: props.selectionState.rect.width,
+          height: props.selectionState.rect.height,
+        }
+      }
 
-  const [x, y] = [
-    width.value / 2 + tooltipBounding.width.value / 2 + gap,
-    0,
-  ]
+      return {
+        width: targetElementBounding.value.width.value,
+        height: targetElementBounding.value.height.value,
+      }
+    },
+    ({ width, height }) => {
+      return [
+        width / 2 + tooltipBounding.width.value / 2 + gap,
+        0,
+      ]
+    }
+  );
 
   return {
     transform: [
@@ -102,9 +98,48 @@ const tooltipStyle = computed<CSSProperties>(() => {
   }
 });
 
-// #region Methods
-defineExpose({});
-// #endregion Methods
+const hasTarget = computed(() => props.targetElement || props.selectionState?.text);
+
+// --- 各類特殊功能
+const clipboard = useClipboard()
+
+const btnList = computed(() => {
+  const result: BtnOption[] = [];
+
+  if (clipboard.isSupported.value) {
+    result.push({
+      label: '📋 複製',
+      onClick(param) {
+        const { targetElement } = param;
+        if (
+          targetElement instanceof HTMLInputElement ||
+          targetElement instanceof HTMLTextAreaElement
+        ) {
+          clipboard.copy(targetElement.value);
+          targetElement.focus();
+        }
+      },
+    });
+  }
+
+  result.push({
+    label: '🧹 清空',
+    onClick(param) {
+      const { targetElement } = param;
+      if (
+        targetElement instanceof HTMLInputElement ||
+        targetElement instanceof HTMLTextAreaElement
+      ) {
+        targetElement.value = '';
+        targetElement.focus();
+      }
+    },
+  });
+
+  return result;
+});
+
+
 </script>
 
 <style scoped lang="sass">

@@ -24,7 +24,7 @@ import {
   useElementBounding, useElementByPoint,
   useMouse, useRafFn, useTextSelection
 } from '@vueuse/core';
-import { isNullish } from 'remeda';
+import { isNullish, pipe } from 'remeda';
 
 type SidekickProp = InstanceType<typeof TheSidekick>['$props'];
 type TooltipProp = InstanceType<typeof SidekickTooltip>['$props'];
@@ -261,10 +261,22 @@ const sidekickProp = computed(() => {
 });
 
 const tooltipStyle = computed<CSSProperties>(() => {
-  const [x, y] = [
-    targetElementBounding.x.value + targetElementBounding.width.value / 2,
-    targetElementBounding.y.value + targetElementBounding.height.value / 2,
-  ]
+  const [x, y] = pipe(null,
+    () => {
+      const rect = selectionState.rects.value[0];
+      if (selectionState.text.value && rect) {
+        return [
+          rect.x + rect.width / 2,
+          rect.y + rect.height / 2,
+        ]
+      }
+
+      return [
+        targetElementBounding.x.value + targetElementBounding.width.value / 2,
+        targetElementBounding.y.value + targetElementBounding.height.value / 2,
+      ]
+    }
+  )
 
   return {
     transform: [
