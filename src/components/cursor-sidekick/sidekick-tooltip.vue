@@ -1,36 +1,47 @@
 <template>
-  <transition name="tooltip">
+  <transition name="tooltip-opacity">
     <div
       v-if="hasTarget"
-      class="tooltip-wrapper pointer-events-none select-none"
+      class=" tooltip-container pointer-events-none select-none "
     >
       <div
-        ref="tooltipRef"
+        class="tooltip border rounded p-2 duration-500"
         :style="tooltipStyle"
-        class="tooltip pointer-events-auto"
       >
-        <div class="flex flex-col gap-2 border rounded p-2">
-          <base-btn
-            v-for="(btn, i) in btnList"
-            :key="i"
-            :label="btn.label"
-            data-sidekick-ignore
-            class=" text-nowrap text-sm"
-            @click="btn.onClick(props)"
-          />
-        </div>
+        <transition
+          name="tooltip"
+          mode="out-in"
+        >
+          <div
+            ref="tooltipRef"
+            :key="key"
+            class="pointer-events-auto"
+          >
+            <div class="flex flex-col gap-2">
+              <base-btn
+                v-for="(btn, i) in btnList"
+                :key="i"
+                :label="btn.label"
+                data-sidekick-ignore
+                class=" text-nowrap text-sm"
+                @click="btn.onClick(props)"
+              />
+            </div>
+          </div>
+        </transition>
       </div>
     </div>
   </transition>
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, computed, ref, watch } from 'vue';
+import { CSSProperties, computed, ref, watch, watchEffect } from 'vue';
 
 import BaseBtn from '../base-btn.vue';
 
 import { useClipboard, useElementBounding } from '@vueuse/core';
-import { pipe } from 'remeda';
+import { filter, isTruthy, join, pipe } from 'remeda';
+import { nanoid } from 'nanoid';
 
 interface BtnOption {
   label: string;
@@ -66,7 +77,7 @@ const tooltipBounding = useElementBounding(tooltipRef, {
   reset: false,
 });
 
-const gap = 10;
+const gap = 20;
 const tooltipStyle = computed<CSSProperties>(() => {
   const [x, y] = pipe(null,
     () => {
@@ -99,6 +110,31 @@ const tooltipStyle = computed<CSSProperties>(() => {
 });
 
 const hasTarget = computed(() => props.targetElement || props.selectionState?.text);
+const key = computed(() => {
+  if (props.targetElement) {
+    return [
+      props.targetElement.id,
+      props.targetElement.className,
+      props.targetElement.tagName,
+      props.targetElement.textContent,
+    ].join('-');
+  }
+
+  if (props.selectionState?.text) {
+    const rect = props.selectionState.rect;
+    return pipe(
+      [
+        props.selectionState?.text,
+        rect?.width, rect?.height,
+        rect?.x, rect?.y,
+      ],
+      filter(isTruthy),
+      join('-'),
+    );
+  }
+
+  return nanoid()
+});
 
 // --- 各類特殊功能
 const clipboard = useClipboard()
@@ -143,16 +179,21 @@ const btnList = computed(() => {
 </script>
 
 <style scoped lang="sass">
-.tooltip-wrapper
+.tooltip-container
   position: absolute
-  transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.6s
-  opacity: 1
-  
+  transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
+
 .tooltip
   background: rgba(white, 0.2)
   backdrop-filter: blur(5px)
   transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15)
 
+.tooltip-opacity-enter-from, .tooltip-opacity-leave-to
+  opacity: 0 !important
+
+.tooltip-enter-active, .tooltip-leave-active
+  transition-duration: 0.4s
 .tooltip-enter-from, .tooltip-leave-to
+  transform: scale(0.98) !important
   opacity: 0 !important
 </style>
