@@ -174,6 +174,7 @@ const faceTransformOrigin = computed(
   () => `50% 50% ${props.size * 3}px`
 );
 
+const SIZE_EXPAND = 10;
 const sidekickStyle = computed<CSSProperties>(() => {
   if (!hasTarget.value) return {};
 
@@ -181,20 +182,22 @@ const sidekickStyle = computed<CSSProperties>(() => {
     width, height
   } = targetElementBounding.value;
 
+  const size = props.size;
+
   const [x, y] = pipe(null,
     () => {
       if (props.targetElement) {
         return [
-          width.value / props.size,
-          height.value / props.size,
+          (width.value + SIZE_EXPAND) / size,
+          (height.value + SIZE_EXPAND) / size,
         ]
       }
 
       const rect = props.selectionState?.rect;
       if (props.selectionState?.text && rect) {
         return [
-          rect.width / props.size,
-          rect.height / props.size,
+          (rect.width + SIZE_EXPAND) / size,
+          (rect.height + SIZE_EXPAND) / size,
         ]
       }
 
