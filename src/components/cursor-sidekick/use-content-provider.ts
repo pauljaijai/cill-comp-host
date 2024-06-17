@@ -47,9 +47,11 @@ export function useContentProvider() {
           return true
         }
 
-        if ([
-          'true', 'plaintext-only'
-        ].includes(data?.contentEditable ?? '')) {
+        if (
+          [
+            'true', 'plaintext-only'
+          ].includes(data?.contentEditable ?? '')
+        ) {
           return true;
         }
 
@@ -63,14 +65,26 @@ export function useContentProvider() {
             label: '📋 複製',
             onClick() {
               const { element } = param;
-              const targetElement = element?.value;
+              const target = element?.value;
 
               if (
-                targetElement instanceof HTMLInputElement ||
-                targetElement instanceof HTMLTextAreaElement
+                target instanceof HTMLInputElement ||
+                target instanceof HTMLTextAreaElement
               ) {
-                clipboard.copy(targetElement.value);
-                targetElement.focus();
+                clipboard.copy(target.value);
+                target.focus();
+              }
+
+              if (
+                [
+                  'true', 'plaintext-only'
+                ].includes(target?.contentEditable ?? '')
+              ) {
+                if (target?.innerHTML) {
+                  clipboard.copy(target.innerHTML);
+                }
+
+                target?.focus();
               }
             },
           });
@@ -95,6 +109,18 @@ export function useContentProvider() {
               target.dispatchEvent(event);
 
               target.focus();
+            }
+
+            if (
+              [
+                'true', 'plaintext-only'
+              ].includes(target?.contentEditable ?? '')
+            ) {
+              if (target) {
+                target.innerHTML = '';
+              }
+
+              target?.focus();
             }
           },
         });
