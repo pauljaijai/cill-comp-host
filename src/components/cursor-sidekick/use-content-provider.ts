@@ -17,7 +17,7 @@ interface TargetParam {
 
 interface BtnOption {
   label: string;
-  onClick: (param: TargetParam) => void;
+  onClick: (event: Event) => void;
 }
 
 interface ContentProvider {
@@ -55,13 +55,13 @@ export function useContentProvider() {
 
         return false;
       },
-      getContent() {
+      getContent(param) {
         const result: BtnOption[] = [];
 
         if (clipboard.isSupported.value) {
           result.push({
             label: '📋 複製',
-            onClick(param) {
+            onClick() {
               const { element } = param;
               const targetElement = element?.value;
 
@@ -78,7 +78,7 @@ export function useContentProvider() {
 
         result.push({
           label: '🧹 清空',
-          onClick(param) {
+          onClick() {
             const { element } = param;
             const target = element?.value;
 
@@ -121,13 +121,13 @@ export function useContentProvider() {
       match(data) {
         return 'rect' in data;
       },
-      getContent() {
+      getContent(param) {
         const result: BtnOption[] = [];
 
         if (clipboard.isSupported.value) {
           result.push({
             label: '📋 複製',
-            onClick(param) {
+            onClick() {
               const { element } = param;
               const targetElement = element?.value;
 
@@ -149,3 +149,10 @@ export function useContentProvider() {
 
   return { contentProviders };
 }
+
+/**
+ *  * - 連結
+ * - 內有 checkbox 的 label
+ * - 內有 radio 的 label
+ * - 內有 select 的 label
+ */

@@ -21,17 +21,26 @@
             data-sidekick-ignore
           >
             <div
+              v-if="Array.isArray(tooltipContent)"
               class="flex flex-col gap-2"
               data-sidekick-ignore
             >
               <base-btn
-                v-for="(btn, i) in btnList"
+                v-for="(btn, i) in tooltipContent"
                 :key="i"
                 :label="btn.label"
                 data-sidekick-ignore
                 class=" text-nowrap text-sm"
-                @click="btn.onClick(props)"
+                @click="btn.onClick"
               />
+            </div>
+
+            <div
+              v-else-if="tooltipContent"
+              class=" text-base"
+              data-sidekick-ignore
+            >
+              {{ tooltipContent }}
             </div>
           </div>
         </transition>
@@ -48,11 +57,7 @@ import BaseBtn from '../base-btn.vue';
 import { useClipboard, useElementBounding } from '@vueuse/core';
 import { filter, isTruthy, join, pipe } from 'remeda';
 import { nanoid } from 'nanoid';
-
-interface BtnOption {
-  label: string;
-  onClick: (param: Props) => void;
-}
+import { useContentProvider } from './use-content-provider';
 
 // #region Props
 interface Props {
@@ -142,50 +147,22 @@ const key = computed(() => {
   return nanoid()
 });
 
-// --- 各類特殊功能
-const clipboard = useClipboard()
+const { contentProviders } = useContentProvider();
 
-const btnList = computed(() => {
-  const result: BtnOption[] = [];
+const tooltipContent = computed(() => {
+  const target = props.targetElement ?? props.selectionState;
+  if (!target) return [];
 
-  if (clipboard.isSupported.value) {
-    result.push({
-      label: '📋 複製',
-      onClick(param) {
-        const { targetElement } = param;
-        if (
-          targetElement instanceof HTMLInputElement ||
-          targetElement instanceof HTMLTextAreaElement
-        ) {
-          clipboard.copy(targetElement.value);
-          targetElement.focus();
-        }
-      },
-    });
-  }
+  const provider = contentProviders.find(({ match }) => match(target));
+  if (!provider) return [];
 
-  result.push({
-    label: '🧹 清空',
-    onClick(param) {
-      const { targetElement } = param;
-      if (
-        targetElement instanceof HTMLInputElement ||
-        targetElement instanceof HTMLTextAreaElement
-      ) {
-        targetElement.value = '';
-        // 觸發 input 事件
-        const event = new Event('input', {
-          bubbles: true,
-          cancelable: false
-        });
-        targetElement.dispatchEvent(event);
-
-        targetElement.focus();
-      }
-    },
+  return provider.getContent({
+    element: props.targetElement ? {
+      value: props.targetElement,
+      bounding: props.targetElementBounding,
+    } : undefined,
+    selectionState: props.selectionState,
   });
-
-  return result;
 });
 
 
