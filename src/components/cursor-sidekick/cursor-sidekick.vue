@@ -25,6 +25,7 @@ import {
   useMouse, useRafFn, useTextSelection
 } from '@vueuse/core';
 import { isNullish, pipe } from 'remeda';
+import { useContentProvider } from './use-content-provider';
 
 type SidekickProp = InstanceType<typeof TheSidekick>['$props'];
 type TooltipProp = InstanceType<typeof SidekickTooltip>['$props'];
@@ -68,82 +69,49 @@ const mouseInfo = useMouse({
 })
 
 // 判斷目標元素或文字選取
-const currentActiveElement = shallowRef<HTMLElement | null>()
+const currentElement = shallowRef<HTMLElement | null>();
+
 const activeElement = useActiveElement();
 watch(activeElement, (el) => {
   if (!isNullish(el?.getAttribute('data-sidekick-ignore'))) {
     return;
   }
 
-  currentActiveElement.value = el;
+  currentElement.value = el;
 })
 
 const { element } = useElementByPoint(mouseInfo);
+watch(element, (el) => {
+  if (!isNullish(el?.getAttribute('data-sidekick-ignore'))) {
+    return;
+  }
+
+  const activeValue = activeElement.value;
+  if (activeValue) {
+    const result = contentProviders.some(({ match }) => match(activeValue));
+    if (result) return;
+  }
+
+  currentElement.value = el;
+})
+
 const selectionState = useTextSelection();
 
-/** 是否為可編輯的元素 */
-function isContentEditable(el?: HTMLElement | null) {
-  if (el instanceof HTMLInputElement) {
-    const inputTypes = ['text', 'number', 'email', 'password', 'search', 'tel', 'url'];
-    return inputTypes.includes(el.type);
-  }
-
-  if (el instanceof HTMLTextAreaElement) {
-    return true
-  }
-
-  if (['true', 'plaintext-only'].includes(el?.contentEditable ?? '')) {
-    return true;
-  }
-
-  return false;
-}
-/** 是否為有效的元素。目前支援的元素為：
- * 
- * - 連結
- * - 內有 checkbox 的 label
- * - 內有 radio 的 label
- * - 內有 select 的 label
- * - button 或 role 為 button 的元素
- * 
- * 若加入 data-sidekick-ignore 屬性則忽略
- */
-function isValidElement(el?: HTMLElement | null) {
-  if (!isNullish(el?.getAttribute('data-sidekick-ignore'))) {
-    return false;
-  }
-
-  // a 連結
-  if (el instanceof HTMLLinkElement) {
-    return true;
-  }
-  if (
-    el instanceof HTMLButtonElement
-    || el?.getAttribute('role') === 'button'
-  ) {
-    return true;
-  }
-
-  return false;
-}
+const { contentProviders } = useContentProvider();
 
 /** 目標 element */
 const targetElement = computed(() => {
-  if (isContentEditable(currentActiveElement.value)) {
-    return currentActiveElement.value ?? undefined;
-  }
+  const el = currentElement.value;
+  if (!el) return;
 
-  if (isValidElement(element.value)) {
-    return element.value ?? undefined;
-  }
-
-  return undefined;
+  const result = contentProviders.some(({ match }) => match(el));
+  return result ? el : undefined;
 });
 const targetElementBounding = useElementBounding(targetElement, {
   reset: false,
 });
 watchEffect(() => {
-  // console.log('targetElement: ', targetElement.value);
+  console.log('targetElement: ', targetElement.value);
 })
 
 // --- 人物基礎參數

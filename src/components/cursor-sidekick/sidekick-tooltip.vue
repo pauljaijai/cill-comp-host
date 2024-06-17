@@ -3,10 +3,12 @@
     <div
       v-if="hasTarget"
       class=" tooltip-container pointer-events-none select-none "
+      data-sidekick-ignore
     >
       <div
         ref="tooltipRef"
-        class="tooltip border rounded p-2 duration-500"
+        class="tooltip border rounded p-2 duration-500 pointer-events-auto"
+        data-sidekick-ignore
         :style="tooltipStyle"
       >
         <transition
@@ -15,9 +17,13 @@
         >
           <div
             :key="key"
-            class="pointer-events-auto"
+            class=""
+            data-sidekick-ignore
           >
-            <div class="flex flex-col gap-2">
+            <div
+              class="flex flex-col gap-2"
+              data-sidekick-ignore
+            >
               <base-btn
                 v-for="(btn, i) in btnList"
                 :key="i"
@@ -77,7 +83,7 @@ const tooltipBounding = useElementBounding(tooltipRef, {
   reset: false,
 });
 
-const gap = 10;
+const gap = 0;
 const tooltipStyle = computed<CSSProperties>(() => {
   const [x, y] = pipe(null,
     () => {
