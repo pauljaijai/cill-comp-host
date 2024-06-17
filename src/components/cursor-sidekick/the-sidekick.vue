@@ -71,7 +71,7 @@ interface Props {
   targetElementBounding: ReturnType<typeof useElementBounding>;
   /** 已選取文字 */
   selectionState?: {
-    rect?: DOMRect;
+    rect: DOMRect;
     text: string;
   };
 }

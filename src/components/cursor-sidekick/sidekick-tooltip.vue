@@ -37,7 +37,7 @@
 
             <div
               v-else-if="tooltipContent"
-              class=" text-base"
+              class="text-nowrap text-base"
               data-sidekick-ignore
             >
               {{ tooltipContent }}
@@ -66,7 +66,7 @@ interface Props {
   targetElementBounding: ReturnType<typeof useElementBounding>;
   /** 已選取文字 */
   selectionState?: {
-    rect?: DOMRect;
+    rect: DOMRect;
     text: string;
   };
 }

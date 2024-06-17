@@ -2,7 +2,7 @@ import { useClipboard, useElementBounding } from '@vueuse/core';
 
 /** 選取狀態 */
 interface SelectionState {
-  rect?: DOMRect;
+  rect: DOMRect;
   text: string;
 }
 
@@ -36,10 +36,14 @@ export function useContentProvider() {
     // 文字編輯類型
     {
       match(data) {
-        if ('text' in data) return false;
+        if ('rect' in data) return false;
 
         if (data instanceof HTMLInputElement) {
-          const inputTypes = ['text', 'number', 'email', 'password', 'search', 'tel', 'url'];
+          const inputTypes = [
+            'text', 'number', 'email',
+            'password', 'search',
+            'tel', 'url'
+          ];
           return inputTypes.includes(data.type);
         }
 
@@ -132,13 +136,74 @@ export function useContentProvider() {
     // 按鈕。button 或 role 為 button 的元素
     {
       match(data) {
-        if ('text' in data) return false;
+        if ('rect' in data) return false;
 
         return data instanceof HTMLButtonElement ||
           data?.getAttribute('role') === 'button'
       },
       getContent() {
         return undefined;
+      }
+    },
+
+    // checkbox 或內有 checkbox 的 label
+    {
+      match(data) {
+        if ('rect' in data) return false;
+
+        if (
+          data instanceof HTMLInputElement &&
+          data.type === 'checkbox'
+        ) {
+          return true;
+        }
+
+        if (
+          data instanceof HTMLLabelElement &&
+          data.querySelector('input[type="checkbox"]')
+        ) {
+          return true;
+        }
+
+        return false;
+      },
+      getContent(param) {
+        const { element } = param;
+        const target = element?.value;
+
+        if (target instanceof HTMLInputElement) {
+          return target?.checked ? '✅→⬜' : '⬜→✅';
+        }
+
+        if (
+          target instanceof HTMLLabelElement
+        ) {
+          const input = target.querySelector('input[type="checkbox"]');
+          if (input instanceof HTMLInputElement) {
+            return input?.checked ? '✅→⬜' : '⬜→✅';
+          }
+        }
+      }
+    },
+
+    // 連結
+    {
+      match(data) {
+        if ('rect' in data) return false;
+
+        if (data instanceof HTMLAnchorElement) {
+          return true;
+        }
+
+        return false;
+      },
+      getContent(param) {
+        const { element } = param;
+        const target = element?.value;
+
+        if (target instanceof HTMLAnchorElement) {
+          return target.href;
+        }
       }
     },
 
@@ -154,15 +219,10 @@ export function useContentProvider() {
           result.push({
             label: '📋 複製',
             onClick() {
-              const { element } = param;
-              const targetElement = element?.value;
+              const { selectionState } = param;
 
-              if (
-                targetElement instanceof HTMLInputElement ||
-                targetElement instanceof HTMLTextAreaElement
-              ) {
-                clipboard.copy(targetElement.value);
-                targetElement.focus();
+              if (selectionState?.text) {
+                clipboard.copy(selectionState.text);
               }
             },
           });
@@ -178,7 +238,6 @@ export function useContentProvider() {
 
 /**
  *  * - 連結
- * - 內有 checkbox 的 label
  * - 內有 radio 的 label
  * - 內有 select 的 label
  */

@@ -82,6 +82,7 @@ watch(activeElement, (el) => {
 
 const { element } = useElementByPoint(mouseInfo);
 watch(element, (el) => {
+  // console.log(`🚀 ~ elementByPoint:`, el);
   if (!isNullish(el?.getAttribute('data-sidekick-ignore'))) {
     return;
   }
@@ -92,6 +93,7 @@ watch(element, (el) => {
     if (result) return;
   }
 
+  // console.log(`🚀 ~ currentElement:`, el);
   currentElement.value = el;
 })
 
@@ -219,10 +221,10 @@ const sidekickProp = computed(() => {
     },
     targetElement: targetElement.value,
     targetElementBounding,
-    selectionState: {
+    selectionState: selectionState.rects.value[0] ? {
       text: selectionState.text.value,
       rect: selectionState.rects.value[0],
-    },
+    } : undefined,
   }
 
   return result;
@@ -260,10 +262,10 @@ const tooltipProp = computed(() => {
   const result: TooltipProp = {
     targetElement: targetElement.value,
     targetElementBounding,
-    selectionState: {
+    selectionState: selectionState.rects.value[0] ? {
       text: selectionState.text.value,
       rect: selectionState.rects.value[0],
-    },
+    } : undefined,
   }
 
   return result;
