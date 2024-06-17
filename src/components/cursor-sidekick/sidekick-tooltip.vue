@@ -7,7 +7,7 @@
     >
       <div
         ref="tooltipRef"
-        class="tooltip border rounded p-2 duration-500 pointer-events-auto"
+        class="tooltip p-2 duration-500 pointer-events-auto"
         data-sidekick-ignore
         :style="tooltipStyle"
       >
@@ -17,7 +17,7 @@
         >
           <div
             :key="key"
-            class=""
+            class="border rounded p-2"
             data-sidekick-ignore
           >
             <div
