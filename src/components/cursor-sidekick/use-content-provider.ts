@@ -219,6 +219,29 @@ export function useContentProvider() {
       }
     },
 
+    // 圖片
+    {
+      match(data) {
+        if ('rect' in data) return false;
+
+        if (data instanceof HTMLImageElement) {
+          return true;
+        }
+
+        return false;
+      },
+      getContent(param) {
+        const { element } = param;
+        const target = element?.value;
+
+        if (target instanceof HTMLImageElement) {
+          return {
+            text: '👍',
+          };
+        }
+      }
+    },
+
     // 選取文字
     {
       match(data) {
