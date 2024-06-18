@@ -20,13 +20,19 @@ interface BtnOption {
   onClick: (event: Event) => void;
 }
 
-interface ContentProvider {
+interface Content {
+  class?: string;
+  text?: string;
+  btnList?: BtnOption[];
+}
+
+export interface ContentProvider {
   match: (
     data: HTMLElement | SelectionState
   ) => boolean;
   getContent: (
     param: TargetParam
-  ) => string | BtnOption[] | undefined;
+  ) => Content | undefined;
 }
 
 export function useContentProvider() {
@@ -62,10 +68,10 @@ export function useContentProvider() {
         return false;
       },
       getContent(param) {
-        const result: BtnOption[] = [];
+        const btnList: BtnOption[] = [];
 
         if (clipboard.isSupported.value) {
-          result.push({
+          btnList.push({
             label: '📋 複製',
             onClick() {
               const { element } = param;
@@ -94,7 +100,7 @@ export function useContentProvider() {
           });
         }
 
-        result.push({
+        btnList.push({
           label: '🧹 清空',
           onClick() {
             const { element } = param;
@@ -129,7 +135,7 @@ export function useContentProvider() {
           },
         });
 
-        return result;
+        return { btnList };
       }
     },
 
@@ -141,7 +147,7 @@ export function useContentProvider() {
         return data instanceof HTMLButtonElement ||
           data?.getAttribute('role') === 'button'
       },
-      getContent() {
+      getContent(param) {
         return undefined;
       }
     },
@@ -172,7 +178,9 @@ export function useContentProvider() {
         const target = element?.value;
 
         if (target instanceof HTMLInputElement) {
-          return target?.checked ? '✅→⬜' : '⬜→✅';
+          return {
+            text: target?.checked ? '✅→⬜' : '⬜→✅',
+          };
         }
 
         if (
@@ -180,7 +188,9 @@ export function useContentProvider() {
         ) {
           const input = target.querySelector('input[type="checkbox"]');
           if (input instanceof HTMLInputElement) {
-            return input?.checked ? '✅→⬜' : '⬜→✅';
+            return {
+              text: input?.checked ? '✅→⬜' : '⬜→✅',
+            };
           }
         }
       }
@@ -202,7 +212,9 @@ export function useContentProvider() {
         const target = element?.value;
 
         if (target instanceof HTMLAnchorElement) {
-          return target.href;
+          return {
+            text: target.href,
+          };
         }
       }
     },
@@ -213,10 +225,10 @@ export function useContentProvider() {
         return 'rect' in data;
       },
       getContent(param) {
-        const result: BtnOption[] = [];
+        const btnList: BtnOption[] = [];
 
         if (clipboard.isSupported.value) {
-          result.push({
+          btnList.push({
             label: '📋 複製',
             onClick() {
               const { selectionState } = param;
@@ -228,7 +240,7 @@ export function useContentProvider() {
           });
         }
 
-        return result;
+        return { btnList };
       }
     },
   ]

@@ -3,6 +3,7 @@
     class="base-btn"
     :class="classes"
     type="button"
+    :aria-disabled="props.disabled"
     @click="handleClick()"
   >
     <slot>

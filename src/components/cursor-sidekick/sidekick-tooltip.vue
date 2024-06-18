@@ -6,6 +6,7 @@
       data-sidekick-ignore
     >
       <div
+        v-if="tooltipContent"
         ref="tooltipRef"
         class="tooltip p-2 duration-500 pointer-events-auto"
         data-sidekick-ignore
@@ -17,30 +18,30 @@
         >
           <div
             :key="key"
-            class="border rounded p-2"
+            class="tooltip-content border rounded p-2"
+            :class="tooltipContent.class"
             data-sidekick-ignore
           >
             <div
-              v-if="Array.isArray(tooltipContent)"
+              v-if="tooltipContent.text"
+              class="text-nowrap text-base"
+              data-sidekick-ignore
+            >
+              {{ tooltipContent.text }}
+            </div>
+
+            <div
               class="flex flex-col gap-2"
               data-sidekick-ignore
             >
               <base-btn
-                v-for="(btn, i) in tooltipContent"
+                v-for="(btn, i) in tooltipContent.btnList"
                 :key="i"
                 :label="btn.label"
                 data-sidekick-ignore
                 class=" text-nowrap text-sm"
                 @click="btn.onClick"
               />
-            </div>
-
-            <div
-              v-else-if="tooltipContent"
-              class="text-nowrap text-base"
-              data-sidekick-ignore
-            >
-              {{ tooltipContent }}
             </div>
           </div>
         </transition>
@@ -151,10 +152,10 @@ const { contentProviders } = useContentProvider();
 
 const tooltipContent = computed(() => {
   const target = props.targetElement ?? props.selectionState;
-  if (!target) return [];
+  if (!target) return;
 
   const provider = contentProviders.find(({ match }) => match(target));
-  if (!provider) return [];
+  if (!provider) return;
 
   return provider.getContent({
     element: props.targetElement ? {
@@ -172,11 +173,11 @@ const tooltipContent = computed(() => {
 .tooltip-container
   position: absolute
   transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
-
 .tooltip
+  transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15)
+.tooltip-content
   background: rgba(white, 0.2)
   backdrop-filter: blur(5px)
-  transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15)
 
 .tooltip-opacity-enter-from, .tooltip-opacity-leave-to
   opacity: 0 !important
