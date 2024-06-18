@@ -64,7 +64,7 @@ const emit = defineEmits<{
 // #endregion Emits
 
 const mouseInfo = useMouse({
-  eventFilter: throttleFilter(15),
+  eventFilter: throttleFilter(30),
   type: 'client',
 })
 
@@ -113,7 +113,7 @@ const targetElementBounding = useElementBounding(targetElement, {
   reset: false,
 });
 watchEffect(() => {
-  console.log('targetElement: ', targetElement.value);
+  // console.log('targetElement: ', targetElement.value);
 })
 
 // --- 人物基礎參數

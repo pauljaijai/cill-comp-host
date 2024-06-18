@@ -8,7 +8,7 @@
       <div
         v-if="tooltipContent"
         ref="tooltipRef"
-        class="tooltip p-2 duration-500 pointer-events-auto"
+        class="tooltip p-2  pointer-events-auto"
         data-sidekick-ignore
         :style="tooltipStyle"
       >
@@ -17,20 +17,23 @@
           mode="out-in"
         >
           <div
+            ref="tooltipContentRef"
             :key="key"
-            class="tooltip-content border rounded p-2"
+            class="tooltip-content flex flex-col gap-2 border rounded p-2 max-w-[90vw]"
             :class="tooltipContent.class"
             data-sidekick-ignore
           >
             <div
               v-if="tooltipContent.text"
-              class="text-nowrap text-base"
+              class=" text-base"
               data-sidekick-ignore
             >
               {{ tooltipContent.text }}
             </div>
 
+
             <div
+              v-if="tooltipContent.btnList"
               class="flex flex-col gap-2"
               data-sidekick-ignore
             >
@@ -52,13 +55,15 @@
 
 <script setup lang="ts">
 import { CSSProperties, computed, ref, watch, watchEffect } from 'vue';
+import { nanoid } from 'nanoid';
+import { filter, isTruthy, join, pipe } from 'remeda';
 
 import BaseBtn from '../base-btn.vue';
 
-import { useClipboard, useElementBounding } from '@vueuse/core';
-import { filter, isTruthy, join, pipe } from 'remeda';
-import { nanoid } from 'nanoid';
+import { useCycleList, useElementBounding, useIntersectionObserver } from '@vueuse/core';
 import { useContentProvider } from './use-content-provider';
+
+type Position = 'top' | 'bottom' | 'left' | 'right'
 
 // #region Props
 interface Props {
@@ -79,20 +84,66 @@ const props = withDefaults(defineProps<Props>(), {
 
 const targetElementBounding = computed(() => props.targetElementBounding);
 
-watch(() => props.targetElement, (el) => {
-})
-watch(() => props.selectionState?.text, () => {
-})
-
 const tooltipRef = ref<HTMLDivElement>();
 const tooltipBounding = useElementBounding(tooltipRef, {
   reset: false,
 });
+/** 偵測 tooltip 內容可見性 */
+const tooltipContentRef = ref<HTMLDivElement>();
+useIntersectionObserver(
+  tooltipContentRef,
+  (data) => {
+    if (!data[0]) return;
 
-const gap = 0;
+    const { isIntersecting } = data[0];
+    // console.log(`🚀 ~ useIntersectionObserver:`, isIntersecting);
+
+    if (!isIntersecting) {
+      nextPosition?.();
+    }
+  },
+  { threshold: 0.98 },
+)
+
+const positionProviderMap: Record<
+  Position,
+  (size: Record<'width' | 'height', number>) => [number, number]
+> = {
+  top: ({ height }) => [
+    0,
+    -(height / 2 + tooltipBounding.height.value / 2),
+  ],
+  bottom: ({ height }) => [
+    0,
+    height / 2 + tooltipBounding.height.value / 2,
+  ],
+  left: ({ width }) => [
+    -(width / 2 + tooltipBounding.width.value / 2),
+    0,
+  ],
+  right: ({ width }) => [
+    width / 2 + tooltipBounding.width.value / 2,
+    0,
+  ],
+}
+
+const {
+  state: currentPosition,
+  next: nextPosition,
+  go: setPositionByIndex,
+} = useCycleList<Position>([
+  'right', 'left', 'top', 'bottom'
+])
 const tooltipStyle = computed<CSSProperties>(() => {
   const [x, y] = pipe(null,
     () => {
+      if (props.targetElement) {
+        return {
+          width: targetElementBounding.value.width.value,
+          height: targetElementBounding.value.height.value,
+        }
+      }
+
       if (props.selectionState?.text && props.selectionState.rect) {
         return {
           width: props.selectionState.rect.width,
@@ -101,16 +152,11 @@ const tooltipStyle = computed<CSSProperties>(() => {
       }
 
       return {
-        width: targetElementBounding.value.width.value,
-        height: targetElementBounding.value.height.value,
+        width: 0,
+        height: 0,
       }
     },
-    ({ width, height }) => {
-      return [
-        width / 2 + tooltipBounding.width.value / 2 + gap,
-        0,
-      ]
-    }
+    positionProviderMap[currentPosition.value],
   );
 
   return {
@@ -122,6 +168,7 @@ const tooltipStyle = computed<CSSProperties>(() => {
 });
 
 const hasTarget = computed(() => props.targetElement || props.selectionState?.text);
+/** 為每一個目標產生專屬的 key */
 const key = computed(() => {
   if (props.targetElement) {
     return [
@@ -147,6 +194,10 @@ const key = computed(() => {
 
   return nanoid()
 });
+/** 目標發生變化時，將 position 重設 */
+// watch(key, () => {
+//   setPositionByIndex(0);
+// })
 
 const { contentProviders } = useContentProvider();
 
@@ -172,18 +223,18 @@ const tooltipContent = computed(() => {
 <style scoped lang="sass">
 .tooltip-container
   position: absolute
-  transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
+  transition: transform 0s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
 .tooltip
-  transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15)
+  transition: transform 0s cubic-bezier(0.96, 0, 0.2, 1.15)
 .tooltip-content
-  background: rgba(white, 0.2)
+  background: rgba(#999, 0.2)
   backdrop-filter: blur(5px)
 
 .tooltip-opacity-enter-from, .tooltip-opacity-leave-to
   opacity: 0 !important
 
 .tooltip-enter-active, .tooltip-leave-active
-  transition-duration: 0.4s
+  transition-duration: 0.3s
 .tooltip-enter-from, .tooltip-leave-to
   transform: scale(0.98) !important
   opacity: 0 !important

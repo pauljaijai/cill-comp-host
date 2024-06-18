@@ -212,8 +212,27 @@ export function useContentProvider() {
         const target = element?.value;
 
         if (target instanceof HTMLAnchorElement) {
+          const btnList: BtnOption[] = [
+            {
+              label: '📑 新分頁開啟連結',
+              onClick() {
+                window.open(target.href, '_blank');
+              }
+            }
+          ];
+
+          if (clipboard.isSupported.value) {
+            btnList.push({
+              label: '🔗 複製連結',
+              onClick() {
+                clipboard.copy(target.href);
+              },
+            });
+          }
+
           return {
-            text: target.href,
+            text: decodeURIComponent(target.href),
+            btnList,
           };
         }
       }
