@@ -233,6 +233,13 @@ const sidekickProp = computed(() => {
 const tooltipStyle = computed<CSSProperties>(() => {
   const [x, y] = pipe(null,
     () => {
+      if (targetElement.value) {
+        return [
+          targetElementBounding.x.value + targetElementBounding.width.value / 2,
+          targetElementBounding.y.value + targetElementBounding.height.value / 2,
+        ]
+      }
+
       const rect = selectionState.rects.value[0];
       if (selectionState.text.value && rect) {
         return [
@@ -241,10 +248,7 @@ const tooltipStyle = computed<CSSProperties>(() => {
         ]
       }
 
-      return [
-        targetElementBounding.x.value + targetElementBounding.width.value / 2,
-        targetElementBounding.y.value + targetElementBounding.height.value / 2,
-      ]
+      return [0, 0]
     }
   )
 
