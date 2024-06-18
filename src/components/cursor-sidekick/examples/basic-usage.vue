@@ -55,6 +55,10 @@
       >
         鱈魚的魚缸
       </a>
+
+      <img
+        src="/painting-codfish-bakery.webp"
+      >
     </div>
   </div>
 </template>
