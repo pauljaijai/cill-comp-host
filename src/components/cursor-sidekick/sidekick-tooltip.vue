@@ -1,7 +1,7 @@
 <template>
   <transition name="tooltip-opacity">
     <div
-      v-if="hasTarget"
+      v-if="tooltipVisible"
       class=" tooltip-container pointer-events-none select-none "
       data-sidekick-ignore
     >
@@ -60,7 +60,7 @@ import { filter, isTruthy, join, pipe } from 'remeda';
 
 import BaseBtn from '../base-btn.vue';
 
-import { useCycleList, useElementBounding, useIntersectionObserver } from '@vueuse/core';
+import { useCycleList, useElementBounding, useIntersectionObserver, useMousePressed, whenever } from '@vueuse/core';
 import { useContentProvider } from './use-content-provider';
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
@@ -81,6 +81,9 @@ const props = withDefaults(defineProps<Props>(), {
   targetElement: undefined,
   selectionState: undefined,
 });
+
+// 按住滑鼠時不顯示 tooltip
+const { pressed } = useMousePressed()
 
 const targetElementBounding = computed(() => props.targetElementBounding);
 
@@ -134,6 +137,12 @@ const {
 } = useCycleList<Position>([
   'right', 'left', 'top', 'bottom'
 ])
+/** 選取文字從 left 開始 */
+whenever(() => props.selectionState, () => {
+  setPositionByIndex(1);
+}, { deep: true })
+
+
 const tooltipStyle = computed<CSSProperties>(() => {
   const [x, y] = pipe(null,
     () => {
@@ -167,7 +176,13 @@ const tooltipStyle = computed<CSSProperties>(() => {
   }
 });
 
-const hasTarget = computed(() => props.targetElement || props.selectionState?.text);
+const tooltipVisible = computed(() => {
+  if (pressed.value) {
+    return false;
+  }
+
+  return props.targetElement || props.selectionState?.text;
+});
 /** 為每一個目標產生專屬的 key */
 const key = computed(() => {
   if (props.targetElement) {
@@ -227,8 +242,8 @@ const tooltipContent = computed(() => {
 .tooltip
   transition: transform 0s cubic-bezier(0.96, 0, 0.2, 1.15)
 .tooltip-content
-  background: rgba(#999, 0.2)
-  backdrop-filter: blur(5px)
+  background: rgba(#EEE, 0.8)
+  backdrop-filter: blur(1px)
 
 .tooltip-opacity-enter-from, .tooltip-opacity-leave-to
   opacity: 0 !important
