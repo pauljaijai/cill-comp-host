@@ -22,7 +22,7 @@ import SidekickTooltip from './sidekick-tooltip.vue';
 import {
   throttleFilter, useActiveElement,
   useElementBounding, useElementByPoint,
-  useMouse,  useRafFn, useTextSelection
+  useMouse, useRafFn, useTextSelection
 } from '@vueuse/core';
 import { isNullish, pipe } from 'remeda';
 import { useContentProvider } from './use-content-provider';
