@@ -25,7 +25,7 @@ import {
   useMouse, useRafFn, useTextSelection
 } from '@vueuse/core';
 import { isNullish, pipe } from 'remeda';
-import { useContentProvider } from './use-content-provider';
+import { ContentProvider, useContentProvider } from './use-content-provider';
 
 type SidekickProp = InstanceType<typeof TheSidekick>['$props'];
 type TooltipProp = InstanceType<typeof SidekickTooltip>['$props'];
@@ -48,6 +48,21 @@ interface Props {
   maxVelocity?: number;
   /**  @default 100 */
   zIndex?: number;
+
+  /** 用於 active element 的 Provider。
+   * 
+   * 通常用於可點擊或 focus 的元素。
+   */
+  activeProviders?: ContentProvider[];
+
+  /** 用於 hover element 的 Provider 
+   * 
+   * 只要 hover 到符合條件的元素，即會觸發。
+   */
+  hoverProviders?: ContentProvider[];
+
+  /** 用於判斷選取文字的 Provider  */
+  selectProviders?: ContentProvider[];
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -55,6 +70,10 @@ const props = withDefaults(defineProps<Props>(), {
   color: '#515151',
   maxVelocity: 2,
   zIndex: 100,
+
+  activeProviders: () => [],
+  hoverProviders: () => [],
+  selectProviders: () => [],
 });
 
 // #region Emits
@@ -87,7 +106,7 @@ watch(activeElementRef, (el) => {
   }
 
   if (el) {
-    const result = activeContentProviders.some(({ match }) => match(el));
+    const result = activeContentProviders.value.some(({ match }) => match(el));
     if (!result) return;
   }
 
@@ -108,7 +127,7 @@ watch(element, (el) => {
   }
 
   if (el) {
-    const result = hoverContentProviders.some(({ match }) => match(el));
+    const result = hoverContentProviders.value.some(({ match }) => match(el));
     if (!result) {
       hoverElement.value = undefined;
       return;
@@ -124,7 +143,12 @@ const selectionState = useTextSelection();
 const {
   activeContentProviders,
   hoverContentProviders,
-} = useContentProvider();
+} = useContentProvider({
+  activeList: props.activeProviders,
+  hoverList: props.hoverProviders,
+  selectList: props.selectProviders,
+});
+
 
 /** 目標 element，active element 優先 */
 const targetElement = computed(() => {
@@ -348,6 +372,10 @@ const tooltipProp = computed(() => {
       text: selectionState.text.value,
       rect: selectionState.rects.value[0],
     } : undefined,
+
+    activeProviders: props.activeProviders,
+    hoverProviders: props.hoverProviders,
+    selectProviders: props.selectProviders,
   }
 
   return result;

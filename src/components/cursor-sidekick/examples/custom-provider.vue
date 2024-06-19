@@ -3,6 +3,7 @@
     <cursor-sidekick
       v-if="enable"
       color="#35abf0"
+      :hover-providers="hoverProviders"
     />
 
     <base-checkbox
@@ -18,20 +19,12 @@
 
       <hr>
 
-      <base-btn label="按鈕" />
       <base-btn
         disabled
-        label="不可以瑟瑟 (。・ω・。)"
+        label="不可以色色 (。・ω・。)"
       />
 
       <hr>
-
-      <a
-        href="https://vocus.cc/salon/cod-aquarium"
-        target="_blank"
-      >
-        鱈魚的魚缸
-      </a>
 
       <img
         src="/painting-codfish-bakery.webp"
@@ -49,5 +42,39 @@ import BaseInput from '../../base-input.vue';
 import BaseBtn from '../../base-btn.vue';
 import CursorSidekick from '../cursor-sidekick.vue';
 
+import { ContentProvider } from '../use-content-provider';
+
 const enable = ref(false);
+
+const hoverProviders: ContentProvider[] = [
+  {
+    match(data) {
+      if ('rect' in data) return false;
+
+      if (
+        data instanceof HTMLButtonElement ||
+        data?.getAttribute('role') === 'button'
+      ) {
+        if (data.innerHTML.includes('色色')) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+    getContent(param) {
+      return {
+        text: `
+        <a
+        href="https://vocus.cc/salon/cod-aquarium"
+        data-sidekick-ignore
+        target="_blank"
+      >
+        色色傳送門
+      </a>
+      `,
+      };
+    }
+  },
+];
 </script>

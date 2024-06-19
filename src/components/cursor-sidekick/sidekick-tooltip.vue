@@ -27,10 +27,8 @@
               v-if="tooltipContent.text"
               class=" text-base text-center"
               data-sidekick-ignore
-            >
-              {{ tooltipContent.text }}
-            </div>
-
+              v-html="tooltipContent.text"
+            />
 
             <div
               v-if="tooltipContent.btnList"
@@ -65,7 +63,7 @@ import {
   useElementHover, useIntersectionObserver,
   useMousePressed,
 } from '@vueuse/core';
-import { useContentProvider } from './use-content-provider';
+import { ContentProvider, useContentProvider } from './use-content-provider';
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -88,6 +86,21 @@ interface Props {
     rect: DOMRect;
     text: string;
   };
+
+  /** 用於 active element 的 Provider。
+   * 
+   * 通常用於可點擊或 focus 的元素。
+   */
+  activeProviders?: ContentProvider[];
+
+  /** 用於 hover element 的 Provider 
+   * 
+   * 只要 hover 到符合條件的元素，即會觸發。
+   */
+  hoverProviders?: ContentProvider[];
+
+  /** 用於判斷選取文字的 Provider  */
+  selectProviders?: ContentProvider[];
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -95,6 +108,10 @@ const props = withDefaults(defineProps<Props>(), {
   activeElement: undefined,
   hoverElement: undefined,
   selectionState: undefined,
+
+  activeProviders: () => [],
+  hoverProviders: () => [],
+  selectProviders: () => [],
 });
 
 
@@ -234,7 +251,11 @@ const {
   activeContentProviders,
   hoverContentProviders,
   selectContentProviders,
-} = useContentProvider();
+} = useContentProvider({
+  activeList: props.activeProviders,
+  hoverList: props.hoverProviders,
+  selectList: props.selectProviders,
+});
 
 /** 優先順序為：active、hover、select */
 const tooltipContent = computed(() => {
@@ -245,15 +266,21 @@ const tooltipContent = computed(() => {
       } = props;
 
       if (activeElement) {
-        return activeContentProviders.find(({ match }) => match(activeElement.value));
+        return activeContentProviders.value.find(
+          ({ match }) => match(activeElement.value)
+        );
       }
 
       if (hoverElement) {
-        return hoverContentProviders.find(({ match }) => match(hoverElement.value));
+        return hoverContentProviders.value.find(
+          ({ match }) => match(hoverElement.value)
+        );
       }
 
       if (selectionState?.text) {
-        return selectContentProviders.find(({ match }) => match(selectionState));
+        return selectContentProviders.value.find(
+          ({ match }) => match(selectionState)
+        );
       }
     }
   );
