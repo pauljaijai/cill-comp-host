@@ -19,7 +19,7 @@
           <div
             ref="tooltipContentRef"
             :key="key"
-            class="tooltip-content flex flex-col gap-2 border rounded p-2 max-w-[90vw]"
+            class="tooltip-content flex flex-col gap-2 border rounded p-2 max-w-[90vw] min-w-[10rem]"
             :class="tooltipContent.class"
             data-sidekick-ignore
           >
@@ -93,7 +93,6 @@ const props = withDefaults(defineProps<Props>(), {
   selectionState: undefined,
 });
 
-// 按住滑鼠時不顯示 tooltip
 const { pressed } = useMousePressed()
 
 const targetElementBounding = computed(() => props.targetElement?.bounding);
@@ -188,7 +187,8 @@ const tooltipStyle = computed<CSSProperties>(() => {
 });
 
 const tooltipVisible = computed(() => {
-  if (pressed.value) {
+  // 按住且有選取文字時，不顯示 tooltip
+  if (pressed.value && props.selectionState?.text) {
     return false;
   }
 

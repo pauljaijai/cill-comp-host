@@ -190,17 +190,15 @@ const faceTransformOrigin = computed(
 
 const SIZE_EXPAND = 10;
 const sidekickStyle = computed<CSSProperties>(() => {
-  if (!hasTarget.value || !targetElementBounding.value) return {};
-
-  const {
-    width, height
-  } = targetElementBounding.value;
+  if (!hasTarget.value) return {};
 
   const size = props.size;
 
   const [x, y] = pipe(null,
     () => {
-      if (props.targetElement) {
+      if (targetElementBounding.value) {
+        const { width, height } = targetElementBounding.value;
+
         return [
           (width.value + SIZE_EXPAND) / size,
           (height.value + SIZE_EXPAND) / size,

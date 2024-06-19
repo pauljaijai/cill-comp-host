@@ -1,4 +1,5 @@
 import { useClipboard, useElementBounding } from '@vueuse/core';
+import { pipe } from 'remeda';
 
 /** 選取狀態 */
 interface SelectionState {
@@ -87,9 +88,9 @@ export function useContentProvider() {
               }
 
               if (
-                [
-                  'true', 'plaintext-only'
-                ].includes(target?.contentEditable ?? '')
+                ['true', 'plaintext-only'].includes(
+                  target?.contentEditable ?? ''
+                )
               ) {
                 if (target?.innerHTML) {
                   clipboard.copy(target.innerHTML);
@@ -143,6 +144,77 @@ export function useContentProvider() {
 
   /** 用於 hover element */
   const hoverContentProviders: ContentProvider[] = [
+    // 文字編輯類型
+    {
+      match(data) {
+        if ('rect' in data) return false;
+
+        if (data instanceof HTMLInputElement) {
+          const inputTypes = [
+            'text', 'number', 'email',
+            'password', 'search',
+            'tel', 'url'
+          ];
+          return inputTypes.includes(data.type);
+        }
+
+        if (data instanceof HTMLTextAreaElement) {
+          return true
+        }
+
+        if (
+          [
+            'true', 'plaintext-only'
+          ].includes(data?.contentEditable ?? '')
+        ) {
+          return true;
+        }
+
+        return false;
+      },
+      getContent(param) {
+        const btnList: BtnOption[] = [];
+
+        if (clipboard.isSupported.value) {
+          btnList.push({
+            label: '📋 複製',
+            onClick() {
+              const { element } = param;
+              const target = element?.value;
+
+              const text = pipe(
+                target,
+                () => {
+                  if (
+                    target instanceof HTMLInputElement ||
+                    target instanceof HTMLTextAreaElement
+                  ) {
+                    return target.value;
+                  }
+
+                  if (
+                    ['true', 'plaintext-only'].includes(
+                      target?.contentEditable ?? ''
+                    )
+                  ) {
+                    if (target?.innerHTML) {
+                      return target.innerHTML;
+                    }
+                  }
+                }
+              )
+
+              if (text) {
+                clipboard.copy(text);
+              }
+            },
+          });
+        }
+
+        return { btnList };
+      }
+    },
+
     // 按鈕。button 或 role 為 button 的元素
     {
       match(data) {
@@ -258,7 +330,7 @@ export function useContentProvider() {
 
         if (target instanceof HTMLImageElement) {
           return {
-            text: '👍',
+            text: target.alt || '沒有 alt 文字',
           };
         }
       }
