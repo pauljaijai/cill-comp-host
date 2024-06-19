@@ -27,8 +27,8 @@
       <hr>
 
       <img
-        src="/painting-codfish-bakery.webp"
-        alt="貪吃的鱈魚"
+        src="/photography-稻穗.jpg"
+        url="https://www.flickr.com/photos/coodfish/albums/"
       >
     </div>
   </div>
@@ -47,6 +47,7 @@ import { ContentProvider } from '../use-content-provider';
 const enable = ref(false);
 
 const hoverProviders: ContentProvider[] = [
+  // 色色按鈕
   {
     match(data) {
       if ('rect' in data) return false;
@@ -64,16 +65,45 @@ const hoverProviders: ContentProvider[] = [
     },
     getContent(param) {
       return {
-        text: `
-        <a
-        href="https://vocus.cc/salon/cod-aquarium"
-        data-sidekick-ignore
-        target="_blank"
-      >
-        色色傳送門
-      </a>
-      `,
+        btnList: [
+          {
+            label: '色色傳送門',
+            onClick() {
+              window.open('https://vocus.cc/salon/cod-aquarium', '_blank');
+            },
+          },
+        ],
       };
+    }
+  },
+
+  // 圖片
+  {
+    match(data) {
+      if ('rect' in data) return false;
+
+      if (data instanceof HTMLImageElement) {
+        return true;
+      }
+
+      return false;
+    },
+    getContent(param) {
+      const { element } = param;
+      const target = element?.value;
+
+      if (target instanceof HTMLImageElement) {
+        return {
+          btnList: [
+            {
+              label: '📷 查看更多精彩照片',
+              onClick() {
+                window.open(target.getAttribute('url') ?? '', '_blank');
+              },
+            },
+          ],
+        };
+      }
     }
   },
 ];
