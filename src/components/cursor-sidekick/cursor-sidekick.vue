@@ -141,7 +141,7 @@ const targetElementBounding = useElementBounding(targetElement, {
 // --- 人物基礎參數
 
 /** 目前位置 */
-const position = ref({ x: 0, y: 0 });
+const position = ref({ x: -50, y: -50 });
 /** 一般狀態為 cursor 位置，目標存在則為目標位置 */
 const targetPosition = computed(() => {
   if (targetElement.value) {
