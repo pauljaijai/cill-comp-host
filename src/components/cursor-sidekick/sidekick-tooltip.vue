@@ -61,8 +61,9 @@ import { filter, isTruthy, join, pipe } from 'remeda';
 import BaseBtn from '../base-btn.vue';
 
 import {
-  useCycleList, useElementBounding, useElementHover, useIntersectionObserver,
-  useMousePressed, whenever
+  useCycleList, useElementBounding,
+  useElementHover, useIntersectionObserver,
+  useMousePressed,
 } from '@vueuse/core';
 import { useContentProvider } from './use-content-provider';
 
@@ -152,11 +153,6 @@ const {
 } = useCycleList<Position>([
   'right', 'left', 'top', 'bottom'
 ])
-/** 選取文字從 left 開始 */
-whenever(() => props.selectionState, () => {
-  setPositionByIndex(1);
-}, { deep: true })
-
 
 const tooltipStyle = computed<CSSProperties>(() => {
   const [x, y] = pipe(null,

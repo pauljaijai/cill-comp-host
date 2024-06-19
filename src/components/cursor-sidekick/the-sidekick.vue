@@ -103,46 +103,38 @@ const size = computed(() => ({
 
 const targetElementBounding = computed(() => props.targetElement?.bounding);
 
-watch(() => props.targetElement?.value, (el) => {
-  const bodyEl = bodyRef.value;
-  if (!bodyEl) return;
+const isRound = ref(true);
+watch(
+  () => ({
+    el: props.targetElement?.value,
+    text: props.selectionState?.text,
+  }),
+  async ({ el, text }) => {
+    const bodyEl = bodyRef.value;
+    if (!bodyEl) return;
 
-  anime.remove(bodyEl);
-  if (el) {
-    anime({
-      targets: bodyEl,
-      d: 'M691 20.4999C711 40.5 705 681 691 695C677 709 32.0003 714 13 695C-6.00038 676 -13.0001 46.5 12.9999 20.5C38.9999 -5.50002 671 0.499857 691 20.4999Z',
-      duration: 1000,
-    })
-  } else {
-    anime({
-      targets: bodyEl,
-      d: 'M584 351.5C584 479.906 485.5 584 351.5 584C217.5 584 119 479.906 119 351.5C119 223.094 223.094 119 351.5 119C479.906 119 584 223.094 584 351.5Z',
-      duration: 800,
-    })
+    if ((el || text) && isRound.value) {
+      anime.remove(bodyEl);
+      anime({
+        targets: bodyEl,
+        d: 'M691 20.4999C711 40.5 705 681 691 695C677 709 32.0003 714 13 695C-6.00038 676 -13.0001 46.5 12.9999 20.5C38.9999 -5.50002 671 0.499857 691 20.4999Z',
+        duration: 1000,
+      }).finished;
+
+      isRound.value = false;
+    }
+
+    if (!el && !text && !isRound.value) {
+      anime.remove(bodyEl);
+      anime({
+        targets: bodyEl,
+        d: 'M584 351.5C584 479.906 485.5 584 351.5 584C217.5 584 119 479.906 119 351.5C119 223.094 223.094 119 351.5 119C479.906 119 584 223.094 584 351.5Z',
+        duration: 800,
+      })
+      isRound.value = true;
+    }
   }
-})
-watch(() => props.selectionState?.text, () => {
-  const state = props.selectionState;
-
-  const bodyEl = bodyRef.value;
-  if (!bodyEl) return;
-
-  anime.remove(bodyEl);
-  if (state?.text) {
-    anime({
-      targets: bodyEl,
-      d: 'M691 20.4999C711 40.5 705 681 691 695C677 709 32.0003 714 13 695C-6.00038 676 -13.0001 46.5 12.9999 20.5C38.9999 -5.50002 671 0.499857 691 20.4999Z',
-      duration: 1000,
-    })
-  } else {
-    anime({
-      targets: bodyEl,
-      d: 'M584 351.5C584 479.906 485.5 584 351.5 584C217.5 584 119 479.906 119 351.5C119 223.094 223.094 119 351.5 119C479.906 119 584 223.094 584 351.5Z',
-      duration: 800,
-    })
-  }
-})
+)
 
 const hasTarget = computed(() => props.targetElement?.value || props.selectionState?.text);
 
