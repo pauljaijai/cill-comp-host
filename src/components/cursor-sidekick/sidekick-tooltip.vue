@@ -67,9 +67,18 @@ type Position = 'top' | 'bottom' | 'left' | 'right'
 
 // #region Props
 interface Props {
-  /** 目標元素 */
-  targetElement?: HTMLElement;
-  targetElementBounding: ReturnType<typeof useElementBounding>;
+  targetElement?: {
+    value: HTMLElement,
+    bounding: ReturnType<typeof useElementBounding>;
+  };
+  activeElement?: {
+    value: HTMLElement,
+    bounding: ReturnType<typeof useElementBounding>;
+  };
+  hoverElement?: {
+    value: HTMLElement,
+    bounding: ReturnType<typeof useElementBounding>;
+  };
   /** 已選取文字 */
   selectionState?: {
     rect: DOMRect;
@@ -85,7 +94,7 @@ const props = withDefaults(defineProps<Props>(), {
 // 按住滑鼠時不顯示 tooltip
 const { pressed } = useMousePressed()
 
-const targetElementBounding = computed(() => props.targetElementBounding);
+const targetElementBounding = computed(() => props.targetElement?.bounding);
 
 const tooltipRef = ref<HTMLDivElement>();
 const tooltipBounding = useElementBounding(tooltipRef, {
@@ -146,7 +155,7 @@ whenever(() => props.selectionState, () => {
 const tooltipStyle = computed<CSSProperties>(() => {
   const [x, y] = pipe(null,
     () => {
-      if (props.targetElement) {
+      if (targetElementBounding.value) {
         return {
           width: targetElementBounding.value.width.value,
           height: targetElementBounding.value.height.value,
@@ -187,10 +196,10 @@ const tooltipVisible = computed(() => {
 const key = computed(() => {
   if (props.targetElement) {
     return [
-      props.targetElement.id,
-      props.targetElement.className,
-      props.targetElement.tagName,
-      props.targetElement.textContent,
+      props.targetElement.value.id,
+      props.targetElement.value.className,
+      props.targetElement.value.tagName,
+      props.targetElement.value.textContent,
     ].join('-');
   }
 
@@ -214,20 +223,37 @@ const key = computed(() => {
 //   setPositionByIndex(0);
 // })
 
-const { contentProviders } = useContentProvider();
+const {
+  activeContentProviders,
+  hoverContentProviders,
+  selectContentProviders,
+} = useContentProvider();
 
+/** 優先順序為：active、hover、select */
 const tooltipContent = computed(() => {
-  const target = props.targetElement ?? props.selectionState;
-  if (!target) return;
+  const provider = pipe(null,
+    () => {
+      const {
+        activeElement, hoverElement, selectionState,
+      } = props;
 
-  const provider = contentProviders.find(({ match }) => match(target));
+      if (activeElement) {
+        return activeContentProviders.find(({ match }) => match(activeElement.value));
+      }
+
+      if (hoverElement) {
+        return hoverContentProviders.find(({ match }) => match(hoverElement.value));
+      }
+
+      if (selectionState?.text) {
+        return selectContentProviders.find(({ match }) => match(selectionState));
+      }
+    }
+  );
   if (!provider) return;
 
   return provider.getContent({
-    element: props.targetElement ? {
-      value: props.targetElement,
-      bounding: props.targetElementBounding,
-    } : undefined,
+    element: props.targetElement,
     selectionState: props.selectionState,
   });
 });

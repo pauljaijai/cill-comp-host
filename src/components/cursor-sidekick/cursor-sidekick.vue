@@ -68,50 +68,69 @@ const mouseInfo = useMouse({
   type: 'client',
 })
 
-// 判斷目標元素或文字選取
-const currentElement = shallowRef<HTMLElement | null>();
+// 有效的 active element
+const activeElement = shallowRef<HTMLElement | null>();
+const activeElementBounding = useElementBounding(activeElement, {
+  reset: false,
+});
 
-const activeElement = useActiveElement();
-watch(activeElement, (el) => {
+const activeElementRef = useActiveElement();
+watch(activeElementRef, (el) => {
   if (!isNullish(el?.getAttribute('data-sidekick-ignore'))) {
     return;
   }
 
-  currentElement.value = el;
+  // body 例外
+  if (el instanceof HTMLBodyElement) {
+    activeElement.value = undefined;
+    return;
+  }
+
+  if (el) {
+    const result = activeContentProviders.some(({ match }) => match(el));
+    if (!result) return;
+  }
+
+  console.log(`🚀 ~ activeElement:`, el);
+  activeElement.value = el;
 })
+
+// 有效的 hover element
+const hoverElement = shallowRef<HTMLElement | null>();
+const hoverElementBounding = useElementBounding(hoverElement, {
+  reset: false,
+});
 
 const { element } = useElementByPoint(mouseInfo);
 watch(element, (el) => {
-  // console.log(`🚀 ~ elementByPoint:`, el);
   if (!isNullish(el?.getAttribute('data-sidekick-ignore'))) {
     return;
   }
 
-  const activeValue = activeElement.value;
-  if (activeValue) {
-    const result = contentProviders.some(({ match }) => match(activeValue));
-    if (result) return;
+  if (el) {
+    const result = hoverContentProviders.some(({ match }) => match(el));
+    if (!result) return;
   }
 
-  // console.log(`🚀 ~ currentElement:`, el);
-  currentElement.value = el;
+  console.log(`🚀 ~ hoverElement:`, el);
+  hoverElement.value = el;
 })
 
 const selectionState = useTextSelection();
 
-const { contentProviders } = useContentProvider();
+const {
+  activeContentProviders,
+  hoverContentProviders,
+} = useContentProvider();
 
-/** 目標 element */
+/** 目標 element，active element 優先 */
 const targetElement = computed(() => {
-  const el = currentElement.value;
-  if (!el) return;
-
-  const result = contentProviders.some(({ match }) => match(el));
-  return result ? el : undefined;
+  return activeElement.value ?? hoverElement.value ?? undefined;
 });
-const targetElementBounding = useElementBounding(targetElement, {
+const targetElementBounding = useElementBounding(activeElement, {
   reset: false,
 });
+
 watchEffect(() => {
   // console.log('targetElement: ', targetElement.value);
 })
@@ -120,7 +139,7 @@ watchEffect(() => {
 
 /** 目前位置 */
 const position = ref({ x: 0, y: 0 });
-/** 一般狀態為 cursor 位置，所有目標則為目標位置 */
+/** 一般狀態為 cursor 位置，目標存在則為目標位置 */
 const targetPosition = computed(() => {
   if (targetElement.value) {
     // 移動至目標元素中心
@@ -219,8 +238,36 @@ const sidekickProp = computed(() => {
       x: mouseInfo.x.value,
       y: mouseInfo.y.value,
     },
-    targetElement: targetElement.value,
-    targetElementBounding,
+    targetElement: pipe(null,
+      () => {
+        if (!targetElement.value) return;
+
+        return {
+          value: targetElement.value,
+          bounding: targetElementBounding,
+        }
+      }
+    ),
+    activeElement: pipe(null,
+      () => {
+        if (!activeElement.value) return;
+
+        return {
+          value: activeElement.value,
+          bounding: activeElementBounding,
+        }
+      }
+    ),
+    hoverElement: pipe(null,
+      () => {
+        if (!hoverElement.value) return;
+
+        return {
+          value: hoverElement.value,
+          bounding: hoverElementBounding,
+        }
+      }
+    ),
     selectionState: selectionState.rects.value[0] ? {
       text: selectionState.text.value,
       rect: selectionState.rects.value[0],
@@ -264,8 +311,36 @@ const tooltipStyle = computed<CSSProperties>(() => {
 
 const tooltipProp = computed(() => {
   const result: TooltipProp = {
-    targetElement: targetElement.value,
-    targetElementBounding,
+    targetElement: pipe(null,
+      () => {
+        if (!targetElement.value) return;
+
+        return {
+          value: targetElement.value,
+          bounding: targetElementBounding,
+        }
+      }
+    ),
+    activeElement: pipe(null,
+      () => {
+        if (!activeElement.value) return;
+
+        return {
+          value: activeElement.value,
+          bounding: activeElementBounding,
+        }
+      }
+    ),
+    hoverElement: pipe(null,
+      () => {
+        if (!hoverElement.value) return;
+
+        return {
+          value: hoverElement.value,
+          bounding: hoverElementBounding,
+        }
+      }
+    ),
     selectionState: selectionState.rects.value[0] ? {
       text: selectionState.text.value,
       rect: selectionState.rects.value[0],

@@ -38,7 +38,8 @@ export interface ContentProvider {
 export function useContentProvider() {
   const clipboard = useClipboard()
 
-  const contentProviders: ContentProvider[] = [
+  /** 用於 active element */
+  const activeContentProviders: ContentProvider[] = [
     // 文字編輯類型
     {
       match(data) {
@@ -138,7 +139,10 @@ export function useContentProvider() {
         return { btnList };
       }
     },
+  ]
 
+  /** 用於 hover element */
+  const hoverContentProviders: ContentProvider[] = [
     // 按鈕。button 或 role 為 button 的元素
     {
       match(data) {
@@ -151,7 +155,6 @@ export function useContentProvider() {
         return undefined;
       }
     },
-
     // checkbox 或內有 checkbox 的 label
     {
       match(data) {
@@ -260,8 +263,11 @@ export function useContentProvider() {
         }
       }
     },
+  ]
 
-    // 選取文字
+  /** 用於選取文字 */
+  const selectContentProviders: ContentProvider[] = [
+    // 通用
     {
       match(data) {
         return 'rect' in data;
@@ -287,7 +293,11 @@ export function useContentProvider() {
     },
   ]
 
-  return { contentProviders };
+  return {
+    activeContentProviders,
+    hoverContentProviders,
+    selectContentProviders,
+  };
 }
 
 /**

@@ -66,9 +66,20 @@ interface Props {
   position: Position;
   /** 游標位置 */
   cursorPosition: Position;
-  /** 目標元素 */
-  targetElement?: HTMLElement;
-  targetElementBounding: ReturnType<typeof useElementBounding>;
+
+  targetElement?: {
+    value: HTMLElement,
+    bounding: ReturnType<typeof useElementBounding>;
+  };
+  activeElement?: {
+    value: HTMLElement,
+    bounding: ReturnType<typeof useElementBounding>;
+  };
+  hoverElement?: {
+    value: HTMLElement,
+    bounding: ReturnType<typeof useElementBounding>;
+  };
+
   /** 已選取文字 */
   selectionState?: {
     rect: DOMRect;
@@ -88,7 +99,7 @@ const size = computed(() => ({
   height: props.size,
 }));
 
-const targetElementBounding = computed(() => props.targetElementBounding);
+const targetElementBounding = computed(() => props.targetElement?.bounding);
 watch(() => props.targetElement, (el) => {
   const bodyEl = bodyRef.value;
   if (!bodyEl) return;
@@ -176,7 +187,7 @@ const faceTransformOrigin = computed(
 
 const SIZE_EXPAND = 10;
 const sidekickStyle = computed<CSSProperties>(() => {
-  if (!hasTarget.value) return {};
+  if (!hasTarget.value || !targetElementBounding.value) return {};
 
   const {
     width, height
