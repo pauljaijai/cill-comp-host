@@ -89,6 +89,8 @@ interface Props {
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   targetElement: undefined,
+  activeElement: undefined,
+  hoverElement: undefined,
   selectionState: undefined,
 });
 
@@ -230,7 +232,7 @@ defineExpose({});
 <style scoped lang="sass">
 .sidekick
   perspective: 10rem
-  transition: transform 0.6s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
+  transition: transform 0.9s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
   transform-origin: 50% 50%
 
 .body
@@ -247,39 +249,3 @@ defineExpose({});
   99%
     opacity: 0
 </style>
-
-
-  <!-- 包住元素 -->
-<!-- 
-  <svg
-    width="703"
-    height="703"
-    viewBox="0 0 703 703"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect
-      width="703"
-      height="703"
-      fill="white"
-    />
-    <path
-      d="M691 20.4999C711 40.5 705 681 691 695C677 709 32.0003 714 13 695C-6.00038 676 -13.0001 46.5 12.9999 20.5C38.9999 -5.50002 671 0.499857 691 20.4999Z"
-      fill="#515151"
-    />
-    <ellipse
-      cx="289"
-      cy="284.5"
-      rx="24"
-      ry="67.5"
-      fill="white"
-    />
-    <ellipse
-      cx="415"
-      cy="284.5"
-      rx="24"
-      ry="67.5"
-      fill="white"
-    />
-  </svg> 
-  -->

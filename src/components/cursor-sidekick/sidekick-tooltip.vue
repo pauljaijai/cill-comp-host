@@ -88,6 +88,8 @@ interface Props {
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   targetElement: undefined,
+  activeElement: undefined,
+  hoverElement: undefined,
   selectionState: undefined,
 });
 

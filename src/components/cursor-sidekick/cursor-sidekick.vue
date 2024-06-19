@@ -91,7 +91,7 @@ watch(activeElementRef, (el) => {
     if (!result) return;
   }
 
-  console.log(`🚀 ~ activeElement:`, el);
+  // console.log(`🚀 ~ activeElement:`, el);
   activeElement.value = el;
 })
 
@@ -109,10 +109,13 @@ watch(element, (el) => {
 
   if (el) {
     const result = hoverContentProviders.some(({ match }) => match(el));
-    if (!result) return;
+    if (!result) {
+      hoverElement.value = undefined;
+      return;
+    }
   }
 
-  console.log(`🚀 ~ hoverElement:`, el);
+  // console.log(`🚀 ~ hoverElement:`, el);
   hoverElement.value = el;
 })
 
@@ -127,13 +130,13 @@ const {
 const targetElement = computed(() => {
   return activeElement.value ?? hoverElement.value ?? undefined;
 });
-const targetElementBounding = useElementBounding(activeElement, {
+const targetElementBounding = useElementBounding(targetElement, {
   reset: false,
 });
 
-watchEffect(() => {
-  // console.log('targetElement: ', targetElement.value);
-})
+// watchEffect(() => {
+//   console.log('targetElement: ', targetElement.value);
+// })
 
 // --- 人物基礎參數
 
