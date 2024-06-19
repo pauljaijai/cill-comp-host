@@ -43,7 +43,7 @@
       <base-btn label="按鈕" />
       <base-btn
         disabled
-        label="不可以色色 (´,,•ω•,,)"
+        label="不可以色色 (ﾟДﾟ*)ﾉ"
       />
 
       <hr>

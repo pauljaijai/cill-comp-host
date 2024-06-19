@@ -234,6 +234,18 @@ export function useContentProvider(param?: {
             data?.getAttribute('role') === 'button'
         },
         getContent(param) {
+          const { element } = param;
+          const target = element?.value;
+
+          if (
+            target instanceof HTMLButtonElement &&
+            (target.disabled || target.ariaDisabled === 'true')
+          ) {
+            return {
+              text: '哭哭不能按 ( ´•̥̥̥ ω •̥̥̥` )',
+            };
+          }
+
           return undefined;
         }
       },

@@ -22,7 +22,7 @@
 
       <base-btn
         disabled
-        label="不可以色色 ԅ(´∀` ԅ)"
+        label="不可以色色 ('◉◞⊖◟◉` )"
       />
 
       <hr>
@@ -67,7 +67,7 @@ const hoverProviders: ContentProvider[] = [
       return {
         btnList: [
           {
-            label: '色色傳送門',
+            label: '色色傳送門 (´,,•ω•,,)',
             onClick() {
               window.open('https://vocus.cc/salon/cod-aquarium', '_blank');
             },

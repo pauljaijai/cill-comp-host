@@ -15,7 +15,7 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 
 ### 基本用法
 
-平時跟著游標跑，碰到特定物體時會有特殊互動
+平時跟著游標跑，碰到特定元素會有特殊互動
 
 <basic-usage/>
 
@@ -25,7 +25,7 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 
 ### 自定義內容
 
-可以自行設計 Provider，產生各種奇奇怪怪的互動吧！ლ（´∀`ლ）
+自行設計 Provider，產生各種奇奇怪怪的互動吧！ლ（´∀`ლ）
 
 <custom-provider/>
 
