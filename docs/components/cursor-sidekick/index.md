@@ -4,6 +4,7 @@ description: 跟著游標跑的小跟班。( ‧ω‧)ノ╰(‧ω‧ )
 
 <script setup>
 import BasicUsage from '../../../src/components/cursor-sidekick/examples/basic-usage.vue'
+import CustomProvider from '../../../src/components/cursor-sidekick/examples/custom-provider.vue'
 </script>
 
 # 游標小跟班
@@ -20,6 +21,16 @@ import BasicUsage from '../../../src/components/cursor-sidekick/examples/basic-u
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/cursor-sidekick/examples/basic-usage.vue
+:::
+
+### 自定義內容
+
+可以自行設計 Provider，產生各種奇奇怪怪的互動吧！ლ（´∀`ლ）
+
+<custom-provider/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/cursor-sidekick/examples/custom-provider.vue
 :::
 
 ## 原理
