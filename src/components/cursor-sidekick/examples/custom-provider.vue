@@ -1,31 +1,19 @@
 <template>
   <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <cursor-sidekick />
+    <cursor-sidekick
+      v-if="enable"
+      color="#35abf0"
+    />
+
+    <base-checkbox
+      v-model="enable"
+      label="啟用小跟班"
+      class="py-1 px-2 border rounded bg-gray-100"
+    />
 
     <div class="flex flex-col gap-2">
       <div class="">
-        嘗試反白這段文字中有選魚的部分和沒有鱈魚的部分，看看會發生什麼事。ˋ( ° ▽、° ) 
-      </div>
-
-      <hr>
-
-      <base-input
-        v-model="text"
-        label="文字輸入框"
-      />
-      <div class=" border rounded w-1/2 h-[20vh]">
-        <textarea
-          v-model="text"
-          placeholder="多行文字"
-          class="w-full h-full p-2"
-        />
-      </div>
-
-      <div
-        contenteditable
-        class="p-2 border rounded w-2/3"
-      >
-        可編輯的 div
+        嘗試反白這段文字中有鱈魚的部分和沒有鱈魚的部分，看看有甚麼差別。
       </div>
 
       <hr>
@@ -34,13 +22,6 @@
       <base-btn
         disabled
         label="不可以瑟瑟 (。・ω・。)"
-      />
-
-      <hr>
-
-      <base-checkbox
-        label="檢核方塊"
-        class="py-1 px-2 border rounded"
       />
 
       <hr>
@@ -68,5 +49,5 @@ import BaseInput from '../../base-input.vue';
 import BaseBtn from '../../base-btn.vue';
 import CursorSidekick from '../cursor-sidekick.vue';
 
-const text = ref('');
+const enable = ref(false);
 </script>

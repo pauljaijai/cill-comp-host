@@ -1,6 +1,12 @@
 <template>
   <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <cursor-sidekick />
+    <cursor-sidekick v-if="enable" />
+
+    <base-checkbox
+      v-model="enable"
+      label="啟用小跟班"
+      class="py-1 px-2 border rounded bg-gray-100"
+    />
 
     <div class="flex flex-col gap-2">
       <div class=" text-2xl font-bold">
@@ -42,13 +48,6 @@
 
       <hr>
 
-      <base-checkbox
-        label="檢核方塊"
-        class="py-1 px-2 border rounded"
-      />
-
-      <hr>
-
       <a
         href="https://vocus.cc/salon/cod-aquarium"
         target="_blank"
@@ -72,5 +71,6 @@ import BaseInput from '../../base-input.vue';
 import BaseBtn from '../../base-btn.vue';
 import CursorSidekick from '../cursor-sidekick.vue';
 
+const enable = ref(false);
 const text = ref('');
 </script>
