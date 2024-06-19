@@ -69,7 +69,7 @@ const hoverProviders: ContentProvider[] = [
           {
             label: '色色傳送門 (´,,•ω•,,)',
             onClick() {
-              window.open('https://vocus.cc/salon/cod-aquarium', '_blank');
+              window.open('https://raw.githubusercontent.com/tpai/dogedeck/main/cards/%E6%8A%97%E8%89%B2%E8%89%B2%E8%97%A5.png', '_blank');
             },
           },
         ],
