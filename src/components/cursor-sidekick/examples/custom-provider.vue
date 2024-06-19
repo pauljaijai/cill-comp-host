@@ -4,6 +4,7 @@
       v-if="enable"
       color="#35abf0"
       :hover-providers="hoverProviders"
+      :select-providers="selectProviders"
     />
 
     <base-checkbox
@@ -21,7 +22,7 @@
 
       <base-btn
         disabled
-        label="不可以色色 (。・ω・。)"
+        label="不可以色色 ԅ(´∀` ԅ)"
       />
 
       <hr>
@@ -38,7 +39,6 @@
 import { ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
-import BaseInput from '../../base-input.vue';
 import BaseBtn from '../../base-btn.vue';
 import CursorSidekick from '../cursor-sidekick.vue';
 
@@ -104,6 +104,43 @@ const hoverProviders: ContentProvider[] = [
           ],
         };
       }
+    }
+  },
+];
+
+const selectProviders: ContentProvider[] = [
+  // 文字包含鱈魚
+  {
+    match(data) {
+      if (!('rect' in data)) return false;
+
+      return data.text.includes('鱈魚');
+    },
+    getContent() {
+      return {
+        text: '被你發現惹 ᕕ( ﾟ ∀。)ᕗ<br>歡迎來以下連結逛逛',
+        class: ' text-nowrap ',
+        btnList: [
+          {
+            label: '🎬 Youtube',
+            onClick() {
+              window.open('https://www.youtube.com/@codfish2140', '_blank');
+            },
+          },
+          {
+            label: '💡 CodePen',
+            onClick() {
+              window.open('https://codepen.io/Codfish2140', '_blank');
+            },
+          },
+          {
+            label: '✏️ 方格子',
+            onClick() {
+              window.open('https://vocus.cc/salon/cod-aquarium', '_blank');
+            },
+          },
+        ],
+      };
     }
   },
 ];
