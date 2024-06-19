@@ -8,7 +8,7 @@
     <base-checkbox
       v-model="enable"
       label="啟用小跟班"
-      class="py-1 px-2 border rounded bg-gray-100"
+      class="p-4 border rounded bg-gray-100"
     />
 
     <div class="flex flex-col gap-2">
