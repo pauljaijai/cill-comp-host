@@ -1,5 +1,5 @@
 ---
-description: 跟著游標跑的小跟班。( ‧ω‧)ノ╰(‧ω‧ )
+description: 跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
 ---
 
 <script setup>
@@ -9,7 +9,7 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 
 # 游標小跟班
 
-跟著游標跑的小跟班。( ‧ω‧)ノ╰(‧ω‧ )
+跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
 
 ## 使用範例
 
@@ -35,16 +35,16 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 
 ## 原理
 
+這個小廢物元件應該是使用最多種 Web API 的元件了，以下是功能與其對應的 API：
+
+
+
 ## API
 
 ### Props
 
 <<< ../../../src/components/cursor-sidekick/cursor-sidekick.vue/#Props
 
-### Emits
+ContentProvider 具體內容如下：
 
-<<< ../../../src/components/cursor-sidekick/cursor-sidekick.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/cursor-sidekick/cursor-sidekick.vue/#Methods
+<<< ../../../src/components/cursor-sidekick/use-content-provider.ts/#ContentProvider

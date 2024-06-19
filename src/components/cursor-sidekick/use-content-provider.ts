@@ -17,25 +17,31 @@ interface TargetParam {
   selectionState?: SelectionState;
 }
 
+// #region ContentProvider
 interface BtnOption {
   label: string;
   onClick: (event: Event) => void;
 }
 
 interface Content {
+  /** 用於調整內容樣式 */
   class?: string;
   text?: string;
+  /** 按鈕清單 */
   btnList?: BtnOption[];
 }
 
 export interface ContentProvider {
+  /** 判斷目前元素或文字是否符合 */
   match: (
     data: HTMLElement | SelectionState
   ) => boolean;
+  /** 取得小跟班顯示用內容 */
   getContent: (
     param: TargetParam
   ) => Content | undefined;
 }
+// #endregion ContentProvider
 
 export function useContentProvider(param?: {
   activeList?: ContentProvider[];
