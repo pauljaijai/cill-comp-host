@@ -93,12 +93,18 @@ const hoverProviders: ContentProvider[] = [
       const target = element?.value;
 
       if (target instanceof HTMLImageElement) {
+        const url = target.getAttribute('url');
+
+        if (!url) {
+          return undefined;
+        }
+
         return {
           btnList: [
             {
               label: '📷 查看更多精彩照片',
               onClick() {
-                window.open(target.getAttribute('url') ?? '', '_blank');
+                window.open(url ?? '', '_blank');
               },
             },
           ],
