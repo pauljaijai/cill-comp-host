@@ -25,7 +25,7 @@
           >
             <div
               v-if="tooltipContent.text"
-              class=" text-base"
+              class=" text-base text-center"
               data-sidekick-ignore
             >
               {{ tooltipContent.text }}
@@ -38,11 +38,11 @@
               data-sidekick-ignore
             >
               <base-btn
-                v-for="(btn, i) in tooltipContent.btnList"
-                :key="i"
+                v-for="btn in tooltipContent.btnList"
+                :key="btn.label"
                 :label="btn.label"
                 data-sidekick-ignore
-                class=" text-nowrap text-sm"
+                class=" text-nowrap text-sm "
                 @click="btn.onClick"
               />
             </div>
@@ -54,13 +54,16 @@
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, computed, ref, watch, watchEffect } from 'vue';
+import { CSSProperties, computed, ref } from 'vue';
 import { nanoid } from 'nanoid';
 import { filter, isTruthy, join, pipe } from 'remeda';
 
 import BaseBtn from '../base-btn.vue';
 
-import { useCycleList, useElementBounding, useIntersectionObserver, useMousePressed, whenever } from '@vueuse/core';
+import {
+  useCycleList, useElementBounding, useIntersectionObserver,
+  useMousePressed, whenever
+} from '@vueuse/core';
 import { useContentProvider } from './use-content-provider';
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
@@ -93,7 +96,7 @@ const props = withDefaults(defineProps<Props>(), {
   selectionState: undefined,
 });
 
-const { pressed } = useMousePressed()
+const { pressed: mousePressed } = useMousePressed()
 
 const targetElementBounding = computed(() => props.targetElement?.bounding);
 
@@ -188,7 +191,7 @@ const tooltipStyle = computed<CSSProperties>(() => {
 
 const tooltipVisible = computed(() => {
   // 按住且有選取文字時，不顯示 tooltip
-  if (pressed.value && props.selectionState?.text) {
+  if (mousePressed.value && props.selectionState?.text) {
     return false;
   }
 

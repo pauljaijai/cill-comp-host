@@ -58,6 +58,7 @@
 
       <img
         src="/painting-codfish-bakery.webp"
+        alt="貪吃的鱈魚"
       >
     </div>
   </div>
