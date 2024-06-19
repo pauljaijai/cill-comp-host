@@ -102,7 +102,8 @@ const size = computed(() => ({
 }));
 
 const targetElementBounding = computed(() => props.targetElement?.bounding);
-watch(() => props.targetElement, (el) => {
+
+watch(() => props.targetElement?.value, (el) => {
   const bodyEl = bodyRef.value;
   if (!bodyEl) return;
 
@@ -143,7 +144,7 @@ watch(() => props.selectionState?.text, () => {
   }
 })
 
-const hasTarget = computed(() => props.targetElement || props.selectionState?.text);
+const hasTarget = computed(() => props.targetElement?.value || props.selectionState?.text);
 
 /** 根據目標位置計算身體旋轉角度，以 +x 為 0 度 */
 const bodyAngle = computed(() => {
@@ -232,7 +233,7 @@ defineExpose({});
 <style scoped lang="sass">
 .sidekick
   perspective: 10rem
-  transition: transform 0.9s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
+  transition: transform 0.8s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
   transform-origin: 50% 50%
 
 .body
