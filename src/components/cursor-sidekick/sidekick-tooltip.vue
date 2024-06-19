@@ -61,7 +61,7 @@ import { filter, isTruthy, join, pipe } from 'remeda';
 import BaseBtn from '../base-btn.vue';
 
 import {
-  useCycleList, useElementBounding, useIntersectionObserver,
+  useCycleList, useElementBounding, useElementHover, useIntersectionObserver,
   useMousePressed, whenever
 } from '@vueuse/core';
 import { useContentProvider } from './use-content-provider';
@@ -96,7 +96,6 @@ const props = withDefaults(defineProps<Props>(), {
   selectionState: undefined,
 });
 
-const { pressed: mousePressed } = useMousePressed()
 
 const targetElementBounding = computed(() => props.targetElement?.bounding);
 
@@ -120,6 +119,9 @@ useIntersectionObserver(
   },
   { threshold: 0.98 },
 )
+
+const { pressed: mousePressed } = useMousePressed();
+const isContentHovered = useElementHover(tooltipContentRef);
 
 const positionProviderMap: Record<
   Position,
@@ -190,6 +192,10 @@ const tooltipStyle = computed<CSSProperties>(() => {
 });
 
 const tooltipVisible = computed(() => {
+  if (isContentHovered.value) {
+    return true;
+  }
+
   // 按住且有選取文字時，不顯示 tooltip
   if (mousePressed.value && props.selectionState?.text) {
     return false;
