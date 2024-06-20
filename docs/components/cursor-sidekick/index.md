@@ -11,6 +11,10 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 
 跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
 
+::: info
+此元件針對滑鼠設計，建議使用電腦或可以使用滑鼠的裝置瀏覽。
+:::
+
 ## 使用範例
 
 ### 基本用法
@@ -35,9 +39,22 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 
 ## 原理
 
-這個小廢物元件應該是使用最多種 Web API 的元件了，以下是功能與其對應的 API：
+這個小廢物元件應該是使用最多種瀏覽器 API 的元件了，以下是 API 與其應用範圍：
 
+- [Document: activeElement property](https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement)
+：取得目前 focus 的輸入框元素。
 
+- [Document: elementFromPoint() method](https://developer.mozilla.org/en-US/docs/Web/API/Document/elementFromPoint)
+：取得目前被 hover 的元素。
+
+- [Document: getSelection() method](https://developer.mozilla.org/en-US/docs/Web/API/Document/getSelection)
+：取得選取文字與位置。
+
+- [Element: getBoundingClientRect() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect)
+：取得目標元素尺寸與位置。
+
+- [Web API: IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
+：判斷 tooltip 是否被遮擋。
 
 ## API
 
@@ -45,6 +62,6 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 
 <<< ../../../src/components/cursor-sidekick/cursor-sidekick.vue/#Props
 
-ContentProvider 具體內容如下：
+ContentProvider 定義如下：
 
 <<< ../../../src/components/cursor-sidekick/use-content-provider.ts/#ContentProvider

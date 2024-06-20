@@ -61,7 +61,7 @@ interface Props {
    */
   hoverProviders?: ContentProvider[];
 
-  /** 匹配判斷選取文字的 provider  */
+  /** 匹配選取文字的 provider  */
   selectProviders?: ContentProvider[];
 }
 // #endregion Props
