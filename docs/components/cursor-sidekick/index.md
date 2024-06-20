@@ -11,7 +11,7 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 
 跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
 
-::: info
+::: tip
 此元件針對滑鼠設計，建議使用電腦或可以使用滑鼠的裝置瀏覽。
 :::
 
