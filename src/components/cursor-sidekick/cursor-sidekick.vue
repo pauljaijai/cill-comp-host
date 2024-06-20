@@ -49,19 +49,19 @@ interface Props {
   /**  @default 100 */
   zIndex?: number;
 
-  /** 用於 active element 的 Provider。
+  /** 匹配 active element 的 provider。
    * 
    * 通常用於可點擊或 focus 的元素。
    */
   activeProviders?: ContentProvider[];
 
-  /** 用於 hover element 的 Provider 
+  /** 匹配 hover element 的 provider 
    * 
    * 只要 hover 到符合條件的元素，即會觸發。
    */
   hoverProviders?: ContentProvider[];
 
-  /** 用於判斷選取文字的 Provider  */
+  /** 匹配判斷選取文字的 provider  */
   selectProviders?: ContentProvider[];
 }
 // #endregion Props
