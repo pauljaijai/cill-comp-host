@@ -47,37 +47,36 @@ import { ContentProvider } from '../use-content-provider';
 const enable = ref(false);
 
 const hoverProviders: ContentProvider[] = [
-  // 色色按鈕
+  // hover 含有色色文字的按鈕時，提供色色傳送門
   {
     match(data) {
       if ('rect' in data) return false;
 
       if (
-        data instanceof HTMLButtonElement ||
-        data?.getAttribute('role') === 'button'
+        !(data instanceof HTMLButtonElement) &&
+        data?.getAttribute('role') !== 'button'
       ) {
-        if (data.innerHTML.includes('色色')) {
-          return true;
-        }
+        return false;
       }
 
-      return false;
+      return data.innerHTML.includes('色色');
     },
-    getContent(param) {
-      return {
-        btnList: [
-          {
-            label: '色色傳送門 (´,,•ω•,,)',
-            onClick() {
-              window.open('https://raw.githubusercontent.com/tpai/dogedeck/main/cards/%E6%8A%97%E8%89%B2%E8%89%B2%E8%97%A5.png', '_blank');
-            },
+    getContent: () => ({
+      btnList: [
+        {
+          label: '色色傳送門 (´,,•ω•,,)',
+          onClick() {
+            window.open(
+              'https://raw.githubusercontent.com/tpai/dogedeck/main/cards/%E6%8A%97%E8%89%B2%E8%89%B2%E8%97%A5.png',
+              '_blank'
+            );
           },
-        ],
-      };
-    }
+        },
+      ],
+    })
   },
 
-  // 圖片
+  // 當圖片含有 url attr 時，提供開啟連結按鈕
   {
     match(data) {
       if ('rect' in data) return false;
@@ -92,62 +91,57 @@ const hoverProviders: ContentProvider[] = [
       const { element } = param;
       const target = element?.value;
 
-      if (target instanceof HTMLImageElement) {
-        const url = target.getAttribute('url');
+      if (!(target instanceof HTMLImageElement)) return;
 
-        if (!url) {
-          return undefined;
-        }
+      const url = target.getAttribute('url');
+      if (!url) return;
 
-        return {
-          btnList: [
-            {
-              label: '📷 查看更多精彩照片',
-              onClick() {
-                window.open(url ?? '', '_blank');
-              },
+      return {
+        btnList: [
+          {
+            label: '📷 查看更多精彩照片',
+            onClick() {
+              window.open(url ?? '', '_blank');
             },
-          ],
-        };
-      }
+          },
+        ],
+      };
     }
   },
 ];
 
 const selectProviders: ContentProvider[] = [
-  // 文字包含鱈魚
+  // 選取文字包含鱈魚時，提供額外選單
   {
     match(data) {
       if (!('rect' in data)) return false;
 
       return data.text.includes('鱈魚');
     },
-    getContent() {
-      return {
-        text: '被你發現惹 ᕕ( ﾟ ∀。)ᕗ<br>歡迎來以下連結逛逛',
-        class: ' text-nowrap ',
-        btnList: [
-          {
-            label: '🎬 Youtube',
-            onClick() {
-              window.open('https://www.youtube.com/@codfish2140', '_blank');
-            },
+    getContent: () => ({
+      text: '被你發現惹 ᕕ( ﾟ ∀。)ᕗ<br>歡迎來以下連結逛逛',
+      class: ' text-nowrap ',
+      btnList: [
+        {
+          label: '🎬 Youtube',
+          onClick() {
+            window.open('https://www.youtube.com/@codfish2140', '_blank');
           },
-          {
-            label: '💡 CodePen',
-            onClick() {
-              window.open('https://codepen.io/Codfish2140', '_blank');
-            },
+        },
+        {
+          label: '💡 CodePen',
+          onClick() {
+            window.open('https://codepen.io/Codfish2140', '_blank');
           },
-          {
-            label: '✏️ 方格子',
-            onClick() {
-              window.open('https://vocus.cc/salon/cod-aquarium', '_blank');
-            },
+        },
+        {
+          label: '✏️ 方格子',
+          onClick() {
+            window.open('https://vocus.cc/salon/cod-aquarium', '_blank');
           },
-        ],
-      };
-    }
+        },
+      ],
+    })
   },
 ];
 </script>

@@ -43,6 +43,12 @@ export interface ContentProvider {
 }
 // #endregion ContentProvider
 
+function isContentEditable(el?: HTMLElement | null) {
+  return ['true', 'plaintext-only'].includes(
+    el?.contentEditable ?? ''
+  )
+}
+
 export function useContentProvider(param?: {
   activeList?: ContentProvider[];
   hoverList?: ContentProvider[];
@@ -72,11 +78,7 @@ export function useContentProvider(param?: {
             return true
           }
 
-          if (
-            [
-              'true', 'plaintext-only'
-            ].includes(data?.contentEditable ?? '')
-          ) {
+          if (isContentEditable(data)) {
             return true;
           }
 
@@ -97,20 +99,13 @@ export function useContentProvider(param?: {
                   target instanceof HTMLTextAreaElement
                 ) {
                   clipboard.copy(target.value);
-                  target.focus();
                 }
 
-                if (
-                  ['true', 'plaintext-only'].includes(
-                    target?.contentEditable ?? ''
-                  )
-                ) {
-                  if (target?.innerHTML) {
-                    clipboard.copy(target.innerHTML);
-                  }
-
-                  target?.focus();
+                if (isContentEditable(target) && target?.innerHTML) {
+                  clipboard.copy(target.innerHTML);
                 }
+
+                target?.focus();
               },
             });
           }
@@ -132,21 +127,13 @@ export function useContentProvider(param?: {
                   cancelable: false
                 });
                 target.dispatchEvent(event);
-
-                target.focus();
               }
 
-              if (
-                [
-                  'true', 'plaintext-only'
-                ].includes(target?.contentEditable ?? '')
-              ) {
-                if (target) {
-                  target.innerHTML = '';
-                }
-
-                target?.focus();
+              if (isContentEditable(target) && target) {
+                target.innerHTML = '';
               }
+
+              target?.focus();
             },
           });
 
@@ -178,11 +165,7 @@ export function useContentProvider(param?: {
             return true
           }
 
-          if (
-            [
-              'true', 'plaintext-only'
-            ].includes(data?.contentEditable ?? '')
-          ) {
+          if (isContentEditable(data)) {
             return true;
           }
 
@@ -208,21 +191,14 @@ export function useContentProvider(param?: {
                       return target.value;
                     }
 
-                    if (
-                      ['true', 'plaintext-only'].includes(
-                        target?.contentEditable ?? ''
-                      )
-                    ) {
-                      if (target?.innerHTML) {
-                        return target.innerHTML;
-                      }
+                    if (isContentEditable(target) && target?.innerHTML) {
+                      return target.innerHTML;
                     }
                   }
                 )
 
-                if (text) {
-                  clipboard.copy(text);
-                }
+                if (!text) return;
+                clipboard.copy(text);
               },
             });
           }
@@ -249,6 +225,7 @@ export function useContentProvider(param?: {
           ) {
             return {
               text: '哭哭不能按 ( ´•̥̥̥ ω •̥̥̥` )',
+              class: 'text-nowrap'
             };
           }
 
@@ -278,24 +255,26 @@ export function useContentProvider(param?: {
         },
         getContent(param) {
           const { element } = param;
-          const target = element?.value;
 
-          if (target instanceof HTMLInputElement) {
-            return {
-              text: target?.checked ? '✅→⬜' : '⬜→✅',
-            };
-          }
+          const input = pipe(element?.value,
+            (target) => {
+              if (target instanceof HTMLInputElement) {
+                return target;
+              }
 
-          if (
-            target instanceof HTMLLabelElement
-          ) {
-            const input = target.querySelector('input[type="checkbox"]');
-            if (input instanceof HTMLInputElement) {
-              return {
-                text: input?.checked ? '✅→⬜' : '⬜→✅',
-              };
+              if (target instanceof HTMLLabelElement) {
+                const input = target.querySelector('input[type="checkbox"]');
+                if (input instanceof HTMLInputElement) {
+                  return input;
+                }
+              }
             }
-          }
+          );
+          if (!input) return;
+
+          return {
+            text: input?.checked ? '✅→⬜' : '⬜→✅',
+          };
         }
       },
 
@@ -314,30 +293,30 @@ export function useContentProvider(param?: {
           const { element } = param;
           const target = element?.value;
 
-          if (target instanceof HTMLAnchorElement) {
-            const btnList: BtnOption[] = [
-              {
-                label: '📑 新分頁開啟連結',
-                onClick() {
-                  window.open(target.href, '_blank');
-                }
+          if (!(target instanceof HTMLAnchorElement)) return;
+
+          const btnList: BtnOption[] = [
+            {
+              label: '📑 新分頁開啟連結',
+              onClick() {
+                window.open(target.href, '_blank');
               }
-            ];
-
-            if (clipboard.isSupported.value) {
-              btnList.push({
-                label: '🔗 複製連結',
-                onClick() {
-                  clipboard.copy(target.href);
-                },
-              });
             }
+          ];
 
-            return {
-              text: decodeURIComponent(target.href),
-              btnList,
-            };
+          if (clipboard.isSupported.value) {
+            btnList.push({
+              label: '🔗 複製連結',
+              onClick() {
+                clipboard.copy(target.href);
+              },
+            });
           }
+
+          return {
+            text: decodeURIComponent(target.href),
+            btnList,
+          };
         }
       },
 
@@ -346,21 +325,17 @@ export function useContentProvider(param?: {
         match(data) {
           if ('rect' in data) return false;
 
-          if (data instanceof HTMLImageElement) {
-            return true;
-          }
-
-          return false;
+          return data instanceof HTMLImageElement;
         },
         getContent(param) {
           const { element } = param;
           const target = element?.value;
 
-          if (target instanceof HTMLImageElement) {
-            return {
-              text: target.alt || '沒有 alt 文字',
-            };
-          }
+          if (!(target instanceof HTMLImageElement)) return;
+
+          return target.alt ? {
+            text: target.alt,
+          } : undefined;
         }
       },
     ]
