@@ -8,6 +8,8 @@ import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-
 import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interactive-effect.vue';
 import WrapperKirbyMouthfulMode from '../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue';
 
+import CursorSidekick from '../../src/components/cursor-sidekick/examples/basic-usage.vue';
+
 import TransitionShape from '../../src/components/transition-shape/examples/basic-usage.vue';
 
 import BgFirefly from '../../src/components/bg-firefly/examples/full-background.vue';
@@ -77,6 +79,16 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 
 <wrapper-kirby-mouthful-mode class="h-[70vh]" />
 
+## 游標
+
+讓~~勞贖~~滑鼠更趣味！ᕕ( ﾟ ∀。)ᕗ
+
+### [游標小跟班](./cursor-sidekick/) <Badge type="info" text="cursor" />
+
+跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
+
+<cursor-sidekick  />
+
 ## 背景
 
 讓生成式藝術藝術點綴網頁吧！ヾ(◍'౪`◍)ﾉﾞ
@@ -95,7 +107,7 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 
 Motion Graphic 風格的 Transition 元件
 
-<transition-shape class="h-[70vh]" />
+<transition-shape  />
 
 ## 實用
 
