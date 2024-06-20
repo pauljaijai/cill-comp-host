@@ -56,6 +56,8 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 - [Web API: IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
 ：判斷 tooltip 是否被遮擋。
 
+小跟班的變形動畫是靠老朋友 anime.js 實現。
+
 ## API
 
 ### Props
