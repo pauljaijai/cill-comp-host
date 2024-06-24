@@ -84,8 +84,8 @@ const { canvasRef, engine } = useBabylonScene({
     if (camera instanceof ArcRotateCamera) {
       const rect = canvas.getBoundingClientRect();
       // camera.radius = Math.max(rect.width, rect.height);
-      camera.radius = 200;
-      camera.attachControl(canvas, true);
+      camera.radius = 50;
+      // camera.attachControl(canvas, true);
     }
 
     // 背景透明
@@ -130,14 +130,17 @@ function initRenderingPipeline(
 }
 
 function initParticles(
-  { scene, canvas }: InitParam
+  { scene, camera }: InitParam
 ) {
+  if (!(camera instanceof ArcRotateCamera)) return
+
   const box = MeshBuilder.CreateBox('box', {});
 
   let index = 0;
 
-  const size = 100;
-  const instanceCount = 10000;
+  // 分布範圍尺寸
+  const size = camera.radius * 1.5;
+  const instanceCount = 1000;
 
   const matricesData = new Float32Array(16 * instanceCount);
 
@@ -161,6 +164,50 @@ function initParticles(
   material.emissiveColor = Color3.FromHexString('#ff7842');
 
   box.material = material;
+
+  // 定義動畫
+  scene.registerBeforeRender(() => {
+    const time = performance.now() * 0.001; // 取得當前時間（秒）
+    for (let i = 0; i < instanceCount; i++) {
+      const offset = i * 16;
+
+      // 獲取原始位置
+      const originalX = matricesData[offset + 12] ?? 0;
+      const originalY = matricesData[offset + 13] ?? 0;
+      const originalZ = matricesData[offset + 14] ?? 0;
+
+      // 計算新的 Y 位置
+      let newY = originalY - 0.02;
+
+      // 計算新的 X 和 Z 位置，讓其左右擺動
+      const newX = originalX + 0.005 * Math.sin(time + i * 0.01) + 0.005;
+      const newZ = originalZ + 0.005 * Math.cos(time + i * 0.01) + 0.005;
+
+      // 如果 Y 位置小於 -size / 2，則將其移動到最上方
+      if (newY < -size / 2) {
+        newY = size / 2;
+      }
+
+      // 創建旋轉矩陣
+      const rotationMatrix = Matrix.RotationYawPitchRoll(
+        time * 0.5 + i * 0.01,
+        time * 0.5 + i * 0.01,
+        time * 0.5 + i * 0.01
+      );
+
+      // 創建平移矩陣
+      const translationMatrix = Matrix.Translation(newX, newY, newZ);
+
+      // 合併旋轉和平移矩陣
+      const finalMatrix = rotationMatrix.multiply(translationMatrix);
+
+      // 更新矩陣數據
+      finalMatrix.copyToArray(matricesData, offset);
+    }
+
+    // 更新實例矩陣
+    box.thinInstanceSetBuffer('matrix', matricesData, 16);
+  });
 }
 </script>
 
