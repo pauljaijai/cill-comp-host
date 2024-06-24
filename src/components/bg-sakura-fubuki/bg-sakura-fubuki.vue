@@ -1,5 +1,5 @@
 <template>
-  <div class="view relative ">
+  <div class="view relative pointer-events-none">
     <!-- <div
       v-if="pipeline"
       class=" pointer-events-auto text-white p-10 z-[9999] absolute w-full"
@@ -80,8 +80,6 @@ const { canvasRef, engine } = useBabylonScene({
     const { scene, camera, canvas } = param;
 
     if (camera instanceof ArcRotateCamera) {
-      const rect = canvas.getBoundingClientRect();
-      // camera.radius = Math.max(rect.width, rect.height);
       camera.radius = 50;
       // camera.attachControl(canvas, true);
     }
@@ -131,6 +129,7 @@ function initParticles(
   if (!(camera instanceof ArcRotateCamera)) return
 
   const box = MeshBuilder.CreateBox('box', {
+    width: 0.5,
     depth: 0.1
   });
 
@@ -164,11 +163,11 @@ function initParticles(
 
   // 定義動畫
   scene.registerBeforeRender(() => {
-    const time = performance.now() * 0.001; // 取得當前時間（秒）
+    // 以時間為基礎，弭平不同裝置 fps 差異
+    const time = performance.now() * 0.001;
     for (let i = 0; i < instanceCount; i++) {
       const offset = i * 16;
 
-      // 獲取原始位置
       const originalX = matricesData[offset + 12] ?? 0;
       const originalY = matricesData[offset + 13] ?? 0;
       const originalZ = matricesData[offset + 14] ?? 0;
@@ -189,9 +188,9 @@ function initParticles(
 
       // 建立旋轉矩陣
       const rotationMatrix = Matrix.RotationYawPitchRoll(
-        time * 0.5 + i * 0.01,
-        time * 0.5 + i * 0.01,
-        time * 0.5 + i * 0.01
+        time * 0.5 + i * 0.1,
+        time * 0.5 + i * 0.1,
+        time * 0.5 + i * 0.1
       );
 
       // 建立平移矩陣
