@@ -4,6 +4,7 @@ description:
 
 <script setup>
 import BasicUsage from '../../../src/components/bg-sakura-fubuki/examples/basic-usage.vue'
+import FullBackground from '../../../src/components/bg-sakura-fubuki/examples/full-background.vue'
 </script>
 
 # 標題
@@ -20,6 +21,14 @@ import BasicUsage from '../../../src/components/bg-sakura-fubuki/examples/basic-
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/bg-sakura-fubuki/examples/basic-usage.vue
+:::
+
+### 背景
+
+<full-background />
+
+::: details 查看範例原始碼
+<<< ../../../src/components/bg-firefly/examples/full-background.vue
 :::
 
 ## 原理

@@ -174,15 +174,17 @@ function initParticles(
       const originalZ = matricesData[offset + 14] ?? 0;
 
       // 計算新的 Y 位置
-      let newY = originalY - 0.02;
+      let y = originalY - 0.02;
 
       // 計算新的 X 和 Z 位置，讓其左右擺動
-      const newX = originalX + 0.005 * Math.sin(time + i * 0.01) + 0.01;
-      const newZ = originalZ + 0.005 * Math.cos(time + i * 0.01) + 0.01;
+      let x = originalX + 0.005 * Math.sin(time + i * 0.01) + 0.01;
+      let z = originalZ + 0.005 * Math.cos(time + i * 0.01) + 0.01;
 
       // 如果 Y 位置小於 -size / 2，則將其移動到最上方
-      if (newY < -size / 2) {
-        newY = size / 2;
+      if (y < -size / 2) {
+        y = size / 2;
+        x = Math.random() * size - size / 2;
+        z = Math.random() * size - size / 2;
       }
 
       // 建立旋轉矩陣
@@ -193,7 +195,7 @@ function initParticles(
       );
 
       // 建立平移矩陣
-      const translationMatrix = Matrix.Translation(newX, newY, newZ);
+      const translationMatrix = Matrix.Translation(x, y, z);
 
       // 合併旋轉和平移矩陣
       const finalMatrix = rotationMatrix.multiply(translationMatrix);
