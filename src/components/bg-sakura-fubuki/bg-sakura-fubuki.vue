@@ -1,6 +1,6 @@
 <template>
   <div class="view relative ">
-    <div
+    <!-- <div
       v-if="pipeline"
       class=" pointer-events-auto text-white p-10 z-[9999] absolute w-full"
     >
@@ -30,7 +30,7 @@
         :step="0.1"
         :max="16"
       />
-    </div>
+    </div> -->
 
     <canvas
       ref="canvasRef"
@@ -51,10 +51,8 @@ import {
   HemisphericLight,
   Matrix,
   MeshBuilder,
-  NoiseProceduralTexture,
-  ParticleSystem, Scalar, SolidParticleSystem, StandardMaterial, Texture, Vector3
+  StandardMaterial, Vector3
 } from '@babylonjs/core';
-import { forEach, map, pipe, range } from 'remeda';
 
 import BaseInput from '../base-input.vue';
 
@@ -96,35 +94,33 @@ const { canvasRef, engine } = useBabylonScene({
     if (defaultLight instanceof HemisphericLight) {
       defaultLight.intensity = 1;
       defaultLight.direction = new Vector3(0.5, 1, 0);
+
+      defaultLight.diffuse = Color3.White();
+      defaultLight.groundColor = Color3.FromHexString('#ffdcbd');
     }
 
-    // pipeline.value = initRenderingPipeline(param);
+    pipeline.value = initRenderingPipeline(param);
     initParticles(param);
   },
 });
 
 function initRenderingPipeline(
-  { scene, canvas, camera }: InitParam
+  { scene, camera }: InitParam
 ) {
-  const rect = canvas.getBoundingClientRect();
-
   const pipeline = new DefaultRenderingPipeline(
     'defaultPipeline',
-    true,
+    false,
     scene,
     [camera]
   );
 
-  // 單位是毫米，所以要乘以 1000
-  const focusDistance = 5000;
-
   pipeline.depthOfFieldEnabled = true;
-  pipeline.depthOfField.focusDistance = focusDistance
-  /** 相機焦距 */
-  pipeline.depthOfField.focalLength = 80;
-  /** 光圈 */
-  pipeline.depthOfField.fStop = 0.5;
-  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
+  pipeline.depthOfField.focusDistance = 37000
+  pipeline.depthOfField.focalLength = 5000;
+  pipeline.depthOfField.fStop = 8;
+  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Medium;
+
+  pipeline.bloomEnabled = true;
 
   return pipeline;
 }
@@ -134,13 +130,15 @@ function initParticles(
 ) {
   if (!(camera instanceof ArcRotateCamera)) return
 
-  const box = MeshBuilder.CreateBox('box', {});
+  const box = MeshBuilder.CreateBox('box', {
+    depth: 0.1
+  });
 
   let index = 0;
 
   // 分布範圍尺寸
   const size = camera.radius * 1.5;
-  const instanceCount = 1000;
+  const instanceCount = 500;
 
   const matricesData = new Float32Array(16 * instanceCount);
 
@@ -160,8 +158,7 @@ function initParticles(
   box.thinInstanceSetBuffer('matrix', matricesData, 16);
 
   const material = new StandardMaterial('material');
-  material.diffuseColor = Color3.FromHexString('#ff756e');
-  material.emissiveColor = Color3.FromHexString('#ff7842');
+  material.diffuseColor = Color3.FromHexString('#ffbace');
 
   box.material = material;
 
@@ -180,28 +177,28 @@ function initParticles(
       let newY = originalY - 0.02;
 
       // 計算新的 X 和 Z 位置，讓其左右擺動
-      const newX = originalX + 0.005 * Math.sin(time + i * 0.01) + 0.005;
-      const newZ = originalZ + 0.005 * Math.cos(time + i * 0.01) + 0.005;
+      const newX = originalX + 0.005 * Math.sin(time + i * 0.01) + 0.01;
+      const newZ = originalZ + 0.005 * Math.cos(time + i * 0.01) + 0.01;
 
       // 如果 Y 位置小於 -size / 2，則將其移動到最上方
       if (newY < -size / 2) {
         newY = size / 2;
       }
 
-      // 創建旋轉矩陣
+      // 建立旋轉矩陣
       const rotationMatrix = Matrix.RotationYawPitchRoll(
         time * 0.5 + i * 0.01,
         time * 0.5 + i * 0.01,
         time * 0.5 + i * 0.01
       );
 
-      // 創建平移矩陣
+      // 建立平移矩陣
       const translationMatrix = Matrix.Translation(newX, newY, newZ);
 
       // 合併旋轉和平移矩陣
       const finalMatrix = rotationMatrix.multiply(translationMatrix);
 
-      // 更新矩陣數據
+      // 更新矩陣
       finalMatrix.copyToArray(matricesData, offset);
     }
 
