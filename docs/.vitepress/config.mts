@@ -89,6 +89,7 @@ export default defineConfig({
             text: '背景',
             items: [
               { text: '螢火蟲', link: '/components/bg-firefly/' },
+              { text: '櫻吹雪', link: '/components/bg-sakura-fubuki/' },
             ]
           },
           {

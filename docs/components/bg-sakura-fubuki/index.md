@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/bg-sakura-fubuki/examples/basic-
 
 當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
 
-<basic-usage/>
+<basic-usage class="h-[60vh]"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/bg-sakura-fubuki/examples/basic-usage.vue
@@ -39,15 +39,3 @@ import BasicUsage from '../../../src/components/bg-sakura-fubuki/examples/basic-
 ### Props
 
 <<< ../../../src/components/bg-sakura-fubuki/bg-sakura-fubuki.vue/#Props
-
-### Emits
-
-<<< ../../../src/components/bg-sakura-fubuki/bg-sakura-fubuki.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/bg-sakura-fubuki/bg-sakura-fubuki.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/bg-sakura-fubuki/bg-sakura-fubuki.vue/#Slots
