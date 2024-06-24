@@ -21,3 +21,8 @@ import BgSakuraFubuki from '../bg-sakura-fubuki.vue';
 const text = ref('');
 const disable = ref(true);
 </script>
+
+<style scoped lang="sass">
+.bg 
+  background: linear-gradient(30deg, #8fcbe8, #add8ed, #ffe6e6)
+</style>

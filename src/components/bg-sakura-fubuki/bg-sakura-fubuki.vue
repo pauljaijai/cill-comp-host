@@ -1,16 +1,16 @@
 <template>
-  <div class="view relative pointer-events-none">
-    <!-- <div
+  <div class="view relative ">
+    <div
       v-if="pipeline"
-      class=" pointer-events-auto text-white"
+      class=" pointer-events-auto text-white p-10 z-[9999] absolute w-full"
     >
       <base-input
         v-model="pipeline.depthOfField.focusDistance"
         :label="`focusDistance: ${pipeline.depthOfField.focusDistance}`"
         type="range"
         :min="0"
-        :step="0.1"
-        :max="1000000"
+        :step="1"
+        :max="100000"
       />
 
       <base-input
@@ -30,7 +30,7 @@
         :step="0.1"
         :max="16"
       />
-    </div> -->
+    </div>
 
     <canvas
       ref="canvasRef"
@@ -49,8 +49,10 @@ import {
   DefaultRenderingPipeline,
   DepthOfFieldEffectBlurLevel,
   HemisphericLight,
+  Matrix,
+  MeshBuilder,
   NoiseProceduralTexture,
-  ParticleSystem, Texture, Vector3
+  ParticleSystem, Scalar, SolidParticleSystem, StandardMaterial, Texture, Vector3
 } from '@babylonjs/core';
 import { forEach, map, pipe, range } from 'remeda';
 
@@ -81,7 +83,9 @@ const { canvasRef, engine } = useBabylonScene({
 
     if (camera instanceof ArcRotateCamera) {
       const rect = canvas.getBoundingClientRect();
-      camera.radius = Math.min(rect.width, rect.height);
+      // camera.radius = Math.max(rect.width, rect.height);
+      camera.radius = 200;
+      camera.attachControl(canvas, true);
     }
 
     // 背景透明
@@ -92,12 +96,72 @@ const { canvasRef, engine } = useBabylonScene({
     if (defaultLight instanceof HemisphericLight) {
       defaultLight.intensity = 1;
       defaultLight.direction = new Vector3(0.5, 1, 0);
-
-      defaultLight.diffuse = new Color3(1, 1, 1);
-      defaultLight.groundColor = new Color3(1, 1, 1);
     }
+
+    // pipeline.value = initRenderingPipeline(param);
+    initParticles(param);
   },
 });
+
+function initRenderingPipeline(
+  { scene, canvas, camera }: InitParam
+) {
+  const rect = canvas.getBoundingClientRect();
+
+  const pipeline = new DefaultRenderingPipeline(
+    'defaultPipeline',
+    true,
+    scene,
+    [camera]
+  );
+
+  // 單位是毫米，所以要乘以 1000
+  const focusDistance = 5000;
+
+  pipeline.depthOfFieldEnabled = true;
+  pipeline.depthOfField.focusDistance = focusDistance
+  /** 相機焦距 */
+  pipeline.depthOfField.focalLength = 80;
+  /** 光圈 */
+  pipeline.depthOfField.fStop = 0.5;
+  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
+
+  return pipeline;
+}
+
+function initParticles(
+  { scene, canvas }: InitParam
+) {
+  const box = MeshBuilder.CreateBox('box', {});
+
+  let index = 0;
+
+  const size = 100;
+  const instanceCount = 10000;
+
+  const matricesData = new Float32Array(16 * instanceCount);
+
+  for (let i = 0; i < instanceCount; i++) {
+    // 使用 Matrix.Translation 來生成新的變換矩陣
+    const translationMatrix = Matrix.Translation(
+      Math.random() * size - size / 2,
+      Math.random() * size - size / 2,
+      Math.random() * size - size / 2
+    );
+
+    translationMatrix.copyToArray(matricesData, index * 16);
+
+    index++;
+  }
+
+  box.thinInstanceSetBuffer('matrix', matricesData, 16);
+
+  const material = new StandardMaterial('material');
+  material.diffuseColor = Color3.FromHexString('#ff756e');
+  material.emissiveColor = Color3.FromHexString('#ff7842');
+
+  box.material = material;
+}
 </script>
 
 <style scoped lang="sass">
