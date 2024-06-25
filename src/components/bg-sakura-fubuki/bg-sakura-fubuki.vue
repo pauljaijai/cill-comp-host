@@ -48,6 +48,7 @@ import {
   ArcRotateCamera, Color3, Color4,
   DefaultRenderingPipeline,
   DepthOfFieldEffectBlurLevel,
+  DynamicTexture,
   HemisphericLight,
   Matrix,
   MeshBuilder,
@@ -61,10 +62,8 @@ import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene'
 
 // #region Props
 interface Props {
-  /** 粒子顏色。包含 # 之 HEX 格式 */
-  diffuseColor?: string;
-  /** 陰影顏色。包含 # 之 HEX 格式 */
-  groundColor?: string;
+  /** 粒子容量 */
+  capacity?: number;
   /** 粒子移動速度。
    * - 正 x：往左
    * - 正 y：往上
@@ -74,8 +73,7 @@ interface Props {
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  diffuseColor: '#ffbace',
-  groundColor: '#ffdcbd',
+  capacity: 500,
   velocity: () => ({
     x: 0.01,
     y: -0.02,
@@ -109,7 +107,7 @@ const { canvasRef, engine } = useBabylonScene({
       defaultLight.direction = new Vector3(0.5, 1, 0);
 
       defaultLight.diffuse = Color3.White();
-      defaultLight.groundColor = Color3.FromHexString(props.groundColor);
+      defaultLight.groundColor = Color3.White();
     }
 
     pipeline.value = initRenderingPipeline(param);
@@ -131,7 +129,7 @@ function initRenderingPipeline(
   pipeline.depthOfField.focusDistance = 37000
   pipeline.depthOfField.focalLength = 5000;
   pipeline.depthOfField.fStop = 8;
-  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Medium;
+  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
 
   pipeline.bloomEnabled = true;
 
@@ -139,24 +137,23 @@ function initRenderingPipeline(
 }
 
 function initParticles(
-  { scene, camera }: InitParam
+  { scene, camera }: InitParam,
 ) {
   if (!(camera instanceof ArcRotateCamera)) return
 
-  const box = MeshBuilder.CreateBox('box', {
-    width: 0.5,
-    depth: 0.1
-  });
+  const { velocity, capacity } = props;
 
+  const box = MeshBuilder.CreateBox('box', {
+    width: 0.7, depth: 0.01,
+  });
   let index = 0;
 
   // 分布範圍尺寸
   const size = camera.radius * 1.5;
-  const instanceCount = 500;
 
-  const matricesData = new Float32Array(16 * instanceCount);
+  const matricesData = new Float32Array(16 * capacity);
 
-  for (let i = 0; i < instanceCount; i++) {
+  for (let i = 0; i < capacity; i++) {
     // 使用 Matrix.Translation 來生成新的變換矩陣
     const translationMatrix = Matrix.Translation(
       Math.random() * size - size / 2,
@@ -172,16 +169,30 @@ function initParticles(
   box.thinInstanceSetBuffer('matrix', matricesData, 16);
 
   const material = new StandardMaterial('material');
-  material.diffuseColor = Color3.FromHexString(props.diffuseColor);
+  material.specularColor = new Color3(0.1, 0.1, 0.1);
 
+  const dynamicTexture = new DynamicTexture('dynamicTexture', {
+    width: 124, height: 180
+  }, scene);
+  dynamicTexture.hasAlpha = true;
+
+  const img = new Image();
+  img.onload = () => {
+    const ctx = dynamicTexture.getContext();
+    ctx.drawImage(img, 0, 0, 124, 180);
+
+    dynamicTexture.update();
+  }
+  img.src = '/sakura-petal.png';
+
+  material.diffuseTexture = dynamicTexture;
   box.material = material;
 
-  const velocity = props.velocity;
   // 定義動畫
   scene.registerBeforeRender(() => {
     // 以時間為基礎，弭平不同裝置 fps 差異
     const time = performance.now() * 0.001;
-    for (let i = 0; i < instanceCount; i++) {
+    for (let i = 0; i < capacity; i++) {
       const offset = i * 16;
 
       const originalX = matricesData[offset + 12] ?? 0;
