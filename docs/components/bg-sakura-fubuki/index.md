@@ -13,7 +13,7 @@ import FullBackground from '../../../src/components/bg-sakura-fubuki/examples/fu
 
 聽說最近要重返大銀幕啦，有興趣的話推薦大家一起來胃痛一下。ᕕ( ﾟ ∀。)ᕗ（大誤
 
-裡面的場景真的很美，櫻花飄落的畫面真的如詩如畫。
+電影的場景真的很美，櫻花飄落的畫面真的如詩如畫。
 
 配上山崎將義的《One more time, One more chance》，氣氛真的很到位，惆悵感滿滿。
 
