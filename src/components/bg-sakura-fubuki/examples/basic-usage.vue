@@ -2,6 +2,7 @@
   <div class="flex flex-col gap-4 w-full py-2">
     <bg-sakura-fubuki
       v-slot="{ fps }"
+      :particle-size="{ width: 1.05, height: 1.5 }"
       class="bg w-full h-full"
     >
       <div class="text-white absolute top-0 left-0 p-4">

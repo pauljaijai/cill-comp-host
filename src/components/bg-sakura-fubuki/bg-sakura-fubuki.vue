@@ -62,6 +62,10 @@ import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene'
 
 // #region Props
 interface Props {
+  /** 粒子貼圖 */
+  particleSrc?: string;
+  /** 粒子尺寸 */
+  particleSize?: Record<'width' | 'height', number>;
   /** 粒子容量 */
   capacity?: number;
   /** 粒子移動速度。
@@ -73,6 +77,8 @@ interface Props {
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
+  particleSrc: '/sakura-petal.png',
+  particleSize: () => ({ width: 0.7, height: 1 }),
   capacity: 500,
   velocity: () => ({
     x: 0.01,
@@ -141,10 +147,10 @@ function initParticles(
 ) {
   if (!(camera instanceof ArcRotateCamera)) return
 
-  const { velocity, capacity } = props;
+  const { velocity, capacity, particleSize } = props;
 
   const box = MeshBuilder.CreateBox('box', {
-    width: 0.7, depth: 0.01,
+    ...particleSize, depth: 0.01,
   });
   let index = 0;
 
@@ -183,7 +189,7 @@ function initParticles(
 
     dynamicTexture.update();
   }
-  img.src = '/sakura-petal.png';
+  img.src = props.particleSrc;
 
   material.diffuseTexture = dynamicTexture;
   box.material = material;
