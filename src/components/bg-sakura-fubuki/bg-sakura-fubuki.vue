@@ -1,37 +1,5 @@
 <template>
   <div class="view relative pointer-events-none">
-    <!-- <div
-      v-if="pipeline"
-      class=" pointer-events-auto text-white p-10 z-[9999] absolute w-full"
-    >
-      <base-input
-        v-model="pipeline.depthOfField.focusDistance"
-        :label="`focusDistance: ${pipeline.depthOfField.focusDistance}`"
-        type="range"
-        :min="0"
-        :step="1"
-        :max="100000"
-      />
-
-      <base-input
-        v-model="pipeline.depthOfField.focalLength"
-        :label="`focalLength: ${pipeline.depthOfField.focalLength}`"
-        type="range"
-        :min="0"
-        :step="1"
-        :max="5000"
-      />
-
-      <base-input
-        v-model="pipeline.depthOfField.fStop"
-        :label="`fStop: ${pipeline.depthOfField.fStop}`"
-        type="range"
-        :min="0.1"
-        :step="0.1"
-        :max="16"
-      />
-    </div> -->
-
     <canvas
       ref="canvasRef"
       class=" absolute left-0 top-0 w-full h-full"
@@ -150,8 +118,9 @@ function initParticles(
   const { velocity, capacity, particleSize } = props;
 
   const box = MeshBuilder.CreateBox('box', {
-    ...particleSize, depth: 0.01,
+    ...particleSize, depth: 0.001,
   });
+
   let index = 0;
 
   // 分布範圍尺寸

@@ -13,6 +13,7 @@ import CursorSidekick from '../../src/components/cursor-sidekick/examples/basic-
 import TransitionShape from '../../src/components/transition-shape/examples/basic-usage.vue';
 
 import BgFirefly from '../../src/components/bg-firefly/examples/full-background.vue';
+import BgSakuraFubuki from '../../src/components/bg-sakura-fubuki/examples/full-background.vue';
 
 import UtilPartyPopper from '../../src/components/util-party-popper/examples/emit-position.vue';
 </script>
@@ -98,6 +99,12 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 靜下心，享受夜晚的寧靜。(´,,•ω•,,)
 
 <bg-firefly class="h-[70vh]" />
+
+### [櫻吹雪](./bg-sakura-fubuki/) <Badge type="info" text="bg" />
+
+櫻花漫天，紛飛如夢
+
+<bg-sakura-fubuki class="h-[70vh]" />
 
 ## 轉場
 
