@@ -61,11 +61,26 @@ import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene'
 
 // #region Props
 interface Props {
-  modelValue?: string;
+  /** 粒子顏色。包含 # 之 HEX 格式 */
+  diffuseColor?: string;
+  /** 陰影顏色。包含 # 之 HEX 格式 */
+  groundColor?: string;
+  /** 粒子移動速度。
+   * - 正 x：往左
+   * - 正 y：往上
+   * - 正 z：射出螢幕方向
+   */
+  velocity?: Record<'x' | 'y' | 'z', number>;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
+  diffuseColor: '#ffbace',
+  groundColor: '#ffdcbd',
+  velocity: () => ({
+    x: 0.01,
+    y: -0.02,
+    z: 0.01,
+  })
 });
 
 const fps = ref(0);
@@ -94,7 +109,7 @@ const { canvasRef, engine } = useBabylonScene({
       defaultLight.direction = new Vector3(0.5, 1, 0);
 
       defaultLight.diffuse = Color3.White();
-      defaultLight.groundColor = Color3.FromHexString('#ffdcbd');
+      defaultLight.groundColor = Color3.FromHexString(props.groundColor);
     }
 
     pipeline.value = initRenderingPipeline(param);
@@ -157,10 +172,11 @@ function initParticles(
   box.thinInstanceSetBuffer('matrix', matricesData, 16);
 
   const material = new StandardMaterial('material');
-  material.diffuseColor = Color3.FromHexString('#ffbace');
+  material.diffuseColor = Color3.FromHexString(props.diffuseColor);
 
   box.material = material;
 
+  const velocity = props.velocity;
   // 定義動畫
   scene.registerBeforeRender(() => {
     // 以時間為基礎，弭平不同裝置 fps 差異
@@ -173,11 +189,11 @@ function initParticles(
       const originalZ = matricesData[offset + 14] ?? 0;
 
       // 計算新的 Y 位置
-      let y = originalY - 0.02;
+      let y = originalY + velocity.y;
 
-      // 計算新的 X 和 Z 位置，讓其左右擺動
-      let x = originalX + 0.005 * Math.sin(time + i * 0.01) + 0.01;
-      let z = originalZ + 0.005 * Math.cos(time + i * 0.01) + 0.01;
+      // 計算新的 X、Z 位置，加入一點擾動
+      let x = originalX + 0.005 * Math.sin(time + i * 0.01) + velocity.x;
+      let z = originalZ + 0.005 * Math.cos(time + i * 0.01) + velocity.z;
 
       // 如果 Y 位置小於 -size / 2，則將其移動到最上方
       if (y < -size / 2) {
@@ -187,10 +203,9 @@ function initParticles(
       }
 
       // 建立旋轉矩陣
+      const angle = time * 0.5 + i * 0.1;
       const rotationMatrix = Matrix.RotationYawPitchRoll(
-        time * 0.5 + i * 0.1,
-        time * 0.5 + i * 0.1,
-        time * 0.5 + i * 0.1
+        angle, angle, angle
       );
 
       // 建立平移矩陣

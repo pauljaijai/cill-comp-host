@@ -24,5 +24,5 @@ const disable = ref(true);
 
 <style scoped lang="sass">
 .bg 
-  background: linear-gradient(30deg, #8fcbe8, #add8ed, #ffe6e6)
+  background: linear-gradient(20deg, #8fcbe8, #add8ed, #ffe6e6)
 </style>
