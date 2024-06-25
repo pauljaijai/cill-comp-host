@@ -40,7 +40,7 @@ import FullBackground from '../../../src/components/bg-sakura-fubuki/examples/fu
 <full-background />
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/bg-firefly/examples/full-background.vue
+<<< ../../../src/components/bg-sakura-fubuki/examples/full-background.vue
 :::
 
 ## 原理
