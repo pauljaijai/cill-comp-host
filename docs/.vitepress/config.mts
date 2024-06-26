@@ -39,7 +39,7 @@ export default defineConfig({
   themeConfig: {
     footer: {
       message: `v${version}`,
-      copyright: 'Copyright © 2024-present <a href="https://gitlab.com/codfish2140">Codfish</a>'
+      copyright: 'MIT License<br>Copyright © 2024-present <a href="https://gitlab.com/codfish2140">Codfish</a>'
     },
     outline: {
       label: '目錄',
