@@ -1,7 +1,38 @@
-<!-- <template></template> -->
+<template>
+  <div class=" relative overflow-hidden">
+    <canvas
+      ref="canvasRef"
+      class=" absolute left-0 top-0 w-full h-full"
+    />
+
+    <div class=" absolute left-0 top-0 p-4 text-white">
+      {{ fps }}
+    </div>
+  </div>
+</template>
+
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
+import {
+  ArcRotateCamera,
+  Color3,
+  Color4,
+  DefaultRenderingPipeline,
+  DepthOfFieldEffectBlurLevel,
+  DynamicTexture, Matrix, Mesh, MeshBuilder,
+  Particle,
+  ParticleSystem,
+  StandardMaterial, Texture, Vector3
+} from '@babylonjs/core';
+import { pipe } from 'remeda';
+
+import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
+import { useIntervalFn } from '@vueuse/core';
+
+import '@babylonjs/core/Debug/debugLayer';
+import '@babylonjs/inspector';
+
 
 // #region Props
 interface Props {
@@ -18,16 +49,19 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-// #region Slots
-defineSlots<{
-  default?: () => unknown;
-}>();
-// #endregion Slots
+const fps = ref(0);
+useIntervalFn(() => {
+  fps.value = Math.floor(engine.value?.getFps() ?? 0);
+}, 100);
 
 
-// #region Methods
-defineExpose({});
-// #endregion Methods
+const { canvasRef, engine } = useBabylonScene({
+  async init(param) {
+    const { canvas, scene } = param;
+  },
+});
+
+
 </script>
 
 <style scoped lang="sass">

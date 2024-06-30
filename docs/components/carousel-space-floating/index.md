@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/carousel-space-floating/examples
 
 當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
 
-<basic-usage/>
+<basic-usage class="h-[60vh]"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/carousel-space-floating/examples/basic-usage.vue
