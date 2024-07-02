@@ -16,10 +16,10 @@ import CarouselSpaceFloating from '../carousel-space-floating.vue';
 const srcList = [
   // '/profile-3.webp',
   '/painting-codfish-rain.webp',
-  '/photography-王功漁火節煙火.jpg',
-  '/photography-秧苗晨光.jpg',
-  '/photography-大笨鳥.jpg',
-  '/photography-稻穗.jpg',
+  '/photography-fireworks.jpg',
+  '/photography-morning-light-of-rice.jpg',
+  '/photography-big-stupid-bird.jpg',
+  '/photography-ears-of-rice.jpg',
 ]
 
 </script>

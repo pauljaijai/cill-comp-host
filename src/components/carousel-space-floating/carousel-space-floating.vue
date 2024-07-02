@@ -80,12 +80,15 @@ async function initBoards(
   { scene }: InitParam
 ) {
   const boards = props.srcList.map((src, i) => {
+    const texture = new Texture(src, scene);
+
+    /** 根據圖片比例產生 plane */
     const board = MeshBuilder.CreatePlane(`board-${i}`, { width: 1, height: 1 });
     board.position = new Vector3(i * 2, 0, 0);
     board.rotation = new Vector3(Math.PI, 0, 0);
 
     const material = new StandardMaterial(`material-${i}`, scene);
-    material.diffuseTexture = new Texture(src, scene);
+    material.diffuseTexture = texture;
 
     board.material = material;
 
