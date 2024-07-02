@@ -66,7 +66,7 @@ useIntervalFn(() => {
 const { canvasRef, engine } = useBabylonScene({
   async init(param) {
     const { canvas, camera, scene } = param;
-    
+
     camera.attachControl(canvas, true);
 
     scene.debugLayer.show();
@@ -81,7 +81,8 @@ function initBoards(
 ) {
   const boards = props.srcList.map((src, i) => {
     const board = MeshBuilder.CreatePlane(`board-${i}`, { width: 1, height: 1 });
-    board.position = new Vector3(0, 0, 0);
+    board.position = new Vector3(i * 2, 0, 0);
+    board.rotation = new Vector3(Math.PI, 0, 0);
 
     const material = new StandardMaterial(`material-${i}`, scene);
     material.diffuseTexture = new Texture(src, scene);
