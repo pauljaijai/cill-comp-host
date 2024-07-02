@@ -36,17 +36,25 @@ import '@babylonjs/inspector';
 
 // #region Props
 interface Props {
-  modelValue?: string;
+  srcList?: string[];
+  /** 自動播放。若為 true，則預設每 5s 切換一次；
+   * number 則可自行指定毫秒。
+   */
+  autoplay?: boolean | number;
+  fpsVisible?: boolean;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
+  srcList: () => [],
+  autoplay: false,
+  fpsVisible: false,
+
 });
 
 // #region Emits
-const emit = defineEmits<{
-  'update:modelValue': [value: Props['modelValue']];
-}>();
+// const emit = defineEmits<{
+//   'update:modelValue': [value: Props['modelValue']];
+// }>();
 // #endregion Emits
 
 const fps = ref(0);
@@ -57,11 +65,34 @@ useIntervalFn(() => {
 
 const { canvasRef, engine } = useBabylonScene({
   async init(param) {
-    const { canvas, scene } = param;
+    const { canvas, camera, scene } = param;
+    
+    camera.attachControl(canvas, true);
+
+    scene.debugLayer.show();
+
+    initBoards(param);
   },
 });
 
 
+function initBoards(
+  { scene }: InitParam
+) {
+  const boards = props.srcList.map((src, i) => {
+    const board = MeshBuilder.CreatePlane(`board-${i}`, { width: 1, height: 1 });
+    board.position = new Vector3(0, 0, 0);
+
+    const material = new StandardMaterial(`material-${i}`, scene);
+    material.diffuseTexture = new Texture(src, scene);
+
+    board.material = material;
+
+    return board;
+  })
+
+  return boards;
+}
 </script>
 
 <style scoped lang="sass">
