@@ -71,12 +71,12 @@ const { canvasRef, engine } = useBabylonScene({
 
     scene.debugLayer.show();
 
-    initBoards(param);
+    await initBoards(param);
   },
 });
 
 
-function initBoards(
+async function initBoards(
   { scene }: InitParam
 ) {
   const boards = props.srcList.map((src, i) => {
