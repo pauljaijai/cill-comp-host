@@ -67,9 +67,9 @@ const { canvasRef, engine } = useBabylonScene({
   async init(param) {
     const { canvas, camera, scene } = param;
 
-    camera.attachControl(canvas, true);
+    // camera.attachControl(canvas, true);
 
-    scene.debugLayer.show();
+    // scene.debugLayer.show();
 
     await initBoards(param);
   },
@@ -88,11 +88,19 @@ async function initBoards(
       const board = MeshBuilder.CreatePlane(`board-${i}`, {
         width: width / height, height: 1,
       });
-      board.position = new Vector3(i * 2, 0, 0);
+      board.position = new Vector3(
+        Math.random() * 10 - 5,
+        Math.random() * 10 - 5,
+        Math.random() * 10 - 5,
+      );
+
       board.rotation = new Vector3(Math.PI, 0, 0);
 
       const material = new StandardMaterial(`material-${i}`, scene);
       material.diffuseTexture = texture;
+
+      material.disableLighting = true;
+      material.emissiveColor = new Color3(1, 1, 1);
 
       board.material = material;
 
