@@ -136,3 +136,24 @@
 .VPNavBarAppearance {
   display: none !important;
 }
+
+#scene-explorer-host,
+#inspector-host {
+  position: fixed !important;
+  top: 0 !important;
+  z-index: 99999;
+  opacity: 0.2;
+  transition-duration: 0.4s;
+}
+
+#scene-explorer-host:hover,
+#inspector-host:hover {
+  opacity: 0.8;
+}
+
+#scene-explorer-host input,
+#scene-explorer-host select,
+#inspector-host input,
+#inspector-host select {
+  color: white;
+}
