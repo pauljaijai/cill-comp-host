@@ -1,6 +1,10 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300">
+  <div
+    class="flex flex-col gap-4 w-full border border-gray-300"
+    @click="handleClick"
+  >
     <carousel-space-floating
+      ref="carouselRef"
       class="h-full"
       :src-list="srcList"
       fps-visible
@@ -22,4 +26,11 @@ const srcList = [
   '/photography-ears-of-rice.jpg',
 ]
 
+
+const carouselRef = ref<InstanceType<typeof CarouselSpaceFloating>>();
+
+const handleClick = () => {
+  console.log(`🚀 ~ handleClick:`);
+  carouselRef.value?.next();
+}
 </script>
