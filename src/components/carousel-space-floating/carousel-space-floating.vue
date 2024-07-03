@@ -28,7 +28,9 @@ import {
   EasingFunction,
   SineEase,
   QuadraticEase,
-  QuinticEase
+  QuinticEase,
+  UniversalCamera,
+  IAnimationKey
 } from '@babylonjs/core';
 import { map, pipe } from 'remeda';
 
@@ -71,15 +73,20 @@ const currentIndex = ref(0);
 const boards = shallowRef<Mesh[]>([]);
 
 const { canvasRef, engine, camera, scene } = useBabylonScene({
+  createCamera(param) {
+    const { scene } = param;
+    const camera = new UniversalCamera('camera', new Vector3(0, 0, -10), scene);
+
+    return camera;
+  },
   async init(param) {
     const { canvas, camera, scene } = param;
 
-    // camera.attachControl(canvas, true);
+    camera.attachControl(canvas, true);
 
-    // scene.debugLayer.show();
+    scene.debugLayer.show();
 
     boards.value = await initBoards(param);
-
     focusBoard(currentIndex.value);
   },
 });
@@ -108,7 +115,7 @@ async function initBoards(
         );
 
         const rotateZ = Math.PI / 2 * (i % 4);
-        board.rotation = new Vector3(Math.PI, 0, rotateZ);
+        board.rotation = new Vector3(0, 0, rotateZ);
 
         const material = new StandardMaterial(`material-${i}`, scene);
         material.diffuseTexture = texture;
@@ -138,6 +145,7 @@ function focusBoard(index: number) {
   const currentCamera = camera.value;
   const currentScene = scene.value;
   if (!currentCamera || !currentScene) return;
+  if (!(currentCamera instanceof UniversalCamera)) return;
 
   const board = boards.value[index];
   if (!board) return;
@@ -145,20 +153,23 @@ function focusBoard(index: number) {
   const { x, y, z } = board.position;
   const { z: rotateZ } = board.rotation;
 
-  const target = new Vector3(x, y, z);
-
-  // currentCamera.target = target;
-  // currentCamera.position = new Vector3(x, y, z + 2);
-  // currentCamera.rotation.addInPlace(new Vector3(0, 0, 0));
-
   // 鏡頭移動動畫
   const animations = pipe([],
     // position
     (result: Animation[]) => {
-      const keys = [
-        { frame: 0, value: currentCamera.position },
-        { frame: 5, value: new Vector3(x, y, z + 5) },
-        { frame: 10, value: new Vector3(x, y, z + 2) },
+      const keys: IAnimationKey[] = [
+        {
+          frame: 0,
+          value: currentCamera.position,
+        },
+        {
+          frame: 5,
+          value: new Vector3(x, y, z - 5),
+        },
+        {
+          frame: 10,
+          value: new Vector3(x, y, z - 2),
+        },
       ];
 
       const easingFunction = new SineEase();
@@ -166,28 +177,6 @@ function focusBoard(index: number) {
 
       const animation = Animation.CreateAnimation(
         'position',
-        Animation.ANIMATIONTYPE_VECTOR3,
-        5,
-        easingFunction
-      );
-      animation.setKeys(keys);
-
-      result.push(animation);
-      return result;
-    },
-
-    // target
-    (result: Animation[]) => {
-      const keys = [
-        { frame: 0, value: currentCamera.target },
-        { frame: 10, value: target },
-      ];
-
-      const easingFunction = new SineEase();
-      easingFunction.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT);
-
-      const animation = Animation.CreateAnimation(
-        'target',
         Animation.ANIMATIONTYPE_VECTOR3,
         5,
         easingFunction

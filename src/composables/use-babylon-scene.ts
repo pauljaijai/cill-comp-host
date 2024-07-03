@@ -19,7 +19,7 @@ export interface InitParam {
 interface UseBabylonSceneParam {
   createEngine?: (param: Omit<InitParam, 'camera' | 'scene' | 'engine'>) => Promise<BabylonEngine>;
   createScene?: (param: Omit<InitParam, 'camera' | 'scene'>) => Scene;
-  createCamera?: (param: Omit<InitParam, 'camera'>) => ArcRotateCamera;
+  createCamera?: (param: Omit<InitParam, 'camera'>) => Camera;
   init?: (param: InitParam) => Promise<void>;
 }
 const defaultParam: Required<UseBabylonSceneParam> = {
@@ -69,7 +69,7 @@ export function useBabylonScene(param?: UseBabylonSceneParam) {
 
   const engine = shallowRef<BabylonEngine>();
   const scene = shallowRef<Scene>();
-  const camera = shallowRef<ArcRotateCamera>();
+  const camera = shallowRef<Camera>();
 
   const {
     createEngine, createScene, createCamera, init
