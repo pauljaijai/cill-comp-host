@@ -19,18 +19,21 @@ import CarouselSpaceFloating from '../carousel-space-floating.vue';
 
 const images = [
   // '/profile-3.webp',
+  '/painting-codfish-bakery.webp',
   '/painting-codfish-rain.webp',
   '/photography-fireworks.jpg',
   '/photography-morning-light-of-rice.jpg',
   '/photography-big-stupid-bird.jpg',
   '/photography-ears-of-rice.jpg',
+  '/photography-gaomei-windmill.jpg',
+  '/photography-spider-at-night.jpg',
+  '/photography-street-cat.jpg',
 ]
 
 
 const carouselRef = ref<InstanceType<typeof CarouselSpaceFloating>>();
 
 const handleClick = () => {
-  console.log(`🚀 ~ handleClick:`);
   carouselRef.value?.next();
 }
 </script>

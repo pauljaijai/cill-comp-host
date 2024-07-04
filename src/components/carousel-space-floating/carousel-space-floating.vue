@@ -30,7 +30,8 @@ import {
   QuadraticEase,
   QuinticEase,
   UniversalCamera,
-  IAnimationKey
+  IAnimationKey,
+  Vector2
 } from '@babylonjs/core';
 import { clone, map, pipe, sum } from 'remeda';
 import anime from 'animejs';
@@ -43,7 +44,8 @@ import '@babylonjs/inspector';
 
 interface ImageInfo {
   src: string;
-  offset: Vector3;
+  offset: Vector2;
+  rotation: Vector3;
   duration: number;
 }
 
@@ -113,7 +115,7 @@ function initRenderingPipeline(
   pipeline.depthOfFieldEnabled = true;
   pipeline.depthOfField.focusDistance = 2 * 1000;
   pipeline.depthOfField.focalLength = 100000;
-  pipeline.depthOfField.fStop = 32;
+  pipeline.depthOfField.fStop = 16;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
 
   pipeline.bloomEnabled = true;
@@ -129,14 +131,19 @@ async function initBoards(
   const boards = await pipe(
     props.images,
     map.indexed((item, i) => new Promise((resolve) => {
-      const src = pipe(
+      const {
+        src, rotation,
+      } = pipe(
         item,
         (data) => {
           if (typeof data === 'string') {
-            return data;
+            return {
+              src: data,
+              rotation: defaultImageInfo.rotation,
+            };
           }
 
-          return data.src
+          return data
         },
       );
 
@@ -157,6 +164,7 @@ async function initBoards(
 
         const rotateZ = Math.PI / 2 * (i % 2);
         board.rotation = new Vector3(0, 0, rotateZ);
+        board.rotation.addInPlace(rotation);
 
         const material = new StandardMaterial(`material-${i}`, scene);
         material.diffuseTexture = texture;
@@ -183,7 +191,8 @@ async function initBoards(
 }
 
 const defaultImageInfo: Omit<ImageInfo, 'src'> = {
-  offset: new Vector3(0, 0, 0),
+  offset: new Vector2(0, 0),
+  rotation: new Vector3(0, 0, 0),
   duration: 3000,
 }
 async function focusBoard(index: number) {
@@ -193,6 +202,8 @@ async function focusBoard(index: number) {
   if (!(currentCamera instanceof UniversalCamera)) return;
 
   const board = boards.value[index];
+  if (!board) return;
+
   const info = pipe(
     props.images[index],
     (data) => {
@@ -206,7 +217,6 @@ async function focusBoard(index: number) {
       }
     },
   );
-  if (!board) return;
 
   const { x, y, z } = board.position;
   const { z: rotateZ } = board.rotation;
@@ -237,7 +247,6 @@ async function focusBoard(index: number) {
             (z - currentCamera.position.z) / 2,
             currentCamera.position.z,
             -5,
-            offset.z,
           ]),
           easing: 'easeInOutQuart',
         },
