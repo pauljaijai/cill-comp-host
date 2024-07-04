@@ -88,14 +88,38 @@ const { canvasRef, engine, camera, scene } = useBabylonScene({
   async init(param) {
     const { canvas, camera, scene } = param;
 
+    scene.clearColor = new Color4(0, 0, 0, 0);
+
     // camera.attachControl(canvas, true);
 
     // scene.debugLayer.show();
 
+    initRenderingPipeline(param);
     boards.value = await initBoards(param);
     focusBoard(currentIndex.value);
   },
 });
+
+function initRenderingPipeline(
+  { scene, camera }: InitParam,
+) {
+  const pipeline = new DefaultRenderingPipeline(
+    'defaultPipeline',
+    true,
+    scene,
+    [camera]
+  );
+
+  pipeline.depthOfFieldEnabled = true;
+  pipeline.depthOfField.focusDistance = 2 * 1000;
+  pipeline.depthOfField.focalLength = 100000;
+  pipeline.depthOfField.fStop = 32;
+  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
+
+  pipeline.bloomEnabled = true;
+
+  return pipeline;
+}
 
 
 const OFFSET = 5;
