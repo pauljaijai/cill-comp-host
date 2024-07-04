@@ -33,6 +33,7 @@ import {
   IAnimationKey
 } from '@babylonjs/core';
 import { map, pipe } from 'remeda';
+import anime from 'animejs';
 
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import { useIntervalFn } from '@vueuse/core';
@@ -84,7 +85,7 @@ const { canvasRef, engine, camera, scene } = useBabylonScene({
 
     camera.attachControl(canvas, true);
 
-    scene.debugLayer.show();
+    // scene.debugLayer.show();
 
     boards.value = await initBoards(param);
     focusBoard(currentIndex.value);
@@ -141,7 +142,7 @@ async function initBoards(
   return boards;
 }
 
-function focusBoard(index: number) {
+async function focusBoard(index: number) {
   const currentCamera = camera.value;
   const currentScene = scene.value;
   if (!currentCamera || !currentScene) return;
@@ -154,43 +155,47 @@ function focusBoard(index: number) {
   const { z: rotateZ } = board.rotation;
 
   // 鏡頭移動動畫
-  const animations = pipe([],
-    // position
-    (result: Animation[]) => {
-      const keys: IAnimationKey[] = [
+  anime.remove(currentCamera.position);
+  anime.remove(currentCamera.rotation);
+
+  await Promise.all([
+    anime({
+      targets: currentCamera.position,
+      x: [
         {
-          frame: 0,
-          value: currentCamera.position,
+          value: x,
+          easing: 'easeInOutQuart',
+        }
+      ],
+      y: [
+        {
+          value: y,
+          easing: 'easeInOutQuart',
+        }
+      ],
+      z: [
+        {
+          value: (z - currentCamera.position.z) / 2 + currentCamera.position.z - 5,
+          easing: 'easeInOutQuart',
         },
         {
-          frame: 5,
-          value: new Vector3(x, y, z - 5),
-        },
+          value: z - 2,
+          easing: 'easeInOutQuart',
+        }
+      ],
+      duration: 3000,
+    }).finished,
+    anime({
+      targets: currentCamera.rotation,
+      z: [
         {
-          frame: 10,
-          value: new Vector3(x, y, z - 2),
-        },
-      ];
-
-      const easingFunction = new SineEase();
-      easingFunction.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT);
-
-      const animation = Animation.CreateAnimation(
-        'position',
-        Animation.ANIMATIONTYPE_VECTOR3,
-        5,
-        easingFunction
-      );
-      animation.setKeys(keys);
-
-      result.push(animation);
-      return result;
-    },
-  );
-
-  currentScene.beginDirectAnimation(currentCamera, animations, 0, 10);
-
-  // console.log(`🚀 ~ currentCamera.rotation:`, currentCamera.rotation);
+          value: rotateZ,
+          easing: 'easeInOutQuart',
+        }
+      ],
+      duration: 3000,
+    }).finished
+  ])
 }
 
 function next() {
