@@ -6,7 +6,7 @@
     <carousel-space-floating
       ref="carouselRef"
       class="h-full"
-      :src-list="srcList"
+      :images="images"
       fps-visible
     />
   </div>
@@ -17,7 +17,7 @@ import { ref } from 'vue';
 
 import CarouselSpaceFloating from '../carousel-space-floating.vue';
 
-const srcList = [
+const images = [
   // '/profile-3.webp',
   '/painting-codfish-rain.webp',
   '/photography-fireworks.jpg',

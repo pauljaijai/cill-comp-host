@@ -32,7 +32,7 @@ import {
   UniversalCamera,
   IAnimationKey
 } from '@babylonjs/core';
-import { map, pipe } from 'remeda';
+import { clone, map, pipe, sum } from 'remeda';
 import anime from 'animejs';
 
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
@@ -41,10 +41,15 @@ import { useIntervalFn } from '@vueuse/core';
 import '@babylonjs/core/Debug/debugLayer';
 import '@babylonjs/inspector';
 
+interface ImageInfo {
+  src: string;
+  offset: Vector3;
+  duration: number;
+}
 
 // #region Props
 interface Props {
-  srcList?: string[];
+  images?: Array<ImageInfo | string>;
   /** 自動播放。若為 true，則預設每 5s 切換一次；
    * number 則可自行指定毫秒。
    */
@@ -53,7 +58,7 @@ interface Props {
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  srcList: () => [],
+  images: () => [],
   autoplay: false,
   fpsVisible: false,
 
@@ -83,7 +88,7 @@ const { canvasRef, engine, camera, scene } = useBabylonScene({
   async init(param) {
     const { canvas, camera, scene } = param;
 
-    camera.attachControl(canvas, true);
+    // camera.attachControl(canvas, true);
 
     // scene.debugLayer.show();
 
@@ -98,8 +103,19 @@ async function initBoards(
   { scene }: InitParam
 ) {
   const boards = await pipe(
-    props.srcList,
-    map.indexed((src, i) => new Promise((resolve) => {
+    props.images,
+    map.indexed((item, i) => new Promise((resolve) => {
+      const src = pipe(
+        item,
+        (data) => {
+          if (typeof data === 'string') {
+            return data;
+          }
+
+          return data.src
+        },
+      );
+
       const texture = new Texture(src, scene);
 
       texture.onLoadObservable.add(() => {
@@ -115,7 +131,7 @@ async function initBoards(
           Math.random() * OFFSET - OFFSET / 2,
         );
 
-        const rotateZ = Math.PI / 2 * (i % 4);
+        const rotateZ = Math.PI / 2 * (i % 2);
         board.rotation = new Vector3(0, 0, rotateZ);
 
         const material = new StandardMaterial(`material-${i}`, scene);
@@ -142,6 +158,10 @@ async function initBoards(
   return boards;
 }
 
+const defaultImageInfo: Omit<ImageInfo, 'src'> = {
+  offset: new Vector3(0, 0, 0),
+  duration: 3000,
+}
 async function focusBoard(index: number) {
   const currentCamera = camera.value;
   const currentScene = scene.value;
@@ -149,6 +169,19 @@ async function focusBoard(index: number) {
   if (!(currentCamera instanceof UniversalCamera)) return;
 
   const board = boards.value[index];
+  const info = pipe(
+    props.images[index],
+    (data) => {
+      if (!data || typeof data === 'string') {
+        return defaultImageInfo;
+      }
+
+      return {
+        ...clone(defaultImageInfo),
+        ...data,
+      }
+    },
+  );
   if (!board) return;
 
   const { x, y, z } = board.position;
@@ -158,24 +191,30 @@ async function focusBoard(index: number) {
   anime.remove(currentCamera.position);
   anime.remove(currentCamera.rotation);
 
+  const { offset } = info;
   await Promise.all([
     anime({
       targets: currentCamera.position,
       x: [
         {
-          value: x,
+          value: x + offset.x,
           easing: 'easeInOutQuart',
         }
       ],
       y: [
         {
-          value: y,
+          value: y + offset.y,
           easing: 'easeInOutQuart',
         }
       ],
       z: [
         {
-          value: (z - currentCamera.position.z) / 2 + currentCamera.position.z - 5,
+          value: sum([
+            (z - currentCamera.position.z) / 2,
+            currentCamera.position.z,
+            -5,
+            offset.z,
+          ]),
           easing: 'easeInOutQuart',
         },
         {
@@ -183,7 +222,7 @@ async function focusBoard(index: number) {
           easing: 'easeInOutQuart',
         }
       ],
-      duration: 3000,
+      duration: info.duration,
     }).finished,
     anime({
       targets: currentCamera.rotation,
@@ -193,13 +232,13 @@ async function focusBoard(index: number) {
           easing: 'easeInOutQuart',
         }
       ],
-      duration: 3000,
+      duration: info.duration,
     }).finished
   ])
 }
 
 function next() {
-  currentIndex.value = (currentIndex.value + 1) % props.srcList.length;
+  currentIndex.value = (currentIndex.value + 1) % props.images.length;
   focusBoard(currentIndex.value);
 }
 
