@@ -33,11 +33,11 @@ import {
   IAnimationKey,
   Vector2
 } from '@babylonjs/core';
-import { clone, map, pipe, sum } from 'remeda';
+import { add, clone, forEach, map, pipe, range, shuffle, splice, sum } from 'remeda';
 import anime from 'animejs';
 
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
-import { useIntervalFn } from '@vueuse/core';
+import { useIntervalFn, useRefHistory } from '@vueuse/core';
 
 import '@babylonjs/core/Debug/debugLayer';
 import '@babylonjs/inspector';
@@ -80,6 +80,9 @@ useIntervalFn(() => {
 const currentIndex = ref(0);
 const boards = shallowRef<Mesh[]>([]);
 
+const Z_OFFSET = 3;
+const CAMERA_OFFSET = 1;
+
 const { canvasRef, engine, camera, scene } = useBabylonScene({
   createCamera(param) {
     const { scene } = param;
@@ -97,7 +100,10 @@ const { canvasRef, engine, camera, scene } = useBabylonScene({
     // scene.debugLayer.show();
 
     initRenderingPipeline(param);
+
     boards.value = await initBoards(param);
+    processBoardsPosition(boards.value);
+
     focusBoard(currentIndex.value);
   },
 });
@@ -113,7 +119,7 @@ function initRenderingPipeline(
   );
 
   pipeline.depthOfFieldEnabled = true;
-  pipeline.depthOfField.focusDistance = 2 * 1000;
+  pipeline.depthOfField.focusDistance = (Z_OFFSET - CAMERA_OFFSET) * 1000;
   pipeline.depthOfField.focalLength = 100000;
   pipeline.depthOfField.fStop = 16;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
@@ -123,8 +129,6 @@ function initRenderingPipeline(
   return pipeline;
 }
 
-
-const OFFSET = 5;
 async function initBoards(
   { scene }: InitParam
 ) {
@@ -156,11 +160,6 @@ async function initBoards(
         const board = MeshBuilder.CreatePlane(`board-${i}`, {
           width: width / height, height: 1,
         });
-        board.position = new Vector3(
-          Math.random() * OFFSET - OFFSET / 2,
-          Math.random() * OFFSET - OFFSET / 2,
-          Math.random() * OFFSET - OFFSET / 2,
-        );
 
         const rotateZ = Math.PI / 2 * (i % 2);
         board.rotation = new Vector3(0, 0, rotateZ);
@@ -188,6 +187,27 @@ async function initBoards(
     },
   )
   return boards;
+}
+
+/** 分散每個 board 位置，每個 board 距離不小於 3 */
+function processBoardsPosition(boards: Mesh[]) {
+  const count = boards.length;
+  const depth = count * Z_OFFSET;
+
+  pipe(
+    range(0, count),
+    shuffle(),
+    forEach.indexed((i, j) => {
+      const board = boards[i];
+      if (!board) return;
+
+      board.position = new Vector3(
+        Math.random() * Z_OFFSET - Z_OFFSET * 2,
+        Math.random() * Z_OFFSET - Z_OFFSET * 2,
+        j * Z_OFFSET - depth / 2,
+      );
+    }),
+  )
 }
 
 const defaultImageInfo: Omit<ImageInfo, 'src'> = {
@@ -218,6 +238,7 @@ async function focusBoard(index: number) {
     },
   );
 
+  const currentPosition = currentCamera.position;
   const { x, y, z } = board.position;
   const { z: rotateZ } = board.rotation;
 
@@ -243,15 +264,23 @@ async function focusBoard(index: number) {
       ],
       z: [
         {
-          value: sum([
-            (z - currentCamera.position.z) / 2,
-            currentCamera.position.z,
-            -5,
-          ]),
+          value: pipe(
+            z - currentPosition.z,
+            (displacement) => {
+              console.log(`🚀 ~ displacement:`, displacement);
+              /** 小於 0 表示往射出螢幕移動 */
+              if (displacement < 0) {
+                return displacement + displacement / 2
+              }
+
+              return displacement / 2
+            },
+            add(currentPosition.z),
+          ),
           easing: 'easeInOutQuart',
         },
         {
-          value: z - 2,
+          value: z - CAMERA_OFFSET * 2,
           easing: 'easeInOutQuart',
         }
       ],
