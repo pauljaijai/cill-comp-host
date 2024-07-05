@@ -37,7 +37,7 @@ import { add, clone, forEach, map, pipe, range, shuffle, splice, sum } from 'rem
 import anime from 'animejs';
 
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
-import { useIntervalFn, useRefHistory } from '@vueuse/core';
+import { promiseTimeout, useIntervalFn, useRefHistory } from '@vueuse/core';
 
 import '@babylonjs/core/Debug/debugLayer';
 import '@babylonjs/inspector';
@@ -78,6 +78,10 @@ useIntervalFn(() => {
 }, 100);
 
 const currentIndex = ref(0);
+const { history: indexHistory } = useRefHistory(currentIndex, {
+  capacity: 2,
+})
+
 const boards = shallowRef<Mesh[]>([]);
 
 const Z_OFFSET = 3;
@@ -86,7 +90,11 @@ const CAMERA_OFFSET = 1;
 const { canvasRef, engine, camera, scene } = useBabylonScene({
   createCamera(param) {
     const { scene } = param;
-    const camera = new UniversalCamera('camera', new Vector3(0, 0, -10), scene);
+    const camera = new UniversalCamera(
+      'camera',
+      new Vector3(0, 0, props.images.length * Z_OFFSET),
+      scene
+    );
 
     return camera;
   },
@@ -102,8 +110,7 @@ const { canvasRef, engine, camera, scene } = useBabylonScene({
     initRenderingPipeline(param);
 
     boards.value = await initBoards(param);
-    processBoardsPosition(boards.value);
-
+    await processBoardsPosition(boards.value);
     focusBoard(currentIndex.value);
   },
 });
@@ -192,22 +199,26 @@ async function initBoards(
 /** 分散每個 board 位置，每個 board 距離不小於 3 */
 function processBoardsPosition(boards: Mesh[]) {
   const count = boards.length;
-  const depth = count * Z_OFFSET;
 
-  pipe(
+  const tasks = pipe(
     range(0, count),
     shuffle(),
-    forEach.indexed((i, j) => {
+    map.indexed((i, j) => {
       const board = boards[i];
       if (!board) return;
 
-      board.position = new Vector3(
-        Math.random() * Z_OFFSET - Z_OFFSET * 2,
-        Math.random() * Z_OFFSET - Z_OFFSET * 2,
-        j * Z_OFFSET - depth / 2,
-      );
+      return anime({
+        targets: board.position,
+        x: Math.random() * Z_OFFSET - Z_OFFSET / 2,
+        y: Math.random() * Z_OFFSET - Z_OFFSET / 2,
+        z: j * Z_OFFSET,
+        duration: 1,
+        easing: 'easeInOutQuart',
+      }).finished
     }),
   )
+
+  return Promise.all(tasks);
 }
 
 const defaultImageInfo: Omit<ImageInfo, 'src'> = {
@@ -238,7 +249,10 @@ async function focusBoard(index: number) {
     },
   );
 
-  const currentPosition = currentCamera.position;
+  const currentPosition = pipe(
+    indexHistory.value[1]?.snapshot,
+    (prevIndex) => boards.value[prevIndex]?.position ?? new Vector3(0, 0, 0),
+  );
   const { x, y, z } = board.position;
   const { z: rotateZ } = board.rotation;
 
@@ -267,7 +281,6 @@ async function focusBoard(index: number) {
           value: pipe(
             z - currentPosition.z,
             (displacement) => {
-              console.log(`🚀 ~ displacement:`, displacement);
               /** 小於 0 表示往射出螢幕移動 */
               if (displacement < 0) {
                 return displacement + displacement / 2
