@@ -78,10 +78,6 @@ useIntervalFn(() => {
 }, 100);
 
 const currentIndex = ref(0);
-const { history: indexHistory } = useRefHistory(currentIndex, {
-  capacity: 2,
-})
-
 const boards = shallowRef<Mesh[]>([]);
 
 const Z_OFFSET = 3;
@@ -249,10 +245,9 @@ async function focusBoard(index: number) {
     },
   );
 
-  const currentPosition = pipe(
-    indexHistory.value[1]?.snapshot,
-    (prevIndex) => boards.value[prevIndex]?.position ?? new Vector3(0, 0, 0),
-  );
+  const currentPosition = currentCamera.position
+    .clone()
+    .addInPlace(new Vector3(0, 0, CAMERA_OFFSET * 2));
   const { x, y, z } = board.position;
   const { z: rotateZ } = board.rotation;
 
