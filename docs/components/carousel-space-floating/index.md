@@ -6,15 +6,15 @@ description:
 import BasicUsage from '../../../src/components/carousel-space-floating/examples/basic-usage.vue'
 </script>
 
-# 標題
+# 空間懸浮輪播
 
-說明說明
+所有的圖片會漂浮在空間中！ヾ(◍'౪`◍)ﾉﾞ
 
 ## 使用範例
 
 ### 基本用法
 
-當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+圖片會漂浮在空間中，鏡頭會移動至目前圖片位置。
 
 <basic-usage class="h-[60vh]"/>
 
