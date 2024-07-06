@@ -14,7 +14,7 @@ import BasicUsage from '../../../src/components/carousel-space-floating/examples
 
 ### 基本用法
 
-圖片會漂浮在空間中，鏡頭會移動至目前圖片位置。
+所有的圖片會分布在空間中，切換圖片時，鏡頭會移動至目標圖片前方。
 
 <basic-usage class="h-[60vh]"/>
 
