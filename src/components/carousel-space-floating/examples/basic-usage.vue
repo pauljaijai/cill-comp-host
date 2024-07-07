@@ -18,7 +18,6 @@ import { ref } from 'vue';
 import CarouselSpaceFloating from '../carousel-space-floating.vue';
 
 const images = [
-  // '/profile-3.webp',
   '/painting-codfish-bakery.webp',
   '/painting-codfish-rain.webp',
   '/photography-fireworks.jpg',

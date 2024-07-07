@@ -31,7 +31,8 @@ import {
   QuinticEase,
   UniversalCamera,
   IAnimationKey,
-  Vector2
+  Vector2,
+  Engine
 } from '@babylonjs/core';
 import { add, clone, forEach, map, pipe, range, shuffle, splice, sum } from 'remeda';
 import anime from 'animejs';
@@ -63,7 +64,6 @@ const props = withDefaults(defineProps<Props>(), {
   images: () => [],
   autoplay: false,
   fpsVisible: false,
-
 });
 
 // #region Emits
@@ -104,7 +104,6 @@ const { canvasRef, engine, camera, scene } = useBabylonScene({
     // scene.debugLayer.show();
 
     initRenderingPipeline(param);
-
     boards.value = await initBoards(param);
     await processBoardsPosition(boards.value);
     focusBoard(currentIndex.value);
@@ -157,14 +156,12 @@ async function initBoards(
       const texture = new Texture(src, scene);
 
       texture.onLoadObservable.add(() => {
-        // console.log(`🚀 ~ texture onLoadObservable:`, src);
-
         const { width, height } = texture.getSize();
 
         /** 根據圖片比例產生 plane */
         const board = MeshBuilder.CreatePlane(`board-${i}`, {
           width: width / height, height: 1,
-        });
+        }, scene);
 
         const rotateZ = Math.PI / 2 * (i % 2);
         board.rotation = new Vector3(0, 0, rotateZ);
@@ -191,6 +188,7 @@ async function initBoards(
         .map(({ value }) => value);
     },
   )
+
   return boards;
 }
 
