@@ -39,8 +39,8 @@ import anime from 'animejs';
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import { promiseTimeout, useIntervalFn, useRefHistory } from '@vueuse/core';
 
-import '@babylonjs/core/Debug/debugLayer';
-import '@babylonjs/inspector';
+// import '@babylonjs/core/Debug/debugLayer';
+// import '@babylonjs/inspector';
 
 interface ImageInfo {
   src: string;
@@ -157,6 +157,8 @@ async function initBoards(
       const texture = new Texture(src, scene);
 
       texture.onLoadObservable.add(() => {
+        // console.log(`🚀 ~ texture onLoadObservable:`, src);
+
         const { width, height } = texture.getSize();
 
         /** 根據圖片比例產生 plane */

@@ -4,6 +4,7 @@ description:
 
 <script setup>
 import BasicUsage from '../../../src/components/carousel-space-floating/examples/basic-usage.vue'
+import CustomPosture from '../../../src/components/carousel-space-floating/examples/custom-posture.vue'
 </script>
 
 # 空間懸浮輪播
@@ -20,6 +21,16 @@ import BasicUsage from '../../../src/components/carousel-space-floating/examples
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/carousel-space-floating/examples/basic-usage.vue
+:::
+
+### 調整姿態
+
+所有的圖片會分布在空間中，切換圖片時，鏡頭會移動至目標圖片前方。
+
+<custom-posture class="h-[60vh]"/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/carousel-space-floating/examples/custom-posture.vue
 :::
 
 ## 原理
