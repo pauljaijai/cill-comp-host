@@ -102,7 +102,7 @@ useIntervalFn(() => {
 }, 100);
 
 const targetIndex = ref(props.initIndex);
-const isSwitching = ref(false);
+const isSwitching = ref(true);
 /** 動畫結束後注視的目標 */
 const stableTarget = computed(() => {
   if (isSwitching.value) return;

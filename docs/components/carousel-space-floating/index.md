@@ -17,7 +17,7 @@ import CustomPosture from '../../../src/components/carousel-space-floating/examp
 
 所有的圖片會分布在空間中，切換圖片時，鏡頭會移動至目標圖片前方。
 
-點擊滑鼠左鍵前往下一張，點擊滑鼠右鍵返回上一張。
+點擊左鍵下一張，右鍵返回上一張。
 
 <basic-usage class="h-[60vh]"/>
 
@@ -29,9 +29,9 @@ import CustomPosture from '../../../src/components/carousel-space-floating/examp
 
 可以微調每張圖片的姿態，包含偏移、旋轉和縮放。
 
-點擊滑鼠左鍵前往下一張，點擊滑鼠右鍵返回上一張。
+點擊左鍵下一張，右鍵返回上一張。
 
-<custom-posture class="h-[40vh]"/>
+<custom-posture />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/carousel-space-floating/examples/custom-posture.vue
