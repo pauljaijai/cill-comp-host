@@ -88,7 +88,7 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 
 ### [空間懸浮輪播](./carousel-space-floating/) <Badge type="info" text="carousel" />
 
-3D 懸浮效果的輪播元件。
+所有的圖片會漂浮在空間中！ヾ(◍'౪`◍)ﾉﾞ
 
 <div class="h-[70vh]">
   <carousel-space-floating  />
