@@ -90,7 +90,9 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 
 3D 懸浮效果的輪播元件。
 
-<carousel-space-floating  />
+<div class="h-[70vh]">
+  <carousel-space-floating  />
+</div>
 
 ## 游標
 
