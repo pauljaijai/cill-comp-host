@@ -1,7 +1,8 @@
 <template>
   <div
     class="flex flex-col gap-4 w-full border border-gray-300"
-    @click="handleClick"
+    @click="next"
+    @click.right.prevent="prev"
   >
     <carousel-space-floating
       ref="carouselRef"
@@ -13,11 +14,13 @@
 </template>
 
 <script setup lang="ts">
+import { Vector2 } from '@babylonjs/core';
 import { ref } from 'vue';
 
 import CarouselSpaceFloating from '../carousel-space-floating.vue';
+type Images = InstanceType<typeof CarouselSpaceFloating>['images'];
 
-const images = [
+const images: Images = [
   '/painting-codfish-bakery.webp',
   '/painting-codfish-rain.webp',
   '/photography-fireworks.jpg',
@@ -32,7 +35,11 @@ const images = [
 
 const carouselRef = ref<InstanceType<typeof CarouselSpaceFloating>>();
 
-const handleClick = () => {
+function next() {
   carouselRef.value?.next();
+}
+
+function prev() {
+  carouselRef.value?.prev();
 }
 </script>
