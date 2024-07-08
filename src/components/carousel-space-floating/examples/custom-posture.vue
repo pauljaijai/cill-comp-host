@@ -64,7 +64,7 @@
 
           <div
             v-if="isTarget('photography-spider-at-night')"
-            class=" absolute left-0 top-0 w-1/3 h-full flex-center"
+            class=" absolute left-0 top-0 w-2/5 h-full flex-center"
           >
             <div class="text-xs md:text-base text-white text-center md:leading-10">
               在無月的夜
@@ -73,7 +73,7 @@
               <br><br>
               燈火闌珊
               <br>
-              仍舊無風
+              晚餐依舊沒來
             </div>
           </div>
 
@@ -81,7 +81,7 @@
             v-if="isTarget('photography-street-cat')"
             class=" absolute left-0 top-0 w-1/2 h-full flex-center"
           >
-            <div class="text-xs md:text-base text-white text-center leading-7 md:leading-20">
+            <div class="text-xs md:text-base text-white text-center leading-7">
               欲言又止
               <br>
               肚子餓了？
@@ -123,8 +123,12 @@ const images: CarouselProp['images'] = map(
       offset: new Vector2(-0.7, 0),
       scale: new Vector2(1.5, 1.5),
     },
+    // {
+    //   src: '/photography-morning-light-of-rice.jpg',
+    //   scale: new Vector2(2, 2),
+    // },
     {
-      src: '/photography-morning-light-of-rice.jpg',
+      src: '/photography-gaomei-windmill.jpg',
       scale: new Vector2(2, 2),
     },
     {
@@ -132,10 +136,6 @@ const images: CarouselProp['images'] = map(
       offset: new Vector2(0.5, 0),
       scale: new Vector2(2, 2),
       rotation: new Vector3(0, -0.7, 0),
-    },
-    {
-      src: '/photography-gaomei-windmill.jpg',
-      scale: new Vector2(2, 2),
     },
     {
       src: '/photography-spider-at-night.jpg',
