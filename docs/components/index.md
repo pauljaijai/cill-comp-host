@@ -10,6 +10,8 @@ import WrapperKirbyMouthfulMode from '../../src/components/wrapper-kirby-mouthfu
 
 import CursorSidekick from '../../src/components/cursor-sidekick/examples/basic-usage.vue';
 
+import CarouselSpaceFloating from '../../src/components/carousel-space-floating/examples/custom-posture.vue';
+
 import TransitionShape from '../../src/components/transition-shape/examples/basic-usage.vue';
 
 import BgFirefly from '../../src/components/bg-firefly/examples/full-background.vue';
@@ -79,6 +81,16 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡• )
 
 <wrapper-kirby-mouthful-mode class="h-[70vh]" />
+
+## 輪播
+
+讓畫面更生動的輪播元件！◝( •ω• )◟
+
+### [空間懸浮輪播](./carousel-space-floating/) <Badge type="info" text="carousel" />
+
+3D 懸浮效果的輪播元件。
+
+<carousel-space-floating  />
 
 ## 游標
 

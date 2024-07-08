@@ -56,10 +56,6 @@ interface ImageInfo {
 interface Props {
   initIndex?: number;
   images?: Array<ImageInfo | string>;
-  /** 自動播放。若為 true，則預設每 5s 切換一次；
-   * number 則可自行指定毫秒。
-   */
-  autoplay?: boolean | number;
   fpsVisible?: boolean;
 
   /** 背景色。無限遠處的顏色 */
@@ -73,7 +69,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   initIndex: 0,
   images: () => [],
-  autoplay: false,
   fpsVisible: false,
   clearColor: () => new Color4(1, 1, 1, 1),
   fogColor: () => new Color3(1, 1, 0.95),
@@ -365,9 +360,13 @@ function prev() {
 
 // #region Methods
 defineExpose({
+  /** 目標 index */
   targetIndex,
+  /** 鏡頭穩定時，注視的目標。還沒穩定時為 undefined */
   stableTarget,
+  /** 下一張圖片 */
   next,
+  /** 上一張圖片 */
   prev,
 });
 // #endregion Methods
