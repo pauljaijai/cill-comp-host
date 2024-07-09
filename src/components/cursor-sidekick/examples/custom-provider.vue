@@ -28,7 +28,7 @@
       <hr>
 
       <img
-        src="/photography-稻穗.jpg"
+        src="/photography-ears-of-rice.jpg"
         url="https://www.flickr.com/photos/coodfish/albums/"
       >
     </div>
