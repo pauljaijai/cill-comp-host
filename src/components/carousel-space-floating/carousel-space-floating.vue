@@ -47,7 +47,7 @@ import { useIntervalFn } from '@vueuse/core';
 interface ImageInfo {
   src: string;
   offset?: Vector2;
-  scale?: Vector2;
+  scale?: Vector2 | number;
   rotation?: Vector3;
   duration?: number;
 }
@@ -202,7 +202,16 @@ async function initBoards(
 
         const rotateZ = Math.PI / 2 * (i % 2);
         board.rotation = new Vector3(0, 0, rotateZ).add(rotation);
-        board.scaling = new Vector3(scale.x, scale.y, 1);
+        board.scaling = pipe(
+          scale,
+          (value) => {
+            if (typeof value === 'number') {
+              return new Vector3(value, value, 1);
+            }
+
+            return new Vector3(value.x, value.y, 1);
+          },
+        );
 
         const material = new StandardMaterial(`material-${i}`, scene);
         material.diffuseTexture = texture;

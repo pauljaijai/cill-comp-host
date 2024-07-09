@@ -110,45 +110,36 @@ const images: CarouselProp['images'] = map(
     {
       src: '/painting-codfish-bakery.webp',
       offset: new Vector2(0.5, 0),
-      scale: new Vector2(1.4, 1.4),
+      scale: 1.4,
       rotation: new Vector3(0, -0.08, 0),
     },
     {
       src: '/painting-codfish-rain.webp',
-      scale: new Vector2(1.6, 1.6),
+      scale: 1.6,
       rotation: new Vector3(-0.05, 0, 0),
     },
     {
       src: '/photography-fireworks.jpg',
       offset: new Vector2(-0.7, 0),
-      scale: new Vector2(1.5, 1.5),
+      scale: 1.5,
     },
-    // {
-    //   src: '/photography-morning-light-of-rice.jpg',
-    //   scale: new Vector2(2, 2),
-    // },
     {
       src: '/photography-gaomei-windmill.jpg',
-      scale: new Vector2(2, 2),
+      scale: 2,
     },
     {
       src: '/photography-big-stupid-bird.jpg',
       offset: new Vector2(0.5, 0),
-      scale: new Vector2(2, 2),
+      scale: 2,
       rotation: new Vector3(0, -0.7, 0),
     },
     {
       src: '/photography-spider-at-night.jpg',
-      scale: new Vector2(2.26, 2.26),
+      scale: 2.26,
     },
-    // {
-    //   src: '/photography-ears-of-rice.jpg',
-    //   offset: new Vector2(0.2, 0),
-    //   scale: new Vector2(2.26, 2.26),
-    // },
     {
       src: '/photography-street-cat.jpg',
-      scale: new Vector2(2, 2),
+      scale: 2,
     },
   ],
   (value) => ({
@@ -159,7 +150,6 @@ const images: CarouselProp['images'] = map(
 
 function isTarget(name: string) {
   const target = carouselRef.value?.stableTarget;
-
   if (!target) return;
 
   if (typeof target === 'string') {
