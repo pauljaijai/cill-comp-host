@@ -29,6 +29,8 @@ import CustomPosture from '../../../src/components/carousel-space-floating/examp
 
 可以微調每張圖片的姿態，包含偏移、旋轉和縮放。
 
+配合文字，製作獨特的輪播吧。( ´ ▽ ` )ﾉ
+
 點擊左鍵下一張，右鍵返回上一張。
 
 <custom-posture />
