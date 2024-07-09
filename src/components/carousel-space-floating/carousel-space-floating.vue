@@ -238,6 +238,15 @@ async function initBoards(
   return boards;
 }
 
+/** 取得指定分布範圍。
+ * 
+ * 例如：min = 3, max = 5，則回傳 -5 ~ -3 與 3 ~ 5 之間的隨機數
+ */
+function getRandomRange(min: number, max: number): number {
+  const range = max - min;
+  return (Math.random() * range + min) * (Math.random() > 0.5 ? 1 : -1);
+}
+
 /** 分散每個 board 位置，每個 board 距離不小於 3 */
 function processBoardsPosition(boards: Mesh[]) {
   const count = boards.length;
@@ -251,10 +260,10 @@ function processBoardsPosition(boards: Mesh[]) {
 
       return anime({
         targets: board.position,
-        x: Math.random() * Z_OFFSET - Z_OFFSET / 2,
-        y: Math.random() * Z_OFFSET - Z_OFFSET / 2,
+        x: getRandomRange(1, Z_OFFSET),
+        y: getRandomRange(1, Z_OFFSET),
         z: j * Z_OFFSET,
-        duration: 1,
+        duration: 0,
         easing: 'easeInOutQuart',
       }).finished
     }),
