@@ -265,7 +265,7 @@ function processBoardsPosition(boards: Mesh[]) {
 
 const defaultImageInfo: Required<Omit<ImageInfo, 'src'>> = {
   offset: new Vector2(0, 0),
-  scale: new Vector2(1, 1),
+  scale: 1,
   rotation: new Vector3(0, 0, 0),
   duration: 3000,
 }
