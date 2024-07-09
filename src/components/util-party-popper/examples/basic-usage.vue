@@ -91,6 +91,11 @@ function emit(
 
   const velocityRange = { min: 2, max: 8 }
 
+  if (!direction) {
+    popperRef.value?.emit(position);
+    return;
+  }
+
   const param = conditional(direction,
     [
       isDeepEqual('rt'),
@@ -142,7 +147,6 @@ function emit(
         },
       }))
     ],
-    conditional.defaultCase(() => position),
   );
 
   popperRef.value?.emit(param);
