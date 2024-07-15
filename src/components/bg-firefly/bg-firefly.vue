@@ -106,7 +106,7 @@ const { canvasRef, engine } = useBabylonScene({
     }
 
     // 背景透明
-    scene.clearColor = new Color4(0, 0, 0, 0);
+    scene.clearColor = new Color4(0, 0, 0, 0.01);
 
     // 調整預設光源
     const defaultLight = scene.lights.at(-1);
