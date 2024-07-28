@@ -74,11 +74,11 @@ async function enter() {
     targets: `.${targetClass}`,
     opacity: [0, 1],
     translateX: () => [
-      anime.random(20, -20),
+      anime.random(-30, -10),
       0,
     ],
     translateY: () => [
-      anime.random(20, -20),
+      anime.random(-20, 20),
       0,
     ],
     filter: ['blur(10px)', 'blur(0px)'],
