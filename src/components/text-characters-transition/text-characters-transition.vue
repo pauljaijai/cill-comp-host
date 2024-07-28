@@ -8,6 +8,7 @@
       :key="i"
       aria-hidden
       :class="targetClass"
+      class="inline-block"
     >
       {{ char.value }}
     </span>
@@ -72,9 +73,19 @@ async function enter() {
   anime({
     targets: `.${targetClass}`,
     opacity: [0, 1],
+    translateX: () => [
+      anime.random(20, -20),
+      0,
+    ],
+    translateY: () => [
+      anime.random(20, -20),
+      0,
+    ],
+    filter: ['blur(10px)', 'blur(0px)'],
     delay(el, i) {
       return i * 100;
-    }
+    },
+    easing: 'easeOutCirc',
   });
 }
 
@@ -101,7 +112,6 @@ async function leave(duration?: number) {
 }
 
 watch(() => props.visible, (visible) => {
-  console.log(`🚀 ~ visible:`, visible);
   visible ? enter() : leave()
 });
 
