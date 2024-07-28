@@ -25,7 +25,7 @@ type AnimeFuncParam = (
   index: number,
   /** 動畫總數 */
   length: number,
-) => Omit<anime.AnimeParams, 'targets'>;
+) => anime.AnimeParams;
 
 // #region Props
 interface Props {
