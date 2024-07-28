@@ -25,6 +25,10 @@ interface Props {
    * @default 'p'
    */
   tag?: string;
+  /** 如何切割文字
+   * 
+   * @default /.*?/u
+   */
   splitter?: RegExp | ((label: string) => string[]);
 }
 // #endregion Props
@@ -45,15 +49,11 @@ const labelText = computed(() => props.label);
 const chars = computed(() => pipe(
   props.label,
   (label) => {
-    if (!props.splitter) {
-      return label.split(/.*?/u);
+    if (typeof props.splitter === 'function') {
+      return props.splitter(label);
     }
 
-    if (props.splitter instanceof RegExp) {
-      return label.split(props.splitter);
-    }
-
-    return props.splitter(label);
+    return label.split(props.splitter ?? /.*?/u);
   },
   map((char) => {
     return {
