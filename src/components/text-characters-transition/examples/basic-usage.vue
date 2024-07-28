@@ -14,7 +14,7 @@
     </div>
 
     <div class="flex">
-      <text-characters-transition />
+      <text-characters-transition label="我是鱈魚🐟" />
     </div>
   </div>
 </template>

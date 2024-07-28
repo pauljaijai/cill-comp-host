@@ -1,29 +1,56 @@
-<!-- <template></template> -->
+<template>
+  <component
+    :is="props.tag"
+    :aria-label="labelText"
+  >
+    <span
+      v-for="char, i in chars"
+      :key="i"
+      aria-hidden
+    >
+      {{ char.value }}
+    </span>
+  </component>
+</template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 // #region Props
 interface Props {
-  modelValue?: string;
+  label: string;
+  /** html tag
+   * 
+   * @default 'p'
+   */
+  tag?: string;
+  splitter?: RegExp;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
+  label: '',
+  tag: 'p',
+  splitter: () => /.*?/u,
 });
 
 // #region Emits
 const emit = defineEmits<{
-  'update:modelValue': [value: Props['modelValue']];
+  'update:modelValue': [];
 }>();
 // #endregion Emits
 
-// #region Slots
-defineSlots<{
-  default?: () => unknown;
-}>();
-// #endregion Slots
+const labelText = computed(() => props.label);
 
+const chars = computed(() => {
+  return props.label
+    .split(props.splitter)
+    .map((char) => {
+
+      return {
+        value: char,
+      }
+    });
+});
 
 // #region Methods
 defineExpose({});

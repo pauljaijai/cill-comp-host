@@ -47,7 +47,3 @@ import BasicUsage from '../../../src/components/text-characters-transition/examp
 ### Methods
 
 <<< ../../../src/components/text-characters-transition/text-characters-transition.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/text-characters-transition/text-characters-transition.vue/#Slots
