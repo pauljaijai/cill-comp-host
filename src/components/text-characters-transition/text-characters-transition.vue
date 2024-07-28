@@ -7,6 +7,7 @@
       v-for="char, i in chars"
       :key="i"
       aria-hidden
+      :class="targetClass"
     >
       {{ char.value }}
     </span>
@@ -14,11 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import { map, pipe } from 'remeda';
-import { computed, ref } from 'vue';
+import anime from 'animejs';
+import { nanoid } from 'nanoid';
+import { isNullish, map, pipe } from 'remeda';
+import { computed, onMounted, ref, watch } from 'vue';
 
 // #region Props
 interface Props {
+  visible?: boolean;
   label: string;
   /** html tag
    * 
@@ -33,6 +37,7 @@ interface Props {
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
+  visible: true,
   label: '',
   tag: 'p',
   splitter: undefined,
@@ -44,6 +49,7 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
+const targetClass = nanoid();
 const labelText = computed(() => props.label);
 
 const chars = computed(() => pipe(
@@ -61,6 +67,50 @@ const chars = computed(() => pipe(
     }
   })
 ));
+
+async function enter() {
+  anime({
+    targets: `.${targetClass}`,
+    opacity: [0, 1],
+    delay(el, i) {
+      return i * 100;
+    }
+  });
+}
+
+async function leave(duration?: number) {
+  if (!isNullish(duration)) {
+    anime({
+      targets: `.${targetClass}`,
+      opacity: [1, 0],
+      duration,
+      delay(el, i) {
+        return i * 100;
+      }
+    });
+    return;
+  }
+
+  anime({
+    targets: `.${targetClass}`,
+    opacity: [1, 0],
+    delay(el, i) {
+      return i * 100;
+    }
+  });
+}
+
+watch(() => props.visible, (visible) => {
+  console.log(`🚀 ~ visible:`, visible);
+  visible ? enter() : leave()
+});
+
+
+onMounted(() => {
+  if (!props.visible) {
+    leave(0);
+  }
+});
 
 // #region Methods
 defineExpose({});

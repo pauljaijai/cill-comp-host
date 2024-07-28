@@ -1,14 +1,14 @@
 ---
-description: 
+description: 可以針對每個文字設定進入和離開動畫
 ---
 
 <script setup>
 import BasicUsage from '../../../src/components/text-characters-transition/examples/basic-usage.vue'
 </script>
 
-# 標題
+# 逐字轉場
 
-說明說明
+可以針對每個文字設定進入和離開動畫
 
 ## 使用範例
 
