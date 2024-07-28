@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import { map, pipe } from 'remeda';
 import { computed, ref } from 'vue';
 
 // #region Props
@@ -24,13 +25,13 @@ interface Props {
    * @default 'p'
    */
   tag?: string;
-  splitter?: RegExp;
+  splitter?: RegExp | ((label: string) => string[]);
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   tag: 'p',
-  splitter: () => /.*?/u,
+  splitter: undefined,
 });
 
 // #region Emits
@@ -41,16 +42,25 @@ const emit = defineEmits<{
 
 const labelText = computed(() => props.label);
 
-const chars = computed(() => {
-  return props.label
-    .split(props.splitter)
-    .map((char) => {
+const chars = computed(() => pipe(
+  props.label,
+  (label) => {
+    if (!props.splitter) {
+      return label.split(/.*?/u);
+    }
 
-      return {
-        value: char,
-      }
-    });
-});
+    if (props.splitter instanceof RegExp) {
+      return label.split(props.splitter);
+    }
+
+    return props.splitter(label);
+  },
+  map((char) => {
+    return {
+      value: char,
+    }
+  })
+));
 
 // #region Methods
 defineExpose({});
