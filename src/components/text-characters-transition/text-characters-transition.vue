@@ -7,7 +7,7 @@
       v-for="char, i in chars"
       :key="i"
       aria-hidden
-      :class="char.class"
+      :id="char.id"
       class="inline-block"
     >
       {{ char.value }}
@@ -48,8 +48,8 @@ interface Props {
    */
   splitter?: RegExp | ((label: string) => string[]);
 
-  defaultEnter?: AnimeFuncParam;
-  defaultLeave?: AnimeFuncParam;
+  enter?: AnimeFuncParam;
+  leave?: AnimeFuncParam;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -58,14 +58,14 @@ const props = withDefaults(defineProps<Props>(), {
   tag: 'p',
   splitter: undefined,
 
-  defaultEnter: () => ({
+  enter: (i, length) => ({
     opacity: [0, 1],
-    delay: (el, i) => i * 50,
+    delay: i * 50,
   } satisfies anime.AnimeParams),
 
-  defaultLeave: () => ({
+  leave: (i, length) => ({
     opacity: [1, 0],
-    delay: (el, i) => i * 50,
+    delay: i * 50,
   } satisfies anime.AnimeParams),
 });
 
@@ -75,8 +75,7 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-const targetClass = nanoid();
-const target = `.${targetClass}`;
+const id = nanoid();
 
 const chars = computed(() => pipe(
   props.label,
@@ -93,18 +92,21 @@ const chars = computed(() => pipe(
     return data.split(props.splitter ?? /.*?/u);
   },
   map.strict.indexed((data, i, array) => {
+    const idName = `${id}-${i}`;
+
     if (typeof data === 'string') {
       return {
         value: data,
-        class: targetClass,
+        id: idName,
         i,
-        enter: () => props.defaultEnter(i, array.length),
-        leave: () => props.defaultLeave(i, array.length),
+        enter: () => props.enter(i, array.length),
+        leave: () => props.leave(i, array.length),
       }
     }
 
     return {
       ...data,
+      id: idName,
       i,
     }
   })
@@ -116,11 +118,12 @@ const labelText = computed(() => pipe(
   join(''),
 ));
 
-async function enter() {
+async function startEnter() {
   chars.value.forEach((char) => {
+    const data = char.enter(char.i, chars.value.length);
     anime({
-      ...char.enter(char.i, chars.value.length),
-      targets: target
+      ...data,
+      targets: `#${char.id}`,
     });
   });
 
@@ -145,13 +148,13 @@ async function enter() {
   // });
 }
 
-async function leave(duration?: number) {
+async function startLeave(duration?: number) {
   if (!isNullish(duration)) {
     chars.value.forEach((char) => {
       anime({
         ...char.leave(char.i, chars.value.length),
         duration,
-        targets: target,
+        targets: `#${char.id}`,
       });
     });
     return;
@@ -160,7 +163,7 @@ async function leave(duration?: number) {
   chars.value.forEach((char) => {
     anime({
       ...char.leave(char.i, chars.value.length),
-      targets: target,
+      targets: `#${char.id}`,
     });
   });
 
@@ -182,13 +185,13 @@ async function leave(duration?: number) {
 }
 
 watch(() => props.visible, (visible) => {
-  visible ? enter() : leave()
+  visible ? startEnter() : startLeave()
 });
 
 
 onMounted(() => {
   if (!props.visible) {
-    leave(0);
+    startLeave(0);
   }
 });
 

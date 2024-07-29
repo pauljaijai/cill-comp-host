@@ -16,13 +16,13 @@
       <text-characters-transition
         :visible="visible"
         label="一段很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長很長的文字"
-        :default-enter="() => ({
+        :enter="(i) => ({
           opacity: [0, 1],
-          delay: (el, i) => i * 5,
+          delay: i * 5,
         })"
-        :default-leave="() => ({
+        :leave="(i) => ({
           opacity: [1, 0],
-          delay: (el, i) => i * 5,
+          delay: i * 5,
         })"
       />
     </div>
