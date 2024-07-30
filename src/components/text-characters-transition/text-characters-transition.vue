@@ -129,14 +129,15 @@ const labelText = computed(() => pipe(
   join(''),
 ));
 
-async function startEnter(duration?: number) {
+async function startEnter(end = false) {
   anime.remove(`.${id}`);
 
   chars.value.forEach((char) => {
     const data = char.enter();
 
-    if (!isNullish(duration)) {
-      data.duration = duration;
+    if (end) {
+      data.duration = 0;
+      data.delay = 0;
     }
 
     anime({
@@ -146,14 +147,15 @@ async function startEnter(duration?: number) {
   });
 }
 
-async function startLeave(duration?: number) {
+async function startLeave(end = false) {
   anime.remove(`.${id}`);
 
   chars.value.forEach((char) => {
     const data = char.leave();
 
-    if (!isNullish(duration)) {
-      data.duration = duration;
+    if (end) {
+      data.duration = 0;
+      data.delay = 0;
     }
 
     anime({
@@ -168,7 +170,7 @@ watch(() => props.visible, (visible) => {
 });
 
 onMounted(() => {
-  props.visible ? startEnter(0) : startLeave(0)
+  props.visible ? startEnter(true) : startLeave(true)
 });
 
 // #region Methods
