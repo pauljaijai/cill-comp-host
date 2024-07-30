@@ -18,19 +18,28 @@
 
 <script setup lang="ts">
 import anime from 'animejs';
-import { nanoid } from 'nanoid';
-import { identity, isNullish, join, map, pipe, range, times } from 'remeda';
+import { nanoid, customAlphabet } from 'nanoid';
+import { identity, isNullish, join, map, pipe, piped, range, times } from 'remeda';
 import { computed, onMounted, ref, watch, CSSProperties } from 'vue';
 import { AnimeFuncParam } from './type';
-import { transitionProvider } from './transition-provider';
+import { TransitionName, transitionProvider } from './transition-provider';
 
 // #region Props
+type AnimeFuncParamWithName = anime.AnimeParams & {
+  name?: `${TransitionName}`;
+}
+
+/** 可以直接給 TransitionName 或者包含 name 與其他動畫參數，用於微調動畫效果 */
+type AnimeParam =
+  | `${TransitionName}`
+  | ((index: number, length: number) => AnimeFuncParamWithName);
+
 interface Props {
   visible?: boolean;
   label: string | string[] | Array<{
     value: string;
-    enter: AnimeFuncParam;
-    leave: AnimeFuncParam;
+    enter: AnimeParam;
+    leave: AnimeParam;
   }>;
   /** html tag
    * 
@@ -44,9 +53,10 @@ interface Props {
    * @default /.*?/u
    */
   splitter?: RegExp | ((label: string) => string[]);
-
-  enter?: AnimeFuncParam;
-  leave?: AnimeFuncParam;
+  /** 進入動畫設定 */
+  enter?: AnimeParam;
+  /** 離開動畫設定 */
+  leave?: AnimeParam;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -64,7 +74,38 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-const id = nanoid();
+const id = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 10)();
+
+/** 沒有指定 TransitionName 的話預設都是 fade */
+function getAnimeParam(
+  type: 'enter' | 'leave',
+  i: number,
+  length: number,
+  data?: AnimeParam,
+): anime.AnimeParams {
+  const defaultParam = transitionProvider.fade[type](i, length);
+
+  if (!data) return defaultParam;
+
+  if (typeof data === 'string') {
+    return transitionProvider[data][type](i, length);
+  }
+
+  const param = data(i, length);
+
+  if (param.name) {
+    const providerParam = transitionProvider[param.name][type](i, length);
+    return {
+      ...providerParam,
+      ...param,
+    }
+  }
+
+  return {
+    ...defaultParam,
+    ...param,
+  }
+}
 
 const chars = computed(() => pipe(
   props.label,
@@ -88,21 +129,17 @@ const chars = computed(() => pipe(
         value: data,
         id: idName,
         i,
-        enter: () => ({
-          ...transitionProvider.fade.enter(i, array.length),
-          ...props.enter?.(i, array.length),
-        }),
-        leave: () => ({
-          ...transitionProvider.fade.leave(i, array.length),
-          ...props.leave?.(i, array.length),
-        }),
+        enter: () => getAnimeParam('enter', i, array.length, props.enter),
+        leave: () => getAnimeParam('leave', i, array.length, props.leave),
       }
     }
 
     return {
-      ...data,
+      value: data.value,
       id: idName,
       i,
+      enter: () => getAnimeParam('enter', i, array.length, data.enter),
+      leave: () => getAnimeParam('leave', i, array.length, data.leave),
     }
   })
 ));
@@ -113,12 +150,18 @@ const labelText = computed(() => pipe(
   join(''),
 ));
 
-async function startEnter() {
+async function startEnter(duration?: number) {
   anime.remove(`.${id}`);
 
   chars.value.forEach((char) => {
+    const data = char.enter();
+
+    if (!isNullish(duration)) {
+      data.duration = duration;
+    }
+
     anime({
-      ...char.enter(char.i, chars.value.length),
+      ...data,
       targets: `#${char.id}`,
     });
   });
@@ -148,7 +191,7 @@ async function startLeave(duration?: number) {
   anime.remove(`.${id}`);
 
   chars.value.forEach((char) => {
-    const data = char.leave(char.i, chars.value.length);
+    const data = char.leave();
 
     if (!isNullish(duration)) {
       data.duration = duration;
@@ -159,33 +202,14 @@ async function startLeave(duration?: number) {
       targets: `#${char.id}`,
     });
   });
-
-  // if (!isNullish(duration)) {
-  //   anime({
-  //     targets: target,
-  //     opacity: [1, 0],
-  //     duration,
-  //     delay: (el, i) => i * 50,
-  //   });
-  //   return;
-  // }
-
-  // anime({
-  //   targets: target,
-  //   opacity: [1, 0],
-  //   delay: (el, i) => i * 50,
-  // });
 }
 
 watch(() => props.visible, (visible) => {
   visible ? startEnter() : startLeave()
 });
 
-
 onMounted(() => {
-  if (!props.visible) {
-    startLeave(0);
-  }
+  props.visible ? startEnter(0) : startLeave(0)
 });
 
 // #region Methods

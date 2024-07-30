@@ -5,6 +5,7 @@ description: 讓文字有進入進出動畫吧！(๑•̀ㅂ•́)و✧
 <script setup>
 import BasicUsage from '../../../src/components/text-characters-transition/examples/basic-usage.vue'
 import CustomSplitter from '../../../src/components/text-characters-transition/examples/custom-splitter.vue'
+import TransitionType from '../../../src/components/text-characters-transition/examples/transition-type.vue'
 </script>
 
 # 逐字轉場
@@ -31,6 +32,16 @@ import CustomSplitter from '../../../src/components/text-characters-transition/e
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/text-characters-transition/examples/custom-splitter.vue
+:::
+
+### 轉場類型
+
+使用各種不同的轉場效果吧。◝( •ω• )◟
+
+<transition-type/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/text-characters-transition/examples/transition-type.vue
 :::
 
 ## 原理
