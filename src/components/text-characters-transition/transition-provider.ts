@@ -7,6 +7,7 @@ export enum TransitionName {
   BLUR = 'blur',
   CLIP_RIGHT = 'clip-right',
   RANDOM_SPIN = 'random-spin',
+  LANDING = 'landing',
 }
 
 export const transitionProvider: Record<
@@ -41,7 +42,6 @@ export const transitionProvider: Record<
   },
   [TransitionName.CLIP_RIGHT]: {
     enter: (i) => ({
-      opacity: 1,
       clipPath: [
         'polygon(0 0, 0 0, 0 100%, 0% 100%)',
         'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
@@ -50,7 +50,6 @@ export const transitionProvider: Record<
       easing: 'easeInOutCirc',
     }),
     leave: (i) => ({
-      opacity: 1,
       clipPath: [
         'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
         'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)',
@@ -61,16 +60,52 @@ export const transitionProvider: Record<
   },
   [TransitionName.RANDOM_SPIN]: {
     enter: (i) => ({
-      opacity: 1,
       rotate: () => 0,
-      delay: i * 10,
-      easing: 'easeInOutCirc',
+      duration: 1200,
+      delay: i * 50,
     }),
     leave: (i) => ({
-      opacity: 1,
       rotate: () => anime.random(270, 60) * sample([-1, 1] as const, 1)[0],
-      delay: i * 10,
-      easing: 'easeInOutCirc',
+      duration: 1200,
+      delay: i * 50,
+    }),
+  },
+  [TransitionName.LANDING]: {
+    enter: (i) => ({
+      transformOrigin: ['50% 100%', '50% 100%'],
+      scaleX: [
+        { value: 0, },
+        { value: 1.2, easing: 'easeInOutCirc' },
+        { value: 1, easing: 'easeInOutCirc', duration: 300 },
+      ],
+      scaleY: [
+        { value: 1.5, },
+        { value: 0.5, easing: 'easeInOutCirc' },
+        { value: 1, easing: 'easeInOutCirc', duration: 300 },
+      ],
+      opacity: 1,
+      duration: 1400,
+      delay: i * 50,
+    }),
+    leave: (i) => ({
+      transformOrigin: ['50% 100%', '50% 100%'],
+      scaleX: [
+        { value: 1 },
+        { value: 1.2, easing: 'easeInOutCirc' },
+        { value: 0 },
+      ],
+      scaleY: [
+        { value: 1 },
+        { value: 0.5, easing: 'easeInOutCirc' },
+        { value: 1.5 },
+      ],
+      opacity: [
+        { value: 1, },
+        { value: 1, },
+        { value: 0, },
+      ],
+      duration: 1400,
+      delay: i * 50,
     }),
   },
 }

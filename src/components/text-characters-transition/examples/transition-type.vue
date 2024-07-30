@@ -26,10 +26,14 @@ import { ref } from 'vue';
 import BaseCheckbox from '../../base-checkbox.vue';
 import TextCharactersTransition from '../text-characters-transition.vue';
 import { ExtractComponentProps } from '../../../types';
+import { useIntervalFn } from '@vueuse/core';
 
 type Param = ExtractComponentProps<typeof TextCharactersTransition>
 
 const visible = ref(false);
+useIntervalFn(() => {
+  visible.value = !visible.value;
+}, 2000);
 
 const list: Array<
   Pick<Param, 'name' | 'enter' | 'leave'>
@@ -38,5 +42,6 @@ const list: Array<
     { name: 'blur' },
     { name: 'clip-right' },
     { name: 'random-spin' },
+    { name: 'landing' },
   ]
 </script>
