@@ -5,9 +5,10 @@
   >
     <span
       v-for="char, i in chars"
-      :key="i"
-      aria-hidden
       :id="char.id"
+      :key="i"
+      :class="id"
+      aria-hidden
       class="inline-block"
     >
       {{ char.value }}
@@ -20,12 +21,8 @@ import anime from 'animejs';
 import { nanoid } from 'nanoid';
 import { identity, isNullish, join, map, pipe, range, times } from 'remeda';
 import { computed, onMounted, ref, watch, CSSProperties } from 'vue';
-
-type AnimeFuncParam = (
-  index: number,
-  /** 動畫總數 */
-  length: number,
-) => anime.AnimeParams;
+import { AnimeFuncParam } from './type';
+import { transitionProvider } from './transition-provider';
 
 // #region Props
 interface Props {
@@ -57,16 +54,8 @@ const props = withDefaults(defineProps<Props>(), {
   label: '',
   tag: 'p',
   splitter: undefined,
-
-  enter: (i, length) => ({
-    opacity: [0, 1],
-    delay: i * 50,
-  } satisfies anime.AnimeParams),
-
-  leave: (i, length) => ({
-    opacity: [1, 0],
-    delay: i * 50,
-  } satisfies anime.AnimeParams),
+  enter: undefined,
+  leave: undefined,
 });
 
 // #region Emits
@@ -99,8 +88,14 @@ const chars = computed(() => pipe(
         value: data,
         id: idName,
         i,
-        enter: () => props.enter(i, array.length),
-        leave: () => props.leave(i, array.length),
+        enter: () => ({
+          ...transitionProvider.fade.enter(i, array.length),
+          ...props.enter?.(i, array.length),
+        }),
+        leave: () => ({
+          ...transitionProvider.fade.leave(i, array.length),
+          ...props.leave?.(i, array.length),
+        }),
       }
     }
 
@@ -119,10 +114,11 @@ const labelText = computed(() => pipe(
 ));
 
 async function startEnter() {
+  anime.remove(`.${id}`);
+
   chars.value.forEach((char) => {
-    const data = char.enter(char.i, chars.value.length);
     anime({
-      ...data,
+      ...char.enter(char.i, chars.value.length),
       targets: `#${char.id}`,
     });
   });
@@ -149,20 +145,17 @@ async function startEnter() {
 }
 
 async function startLeave(duration?: number) {
-  if (!isNullish(duration)) {
-    chars.value.forEach((char) => {
-      anime({
-        ...char.leave(char.i, chars.value.length),
-        duration,
-        targets: `#${char.id}`,
-      });
-    });
-    return;
-  }
+  anime.remove(`.${id}`);
 
   chars.value.forEach((char) => {
+    const data = char.leave(char.i, chars.value.length);
+
+    if (!isNullish(duration)) {
+      data.duration = duration;
+    }
+
     anime({
-      ...char.leave(char.i, chars.value.length),
+      ...data,
       targets: `#${char.id}`,
     });
   });
