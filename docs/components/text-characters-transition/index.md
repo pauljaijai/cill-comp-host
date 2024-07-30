@@ -1,25 +1,36 @@
 ---
-description: 可以針對每個文字設定進入和離開動畫
+description: 讓文字有進入進出動畫吧！(๑•̀ㅂ•́)و✧
 ---
 
 <script setup>
 import BasicUsage from '../../../src/components/text-characters-transition/examples/basic-usage.vue'
+import CustomSplitter from '../../../src/components/text-characters-transition/examples/custom-splitter.vue'
 </script>
 
 # 逐字轉場
 
-可以針對每個文字設定進入和離開動畫
+讓文字有進入進出動畫吧！(๑•̀ㅂ•́)و✧
 
 ## 使用範例
 
 ### 基本用法
 
-當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+預設就是經典的淡入淡出。( •̀ ω •́ )✧
 
 <basic-usage/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/text-characters-transition/examples/basic-usage.vue
+:::
+
+### 切分文字
+
+可以自行設定文字分割邏輯或是直接分好的文字。
+
+<custom-splitter/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/text-characters-transition/examples/custom-splitter.vue
 :::
 
 ## 原理
