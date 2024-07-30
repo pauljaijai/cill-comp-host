@@ -6,15 +6,15 @@
       class="border p-4 rounded"
     />
 
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 text-3xl font-bold tracking-wider">
       <text-characters-transition
+        v-for="({ name, enter, leave }, i) in list"
+        :key="i"
         :visible="visible"
-        label="一隻熱愛程式的魚，但是沒有手指可以打鍵盤，更買不到能在水裡用的電腦。"
-      />
-
-      <text-characters-transition
-        :visible="visible"
-        label="一隻熱愛程式的魚，但是沒有手指可以打鍵盤，更買不到能在水裡用的電腦。"
+        label="一段展示用的文字"
+        :name="name"
+        :enter="enter"
+        :leave="leave"
       />
     </div>
   </div>
@@ -25,6 +25,18 @@ import { ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
 import TextCharactersTransition from '../text-characters-transition.vue';
+import { ExtractComponentProps } from '../../../types';
+
+type Param = ExtractComponentProps<typeof TextCharactersTransition>
 
 const visible = ref(false);
+
+const list: Array<
+  Pick<Param, 'name' | 'enter' | 'leave'>
+> = [
+    {},
+    { name: 'blur' },
+    { name: 'clip-right' },
+    { name: 'random-spin' },
+  ]
 </script>

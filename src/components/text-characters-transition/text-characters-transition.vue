@@ -25,21 +25,12 @@ import { AnimeFuncParam } from './type';
 import { TransitionName, transitionProvider } from './transition-provider';
 
 // #region Props
-type AnimeFuncParamWithName = anime.AnimeParams & {
-  name?: `${TransitionName}`;
-}
-
-/** 可以直接給 TransitionName 或者包含 name 與其他動畫參數，用於微調動畫效果 */
-type AnimeParam =
-  | `${TransitionName}`
-  | ((index: number, length: number) => AnimeFuncParamWithName);
-
 interface Props {
   visible?: boolean;
   label: string | string[] | Array<{
     value: string;
-    enter: AnimeParam;
-    leave: AnimeParam;
+    enter: AnimeFuncParam;
+    leave: AnimeFuncParam;
   }>;
   /** html tag
    * 
@@ -53,10 +44,12 @@ interface Props {
    * @default /.*?/u
    */
   splitter?: RegExp | ((label: string) => string[]);
+  /** 過場名稱。使用預設內容 */
+  name?: `${TransitionName}`;
   /** 進入動畫設定 */
-  enter?: AnimeParam;
+  enter?: AnimeFuncParam;
   /** 離開動畫設定 */
-  leave?: AnimeParam;
+  leave?: AnimeFuncParam;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -64,6 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
   label: '',
   tag: 'p',
   splitter: undefined,
+  name: 'fade',
   enter: undefined,
   leave: undefined,
 });
@@ -81,29 +75,14 @@ function getAnimeParam(
   type: 'enter' | 'leave',
   i: number,
   length: number,
-  data?: AnimeParam,
+  data?: AnimeFuncParam,
 ): anime.AnimeParams {
-  const defaultParam = transitionProvider.fade[type](i, length);
-
+  const defaultParam = transitionProvider[props.name][type](i, length);
   if (!data) return defaultParam;
-
-  if (typeof data === 'string') {
-    return transitionProvider[data][type](i, length);
-  }
-
-  const param = data(i, length);
-
-  if (param.name) {
-    const providerParam = transitionProvider[param.name][type](i, length);
-    return {
-      ...providerParam,
-      ...param,
-    }
-  }
 
   return {
     ...defaultParam,
-    ...param,
+    ...data(i, length),
   }
 }
 
@@ -165,26 +144,6 @@ async function startEnter(duration?: number) {
       targets: `#${char.id}`,
     });
   });
-
-  // anime({
-  //   targets: target,
-  //   opacity: [0, 1],
-  //   translateX: () => [
-  //     anime.random(-30, -10),
-  //     0,
-  //   ],
-  //   translateY: () => [
-  //     anime.random(-20, 20),
-  //     0,
-  //   ],
-  //   rotate: () => [
-  //     anime.random(-30, 30),
-  //     0,
-  //   ],
-  //   filter: ['blur(10px)', 'blur(0px)'],
-  //   delay: (el, i) => i * 100,
-  //   easing: 'easeOutCirc',
-  // });
 }
 
 async function startLeave(duration?: number) {
