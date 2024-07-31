@@ -6,6 +6,7 @@ description: 讓文字有進入進出動畫吧！(๑•̀ㅂ•́)و✧
 import BasicUsage from '../../../src/components/text-characters-transition/examples/basic-usage.vue'
 import CustomSplitter from '../../../src/components/text-characters-transition/examples/custom-splitter.vue'
 import TransitionType from '../../../src/components/text-characters-transition/examples/transition-type.vue'
+import CustomTransition from '../../../src/components/text-characters-transition/examples/custom-transition.vue'
 </script>
 
 # 逐字轉場
@@ -26,7 +27,7 @@ import TransitionType from '../../../src/components/text-characters-transition/e
 
 ### 切分文字
 
-可以自行設定文字分割邏輯或是直接分好的文字。
+可以自行設定文字分割邏輯或是提供分好的文字。
 
 <custom-splitter/>
 
@@ -36,7 +37,7 @@ import TransitionType from '../../../src/components/text-characters-transition/e
 
 ### 轉場類型
 
-使用各種不同的轉場效果吧。◝( •ω• )◟
+內建了一些簡單的效果，來試試看吧。◝( •ω• )◟
 
 <transition-type/>
 
@@ -44,17 +45,23 @@ import TransitionType from '../../../src/components/text-characters-transition/e
 <<< ../../../src/components/text-characters-transition/examples/transition-type.vue
 :::
 
+### 自定義轉場
+
+參數皆可自定義，寫法詳見 [anime.js 文檔](https://animejs.com/documentation/#cssProperties)
+
+來打造各種獨特的轉場效果！(≖‿ゝ≖)✧
+
+<custom-transition class="min-h-[70vh]"/>
+
+鱈魚：「那個沒有也太晚出現了吧！Σ(ˊДˋ;)」
+
+::: details 查看範例原始碼
+<<< ../../../src/components/text-characters-transition/examples/custom-transition.vue
+:::
+
 ## 原理
 
-滑鼠碰觸按鈕時，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕尺寸的距離。
-
-如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕會啪沒了，消失的無影無蹤。
-:::
+基於 anime.js 實現動畫效果
 
 ## API
 
