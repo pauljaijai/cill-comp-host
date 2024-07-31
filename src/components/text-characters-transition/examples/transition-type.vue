@@ -31,9 +31,6 @@ import { useIntervalFn } from '@vueuse/core';
 type Param = ExtractComponentProps<typeof TextCharactersTransition>
 
 const visible = ref(false);
-useIntervalFn(() => {
-  visible.value = !visible.value;
-}, 2000);
 
 const list: Array<
   Pick<Param, 'name' | 'enter' | 'leave'>
