@@ -32,7 +32,6 @@ const visible = ref(false);
 const list: Array<
   Pick<Param, 'name' | 'enter' | 'leave'>
 > = [
-    {},
     { name: 'blur' },
     { name: 'clip-right' },
     { name: 'random-spin' },

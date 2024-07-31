@@ -32,11 +32,13 @@ interface Props {
     enter: AnimeFuncParam;
     leave: AnimeFuncParam;
   }>;
+
   /** html tag
    * 
    * @default 'p'
    */
   tag?: string;
+
   /** 如何切割文字
    * 
    * 只有在 label 為 string 時有效
@@ -44,10 +46,13 @@ interface Props {
    * @default /.*?/u
    */
   splitter?: RegExp | ((label: string) => string[]);
+
   /** 過場名稱。使用預設內容 */
   name?: `${TransitionName}`;
+
   /** 進入動畫設定 */
   enter?: AnimeFuncParam;
+
   /** 離開動畫設定 */
   leave?: AnimeFuncParam;
 }

@@ -37,7 +37,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 ### 轉場類型
 
-內建了一些簡單的效果，來試試看吧。◝( •ω• )◟
+元件內建了一些簡單的效果，來試試吧。◝( •ω• )◟
 
 <transition-type/>
 
@@ -51,7 +51,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 來打造各種獨特的轉場效果！(≖‿ゝ≖)✧
 
-<custom-transition class="min-h-[70vh]"/>
+<custom-transition class="min-h-[50vh]"/>
 
 鱈魚：「那個沒有也太晚出現了吧！Σ(ˊДˋ;)」
 
