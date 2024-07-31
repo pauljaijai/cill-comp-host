@@ -64,7 +64,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 // #region Emits
 const emit = defineEmits<{
-  'update:modelValue': [];
+  'before-enter': [];
+  'after-enter': [];
+  'before-leave': [];
+  'after-leave': [];
 }>();
 // #endregion Emits
 
@@ -132,7 +135,9 @@ const labelText = computed(() => pipe(
 async function startEnter(end = false) {
   anime.remove(`.${id}`);
 
-  chars.value.forEach((char) => {
+  emit('before-enter');
+
+  const tasks = chars.value.map((char) => {
     const data = char.enter();
 
     if (end) {
@@ -140,17 +145,23 @@ async function startEnter(end = false) {
       data.delay = 0;
     }
 
-    anime({
+    return anime({
       ...data,
       targets: `#${char.id}`,
-    });
+    }).finished;
   });
+
+  await Promise.allSettled(tasks);
+
+  emit('after-enter');
 }
 
 async function startLeave(end = false) {
   anime.remove(`.${id}`);
 
-  chars.value.forEach((char) => {
+  emit('before-leave');
+
+  const tasks = chars.value.map((char) => {
     const data = char.leave();
 
     if (end) {
@@ -158,11 +169,15 @@ async function startLeave(end = false) {
       data.delay = 0;
     }
 
-    anime({
+    return anime({
       ...data,
       targets: `#${char.id}`,
     });
   });
+
+  await Promise.allSettled(tasks);
+
+  emit('after-leave');
 }
 
 watch(() => props.visible, (visible) => {
