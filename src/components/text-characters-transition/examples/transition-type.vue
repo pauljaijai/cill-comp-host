@@ -26,7 +26,6 @@ import { ref } from 'vue';
 import BaseCheckbox from '../../base-checkbox.vue';
 import TextCharactersTransition from '../text-characters-transition.vue';
 import { ExtractComponentProps } from '../../../types';
-import { useIntervalFn } from '@vueuse/core';
 
 type Param = ExtractComponentProps<typeof TextCharactersTransition>
 
