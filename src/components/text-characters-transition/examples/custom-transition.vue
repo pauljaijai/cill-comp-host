@@ -73,7 +73,9 @@ const list: Array<
           '0rem',
           '1.25rem',
         ],
-        delay: i * 600,
+        // easing: 'easeOutBack',
+        duration: 1400,
+        delay: i * 100,
       }),
       leave: (i) => ({
         opacity: 1,
@@ -82,7 +84,7 @@ const list: Array<
           { value: '0rem', easing: 'easeInOutQuint' },
         ],
         duration: 600,
-        delay: i * 50,
+        delay: i * 40,
       }),
     },
     {
