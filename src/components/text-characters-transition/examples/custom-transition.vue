@@ -66,25 +66,20 @@ const list: Array<
     },
     {
       label: ['人', '和', '程式', '，', '一個', '能跑', '就行'],
-      class: 'tracking-[0.2rem]',
+      class: 'tracking-[0.2rem] perspective',
       enter: (i) => ({
-        opacity: 1,
-        fontSize: [
-          '0rem',
-          '1.25rem',
-        ],
-        // easing: 'easeOutBack',
-        duration: 1400,
+        opacity: [1, 1],
+        rotateX: [270, 0],
+        easing: 'easeOutCirc',
+        duration: 800,
         delay: i * 100,
       }),
       leave: (i) => ({
-        opacity: 1,
-        fontSize: [
-          { value: '3rem', easing: 'easeInOutQuint' },
-          { value: '0rem', easing: 'easeInOutQuint' },
-        ],
-        duration: 600,
-        delay: i * 40,
+        opacity: [1, 1],
+        rotateX: [0, -270],
+        easing: 'easeInCirc',
+        duration: 800,
+        delay: i * 100,
       }),
     },
     {
@@ -166,4 +161,7 @@ const list: Array<
   color: #222
   text-shadow: 0 0 10px rgba(#111, 0.2)
 
+.perspective
+  perspective: 100px
+  transform-style: preserve-3d
 </style>
