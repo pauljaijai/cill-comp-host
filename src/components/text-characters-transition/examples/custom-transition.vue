@@ -39,7 +39,7 @@ const list: Array<
   }
 > = [
     {
-      label: '程式如詩寫，太美無人解',
+      label: '程式如詩寫，美到無人解',
       class: 'font-wenkai tracking-[0.2rem]',
       enter: (i) => ({
         opacity: [0, 1],
