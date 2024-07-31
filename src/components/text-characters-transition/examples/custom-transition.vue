@@ -65,7 +65,7 @@ const list: Array<
       }),
     },
     {
-      label: ['人', '和', '程式', '，', '一個', '能跑', '就行'],
+      label: '人和程式，一個能跑就行',
       class: 'tracking-[0.2rem] perspective',
       enter: (i) => ({
         opacity: [1, 1],
