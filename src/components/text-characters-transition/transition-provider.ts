@@ -1,6 +1,6 @@
 import anime from "animejs";
 import { AnimeFuncParam } from "./type";
-import { sample } from "remeda";
+import { constant, first, map, pipe, range, sample, times } from "remeda";
 
 export enum TransitionName {
   FADE = 'fade',
@@ -8,6 +8,8 @@ export enum TransitionName {
   CLIP_RIGHT = 'clip-right',
   RANDOM_SPIN = 'random-spin',
   LANDING = 'landing',
+  FLICKER = 'flicker',
+  CONVERGE = 'converge',
 }
 
 export const transitionProvider: Record<
@@ -108,7 +110,146 @@ export const transitionProvider: Record<
       delay: i * 50,
     }),
   },
+  [TransitionName.FLICKER]: {
+    enter: (i) => ({
+      opacity: [
+        ...times(4, () => ({ value: anime.random(0, 0.5) + 0.1 })),
+        { value: 1 },
+      ],
+      duration: 200,
+      delay: i * 50,
+    }),
+    leave: (i) => ({
+      opacity: [
+        ...times(4, () => ({ value: anime.random(0, 0.5) + 0.1 })),
+        { value: 0 },
+      ],
+      duration: 200,
+      delay: i * 50,
+    }),
+  },
+  [TransitionName.CONVERGE]: {
+    enter: (i, length) => ({
+      ...pipe(
+        sample(convergeAnimateList, 1),
+        first(),
+      )[0],
+      delay: i * 100,
+      easing: 'easeOutExpo',
+    }),
+    leave: (i, length) => ({
+      ...pipe(
+        sample(convergeAnimateList, 1),
+        first(),
+      )[1],
+      delay: i * 100,
+      easing: 'easeInExpo',
+    }),
+  },
 }
+
+const convergeAnimateList = [
+  [
+    // 上
+    {
+      clipPath: [
+        'polygon(0 0, 100% 0%, 100% 0%, 0% 0%)',
+        'polygon(0 0, 100% 0%, 100% 100%, 0% 100%)',
+      ],
+      translateX: ['0%', '0%'],
+      translateY: [
+        '100%',
+        '0%',
+      ],
+    },
+    {
+      clipPath: [
+        'polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)',
+        'polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)',
+      ],
+      translateX: ['0%', '0%'],
+      translateY: [
+        '0%',
+        '-100%',
+      ],
+    },
+  ],
+  [
+    // 下
+    {
+      clipPath: [
+        'polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)',
+        'polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)',
+      ],
+      translateX: ['0%', '0%'],
+      translateY: [
+        '-100%',
+        '0%',
+      ],
+    },
+    {
+      clipPath: [
+        'polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)',
+        'polygon(0 0%, 100% 0%, 100% 0%, 0% 0%)',
+      ],
+      translateX: ['0%', '0%'],
+      translateY: [
+        '0%',
+        '100%',
+      ],
+    },
+  ],
+  [
+    // 左
+    {
+      clipPath: [
+        'polygon(0 0%, 0% 0%, 0% 100%, 0% 100%)',
+        'polygon(0 0%, 100% 0%, 100% 100%, 0% 100%)',
+      ],
+      translateY: ['0%', '0%'],
+      translateX: [
+        '100%',
+        '0%',
+      ],
+    },
+    {
+      clipPath: [
+        'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+        'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)',
+      ],
+      translateY: ['0%', '0%'],
+      translateX: [
+        '0%',
+        '-100%',
+      ],
+    },
+  ],
+  [
+    // 右
+    {
+      clipPath: [
+        'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)',
+        'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+      ],
+      translateY: ['0%', '0%'],
+      translateX: [
+        '-100%',
+        '0%',
+      ],
+    },
+    {
+      clipPath: [
+        'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+        'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
+      ],
+      translateY: ['0%', '0%'],
+      translateX: [
+        '0%',
+        '100%',
+      ],
+    },
+  ],
+] as const;
 
 // anime({
 //   targets: target,

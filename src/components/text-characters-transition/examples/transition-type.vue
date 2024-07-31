@@ -43,5 +43,7 @@ const list: Array<
     { name: 'clip-right' },
     { name: 'random-spin' },
     { name: 'landing' },
+    { name: 'flicker' },
+    { name: 'converge' },
   ]
 </script>
