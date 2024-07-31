@@ -6,15 +6,13 @@
       class="border p-4 rounded"
     />
 
-    <div class="flex flex-col gap-2 text-3xl font-bold tracking-wider">
+    <div class="flex flex-col items-center gap-2 text-3xl font-bold tracking-wider">
       <text-characters-transition
-        v-for="({ name, enter, leave }, i) in list"
+        v-for="(item, i) in list"
         :key="i"
         :visible="visible"
         label="一段展示用的文字"
-        :name="name"
-        :enter="enter"
-        :leave="leave"
+        v-bind="item"
       />
     </div>
   </div>
