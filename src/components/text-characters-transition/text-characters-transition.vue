@@ -172,7 +172,7 @@ async function startLeave(end = false) {
     return anime({
       ...data,
       targets: `#${char.id}`,
-    });
+    }).finished;
   });
 
   await Promise.allSettled(tasks);
