@@ -20,16 +20,12 @@ import { ExtractComponentProps } from '../../../types';
 import anime from 'animejs';
 import { sample } from 'remeda';
 
-import BaseCheckbox from '../../base-checkbox.vue';
 import TextCharactersTransition from '../text-characters-transition.vue';
-
 
 type Param = ExtractComponentProps<typeof TextCharactersTransition>
 type Item = Pick<Param, 'label' | 'enter' | 'leave' | 'visible'> & {
   class?: string;
 };
-
-const visible = ref(false);
 
 const negativeList = [1, -1] as const;
 const randomNegative = () => sample(negativeList, 1)[0];
