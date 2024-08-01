@@ -42,6 +42,7 @@ const list = ref<Item[]>(
       { name: 'flicker' },
       { name: 'converge' },
       { name: 'whirling' },
+      { name: 'glitch' },
     ] as const,
     addProp('visible', false),
   )
@@ -59,6 +60,6 @@ function toggleVisible(item: Pick<Param, 'visible'>) {
   &:hover
     background-color: rgba(#CCC, 0.1)
   &:active
-    transition-duration: 0.05s
-    scale: 0.99
+    transition-duration: 0.1s
+    scale: 0.98
 </style>

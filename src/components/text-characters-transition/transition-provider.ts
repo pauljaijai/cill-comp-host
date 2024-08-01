@@ -11,6 +11,7 @@ export enum TransitionName {
   FLICKER = 'flicker',
   CONVERGE = 'converge',
   WHIRLING = 'whirling',
+  GLITCH = 'glitch',
   TEST = 'test',
 }
 
@@ -166,6 +167,54 @@ export const transitionProvider: Record<
       delay: i * 100,
       duration: 1400,
       easing: 'easeInQuart',
+    }),
+  },
+  [TransitionName.GLITCH]: {
+    enter: (i) => ({
+      textShadow: () => [
+        [
+          `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #FF0000`,
+          `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #FFFF00`,
+          `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #00FF00`,
+        ].join(','),
+        {
+          value: [
+            `0px 0px #FF0000`,
+            `0px 0px #FFFF00`,
+            `0px 0px #00FF00`,
+          ].join(',')
+        },
+      ],
+      translateX: () => [
+        `${anime.random(-20, 20)}px`,
+        { value: `${anime.random(-20, 20)}px` },
+        { value: `0px` },
+      ],
+      translateY: () => [
+        `${anime.random(-20, 20)}px`,
+        { value: `${anime.random(-20, 20)}px` },
+        { value: `0px` },
+      ],
+      color: () => [
+        'rgba(0, 0, 0, 0)',
+        'rgba(0, 0, 0, 1)',
+      ],
+      delay: i * 100,
+      duration: 500,
+      // easing: 'steps(5)',
+    }),
+    leave: (i) => ({
+      textShadow: () => [
+        `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #FF0000`,
+        `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #FFFF00`,
+        `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #00FF00`,
+      ].join(','),
+      translateX: () => `${anime.random(-20, 20)}px`,
+      translateY: () => `${anime.random(-20, 20)}px`,
+      color: 'rgba(0, 0, 0, 0)',
+      delay: i * 100,
+      duration: 500,
+      // easing: 'steps(5)',
     }),
   },
   [TransitionName.TEST]: {
