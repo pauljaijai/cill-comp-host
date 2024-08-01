@@ -1,6 +1,6 @@
-import anime from "animejs";
+import anime, { random } from "animejs";
 import { AnimeFuncParam } from "./type";
-import { constant, first, map, pipe, range, sample, times } from "remeda";
+import { constant, first, map, pipe, piped, range, sample, times } from "remeda";
 
 export enum TransitionName {
   FADE = 'fade',
@@ -10,6 +10,9 @@ export enum TransitionName {
   LANDING = 'landing',
   FLICKER = 'flicker',
   CONVERGE = 'converge',
+  WHIRLING = 'whirling',
+  GLITCH = 'glitch',
+  TEST = 'test',
 }
 
 export const transitionProvider: Record<
@@ -144,6 +147,94 @@ export const transitionProvider: Record<
       )[1],
       delay: i * 100,
       easing: 'easeInExpo',
+    }),
+  },
+  [TransitionName.WHIRLING]: {
+    enter: (i, length) => ({
+      opacity: [0, 1],
+      transformOrigin: () => [
+        `${anime.random(-500, 500)}% ${anime.random(-500, 500)}%`, '0% 0%',
+      ],
+      rotate: () => [anime.random(-360, 360), 0],
+      delay: i * 100,
+      duration: 1400,
+      easing: 'easeOutQuart',
+    }),
+    leave: (i, length) => ({
+      opacity: 0,
+      transformOrigin: () => `${anime.random(-500, 500)}% ${anime.random(-500, 500)}%`,
+      rotate: () => anime.random(-360, 360),
+      delay: i * 100,
+      duration: 1400,
+      easing: 'easeInQuart',
+    }),
+  },
+  [TransitionName.GLITCH]: {
+    enter: (i) => ({
+      textShadow: () => [
+        {
+          value: [
+            `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #FF0000`,
+            `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #FFFF00`,
+            `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #00FF00`,
+          ].join(',')
+        },
+        [
+          `0px 0px #FF0000`,
+          `0px 0px #FFFF00`,
+          `0px 0px #00FF00`,
+        ].join(','),
+      ],
+      translateX: () => [
+        { value: `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px` },
+        `0px 0px`,
+      ],
+      translateY: () => [
+        { value: `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px` },
+        `0px 0px`,
+      ],
+      color: () => [
+        'rgba(0, 0, 0, 0)',
+        'rgba(0, 0, 0, 1)',
+      ],
+      delay: i * 100,
+      duration: 500,
+      // easing: 'steps(5)',
+    }),
+    leave: (i) => ({
+      textShadow: () => [
+        `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #FF0000`,
+        `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #FFFF00`,
+        `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px #00FF00`,
+      ].join(','),
+      translateX: () => `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px`,
+      translateY: () => `${anime.random(-20, 20)}px ${anime.random(-20, 20)}px`,
+      color: 'rgba(0, 0, 0, 0)',
+      delay: i * 100,
+      duration: 500,
+      // easing: 'steps(5)',
+    }),
+  },
+  [TransitionName.TEST]: {
+    enter: (i) => ({
+      opacity: [0, 1],
+      transformOrigin: () => [
+        `${anime.random(-500, 500)}% ${anime.random(-500, 500)}%`, '0% 0%',
+      ],
+      rotate: () => [anime.random(-360, 360), 0],
+      delay: i * 100,
+      duration: 1400,
+      easing: 'easeOutQuart',
+    }),
+    leave: (i) => ({
+      opacity: 0,
+      transformOrigin: () => [
+        '0% 0%', `${anime.random(-500, 500)}% ${anime.random(-500, 500)}%`
+      ],
+      rotate: () => anime.random(-360, 360),
+      delay: i * 100,
+      duration: 1400,
+      easing: 'easeInQuart',
     }),
   },
 }
