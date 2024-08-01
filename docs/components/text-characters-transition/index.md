@@ -39,6 +39,8 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 元件內建了一些簡單的效果，來試試吧。◝( •ω• )◟
 
+點擊以下任一方塊，即開始切換
+
 <transition-type/>
 
 ::: details 查看範例原始碼
