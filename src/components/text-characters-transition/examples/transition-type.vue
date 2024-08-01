@@ -57,8 +57,6 @@ function toggleVisible(item: Pick<Param, 'visible'>) {
 .clickable-box
   cursor: pointer
   transition-duration: 0.4s
-  &:hover
-    background-color: rgba(#CCC, 0.1)
   &:active
     transition-duration: 0.1s
     scale: 0.98

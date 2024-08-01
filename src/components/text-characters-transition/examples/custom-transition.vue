@@ -4,7 +4,7 @@
       <div
         v-for="(item, i) in list"
         :key="i"
-        class=" cursor-pointer border px-10 py-4 duration-500"
+        class=" clickable-box border px-10 py-4"
         :class="{ 'border-x-4': item.visible }"
         @click="toggleVisible(item)"
       >
@@ -159,9 +159,16 @@ function toggleVisible(item: Pick<Param, 'visible'>) {
   font-weight: 400
   font-style: normal
   color: #222
-  text-shadow: 0 0 10px rgba(#111, 0.2)
+  text-shadow: 0 0 10px rgba(#111, 0.1)
 
 .perspective
   perspective: 100px
   transform-style: preserve-3d
+
+.clickable-box
+  cursor: pointer
+  transition-duration: 0.4s
+  &:active
+    transition-duration: 0.1s
+    scale: 0.98
 </style>
