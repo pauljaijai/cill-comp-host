@@ -42,7 +42,7 @@ const list = ref<Item[]>(
       { name: 'flicker' },
       { name: 'converge' },
       { name: 'whirling' },
-      { name: 'glitch' },
+      { name: 'gather' },
     ] as const,
     addProp('visible', false),
   )
