@@ -1,4 +1,4 @@
-import anime, { random } from "animejs";
+import anime, { easings, random } from "animejs";
 import { AnimeFuncParam } from "./type";
 import { constant, first, map, pipe, piped, range, sample, times } from "remeda";
 
@@ -12,6 +12,7 @@ export enum TransitionName {
   CONVERGE = 'converge',
   WHIRLING = 'whirling',
   GATHER = 'gather',
+  EMERGE = 'emerge',
   TEST = 'test',
 }
 
@@ -189,6 +190,26 @@ export const transitionProvider: Record<
       delay: i * 100,
       duration: 400,
       easing: 'easeInCubic',
+    }),
+  },
+  [TransitionName.EMERGE]: {
+    enter: (i) => ({
+      opacity: [0, 1],
+      filter: ['blur(6px)', 'blur(0px)'],
+      scale: [0.6, 1],
+      rotate: 0,
+      delay: i * 100,
+      duration: 1000,
+      easing: 'cubicBezier(0, 1.47, 0.83, 1)',
+    }),
+    leave: (i) => ({
+      opacity: 0,
+      filter: 'blur(2px)',
+      scale: 0.8,
+      rotate: anime.random(-30, 30),
+      delay: i * 100,
+      duration: 1800,
+      easing: 'easeInCirc',
     }),
   },
   [TransitionName.TEST]: {

@@ -32,7 +32,7 @@ import TextCharactersTransition from '../text-characters-transition.vue';
 type Param = ExtractComponentProps<typeof TextCharactersTransition>
 type Item = Pick<Param, 'name' | 'visible'>;
 
-const list = ref<Item[]>(
+const list = ref(
   map(
     [
       { name: 'blur' },
@@ -43,7 +43,8 @@ const list = ref<Item[]>(
       { name: 'converge' },
       { name: 'whirling' },
       { name: 'gather' },
-    ] as const,
+      { name: 'emerge' },
+    ] satisfies Item[],
     addProp('visible', false),
   )
 );
