@@ -35,7 +35,6 @@ type Item = Pick<Param, 'name' | 'visible'>;
 const list = ref(
   map(
     [
-      { name: 'blur' },
       { name: 'clip-right' },
       { name: 'random-spin' },
       { name: 'landing' },
