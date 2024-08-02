@@ -1,4 +1,9 @@
-<script setup>
+<script setup lang="ts">
+
+import BaseCheckbox from '../../src/components/base-checkbox.vue';
+import BaseRadio from '../../src/components/base-radio.vue';
+import ExpansionSection from '../../src/components/expansion-section.vue';
+
 import BtnNaughty from '../../src/components/btn-naughty/btn-naughty.vue';
 
 import WrapperStereoscopic from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic.vue';
@@ -18,6 +23,10 @@ import BgFirefly from '../../src/components/bg-firefly/examples/full-background.
 import BgSakuraFubuki from '../../src/components/bg-sakura-fubuki/examples/full-background.vue';
 
 import UtilPartyPopper from '../../src/components/util-party-popper/examples/emit-position.vue';
+
+import { ref } from 'vue';
+
+const currentSection = ref<SectionName>('btn');
 </script>
 
 # 元件清單
@@ -25,6 +34,13 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 ## 按鈕
 
 經典卻又不常見的按鈕。(。・∀・)ノ
+
+<expansion-section
+  v-model="currentSection"
+  value="btn"
+  header="展開清單"
+  header-class="border p-2 rounded-lg"
+>
 
 ### [調皮的按鈕](./btn-naughty/) <Badge type="info" text="button" />
 
@@ -34,9 +50,18 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
   <btn-naughty label="(^._.^)ﾉ" z-index="99" disabled/>
 </div>
 
+</expansion-section>
+
 ## 包裝器
 
 包起來，產生各種有趣的效果吧！(´▽`ʃ♡ƪ)
+
+<expansion-section
+  v-model="currentSection"
+  value="wrapper"
+  header="展開清單"
+  header-class="border p-2 rounded-lg"
+>
 
 ### [立體包裝器](./wrapper-stereoscopic/) <Badge type="info" text="wrapper" />
 
@@ -82,9 +107,18 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 
 <wrapper-kirby-mouthful-mode class="h-[70vh]" />
 
+</expansion-section>
+
 ## 輪播
 
 讓畫面更生動的輪播元件！◝( •ω• )◟
+
+<expansion-section
+  v-model="currentSection"
+  value="carousel"
+  header="展開清單"
+  header-class="border p-2 rounded-lg"
+>
 
 ### [空間懸浮輪播](./carousel-space-floating/) <Badge type="info" text="carousel" />
 
@@ -94,9 +128,18 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
   <carousel-space-floating  />
 </div>
 
+</expansion-section>
+
 ## 游標
 
 讓~~勞贖~~滑鼠更趣味！ᕕ( ﾟ ∀。)ᕗ
+
+<expansion-section
+  v-model="currentSection"
+  value="cursor"
+  header="展開清單"
+  header-class="border p-2 rounded-lg"
+>
 
 ### [游標小跟班](./cursor-sidekick/) <Badge type="info" text="cursor" />
 
@@ -104,9 +147,18 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 
 <cursor-sidekick  />
 
+</expansion-section>
+
 ## 背景
 
 讓生成式藝術藝術點綴網頁吧！ヾ(◍'౪`◍)ﾉﾞ
+
+<expansion-section
+  v-model="currentSection"
+  value="bg"
+  header="展開清單"
+  header-class="border p-2 rounded-lg"
+>
 
 ### [螢火蟲](./bg-firefly/) <Badge type="info" text="bg" />
 
@@ -120,9 +172,18 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 
 <bg-sakura-fubuki class="h-[70vh]" />
 
+</expansion-section>
+
 ## 轉場
 
 特殊的轉場元件
+
+<expansion-section
+  v-model="currentSection"
+  value="transition"
+  header="展開清單"
+  header-class="border p-2 rounded-lg"
+>
 
 ### [多邊形轉場](./transition-shape/) <Badge type="info" text="transition" />
 
@@ -130,10 +191,23 @@ Motion Graphic 風格的 Transition 元件
 
 <transition-shape  />
 
+</expansion-section>
+
 ## 實用
+
+各種實用（？）的奇怪東東。ᕕ( ﾟ ∀。)ᕗ
+
+<expansion-section
+  v-model="currentSection"
+  value="util"
+  header="展開清單"
+  header-class="border p-2 rounded-lg"
+>
 
 ### [拉炮](./util-party-popper/) <Badge type="info" text="util" />
 
 隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
 
 <util-party-popper class="h-[70vh]" />
+
+</expansion-section>
