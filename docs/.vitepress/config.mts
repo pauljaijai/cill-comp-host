@@ -105,6 +105,12 @@ export default defineConfig({
             ]
           },
           {
+            text: '文字',
+            items: [
+              { text: '逐字轉場', link: '/components/text-characters-transition/' },
+            ]
+          },
+          {
             text: '實用',
             items: [
               { text: '拉炮', link: '/components/util-party-popper/' },
