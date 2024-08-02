@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col">
     <div
-      class="text-center cursor-pointer"
+      class="text-center cursor-pointer duration-500"
       :class="headerClass"
       @click="handleClick()"
     >
@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
-import { useElementSize, useVModel } from '@vueuse/core';
+import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
 
 interface Props {
   modelValue?: string;
@@ -39,7 +39,7 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), {
   modelValue: undefined,
-  header: '',
+  header: '點擊展開',
   headerClass: '',
   contentClass: '',
 });
@@ -71,9 +71,9 @@ const contentStyle = computed(() => ({
 
 const slotRef = ref();
 const { height } = useElementSize(slotRef);
-watch(height, (value) => {
+watchDebounced(height, (value) => {
   targetHeight.value = value;
-})
+}, { debounce: 10 })
 
 const headerClass = computed(() => {
   const result = [
@@ -92,7 +92,7 @@ const headerClass = computed(() => {
 
 <style scoped lang="sass">
 .content-enter-active, .content-leave-active
-  transition-duration: 0.4s
+  transition-duration: 0.6s
 .content-enter-from, .content-leave-to
   transform: translateX(-10px) !important
   opacity: 0 !important

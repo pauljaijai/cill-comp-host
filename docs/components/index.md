@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import BaseCheckbox from '../../src/components/base-checkbox.vue';
-import BaseRadio from '../../src/components/base-radio.vue';
 import ExpansionSection from '../../src/components/expansion-section.vue';
 
 import BtnNaughty from '../../src/components/btn-naughty/btn-naughty.vue';
@@ -38,7 +37,6 @@ const currentSection = ref<SectionName>('btn');
 <expansion-section
   v-model="currentSection"
   value="btn"
-  header="展開清單"
   header-class="border p-2 rounded-lg"
 >
 
@@ -59,7 +57,6 @@ const currentSection = ref<SectionName>('btn');
 <expansion-section
   v-model="currentSection"
   value="wrapper"
-  header="展開清單"
   header-class="border p-2 rounded-lg"
 >
 
@@ -116,7 +113,6 @@ const currentSection = ref<SectionName>('btn');
 <expansion-section
   v-model="currentSection"
   value="carousel"
-  header="展開清單"
   header-class="border p-2 rounded-lg"
 >
 
@@ -137,7 +133,6 @@ const currentSection = ref<SectionName>('btn');
 <expansion-section
   v-model="currentSection"
   value="cursor"
-  header="展開清單"
   header-class="border p-2 rounded-lg"
 >
 
@@ -156,7 +151,6 @@ const currentSection = ref<SectionName>('btn');
 <expansion-section
   v-model="currentSection"
   value="bg"
-  header="展開清單"
   header-class="border p-2 rounded-lg"
 >
 
@@ -181,7 +175,6 @@ const currentSection = ref<SectionName>('btn');
 <expansion-section
   v-model="currentSection"
   value="transition"
-  header="展開清單"
   header-class="border p-2 rounded-lg"
 >
 
@@ -200,7 +193,6 @@ Motion Graphic 風格的 Transition 元件
 <expansion-section
   v-model="currentSection"
   value="util"
-  header="展開清單"
   header-class="border p-2 rounded-lg"
 >
 
