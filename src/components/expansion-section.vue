@@ -94,6 +94,7 @@ const headerClass = computed(() => {
 .content-enter-active, .content-leave-active
   transition-duration: 0.6s
 .content-enter-from, .content-leave-to
-  transform: translateX(-10px) !important
+  // transform 會導致內容之 canvas 顯示異常問題
+  // transform: translateX(-10px) !important
   opacity: 0 !important
 </style>
