@@ -38,6 +38,7 @@ const currentSection = ref('btn');
 
 <expansion-section
   v-model="currentSection"
+  value="btn"
   header-class="border p-2 rounded-lg"
 >
 
