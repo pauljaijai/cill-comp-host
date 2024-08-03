@@ -97,7 +97,7 @@
 import { ref } from 'vue';
 import { Vector2, Vector3 } from '@babylonjs/core';
 import { ExtractComponentProps } from '../../../types/utils.type';
-import { map } from 'remeda';
+import { addProp, map } from 'remeda';
 
 import CarouselSpaceFloating from '../carousel-space-floating.vue';
 
@@ -142,10 +142,7 @@ const images: CarouselProp['images'] = map(
       scale: 2,
     },
   ],
-  (value) => ({
-    ...value,
-    duration,
-  })
+  addProp('duration', duration),
 )
 
 function isTarget(name: string) {
