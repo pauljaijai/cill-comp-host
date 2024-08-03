@@ -207,39 +207,21 @@ const rectAction = ref<
   },
 });
 const rectActionOptions = Object.values(RectAction);
+
+const timingList = ['In', 'Out', 'InOut'];
+const typeList = [
+  'Quad', 'Cubic', 'Quart', 'Quint',
+  'Sine', 'Expo', 'Circ', 'Back',
+  'Elastic', 'Bounce',
+];
 const easingOptions = [
   'linear',
-  'easeInQuad',
-  'easeOutQuad',
-  'easeInOutQuad',
-  'easeInCubic',
-  'easeOutCubic',
-  'easeInOutCubic',
-  'easeInQuart',
-  'easeOutQuart',
-  'easeInOutQuart',
-  'easeInQuint',
-  'easeOutQuint',
-  'easeInOutQuint',
-  'easeInSine',
-  'easeOutSine',
-  'easeInOutSine',
-  'easeInExpo',
-  'easeOutExpo',
-  'easeInOutExpo',
-  'easeInCirc',
-  'easeOutCirc',
-  'easeInOutCirc',
-  'easeInBack',
-  'easeOutBack',
-  'easeInOutBack',
-  'easeInElastic',
-  'easeOutElastic',
-  'easeInOutElastic',
-  'easeInBounce',
-  'easeOutBounce',
-  'easeInOutBounce',
+  ...typeList.flatMap((type) =>
+    timingList.map((timing) => `ease${timing}${type}`)
+  ),
 ];
+
+
 const transitionType = computed<TransitionType>(() => ({
   name: 'rect',
   enter: rectAction.value.enter,
