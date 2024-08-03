@@ -3,6 +3,8 @@ description: Motion Graphic 風格的 Transition 元件
 ---
 
 <script setup>
+import ExpansionSection from '../../../src/components/expansion-section.vue';
+
 import BasicUsage from '../../../src/components/transition-shape/examples/basic-usage.vue'
 import TransitionParam from '../../../src/components/transition-shape/examples/transition-param.vue'
 import RoundTransition from '../../../src/components/transition-shape/examples/round-transition.vue'
@@ -10,6 +12,9 @@ import FenceTransition from '../../../src/components/transition-shape/examples/f
 import ConvergingRectTransition from '../../../src/components/transition-shape/examples/converging-rect-transition.vue'
 import SequentialLineTransition from '../../../src/components/transition-shape/examples/sequential-line-transition.vue'
 
+import { ref } from 'vue';
+
+const currentTransition = ref();
 </script>
 
 # 多邊形轉場
@@ -57,7 +62,12 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 
 點擊任意魚，開始轉場。(≧∇≦)ﾉ
 
-<round-transition />
+<expansion-section
+  v-model="currentTransition"
+  header-class="border p-2 rounded-lg"
+>
+  <round-transition />
+</expansion-section>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-shape/examples/round-transition.vue
@@ -69,7 +79,12 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 
 點擊任意魚，開始轉場。(≧∇≦)ﾉ
 
-<fence-transition />
+<expansion-section
+  v-model="currentTransition"
+  header-class="border p-2 rounded-lg"
+>
+  <fence-transition />
+</expansion-section>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-shape/examples/fence-transition.vue
@@ -81,7 +96,12 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 
 點擊任意魚，開始轉場。(≧∇≦)ﾉ
 
-<converging-rect-transition />
+<expansion-section
+  v-model="currentTransition"
+  header-class="border p-2 rounded-lg"
+>
+  <converging-rect-transition />
+</expansion-section>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-shape/examples/converging-rect-transition.vue

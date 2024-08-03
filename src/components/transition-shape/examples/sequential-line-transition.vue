@@ -1,8 +1,5 @@
 <template>
-  <div
-    ref="boxRef"
-    class="flex flex-col justify-center gap-4 w-full border border-gray-300 p-6"
-  >
+  <div class="flex flex-col justify-center gap-4 w-full border border-gray-300 p-6">
     <div
       v-for="item in list"
       :key="item.key"
