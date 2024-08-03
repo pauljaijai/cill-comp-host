@@ -11,7 +11,7 @@
     <!-- expander -->
     <div
       :style="expanderStyle"
-      class="expander duration-500 ease-in-out-circ overflow-hidden"
+      class="expander flex flex-col duration-500 ease-in-out-circ overflow-hidden"
     >
       <transition name="content">
         <!-- 內容 -->
