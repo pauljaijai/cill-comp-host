@@ -39,7 +39,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 元件內建了一些簡單的效果，來試試吧。◝( •ω• )◟
 
-（點擊以下任一方塊，即開始切換）
+（點擊以下任一方塊，開始切換）
 
 <transition-type/>
 
@@ -53,7 +53,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 來打造各種獨特的轉場效果！(≖‿ゝ≖)✧
 
-（點擊以下任一方塊，即開始切換）
+（點擊以下任一方塊，開始切換）
 
 <custom-transition class="min-h-[50vh]"/>
 

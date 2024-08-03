@@ -195,6 +195,8 @@ Motion Graphic 風格的 Transition 元件
 
 讓每個文字都有進入進出動畫。( •̀ ω •́ )✧
 
+（點擊以下任一方塊，開始切換）
+
 <text-characters-transition  />
 
 </expansion-section>
