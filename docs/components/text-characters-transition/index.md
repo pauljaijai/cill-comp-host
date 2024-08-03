@@ -1,5 +1,5 @@
 ---
-description: 讓文字有進入進出動畫吧！(๑•̀ㅂ•́)و✧
+description: 讓每個文字都有進入進出動畫。( •̀ ω •́ )✧
 ---
 
 <script setup>
@@ -11,7 +11,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 # 逐字轉場
 
-讓文字有進入進出動畫吧！(๑•̀ㅂ•́)و✧
+讓每個文字都有進入進出動畫。( •̀ ω •́ )✧
 
 ## 使用範例
 

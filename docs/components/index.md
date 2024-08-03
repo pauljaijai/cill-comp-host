@@ -21,6 +21,8 @@ import TransitionShape from '../../src/components/transition-shape/examples/basi
 import BgFirefly from '../../src/components/bg-firefly/examples/full-background.vue';
 import BgSakuraFubuki from '../../src/components/bg-sakura-fubuki/examples/full-background.vue';
 
+import TextCharactersTransition from '../../src/components/text-characters-transition/examples/custom-transition.vue';
+
 import UtilPartyPopper from '../../src/components/util-party-popper/examples/emit-position.vue';
 
 import { ref } from 'vue';
@@ -104,6 +106,23 @@ const currentSection = ref<SectionName>('btn');
 
 </expansion-section>
 
+## 游標
+
+讓~~勞贖~~滑鼠更趣味！ᕕ( ﾟ ∀。)ᕗ
+
+<expansion-section
+  v-model="currentSection"
+  header-class="border p-2 rounded-lg"
+>
+
+### [游標小跟班](./cursor-sidekick/) <Badge type="info" text="cursor" />
+
+跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
+
+<cursor-sidekick  />
+
+</expansion-section>
+
 ## 輪播
 
 讓畫面更生動的輪播元件！◝( •ω• )◟
@@ -120,23 +139,6 @@ const currentSection = ref<SectionName>('btn');
 <div class="h-[70vh]">
   <carousel-space-floating  />
 </div>
-
-</expansion-section>
-
-## 游標
-
-讓~~勞贖~~滑鼠更趣味！ᕕ( ﾟ ∀。)ᕗ
-
-<expansion-section
-  v-model="currentSection"
-  header-class="border p-2 rounded-lg"
->
-
-### [游標小跟班](./cursor-sidekick/) <Badge type="info" text="cursor" />
-
-跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
-
-<cursor-sidekick  />
 
 </expansion-section>
 
@@ -180,9 +182,26 @@ Motion Graphic 風格的 Transition 元件
 
 </expansion-section>
 
+## 文字
+
+讓文字活起來吧！(๑•̀ㅂ•́)و✧
+
+<expansion-section
+  v-model="currentSection"
+  header-class="border p-2 rounded-lg"
+>
+
+### [逐字轉場](./text-characters-transition/) <Badge type="info" text="text" />
+
+讓每個文字都有進入進出動畫。( •̀ ω •́ )✧
+
+<text-characters-transition  />
+
+</expansion-section>
+
 ## 實用
 
-各種實用（？）的奇怪東東。ᕕ( ﾟ ∀。)ᕗ
+各種實用（？）的奇怪東東。( ͡° ͜ʖ ͡°)✧
 
 <expansion-section
   v-model="currentSection"
