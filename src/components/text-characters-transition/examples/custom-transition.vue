@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
+  <div class="flex flex-col gap-4 w-full">
     <div class="flex-1 flex flex-col justify-around items-center gap-2 text-xl">
       <div
         v-for="(item, i) in list"
         :key="i"
-        class=" clickable-box border px-10 py-4"
+        class=" clickable-box border px-8 py-4"
         :class="{ 'border-x-4': item.visible }"
         @click="toggleVisible(item)"
       >
@@ -85,10 +85,10 @@ const list = ref<Item[]>([
   },
   {
     visible: false,
-    class: 'font-bold tracking-wider',
+    class: 'flex flex-nowrap justify-center items-center font-bold tracking-wider w-[18rem] h-[2.8rem]',
     label: [
       {
-        value: '聽說鱈魚的體重',
+        value: '聽說鱈魚體重',
         enter: () => ({
           opacity: [0, 1],
         }),

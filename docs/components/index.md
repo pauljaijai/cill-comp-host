@@ -199,6 +199,8 @@ Motion Graphic 風格的 Transition 元件
 
 <text-characters-transition  />
 
+鱈魚：「那個沒有也太晚出現了吧！Σ(ˊДˋ;)」
+
 </expansion-section>
 
 ## 實用

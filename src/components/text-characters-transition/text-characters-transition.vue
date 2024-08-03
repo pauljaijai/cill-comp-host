@@ -18,9 +18,9 @@
 
 <script setup lang="ts">
 import anime from 'animejs';
-import { nanoid, customAlphabet } from 'nanoid';
-import { identity, isNullish, join, map, pipe, piped, range, times } from 'remeda';
-import { computed, onMounted, ref, watch, CSSProperties } from 'vue';
+import { customAlphabet } from 'nanoid';
+import { join, map, pipe } from 'remeda';
+import { computed, onMounted, watch } from 'vue';
 import { AnimeFuncParam } from './type';
 import { TransitionName, transitionProvider } from './transition-provider';
 
