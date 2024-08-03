@@ -11,7 +11,7 @@
     <!-- expander -->
     <div
       :style="expanderStyle"
-      class=" duration-500 ease-in-out-circ overflow-hidden"
+      class="expander duration-500 ease-in-out-circ overflow-hidden"
     >
       <transition name="content">
         <!-- 內容 -->
@@ -29,8 +29,9 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useElementSize, useVModel } from '@vueuse/core';
 import { nanoid } from 'nanoid';
+
+import { useElementSize, useVModel } from '@vueuse/core';
 
 interface Props {
   modelValue?: string;
@@ -84,6 +85,9 @@ const headerClass = computed(() => {
 </script>
 
 <style scoped lang="sass">
+.expander
+  will-change: height
+
 .content-enter-active, .content-leave-active
   transition-duration: 0.6s
 .content-enter-from, .content-leave-to
