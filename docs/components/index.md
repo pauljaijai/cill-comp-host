@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 
 import BaseCheckbox from '../../src/components/base-checkbox.vue';
 import ExpansionSection from '../../src/components/expansion-section.vue';
@@ -27,7 +27,7 @@ import UtilPartyPopper from '../../src/components/util-party-popper/examples/emi
 
 import { ref } from 'vue';
 
-const currentSection = ref<SectionName>('btn');
+const currentSection = ref('btn');
 </script>
 
 # 元件清單
