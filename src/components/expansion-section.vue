@@ -41,7 +41,7 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), {
   modelValue: undefined,
-  value: nanoid(),
+  value: () => nanoid(),
   header: '點擊展開',
   headerClass: '',
   contentClass: '',
