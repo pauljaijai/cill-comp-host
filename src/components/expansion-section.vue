@@ -8,16 +8,17 @@
       {{ props.header }}
     </div>
 
-    <!-- 內容 -->
+    <!-- expander -->
     <div
-      :class="props.contentClass"
-      :style="contentStyle"
-      class=" duration-500 ease-in-out"
+      :style="expanderStyle"
+      class=" duration-500 ease-in-out-circ overflow-hidden"
     >
       <transition name="content">
+        <!-- 內容 -->
         <div
           v-if="contentVisible"
-          ref="slotRef"
+          ref="contentRef"
+          :class="props.contentClass"
         >
           <slot />
         </div>
@@ -27,18 +28,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue';
-import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
+import { computed, ref } from 'vue';
+import { useElementSize, useVModel } from '@vueuse/core';
+import { nanoid } from 'nanoid';
 
 interface Props {
   modelValue?: string;
-  value: string;
+  value?: string;
   header?: string;
   headerClass?: string;
   contentClass?: string;
 }
 const props = withDefaults(defineProps<Props>(), {
   modelValue: undefined,
+  value: nanoid(),
   header: '點擊展開',
   headerClass: '',
   contentClass: '',
@@ -57,23 +60,13 @@ function handleClick() {
   }
 }
 
-const shouldShowContent = computed(() => modelValue.value === props.value);
-watch(shouldShowContent, (value) => {
-  contentVisible.value = value;
-})
+const contentVisible = computed(() => modelValue.value === props.value);
+const contentRef = ref();
+const { height } = useElementSize(contentRef);
 
-const contentVisible = ref(false);
-/** 紀錄內容的目標高度 */
-const targetHeight = ref(0);
-const contentStyle = computed(() => ({
-  height: shouldShowContent.value ? `${targetHeight.value}px` : '0px',
+const expanderStyle = computed(() => ({
+  height: contentVisible.value ? `${height.value}px` : '0px',
 }));
-
-const slotRef = ref();
-const { height } = useElementSize(slotRef);
-watchDebounced(height, (value) => {
-  targetHeight.value = value;
-}, { debounce: 10 })
 
 const headerClass = computed(() => {
   const result = [
@@ -97,4 +90,7 @@ const headerClass = computed(() => {
   // transform 會導致內容之 canvas 顯示異常問題
   // transform: translateX(-10px) !important
   opacity: 0 !important
+
+.ease-in-out-circ
+  transition-timing-function: cubic-bezier(0.85, 0, 0.15, 1)
 </style>

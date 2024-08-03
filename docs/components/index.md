@@ -36,7 +36,6 @@ const currentSection = ref<SectionName>('btn');
 
 <expansion-section
   v-model="currentSection"
-  value="btn"
   header-class="border p-2 rounded-lg"
 >
 
@@ -56,7 +55,6 @@ const currentSection = ref<SectionName>('btn');
 
 <expansion-section
   v-model="currentSection"
-  value="wrapper"
   header-class="border p-2 rounded-lg"
 >
 
@@ -112,7 +110,6 @@ const currentSection = ref<SectionName>('btn');
 
 <expansion-section
   v-model="currentSection"
-  value="carousel"
   header-class="border p-2 rounded-lg"
 >
 
@@ -132,7 +129,6 @@ const currentSection = ref<SectionName>('btn');
 
 <expansion-section
   v-model="currentSection"
-  value="cursor"
   header-class="border p-2 rounded-lg"
 >
 
@@ -150,7 +146,6 @@ const currentSection = ref<SectionName>('btn');
 
 <expansion-section
   v-model="currentSection"
-  value="bg"
   header-class="border p-2 rounded-lg"
 >
 
@@ -174,7 +169,6 @@ const currentSection = ref<SectionName>('btn');
 
 <expansion-section
   v-model="currentSection"
-  value="transition"
   header-class="border p-2 rounded-lg"
 >
 
@@ -192,7 +186,6 @@ Motion Graphic 風格的 Transition 元件
 
 <expansion-section
   v-model="currentSection"
-  value="util"
   header-class="border p-2 rounded-lg"
 >
 
