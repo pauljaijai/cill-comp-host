@@ -13,7 +13,8 @@ export default defineConfig({
     return [
       [
         'script',
-        { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-2T520RHFM9' }
+        { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-2T520RHFM9' },
+        '',
       ],
       [
         'script',
@@ -27,7 +28,10 @@ export default defineConfig({
   },
   transformPageData(pageData) {
     pageData.frontmatter.head ??= []
-    pageData.frontmatter.head.push(['meta', { property: 'og:description', content: pageData.frontmatter.description }])
+    pageData.frontmatter.head.push(['meta', {
+      property: 'og:description',
+      content: pageData?.frontmatter?.description ?? ''
+    }])
   },
   markdown: {
     lineNumbers: true
