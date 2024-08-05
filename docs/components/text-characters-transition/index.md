@@ -7,6 +7,21 @@ import BasicUsage from '../../../src/components/text-characters-transition/examp
 import CustomSplitter from '../../../src/components/text-characters-transition/examples/custom-splitter.vue'
 import TransitionType from '../../../src/components/text-characters-transition/examples/transition-type.vue'
 import CustomTransition from '../../../src/components/text-characters-transition/examples/custom-transition.vue'
+
+import { onMounted, ref, nextTick } from 'vue'
+
+const visible = ref(false);
+
+/** FIX: 強制更新元件
+ *
+ * 否則直接從此頁網址進入頁面時，所有的元件無法動作；從其他頁面跳轉至此頁則不會
+ *
+ * 目前原因不明
+ */
+onMounted(async () => {
+  await nextTick();
+  visible.value = true;
+});
 </script>
 
 # 逐字轉場
@@ -19,7 +34,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 預設就是經典的淡入淡出。( •̀ ω •́ )✧
 
-<basic-usage/>
+<basic-usage v-if="visible"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/text-characters-transition/examples/basic-usage.vue
@@ -29,7 +44,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 可以自行設定文字分割邏輯或是提供分好的文字。
 
-<custom-splitter/>
+<custom-splitter v-if="visible"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/text-characters-transition/examples/custom-splitter.vue
@@ -41,7 +56,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 （點擊以下任一方塊，開始切換）
 
-<transition-type/>
+<transition-type v-if="visible"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/text-characters-transition/examples/transition-type.vue
@@ -55,7 +70,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 （點擊以下任一方塊，開始切換）
 
-<custom-transition class="min-h-[50vh]"/>
+<custom-transition v-if="visible" class="min-h-[50vh]"/>
 
 鱈魚：「那個沒有也太晚出現了吧！Σ(ˊДˋ;)」
 
