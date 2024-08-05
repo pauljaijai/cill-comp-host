@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col gap-4 w-full">
-    <div class="flex-1 flex flex-col justify-around items-center gap-2 text-xl">
+    <div class="flex-1 flex flex-col justify-around items-center gap-6 text-xl">
       <div
         v-for="(item, i) in list"
         :key="i"
-        class=" clickable-box border px-8 py-4"
+        class=" clickable-box border px-9 py-6"
         :class="{ 'border-x-4': item.visible }"
         @click="toggleVisible(item)"
       >
