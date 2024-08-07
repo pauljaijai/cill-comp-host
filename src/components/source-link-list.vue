@@ -28,7 +28,7 @@ const props = withDefaults(defineProps<Props>(), {});
 const list = computed(() => [
   {
     label: '元件',
-    href: `https://gitlab.com/side_project/chill-component/-/tree/main/src/components/${props.name}/${props.name}.vue`,
+    href: `https://gitlab.com/side_project/chill-component/-/tree/main/src/components/${props.name}`,
   },
   {
     label: '範例',
