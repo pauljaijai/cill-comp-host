@@ -3,6 +3,8 @@ description: 櫻花漫天，紛飛如夢
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/bg-sakura-fubuki/examples/basic-usage.vue'
 import FullBackground from '../../../src/components/bg-sakura-fubuki/examples/full-background.vue'
 </script>

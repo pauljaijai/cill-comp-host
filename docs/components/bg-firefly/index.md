@@ -3,6 +3,8 @@ description: 讓網頁充滿漫天飛舞的小小螢火
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/bg-firefly/examples/basic-usage.vue'
 import FullBackground from '../../../src/components/bg-firefly/examples/full-background.vue'
 

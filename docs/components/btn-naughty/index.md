@@ -3,6 +3,8 @@ description: 一個停用時會越嚕越遠的按鈕，像極了你家那隻欠�
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/btn-naughty/examples/basic-usage.vue'
 import MovingDistance from '../../../src/components/btn-naughty/examples/moving-distance.vue'
 import CallMethod from '../../../src/components/btn-naughty/examples/call-method.vue'
