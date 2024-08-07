@@ -3,10 +3,13 @@ description: 讓每個文字都有進入進出動畫。( •̀ ω •́ )✧
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/text-characters-transition/examples/basic-usage.vue'
 import CustomSplitter from '../../../src/components/text-characters-transition/examples/custom-splitter.vue'
 import TransitionType from '../../../src/components/text-characters-transition/examples/transition-type.vue'
 import CustomTransition from '../../../src/components/text-characters-transition/examples/custom-transition.vue'
+
 
 import { onMounted, ref, nextTick } from 'vue'
 
@@ -81,6 +84,10 @@ onMounted(async () => {
 ## 原理
 
 基於 anime.js 實現動畫效果
+
+## 原始碼
+
+<source-link-list name="text-characters-transition"/>
 
 ## API
 

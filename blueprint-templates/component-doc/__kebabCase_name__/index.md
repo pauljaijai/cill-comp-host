@@ -3,6 +3,8 @@ description:
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/{{kebabCase name}}/examples/basic-usage.vue'
 </script>
 
@@ -33,6 +35,10 @@ import BasicUsage from '../../../src/components/{{kebabCase name}}/examples/basi
 ::: danger 注意！Σ(ˊДˋ;)
 請不要將 overflow 設定為 hidden，否則按鈕會啪沒了，消失的無影無蹤。
 :::
+
+## 原始碼
+
+<source-link-list name="{{kebabCase name}}"/>
 
 ## API
 
