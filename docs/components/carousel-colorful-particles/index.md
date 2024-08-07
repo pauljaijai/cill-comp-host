@@ -34,6 +34,10 @@ import BasicUsage from '../../../src/components/carousel-colorful-particles/exam
 請不要將 overflow 設定為 hidden，否則按鈕會啪沒了，消失的無影無蹤。
 :::
 
+## 原始碼
+
+<source-link-list name="carousel-colorful-particles"/>
+
 ## API
 
 ### Props

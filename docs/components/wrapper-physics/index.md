@@ -129,6 +129,10 @@ Matter.js 是一個很成熟的 JavaScript 2D 物理引擎套件，官網上有�
 
 JOJO！我不想當 DOM 了！（⊙益⊙）
 
+## 原始碼
+
+<source-link-list name="wrapper-physics"/>
+
 ## API
 
 需要兩個元件，分別為：

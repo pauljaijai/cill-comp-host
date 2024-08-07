@@ -75,6 +75,10 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 
 這樣無論「目標角度」怎麼亂跳，都可以保證偏轉效果都有動畫呈現，看起來更自然、舒服。◝(≧∀≦)◟
 
+## 原始碼
+
+<source-link-list name="wrapper-stereoscopic"/>
+
 ## API
 
 ### Props

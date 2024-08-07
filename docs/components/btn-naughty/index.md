@@ -93,6 +93,10 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
 :::
 
+## 原始碼
+
+<source-link-list name="btn-naughty"/>
+
 ## API
 
 ### Props

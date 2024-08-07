@@ -47,6 +47,10 @@ import FullBackground from '../../../src/components/bg-sakura-fubuki/examples/fu
 
 使用 babylon.js 產生實體粒子，才有辦法產生鏡頭特效。(≖‿ゝ≖)✧
 
+## 原始碼
+
+<source-link-list name="bg-sakura-fubuki"/>
+
 ## API
 
 ### Props

@@ -56,6 +56,10 @@ import FullBackground from '../../../src/components/bg-firefly/examples/full-bac
 
 使用 WebGPU 與 babylon 的粒子系統，性能超棒棒。( •̀ ω •́ )✧
 
+## 原始碼
+
+<source-link-list name="bg-firefly"/>
+
 ## API
 
 ### Props

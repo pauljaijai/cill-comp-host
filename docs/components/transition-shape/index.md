@@ -138,6 +138,10 @@ Motion Graphic 轉場在影片製作其實很常見，不過網頁中就沒那�
 
 📚 [CSS Anchor Positioning API](https://developer.chrome.com/blog/anchor-positioning-api?hl=zh-tw#core_concepts_anchors_and_positioned_elements)
 
+## 原始碼
+
+<source-link-list name="transition-shape"/>
+
 ## API
 
 ### Props

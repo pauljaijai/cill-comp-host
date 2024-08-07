@@ -58,6 +58,10 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 
 小跟班的變形動畫是靠老朋友 anime.js 實現。
 
+## 原始碼
+
+<source-link-list name="cursor-sidekick"/>
+
 ## API
 
 ### Props

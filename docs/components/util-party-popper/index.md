@@ -82,6 +82,10 @@ import CustomText from '../../../src/components/util-party-popper/examples/custo
 
 預設使用 WebGPU，效能好棒棒！*｡✧*｡٩(ˊᗜˋ*)و✧*｡
 
+## 原始碼
+
+<source-link-list name="util-party-popper"/>
+
 ## API
 
 ### Props

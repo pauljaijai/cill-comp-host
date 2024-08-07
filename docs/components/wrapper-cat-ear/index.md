@@ -94,6 +94,10 @@ import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty
 
 如果大家有更好的套件，拜託請推薦給我。(´▽`ʃ♡ƪ)
 
+## 原始碼
+
+<source-link-list name="wrapper-cat-ear"/>
+
 ## API
 
 ### ActionName

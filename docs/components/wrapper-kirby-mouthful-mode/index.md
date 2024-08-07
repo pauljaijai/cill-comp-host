@@ -55,6 +55,10 @@ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; pic
 
 這裡使用了 SVG Mask 的技巧，切割出卡比的嘴巴，實現卡比吃掉元素的效果。
 
+## 原始碼
+
+<source-link-list name="wrapper-kirby-mouthful-mode"/>
+
 ## API
 
 ### Props
