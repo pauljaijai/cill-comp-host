@@ -164,7 +164,6 @@ function toggleVisible(item: Pick<Param, 'visible'>) {
   font-family: "LXGW WenKai Mono TC", monospace
   font-weight: 400
   font-style: normal
-  color: #222
   text-shadow: 0 0 10px rgba(#111, 0.1)
 
 .perspective
