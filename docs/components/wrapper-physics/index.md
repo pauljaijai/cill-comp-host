@@ -3,6 +3,8 @@ description: 產生物理世界，讓內部元素具有物理效果 ヾ(⌐■_�
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-usage.vue'
 import BodyProperty from '../../../src/components/wrapper-physics/examples/body-property.vue'
 import AdjustGravity from '../../../src/components/wrapper-physics/examples/adjust-gravity.vue'

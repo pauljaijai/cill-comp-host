@@ -3,6 +3,8 @@ description: 所有的圖片會漂浮在空間中！ヾ(◍'౪`◍)ﾉﾞ
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/carousel-space-floating/examples/basic-usage.vue'
 import CustomPosture from '../../../src/components/carousel-space-floating/examples/custom-posture.vue'
 </script>
@@ -42,6 +44,10 @@ import CustomPosture from '../../../src/components/carousel-space-floating/examp
 ## 原理
 
 使用 babylon 建立 3D 場景，將所有的圖片放置在空間中，並且根據目標圖片的位置，移動鏡頭至目標圖片前方。
+
+## 原始碼
+
+<source-link-list name="carousel-space-floating"/>
 
 ## API
 

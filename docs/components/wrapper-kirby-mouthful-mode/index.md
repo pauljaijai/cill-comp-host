@@ -3,6 +3,8 @@ description: 讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡�
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue'
 import MixColors from '../../../src/components/wrapper-kirby-mouthful-mode/examples/mix-colors.vue'
 </script>

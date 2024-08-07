@@ -3,6 +3,8 @@ description: 任何元素包起來都會長出貓耳，讓萬物皆可萌吧！(
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-usage.vue'
 import SwitchAction from '../../../src/components/wrapper-cat-ear/examples/switch-action.vue'
 import MixColors from '../../../src/components/wrapper-cat-ear/examples/mix-colors.vue'

@@ -3,6 +3,8 @@ description: 跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/cursor-sidekick/examples/basic-usage.vue'
 import CustomProvider from '../../../src/components/cursor-sidekick/examples/custom-provider.vue'
 </script>

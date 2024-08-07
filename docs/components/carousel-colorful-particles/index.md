@@ -3,6 +3,8 @@ description:
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/carousel-colorful-particles/examples/basic-usage.vue'
 </script>
 

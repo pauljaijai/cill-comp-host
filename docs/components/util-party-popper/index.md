@@ -3,6 +3,8 @@ description: 隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/util-party-popper/examples/basic-usage.vue'
 import EmitPosition from '../../../src/components/util-party-popper/examples/emit-position.vue'
 import MousePopper from '../../../src/components/util-party-popper/examples/mouse-popper.vue'

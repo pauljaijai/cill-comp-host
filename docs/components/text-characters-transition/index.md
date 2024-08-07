@@ -10,7 +10,6 @@ import CustomSplitter from '../../../src/components/text-characters-transition/e
 import TransitionType from '../../../src/components/text-characters-transition/examples/transition-type.vue'
 import CustomTransition from '../../../src/components/text-characters-transition/examples/custom-transition.vue'
 
-
 import { onMounted, ref, nextTick } from 'vue'
 
 const visible = ref(false);
