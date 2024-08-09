@@ -2,15 +2,12 @@
   "name": "chill-component",
   "version": "0.17.7",
   "scripts": {
-    "dev": "vitepress dev docs --force --host",
     "docs:dev": "vitepress dev docs --force --host",
     "docs:build": "vitepress build docs",
     "docs:preview": "npm run docs:build && vitepress preview docs",
     "version:minor": "npm version minor",
     "version:patch": "npm version patch",
     "check": "vue-tsc --noEmit --skipLibCheck",
-    "build": "vue-tsc --noEmit --skipLibCheck && vite build",
-    "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
