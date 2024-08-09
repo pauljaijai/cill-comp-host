@@ -1,20 +1,17 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border p-4 rounded">
-      <!-- <base-checkbox
-        v-model="disable"
-        label="停用按鈕"
+  <div class="flex flex-col w-full border border-gray-300 p-6">
+    <base-checkbox
+      v-model="disabled"
+      class="p-4 w-full border rounded"
+      label="停用"
+    />
+
+    <div class="flex flex-col justify-center flex-1">
+      <slider-stubborn
+        v-model="value"
+        :disabled="disabled"
+        class="w-full"
       />
-
-      <base-input
-        v-model="text"
-        placeholder="點擊這裡並使用 tab 將焦點轉移至按鈕後，再按下 Enter 看看"
-        class=" w-full "
-      /> -->
-    </div>
-
-    <div class="flex">
-      <slider-stubborn />
     </div>
   </div>
 </template>
@@ -23,9 +20,8 @@
 import { ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
-import BaseInput from '../../base-input.vue';
 import SliderStubborn from '../slider-stubborn.vue';
 
-const text = ref('');
-const disable = ref(true);
+const disabled = ref(false);
+const value = ref(0);
 </script>

@@ -75,6 +75,12 @@ export default defineConfig({
             ]
           },
           {
+            text: '滑動條',
+            items: [
+              { text: '固執的滑動條', link: '/components/slider-stubborn/' },
+            ]
+          },
+          {
             text: '包裝器',
             items: [
               { text: '立體包裝器', link: '/components/wrapper-stereoscopic/' },
@@ -126,7 +132,7 @@ export default defineConfig({
               { text: '固執的滑桿', link: '/components/slider-stubborn/' },
             ]
           },
-          
+
         ]
       },
     ],

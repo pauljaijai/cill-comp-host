@@ -8,9 +8,9 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-usage.vue'
 </script>
 
-# 標題
+# 固執的滑動條
 
-說明說明
+停用時很固執的滑動條。( ・ิω・ิ)
 
 ## 使用範例
 
@@ -18,7 +18,7 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 
 當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
 
-<basic-usage/>
+<basic-usage class="h-[30vh]"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/slider-stubborn/examples/basic-usage.vue
