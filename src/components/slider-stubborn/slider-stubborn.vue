@@ -18,16 +18,6 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-// #region Slots
-defineSlots<{
-  default?: () => unknown;
-}>();
-// #endregion Slots
-
-
-// #region Methods
-defineExpose({});
-// #endregion Methods
 </script>
 
 <style scoped lang="sass">

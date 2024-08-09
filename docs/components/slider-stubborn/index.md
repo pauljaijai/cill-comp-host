@@ -3,6 +3,8 @@ description:
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-usage.vue'
 </script>
 
@@ -34,6 +36,10 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 請不要將 overflow 設定為 hidden，否則按鈕會啪沒了，消失的無影無蹤。
 :::
 
+## 原始碼
+
+<source-link-list name="slider-stubborn"/>
+
 ## API
 
 ### Props
@@ -43,11 +49,3 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 ### Emits
 
 <<< ../../../src/components/slider-stubborn/slider-stubborn.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/slider-stubborn/slider-stubborn.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/slider-stubborn/slider-stubborn.vue/#Slots
