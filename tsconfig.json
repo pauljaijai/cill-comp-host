@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "noErrorTruncation": true,
     "useDefineForClassFields": true,
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
+    "noUncheckedIndexedAccess": true,
     "jsx": "preserve",
     "sourceMap": true,
     "resolveJsonModule": true,
@@ -17,7 +19,10 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "@babylonjs/core",
+    ],
   },
   "include": [
     "src/**/*.ts",

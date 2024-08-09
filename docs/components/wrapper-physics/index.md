@@ -3,6 +3,8 @@ description: 產生物理世界，讓內部元素具有物理效果 ヾ(⌐■_�
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/wrapper-physics/examples/basic-usage.vue'
 import BodyProperty from '../../../src/components/wrapper-physics/examples/body-property.vue'
 import AdjustGravity from '../../../src/components/wrapper-physics/examples/adjust-gravity.vue'
@@ -128,6 +130,10 @@ Matter.js 是一個很成熟的 JavaScript 2D 物理引擎套件，官網上有�
 如此這般，我們成功實現物理效果模擬了！就像是替身一樣！(ﾉ>ω<)ﾉ
 
 JOJO！我不想當 DOM 了！（⊙益⊙）
+
+## 原始碼
+
+<source-link-list name="wrapper-physics"/>
 
 ## API
 

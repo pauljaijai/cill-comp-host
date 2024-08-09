@@ -1,10 +1,10 @@
 import { defineConfig, HeadConfig } from 'vitepress';
-import packageJson from '../../package.json';
+import { version } from '../../package.json';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "🐟 鱈魚的酷酷元件",
-  description: "設計各類惡搞、有趣的特殊元件",
+  description: "設計各類惡搞、有趣且實用（？）的特殊元件",
   head: [
     ['link', { rel: 'icon', href: '/favicon.webp' }],
     ['meta', { property: 'og:image', content: 'https://cod-chill-component.pages.dev/og.jpg' }],
@@ -13,7 +13,8 @@ export default defineConfig({
     return [
       [
         'script',
-        { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-2T520RHFM9' }
+        { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-2T520RHFM9' },
+        '',
       ],
       [
         'script',
@@ -27,17 +28,22 @@ export default defineConfig({
   },
   transformPageData(pageData) {
     pageData.frontmatter.head ??= []
-    pageData.frontmatter.head.push(['meta', { property: 'og:description', content: pageData.frontmatter.description }])
+    pageData.frontmatter.head.push(['meta', {
+      property: 'og:description',
+      content: pageData?.frontmatter?.description ?? ''
+    }])
   },
   markdown: {
     lineNumbers: true
   },
-  appearance: false,
+  appearance: {
+    initialValue: undefined,
+  },
 
   themeConfig: {
     footer: {
-      message: `v${packageJson.version}`,
-      copyright: 'Copyright © 2024-present <a href="https://gitlab.com/codfish2140">Codfish</a>'
+      message: `v${version}`,
+      copyright: 'MIT License<br>Copyright © 2024-present <a href="https://gitlab.com/codfish2140">Codfish</a>'
     },
     outline: {
       label: '目錄',
@@ -74,6 +80,44 @@ export default defineConfig({
               { text: '立體包裝器', link: '/components/wrapper-stereoscopic/' },
               { text: '物理包裝器', link: '/components/wrapper-physics/' },
               { text: '貓耳包裝器', link: '/components/wrapper-cat-ear/' },
+              { text: '塞滿嘴包裝器', link: '/components/wrapper-kirby-mouthful-mode/' },
+            ]
+          },
+          {
+            text: '游標',
+            items: [
+              { text: '游標小跟班', link: '/components/cursor-sidekick/' },
+            ]
+          },
+          {
+            text: '輪播',
+            items: [
+              { text: '空間懸浮輪播', link: '/components/carousel-space-floating/' },
+            ]
+          },
+          {
+            text: '背景',
+            items: [
+              { text: '螢火蟲', link: '/components/bg-firefly/' },
+              { text: '櫻吹雪', link: '/components/bg-sakura-fubuki/' },
+            ]
+          },
+          {
+            text: '轉場',
+            items: [
+              { text: '多邊形轉場', link: '/components/transition-shape/' },
+            ]
+          },
+          {
+            text: '文字',
+            items: [
+              { text: '逐字轉場', link: '/components/text-characters-transition/' },
+            ]
+          },
+          {
+            text: '實用',
+            items: [
+              { text: '拉炮', link: '/components/util-party-popper/' },
             ]
           },
           {

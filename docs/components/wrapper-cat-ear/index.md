@@ -3,6 +3,8 @@ description: 任何元素包起來都會長出貓耳，讓萬物皆可萌吧！(
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/wrapper-cat-ear/examples/basic-usage.vue'
 import SwitchAction from '../../../src/components/wrapper-cat-ear/examples/switch-action.vue'
 import MixColors from '../../../src/components/wrapper-cat-ear/examples/mix-colors.vue'
@@ -93,6 +95,10 @@ import NaughtyCat from '../../../src/components/wrapper-cat-ear/examples/naughty
 最後選擇了資料還算齊全且 SVG 支援度不錯的 anime.js 了。
 
 如果大家有更好的套件，拜託請推薦給我。(´▽`ʃ♡ƪ)
+
+## 原始碼
+
+<source-link-list name="wrapper-cat-ear"/>
 
 ## API
 

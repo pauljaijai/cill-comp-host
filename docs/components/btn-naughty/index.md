@@ -3,6 +3,8 @@ description: 一個停用時會越嚕越遠的按鈕，像極了你家那隻欠�
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/btn-naughty/examples/basic-usage.vue'
 import MovingDistance from '../../../src/components/btn-naughty/examples/moving-distance.vue'
 import CallMethod from '../../../src/components/btn-naughty/examples/call-method.vue'
@@ -92,6 +94,10 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 ::: danger 注意！Σ(ˊДˋ;)
 請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
 :::
+
+## 原始碼
+
+<source-link-list name="btn-naughty"/>
 
 ## API
 

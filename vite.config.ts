@@ -1,7 +1,5 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
-import loadVersion from 'vite-plugin-package-version';
 import path from 'path';
 
 import legacy from '@vitejs/plugin-legacy';
@@ -26,15 +24,7 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     plugins: [
-      vue({
-        template: { transformAssetUrls }
-      }),
-
-      quasar({
-        sassVariables: 'src/style/quasar-variables.sass'
-      }),
-
-      loadVersion(),
+      vue(),
 
       legacy({
         targets: legacyTargets

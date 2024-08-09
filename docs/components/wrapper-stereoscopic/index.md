@@ -3,6 +3,8 @@ description: 可以讓元素有酷酷的 3D 偏轉效果。ˋ( ° ▽、° )
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
+
 import BasicUsage from '../../../src/components/wrapper-stereoscopic/examples/basic-usage.vue'
 import MultiLayer from '../../../src/components/wrapper-stereoscopic/examples/multi-layer.vue'
 import AngleRange from '../../../src/components/wrapper-stereoscopic/examples/angle-range.vue'
@@ -74,6 +76,10 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 不過這裡有個小技巧，我們不把「目前角度」直接設為「目標角度」，而是逐漸趨近「目標角度」。
 
 這樣無論「目標角度」怎麼亂跳，都可以保證偏轉效果都有動畫呈現，看起來更自然、舒服。◝(≧∀≦)◟
+
+## 原始碼
+
+<source-link-list name="wrapper-stereoscopic"/>
 
 ## API
 
