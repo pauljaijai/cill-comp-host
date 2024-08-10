@@ -67,7 +67,7 @@ const currentSection = ref('btn');
 
 停用時寧死不屈的滑動條。( ・ิω・ิ)
 
-<slider-stubborn z-index="999"/>
+<slider-stubborn class="h-[60vh]" z-index="999"/>
 
 </expansion-section>
 
