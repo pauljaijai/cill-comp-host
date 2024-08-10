@@ -1,8 +1,11 @@
 <template>
   <div
     ref="sliderRef"
-    class=" relative py-2 cursor-grab"
+    class="slider-stubborn relative py-3 cursor-grab"
     @mousedown="(e) => e.preventDefault()"
+    @mousemove="(e) => e.preventDefault()"
+    @touchstart="(e) => e.preventDefault()"
+    @touchmove="(e) => e.preventDefault()"
   >
     <div
       class="track rounded-full "

@@ -3,7 +3,7 @@
     ref="svgRef"
     v-bind="svgAttrData"
     :style="svgStyle"
-    class="thumb-svg border absolute pointer-events-none"
+    class="thumb-svg absolute pointer-events-none"
   >
     <path
       :d="pathD"
@@ -18,10 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import { throttleFilter, useIntervalFn, useMouseInElement, useMousePressed, useVModel } from '@vueuse/core';
+import { throttleFilter, useIntervalFn, useMouseInElement, useRafFn } from '@vueuse/core';
 import anime from 'animejs';
-import { clamp, pipe } from 'remeda';
-import { computed, CSSProperties, reactive, ref, watch, watchEffect } from 'vue';
+import { computed, CSSProperties, reactive, ref, watch } from 'vue';
 import { getVectorLength, mapNumber } from '../../common/utils';
 
 interface Props {
@@ -121,16 +120,19 @@ const stiffness = computed(() => {
     length.value,
     0,
     props.maxThumbLength,
-    0.5,
-    3,
+    1,
+    4,
   );
 });
 /** 速度衰減率，範圍 0 ~ 1。越小速度衰減越快 */
-const damping = 0.7;
+const damping = 0.8;
 
 /** 放開的瞬間，播放回彈動畫 */
 watch(isHeld, (value) => {
-  if (value) return;
+  if (value) {
+    resume()
+    return;
+  }
 
   anime({
     targets: pathEnd.value,
@@ -143,56 +145,42 @@ watch(isHeld, (value) => {
 watch(() => [
   mouseInSvg.elementX, mouseInSvg.elementY
 ], () => {
-  if (isHeld.value) {
-    // 長度不能超過 maxThumbLength
-    const newPoint = {
-      x: mouseInSvg.elementX,
-      y: mouseInSvg.elementY,
-    }
+  if (props.disabled) return;
 
-    const delta = {
-      x: newPoint.x - pathStart.value.x,
-      y: newPoint.y - pathStart.value.y,
-    }
-    const deltaLength = getVectorLength(delta);
-
-    // 如果超過 maxThumbLength，則將 newPoint 限制在 maxThumbLength 範圍內
-    if (deltaLength > props.maxThumbLength) {
-      const scaleFactor = props.maxThumbLength / deltaLength;
-      newPoint.x = pathStart.value.x + delta.x * scaleFactor;
-      newPoint.y = pathStart.value.y + delta.y * scaleFactor;
-    }
-
-    // 設定 pathEnd 為 newPoint
-    pathEnd.value = newPoint;
+  pathEnd.value = {
+    ...pathStart.value
   }
-
-  if (!props.disabled) {
-    pathEnd.value = {
-      ...pathStart.value
-    }
-  }
+  pause();
 }, { deep: true })
 
 /** 更新終點位置 */
-// useIntervalFn(() => {
-//   if (isHeld.value) {
-//     pathEnd.value = {
-//       x: mouseInSvg.elementX,
-//       y: mouseInSvg.elementY,
-//     }
-//   }
+useRafFn(() => {
+  if (!isHeld.value || !props.disabled) return;
 
-//   if (!props.disabled) {
-//     pathEnd.value = {
-//       ...pathStart.value
-//     }
-//     return;
-//   }
-// }, 15)
+  const newPoint = {
+    x: (mouseInSvg.elementX - pathEnd.value.x) / 2 + pathEnd.value.x,
+    y: (mouseInSvg.elementY - pathEnd.value.y) / 2 + pathEnd.value.y,
+  }
 
-/** 處理彈性動畫 */
-useIntervalFn(() => {
+  const delta = {
+    x: newPoint.x - pathStart.value.x,
+    y: newPoint.y - pathStart.value.y,
+  }
+  const deltaLength = getVectorLength(delta);
+
+  // 如果超過 maxThumbLength，則將 newPoint 限制在 maxThumbLength 範圍內
+  if (deltaLength > props.maxThumbLength) {
+    const scaleFactor = props.maxThumbLength / deltaLength;
+    newPoint.x = pathStart.value.x + delta.x * scaleFactor;
+    newPoint.y = pathStart.value.y + delta.y * scaleFactor;
+  }
+
+  // 設定 pathEnd 為 newPoint
+  pathEnd.value = newPoint;
+})
+
+/** 處理彈性動畫。自動停止以節省效能 */
+const { pause, resume } = useRafFn(() => {
   const targetPoint = {
     x: (pathEnd.value.x + pathStart.value.x) / 2,
     y: (pathEnd.value.y + pathStart.value.y) / 2,
@@ -216,7 +204,7 @@ useIntervalFn(() => {
   // 更新座標
   pathMid.value.x += midVelocity.x
   pathMid.value.y += midVelocity.y
-}, 20)
+})
 </script>
 
 <style scoped lang="sass">
