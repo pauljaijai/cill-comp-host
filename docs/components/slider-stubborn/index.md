@@ -28,8 +28,6 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 
 使用 svg path 實現拉長與彎曲彈性效果。
 
-由於需要額外空間繪製拉長效果，所以拉動握把時可能造成頁面跑出水平滾動條，需要自行處理 overflow。(´・ω・`)
-
 ::: danger 注意！Σ(ˊДˋ;)
 請不要將 overflow 設定為 hidden，否則握把拉長時會被裁切
 :::
