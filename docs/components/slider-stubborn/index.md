@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 
 ### 基本用法
 
-當按鈕狀態為 disabled 並觸發 hover、click、key enter 事件時，按鈕會開始亂跑
+當狀態為 disabled 時，拉動握把會讓握把拉長，還會越拉越緊。ᕕ( ﾟ ∀。)ᕗ 
 
 <basic-usage class="h-[30vh]"/>
 

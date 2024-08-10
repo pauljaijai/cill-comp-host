@@ -74,7 +74,7 @@ export default defineConfig({
               { text: '調皮的按鈕', link: '/components/btn-naughty/' },
             ]
           },
-          {
+             {
             text: '滑動條',
             items: [
               { text: '固執的滑動條', link: '/components/slider-stubborn/' },
@@ -126,13 +126,6 @@ export default defineConfig({
               { text: '拉炮', link: '/components/util-party-popper/' },
             ]
           },
-          {
-            text: '滑桿',
-            items: [
-              { text: '固執的滑桿', link: '/components/slider-stubborn/' },
-            ]
-          },
-
         ]
       },
     ],
