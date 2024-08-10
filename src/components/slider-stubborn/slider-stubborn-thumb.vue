@@ -120,7 +120,7 @@ const stiffness = computed(() => {
     length.value,
     0,
     props.maxThumbLength,
-    4,
+    3.5,
     4.5,
   );
 });
