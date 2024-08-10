@@ -7,6 +7,8 @@
     />
 
     <div class="flex flex-col justify-center flex-1">
+      目前數值：{{ Math.floor(value) }}
+
       <slider-stubborn
         v-model="value"
         :disabled="disabled"
