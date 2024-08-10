@@ -22,6 +22,7 @@ import { computed, ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
 import SliderStubborn from '../slider-stubborn.vue';
+
 import { useWindowSize } from '@vueuse/core';
 
 const { width, height } = useWindowSize()
