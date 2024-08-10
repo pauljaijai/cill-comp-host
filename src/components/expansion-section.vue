@@ -11,7 +11,7 @@
     <!-- expander -->
     <div
       :style="expanderStyle"
-      class="expander flex flex-col duration-500 ease-in-out-circ overflow-hidden"
+      class="expander flex flex-col duration-500 ease-in-out-circ"
     >
       <transition name="content">
         <!-- 內容 -->
@@ -19,6 +19,7 @@
           v-if="contentVisible"
           ref="contentRef"
           :class="props.contentClass"
+          :style="contentStyle"
         >
           <slot />
         </div>
@@ -28,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, CSSProperties, ref, watchEffect } from 'vue';
 import { nanoid } from 'nanoid';
 
 import { useElementSize, useVModel } from '@vueuse/core';
@@ -62,11 +63,15 @@ function handleClick() {
 }
 
 const contentVisible = computed(() => modelValue.value === props.value);
+
 const contentRef = ref();
 const { height } = useElementSize(contentRef);
 
-const expanderStyle = computed(() => ({
+const expanderStyle = computed<CSSProperties>(() => ({
   height: contentVisible.value ? `${height.value}px` : '0px',
+}));
+const contentStyle = computed<CSSProperties>(() => ({
+  transitionDelay: contentVisible.value ? `0.3s` : '0s',
 }));
 
 const headerClass = computed(() => {
@@ -89,11 +94,12 @@ const headerClass = computed(() => {
   will-change: height
 
 .content-enter-active, .content-leave-active
-  transition-duration: 0.6s
+  transition-duration: 0.4s 
 .content-enter-from, .content-leave-to
   // transform 會導致內容之 canvas 顯示異常問題
   // transform: translateX(-10px) !important
   opacity: 0 !important
+  overflow: hidden
 
 .ease-in-out-circ
   transition-timing-function: cubic-bezier(0.85, 0, 0.15, 1)
