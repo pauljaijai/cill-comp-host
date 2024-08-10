@@ -5,6 +5,8 @@ import ExpansionSection from '../../src/components/expansion-section.vue';
 
 import BtnNaughty from '../../src/components/btn-naughty/btn-naughty.vue';
 
+import SliderStubborn from '../../src/components/slider-stubborn/examples/basic-usage.vue';
+
 import WrapperStereoscopic from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic.vue';
 import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic-layer.vue';
 
@@ -49,6 +51,23 @@ const currentSection = ref('btn');
 <div class="flex w-full justify-center py-[20vh]">
   <btn-naughty label="(^._.^)ﾉ" z-index="99" disabled/>
 </div>
+
+</expansion-section>
+
+## 滑動條
+
+經典卻又不常見的滑動條。∠( ᐛ 」∠)_
+
+<expansion-section
+  v-model="currentSection"
+  header-class="border p-2 rounded-lg"
+>
+
+### [固執的滑動條](./slider-stubborn/) <Badge type="info" text="slider" />
+
+停用時寧死不屈的滑動條。( ・ิω・ิ)
+
+<slider-stubborn z-index="999"/>
 
 </expansion-section>
 
