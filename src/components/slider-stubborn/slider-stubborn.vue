@@ -17,12 +17,17 @@
       :is-held="isHeld"
       :ratio="ratio"
       :mouse-ratio="mouseRatio"
+      :slider-size="sliderSize"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { throttleFilter, useMouseInElement, useMousePressed, useVModel } from '@vueuse/core';
+import {
+  throttleFilter, useElementSize,
+  useMouseInElement, useMousePressed,
+  useVModel
+} from '@vueuse/core';
 import { clamp, pipe } from 'remeda';
 import { computed, reactive, ref, watch } from 'vue';
 
@@ -61,8 +66,9 @@ const modelValue = useVModel(props, 'modelValue', emit);
 
 const sliderRef = ref<HTMLDivElement>();
 const mouseInSlider = reactive(useMouseInElement(
-  sliderRef, { eventFilter: throttleFilter(16) }
+  sliderRef, { eventFilter: throttleFilter(15) }
 ));
+const sliderSize = reactive(useElementSize(sliderRef));
 
 const { pressed: isHeld } = useMousePressed({
   target: sliderRef,

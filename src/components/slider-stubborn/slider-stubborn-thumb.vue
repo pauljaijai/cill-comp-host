@@ -18,7 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import { throttleFilter, useIntervalFn, useMouseInElement } from '@vueuse/core';
+import {
+  throttleFilter, useIntervalFn,
+  useMouseInElement
+} from '@vueuse/core';
 import anime from 'animejs';
 import { computed, CSSProperties, reactive, ref, watch } from 'vue';
 import { getVectorLength, mapNumber } from '../../common/utils';
@@ -34,6 +37,10 @@ interface Props {
   isHeld: boolean;
   ratio: number;
   mouseRatio: number;
+  sliderSize: {
+    width: number,
+    height: number,
+  };
 }
 const props = withDefaults(defineProps<Props>(), {});
 
@@ -43,7 +50,7 @@ const mouseRatio = computed(() => props.mouseRatio);
 
 const svgRef = ref<SVGElement>();
 const mouseInSvg = reactive(useMouseInElement(
-  svgRef, { eventFilter: throttleFilter(16) }
+  svgRef, { eventFilter: throttleFilter(15) }
 ));
 
 const svgAttrData = computed(() => {
@@ -149,8 +156,11 @@ watch(isHeld, (value) => {
   });
 })
 
+
 watch(() => [
-  mouseInSvg.elementX, mouseInSvg.elementY
+  mouseInSvg.elementX,
+  mouseInSvg.elementY,
+  props.sliderSize,
 ], () => {
   if (props.disabled) return;
 
@@ -208,6 +218,7 @@ useIntervalFn(() => {
 
   if (Math.abs(midVelocity.x) < 0.001 && Math.abs(midVelocity.y) < 0.001) {
     midVelocity = { x: 0, y: 0 }
+    return;
   }
 
   // 更新座標
