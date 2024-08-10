@@ -59,7 +59,14 @@ const emit = defineEmits<{
 
 const modelValue = useVModel(props, 'modelValue', emit);
 
-const isHeld = ref(false);
+const sliderRef = ref<HTMLDivElement>();
+const mouseInSlider = reactive(useMouseInElement(
+  sliderRef, { eventFilter: throttleFilter(16) }
+));
+
+const { pressed: isHeld } = useMousePressed({
+  target: sliderRef,
+})
 /** 切換滑鼠圖標 */
 watch(isHeld, (value) => {
   if (value) {
@@ -68,22 +75,6 @@ watch(isHeld, (value) => {
     document.body.classList.remove('grabbing')
   }
 })
-
-const { pressed } = useMousePressed()
-watch(pressed, (isPressed) => {
-  if (!mouseInSlider.isOutside && isPressed) {
-    isHeld.value = true;
-  }
-
-  if (!isPressed) {
-    isHeld.value = false;
-  }
-})
-
-const sliderRef = ref<HTMLDivElement>();
-const mouseInSlider = reactive(useMouseInElement(
-  sliderRef, { eventFilter: throttleFilter(16) }
-));
 
 const ratio = computed(() => pipe(
   modelValue.value / (props.max - props.min) * 100,
