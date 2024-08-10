@@ -25,6 +25,7 @@ import {
 import anime from 'animejs';
 import { computed, CSSProperties, reactive, ref, watch } from 'vue';
 import { getVectorLength, mapNumber } from '../../common/utils';
+import { add, pipe } from 'remeda';
 
 interface Props {
   min: number;
@@ -52,16 +53,62 @@ const svgRef = ref<SVGElement>();
 const mouseInSvg = reactive(useMouseInElement(
   svgRef, { eventFilter: throttleFilter(15) }
 ));
+/** 以 svg 中心為 0 點 */
+const mousePosition = computed(() => ({
+  x: mouseInSvg.elementX - mouseInSvg.elementWidth / 2,
+  y: mouseInSvg.elementY - mouseInSvg.elementHeight / 2,
+}));
 
-const svgAttrData = computed(() => {
-  const value = props.maxThumbLength * 2;
+/** 動態調整 svg 尺寸，避免拉動 slider 時頁面產生多餘滾動條 */
+const svgSize = ref(props.maxThumbLength + 10);
+const svgAttrData = computed(() => ({
+  width: svgSize.value,
+  height: svgSize.value,
+  viewBox: [
+    svgSize.value / -2,
+    svgSize.value / -2,
+    svgSize.value,
+    svgSize.value,
+  ].join(' ')
+}));
 
-  return {
-    width: value,
-    height: value,
-    viewBox: `0 0 ${value} ${value}`
+/** svgSize 動畫效果 */
+useIntervalFn(() => {
+  const newSize = pipe(0,
+    () => {
+      if (!isHeld.value || !props.disabled) {
+        return props.thumbSize;
+      }
+
+      const size = Math.max(
+        Math.abs(mousePosition.value.x),
+        Math.abs(mousePosition.value.y),
+        props.thumbSize,
+      ) * 2
+
+      if (size > props.maxThumbLength * 2) {
+        return props.maxThumbLength * 2;
+      }
+
+      return size;
+    }
+  ) + 20;
+
+  const delta = newSize - svgSize.value;
+  if (Math.abs(delta) < 0.01) {
+    svgSize.value = newSize;
+    return;
   }
-});
+
+  // 長大要快，縮小要慢
+  if (delta > 0) {
+    svgSize.value += delta;
+  } else {
+    svgSize.value += delta / 10;
+  }
+}, 15)
+
+
 const svgStyle = computed<CSSProperties>(() => {
   if (props.disabled) {
     return {
@@ -76,25 +123,21 @@ const svgStyle = computed<CSSProperties>(() => {
 });
 
 const pathStart = computed(() => {
-  const point = props.maxThumbLength;
-  return { x: point, y: point };
+  return { x: 0, y: 0 };
 });
 const pathMid = ref({
-  x: pathStart.value.x,
-  y: pathStart.value.y,
+  x: 0, y: 0,
 });
 const pathEnd = ref({
-  x: pathStart.value.x,
-  y: pathStart.value.y,
+  x: 0, y: 0,
 });
 
 const pathD = computed(() => {
-  const { x: startX, y: startY } = pathStart.value;
   const { x: halfX, y: halfY } = pathMid.value;
   const { x: endX, y: endY } = pathEnd.value;
 
   return [
-    `M${startX} ${startY}`,
+    `M0 0`,
     `Q${halfX} ${halfY},`,
     `${endX} ${endY}`,
   ].join(' ')
@@ -109,15 +152,14 @@ const length = computed(() => {
   return getVectorLength(delta);
 });
 
-const strokeWidth = computed(() => {
-  return mapNumber(
-    length.value,
-    0,
-    props.maxThumbLength,
-    props.thumbSize,
-    props.thumbSize * 0.1,
-  );
-});
+const strokeMinWidth = computed(() => Math.max(props.thumbSize * 0.1, 5));
+const strokeWidth = computed(() => mapNumber(
+  length.value,
+  0,
+  props.maxThumbLength,
+  props.thumbSize,
+  strokeMinWidth.value,
+));
 
 /** 中間點速度，用來模擬震盪效果 */
 let midVelocity = { x: 0, y: 0 };
@@ -156,10 +198,9 @@ watch(isHeld, (value) => {
   });
 })
 
-
+/** 滑鼠移動時，更新終點位置 */
 watch(() => [
-  mouseInSvg.elementX,
-  mouseInSvg.elementY,
+  mousePosition,
   props.sliderSize,
 ], () => {
   if (props.disabled) return;
@@ -174,35 +215,30 @@ useIntervalFn(() => {
   if (!isHeld.value || !props.disabled) return;
 
   const newPoint = {
-    x: (mouseInSvg.elementX - pathEnd.value.x) / 2 + pathEnd.value.x,
-    y: (mouseInSvg.elementY - pathEnd.value.y) / 2 + pathEnd.value.y,
+    x: (mousePosition.value.x - pathEnd.value.x) / 2 + pathEnd.value.x,
+    y: (mousePosition.value.y - pathEnd.value.y) / 2 + pathEnd.value.y,
   }
 
-  const delta = {
-    x: newPoint.x - pathStart.value.x,
-    y: newPoint.y - pathStart.value.y,
-  }
-  const deltaLength = getVectorLength(delta);
+  const length = getVectorLength(newPoint);
 
   // 如果超過 maxThumbLength，則將 newPoint 限制在 maxThumbLength 範圍內
-  if (deltaLength > props.maxThumbLength) {
+  if (length > props.maxThumbLength) {
     // 製造抖動效果
     const noise = Math.random() * 4;
 
-    const scaleFactor = props.maxThumbLength / deltaLength;
-    newPoint.x = pathStart.value.x + delta.x * scaleFactor + noise;
-    newPoint.y = pathStart.value.y + delta.y * scaleFactor + noise;
+    const scaleFactor = props.maxThumbLength / length;
+    newPoint.x = newPoint.x * scaleFactor + noise;
+    newPoint.y = newPoint.y * scaleFactor + noise;
   }
 
-  // 設定 pathEnd 為 newPoint
   pathEnd.value = newPoint;
 }, 15)
 
 /** 處理彈性動畫 */
 useIntervalFn(() => {
   const targetPoint = {
-    x: (pathEnd.value.x + pathStart.value.x) / 2,
-    y: (pathEnd.value.y + pathStart.value.y) / 2,
+    x: pathEnd.value.x / 2,
+    y: pathEnd.value.y / 2,
   }
 
   const dx = targetPoint.x - pathMid.value.x
@@ -231,7 +267,7 @@ useIntervalFn(() => {
 .thumb-svg
   top: 50%
   transform: translate(-50%, -50%)
-  will-change: left
+  will-change: left width height view-box
 
 .track
   height: 8px
