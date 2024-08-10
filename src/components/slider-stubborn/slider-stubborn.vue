@@ -45,7 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   min: 0,
   max: 100,
-  maxThumbLength: 500,
+  maxThumbLength: 200,
   thumbSize: 20,
   thumbColor: '#34c6eb',
   trackClass: ' bg-[#EEE]',
