@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { throttleFilter, useIntervalFn, useMouseInElement, useRafFn } from '@vueuse/core';
+import { throttleFilter, useIntervalFn, useMouseInElement } from '@vueuse/core';
 import anime from 'animejs';
 import { computed, CSSProperties, reactive, ref, watch } from 'vue';
 import { getVectorLength, mapNumber } from '../../common/utils';
@@ -120,17 +120,24 @@ const stiffness = computed(() => {
     length.value,
     0,
     props.maxThumbLength,
-    1,
-    4,
+    2,
+    3,
   );
 });
 /** 速度衰減率，範圍 0 ~ 1。越小速度衰減越快 */
-const damping = 0.8;
+const damping = computed(() => {
+  return mapNumber(
+    length.value,
+    0,
+    props.maxThumbLength,
+    0.9,
+    0.75,
+  );
+});
 
 /** 放開的瞬間，播放回彈動畫 */
 watch(isHeld, (value) => {
   if (value) {
-    resume()
     return;
   }
 
@@ -150,11 +157,10 @@ watch(() => [
   pathEnd.value = {
     ...pathStart.value
   }
-  pause();
 }, { deep: true })
 
 /** 更新終點位置 */
-useRafFn(() => {
+useIntervalFn(() => {
   if (!isHeld.value || !props.disabled) return;
 
   const newPoint = {
@@ -177,10 +183,10 @@ useRafFn(() => {
 
   // 設定 pathEnd 為 newPoint
   pathEnd.value = newPoint;
-})
+}, 15)
 
-/** 處理彈性動畫。自動停止以節省效能 */
-const { pause, resume } = useRafFn(() => {
+/** 處理彈性動畫 */
+useIntervalFn(() => {
   const targetPoint = {
     x: (pathEnd.value.x + pathStart.value.x) / 2,
     y: (pathEnd.value.y + pathStart.value.y) / 2,
@@ -194,8 +200,8 @@ const { pause, resume } = useRafFn(() => {
   midVelocity.y += stiffness.value * dy
 
   // 阻尼：減少速度，模擬摩擦或空氣阻力
-  midVelocity.x *= damping
-  midVelocity.y *= damping
+  midVelocity.x *= damping.value
+  midVelocity.y *= damping.value
 
   if (Math.abs(midVelocity.x) < 0.001 && Math.abs(midVelocity.y) < 0.001) {
     midVelocity = { x: 0, y: 0 }
@@ -204,7 +210,7 @@ const { pause, resume } = useRafFn(() => {
   // 更新座標
   pathMid.value.x += midVelocity.x
   pathMid.value.y += midVelocity.y
-})
+}, 15)
 </script>
 
 <style scoped lang="sass">
