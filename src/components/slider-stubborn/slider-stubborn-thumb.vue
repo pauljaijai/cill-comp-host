@@ -120,8 +120,8 @@ const stiffness = computed(() => {
     length.value,
     0,
     props.maxThumbLength,
-    2,
-    3,
+    4,
+    4.5,
   );
 });
 /** 速度衰減率，範圍 0 ~ 1。越小速度衰減越快 */
@@ -130,7 +130,7 @@ const damping = computed(() => {
     length.value,
     0,
     props.maxThumbLength,
-    0.9,
+    0.85,
     0.75,
   );
 });
@@ -176,9 +176,12 @@ useIntervalFn(() => {
 
   // 如果超過 maxThumbLength，則將 newPoint 限制在 maxThumbLength 範圍內
   if (deltaLength > props.maxThumbLength) {
+    // 製造抖動效果
+    const noise = Math.random() * 4;
+
     const scaleFactor = props.maxThumbLength / deltaLength;
-    newPoint.x = pathStart.value.x + delta.x * scaleFactor;
-    newPoint.y = pathStart.value.y + delta.y * scaleFactor;
+    newPoint.x = pathStart.value.x + delta.x * scaleFactor + noise;
+    newPoint.y = pathStart.value.y + delta.y * scaleFactor + noise;
   }
 
   // 設定 pathEnd 為 newPoint
