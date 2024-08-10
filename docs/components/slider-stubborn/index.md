@@ -1,5 +1,5 @@
 ---
-description: 停用時寧死不屈的滑動條。( ・ิω・ิ)
+description: 停用時絕不妥協的滑動條。( ・ิω・ิ)
 ---
 
 <script setup>
@@ -10,7 +10,7 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 
 # 固執的滑動條
 
-停用時寧死不屈的滑動條。( ・ิω・ิ)
+停用時絕不妥協的滑動條。( ・ิω・ิ)
 
 ## 使用範例
 

@@ -65,7 +65,7 @@ const currentSection = ref('btn');
 
 ### [固執的滑動條](./slider-stubborn/) <Badge type="info" text="slider" />
 
-停用時寧死不屈的滑動條。( ・ิω・ิ)
+停用時絕不妥協的滑動條。( ・ิω・ิ)
 
 <slider-stubborn class="h-[60vh]" z-index="999"/>
 
