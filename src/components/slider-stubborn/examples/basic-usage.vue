@@ -10,7 +10,7 @@
       <slider-stubborn
         v-model="value"
         :disabled="disabled"
-        :max-thumb-length="width / 2"
+        :max-thumb-length="thumbLength"
         class="w-full"
       />
     </div>
@@ -18,14 +18,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import BaseCheckbox from '../../base-checkbox.vue';
 import SliderStubborn from '../slider-stubborn.vue';
 import { useWindowSize } from '@vueuse/core';
 
-const { width } = useWindowSize()
+const { width, height } = useWindowSize()
 
 const disabled = ref(false);
-const value = ref(0);
+const value = ref(50);
+
+const thumbLength = computed(() =>
+  Math.min(width.value, height.value) / 3
+);
 </script>

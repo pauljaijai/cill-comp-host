@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 
 ### 基本用法
 
-當狀態為 disabled 時，拉動握把會讓握把拉長，還會越拉越緊。ᕕ( ﾟ ∀。)ᕗ 
+當狀態為 disabled 時，拉動握把會讓握把拉長，還會越拉越緊。ᕕ( ﾟ ∀。)ᕗ
 
 <basic-usage class="h-[30vh]"/>
 
@@ -26,11 +26,9 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 
 ## 原理
 
-滑鼠碰觸按鈕時，計算滑鼠位置到按鈕中心的單位向量，並以此向量為基準，移動一個按鈕尺寸的距離。
+使用 svg path 實現拉長與彎曲彈性效果。
 
-如果按鈕移動到畫面外，則會自動返回原點，使用 IntersectionObserver 實作。
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
+由於需要額外空間繪製拉長效果，所以拉動握把時可能造成頁面跑出水平滾動條，需要自行處理 overflow。(´・ω・`)
 
 ::: danger 注意！Σ(ˊДˋ;)
 請不要將 overflow 設定為 hidden，否則握把拉長時會被裁切
