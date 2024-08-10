@@ -60,7 +60,7 @@ const mousePosition = computed(() => ({
 }));
 
 /** 動態調整 svg 尺寸，避免拉動 slider 時頁面產生多餘滾動條 */
-const svgSize = ref(props.maxThumbLength + 10);
+const svgSize = ref(props.maxThumbLength + props.thumbSize * 1.5);
 const svgAttrData = computed(() => ({
   width: svgSize.value,
   height: svgSize.value,
@@ -92,7 +92,7 @@ useIntervalFn(() => {
 
       return size;
     }
-  ) + 20;
+  ) + props.thumbSize * 1.5;
 
   const delta = newSize - svgSize.value;
   if (Math.abs(delta) < 0.01) {

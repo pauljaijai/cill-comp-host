@@ -6,6 +6,7 @@ description: 停用時絕不妥協的滑動條。( ・ิω・ิ)
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-usage.vue'
+import CustomProp from '../../../src/components/slider-stubborn/examples/custom-prop.vue'
 </script>
 
 # 固執的滑動條
@@ -22,6 +23,16 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/slider-stubborn/examples/basic-usage.vue
+:::
+
+### 元件參數
+
+樣式可隨意調整
+
+<custom-prop />
+
+::: details 查看範例原始碼
+<<< ../../../src/components/slider-stubborn/examples/custom-prop.vue
 :::
 
 ## 原理
