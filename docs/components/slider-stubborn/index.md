@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 
 ### 基本用法
 
-當狀態為 disabled 時，拉動握把會拉長握把，還會越拉越緊。ᕕ( ﾟ ∀。)ᕗ
+當狀態為 disabled 時，拉動握把會越拉越長，還會越拉越緊。ᕕ( ﾟ ∀。)ᕗ
 
 <basic-usage class="h-[30vh]"/>
 
