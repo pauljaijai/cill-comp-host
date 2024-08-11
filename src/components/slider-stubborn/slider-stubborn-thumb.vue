@@ -110,31 +110,28 @@ useIntervalFn(() => {
 
 
 const svgStyle = computed<CSSProperties>(() => {
-  if (props.disabled) {
-    return {
-      left: `${ratio.value}%`,
+  const leftValue = pipe(null,
+    () => {
+      if (props.disabled) {
+        return ratio.value;
+      }
+
+      return isHeld.value ? mouseRatio.value : ratio.value;
     }
-  }
+  );
 
-  const left = isHeld.value ? mouseRatio.value : ratio.value;
   return {
-    left: `${left}%`,
+    left: `${leftValue}%`,
   }
 });
 
-const pathStart = computed(() => {
-  return { x: 0, y: 0 };
-});
-const pathMid = ref({
-  x: 0, y: 0,
-});
-const pathEnd = ref({
-  x: 0, y: 0,
-});
+const startPoint = computed(() => ({ x: 0, y: 0 }));
+const midPoint = ref({ x: 0, y: 0 });
+const endPoint = ref({ x: 0, y: 0 });
 
 const pathD = computed(() => {
-  const { x: halfX, y: halfY } = pathMid.value;
-  const { x: endX, y: endY } = pathEnd.value;
+  const { x: halfX, y: halfY } = midPoint.value;
+  const { x: endX, y: endY } = endPoint.value;
 
   return [
     `M0 0`,
@@ -145,8 +142,8 @@ const pathD = computed(() => {
 
 const length = computed(() => {
   const delta = {
-    x: pathEnd.value.x - pathStart.value.x,
-    y: pathEnd.value.y - pathStart.value.y,
+    x: endPoint.value.x - startPoint.value.x,
+    y: endPoint.value.y - startPoint.value.y,
   }
 
   return getVectorLength(delta);
@@ -162,37 +159,31 @@ const strokeWidth = computed(() => mapNumber(
 ));
 
 /** 中間點速度，用來模擬震盪效果 */
-let midVelocity = { x: 0, y: 0 };
+let midPointVelocity = { x: 0, y: 0 };
 /** 彈性係數，越大震動越快 */
-const stiffness = computed(() => {
-  return mapNumber(
-    length.value,
-    0,
-    props.maxThumbLength,
-    3.5,
-    4.5,
-  );
-});
+const midPointStiffness = computed(() => mapNumber(
+  length.value,
+  0,
+  props.maxThumbLength,
+  3.5,
+  4.5,
+));
 /** 速度衰減率，範圍 0 ~ 1。越小速度衰減越快 */
-const damping = computed(() => {
-  return mapNumber(
-    length.value,
-    0,
-    props.maxThumbLength,
-    0.85,
-    0.75,
-  );
-});
+const midPointDamping = computed(() => mapNumber(
+  length.value,
+  0,
+  props.maxThumbLength,
+  0.85,
+  0.75,
+));
 
-/** 放開的瞬間，播放回彈動畫 */
+/** 放開時，播放回彈動畫 */
 watch(isHeld, (value) => {
-  if (value) {
-    return;
-  }
+  if (value) return;
 
   anime({
-    targets: pathEnd.value,
-    ...pathStart.value,
+    targets: endPoint.value,
+    ...startPoint.value,
     easing: 'easeOutElastic',
     duration: 300,
   });
@@ -205,18 +196,18 @@ watch(() => [
 ], () => {
   if (props.disabled) return;
 
-  pathEnd.value = {
-    ...pathStart.value
+  endPoint.value = {
+    ...startPoint.value
   }
 }, { deep: true })
 
-/** 更新終點位置 */
+/** 處理終點動畫 */
 useIntervalFn(() => {
   if (!isHeld.value || !props.disabled) return;
 
   const newPoint = {
-    x: (mousePosition.value.x - pathEnd.value.x) / 2 + pathEnd.value.x,
-    y: (mousePosition.value.y - pathEnd.value.y) / 2 + pathEnd.value.y,
+    x: (mousePosition.value.x - endPoint.value.x) / 2 + endPoint.value.x,
+    y: (mousePosition.value.y - endPoint.value.y) / 2 + endPoint.value.y,
   }
 
   const length = getVectorLength(newPoint);
@@ -231,35 +222,35 @@ useIntervalFn(() => {
     newPoint.y = newPoint.y * scaleFactor + noise;
   }
 
-  pathEnd.value = newPoint;
+  endPoint.value = newPoint;
 }, 15)
 
 /** 處理彈性動畫 */
 useIntervalFn(() => {
   const targetPoint = {
-    x: pathEnd.value.x / 2,
-    y: pathEnd.value.y / 2,
+    x: endPoint.value.x / 2,
+    y: endPoint.value.y / 2,
   }
 
-  const dx = targetPoint.x - pathMid.value.x
-  const dy = targetPoint.y - pathMid.value.y
+  const dx = targetPoint.x - midPoint.value.x
+  const dy = targetPoint.y - midPoint.value.y
 
   // 彈力公式：F = -k * x (k 是彈性係數，x 是位移)
-  midVelocity.x += stiffness.value * dx
-  midVelocity.y += stiffness.value * dy
+  midPointVelocity.x += midPointStiffness.value * dx
+  midPointVelocity.y += midPointStiffness.value * dy
 
   // 阻尼：減少速度，模擬摩擦或空氣阻力
-  midVelocity.x *= damping.value
-  midVelocity.y *= damping.value
+  midPointVelocity.x *= midPointDamping.value
+  midPointVelocity.y *= midPointDamping.value
 
-  if (Math.abs(midVelocity.x) < 0.001 && Math.abs(midVelocity.y) < 0.001) {
-    midVelocity = { x: 0, y: 0 }
+  if (Math.abs(midPointVelocity.x) < 0.001 && Math.abs(midPointVelocity.y) < 0.001) {
+    midPointVelocity = { x: 0, y: 0 }
     return;
   }
 
   // 更新座標
-  pathMid.value.x += midVelocity.x
-  pathMid.value.y += midVelocity.y
+  midPoint.value.x += midPointVelocity.x
+  midPoint.value.y += midPointVelocity.y
 }, 15)
 </script>
 
