@@ -5,15 +5,15 @@
       disabled
       :max-thumb-length="thumbMaxLength / 4"
       thumb-color="#ff8d36"
-      class="w-full"
+      class="w-full z-[999]"
     />
 
     <slider-stubborn
       v-model="value"
       disabled
-      :max-thumb-length="thumbMaxLength / 3 * 2"
+      :max-thumb-length="thumbMaxLength / 2"
       :thumb-size="40"
-      class="w-full"
+      class="w-full z-[999]"
     />
   </div>
 </template>
@@ -27,7 +27,6 @@ import { useWindowSize } from '@vueuse/core';
 
 const { width, height } = useWindowSize()
 
-const disabled = ref(false);
 const value = ref(50);
 
 const thumbMaxLength = computed(() =>
