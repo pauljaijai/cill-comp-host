@@ -74,7 +74,7 @@ export default defineConfig({
               { text: '調皮的按鈕', link: '/components/btn-naughty/' },
             ]
           },
-             {
+          {
             text: '滑動條',
             items: [
               { text: '固執的滑動條', link: '/components/slider-stubborn/' },
@@ -144,6 +144,12 @@ export default defineConfig({
       {
         icon: 'youtube',
         link: 'https://www.youtube.com/@codfish2140',
+      },
+      {
+        icon: {
+          svg: '📚'
+        },
+        link: 'https://vocus.cc/salon/cod-aquarium',
       },
     ],
 
