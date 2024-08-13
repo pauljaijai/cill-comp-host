@@ -20,7 +20,8 @@
 <script setup lang="ts">
 import {
   throttleFilter, useIntervalFn,
-  useMouseInElement
+  useMouseInElement,
+  useWindowSize
 } from '@vueuse/core';
 import anime from 'animejs';
 import { computed, CSSProperties, reactive, ref, watch } from 'vue';
@@ -44,6 +45,8 @@ interface Props {
   };
 }
 const props = withDefaults(defineProps<Props>(), {});
+
+const windowSize = reactive(useWindowSize());
 
 const isHeld = computed(() => props.isHeld);
 const ratio = computed(() => props.ratio);
@@ -239,7 +242,7 @@ useIntervalFn(() => {
   midPointVelocity.x += midPointStiffness.value * dx
   midPointVelocity.y += midPointStiffness.value * dy
 
-  // 阻尼：減少速度，模擬摩擦或空氣阻力
+  // 阻尼，減少速度
   midPointVelocity.x *= midPointDamping.value
   midPointVelocity.y *= midPointDamping.value
 
@@ -251,6 +254,14 @@ useIntervalFn(() => {
   // 更新座標
   midPoint.value.x += midPointVelocity.x
   midPoint.value.y += midPointVelocity.y
+
+  // 不可以超出畫面
+  if (Math.abs(midPoint.value.x) > windowSize.width / 2) {
+    midPoint.value.x = midPoint.value.x > 0 ? windowSize.width / 2 : -windowSize.width / 2;
+  }
+  if (Math.abs(midPoint.value.y) > windowSize.height / 2) {
+    midPoint.value.y = midPoint.value.y > 0 ? windowSize.height / 2 : -windowSize.height / 2;
+  }
 }, 15)
 </script>
 
