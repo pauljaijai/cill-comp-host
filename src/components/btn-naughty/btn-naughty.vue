@@ -18,7 +18,7 @@
     <div
       ref="carrierRef"
       class="content relative"
-      :style="moveStyle"
+      :style="carrierStyle"
       tabindex="0"
       @transitionend="toggleRunning(false)"
       @click="handleClick"
@@ -128,12 +128,9 @@ watch(isOutside, (value) => {
   run();
 });
 
-const offset = ref({
-  x: 0,
-  y: 0
-});
-const moveStyle = computed(() => {
-  const { x, y } = offset.value;
+const carrierOffset = ref({ x: 0, y: 0 });
+const carrierStyle = computed(() => {
+  const { x, y } = carrierOffset.value;
 
   const cursor = props.disabled ? 'not-allowed' : 'pointer';
 
@@ -154,8 +151,8 @@ watch(() => props.disabled, (value) => {
   back();
 });
 function back() {
-  offset.value.x = 0;
-  offset.value.y = 0;
+  carrierOffset.value.x = 0;
+  carrierOffset.value.y = 0;
   counter.value = 0;
 
   emit('back');
@@ -173,8 +170,8 @@ const run = throttle(() => {
   });
 
   /** 往遠離滑鼠的方向移動 */
-  offset.value.x += direction.x * elementWidth.value;
-  offset.value.y += direction.y * elementHeight.value;
+  carrierOffset.value.x += direction.x * elementWidth.value;
+  carrierOffset.value.y += direction.y * elementHeight.value;
 
   counter.value += 1;
 
@@ -188,7 +185,7 @@ const run = throttle(() => {
         y: elementHeight.value * Number(props.maxDistanceMultiple),
       });
 
-      const distance = getVectorLength(offset.value);
+      const distance = getVectorLength(carrierOffset.value);
 
       return distance > maxDistance;
     },
