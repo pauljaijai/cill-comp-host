@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
-    <div class="flex gap-4 border p-4 rounded">
+  <div class="flex flex-col items-center justify-center gap-4 w-full border border-gray-300 p-6">
+    <div class="flex gap-4 border p-4 rounded w-full">
       <base-btn
         label="移動"
         @click="run"
