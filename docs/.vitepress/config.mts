@@ -1,4 +1,4 @@
-import { defineConfig, HeadConfig } from 'vitepress';
+import { defineConfig } from 'vitepress';
 import { version } from '../../package.json';
 
 // https://vitepress.dev/reference/site-config
@@ -7,7 +7,7 @@ export default defineConfig({
   description: "設計各類惡搞、有趣且實用（？）的特殊元件",
   head: [
     ['link', { rel: 'icon', href: '/favicon.webp' }],
-    ['meta', { property: 'og:image', content: 'https://cod-chill-component.pages.dev/og.jpg' }],
+    ['meta', { property: 'og:image', content: 'https://chillcomponent.codlin.me/og.jpg' }],
   ],
   async transformHead() {
     return [
