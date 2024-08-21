@@ -7,12 +7,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
+import { eventKey } from './type';
+import { nanoid } from 'nanoid';
 
-import { useElementBounding } from '@vueuse/core';
+import { useElementBounding, useEventBus } from '@vueuse/core';
 
 import MinecraftWorld from './minecraft-world.vue';
-
+import { pick } from 'remeda';
 
 // #region Props
 interface Props {
@@ -29,9 +31,28 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-const blockRef = ref<HTMLElement>();
+const bus = useEventBus(eventKey);
 
-const blockBounding = useElementBounding(blockRef);
+const id = nanoid();
+
+const blockRef = ref<HTMLElement>();
+const blockBounding = reactive(useElementBounding(blockRef));
+
+watch(blockBounding, (value) => {
+  if (value.width === 0) return;
+
+  bus.emit({
+    type: 'update',
+    ...pick(value, ['x', 'y']),
+  });
+});
+
+onMounted(() => {
+  bus.emit({
+    type: 'add',
+    ...pick(blockBounding, ['x', 'y', 'width', 'height']),
+  });
+});
 
 // #region Slots
 defineSlots<{
