@@ -33,7 +33,7 @@ bus.on((data) => {
   }
 });
 
-const depth = 200;
+const depth = 100;
 const { canvasRef, engine, camera, scene } = useBabylonScene({
   async createEngine({ canvas }) {
     return new Engine(canvas, true, {
