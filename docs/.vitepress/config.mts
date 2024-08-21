@@ -87,6 +87,7 @@ export default defineConfig({
               { text: '物理包裝器', link: '/components/wrapper-physics/' },
               { text: '貓耳包裝器', link: '/components/wrapper-cat-ear/' },
               { text: '塞滿嘴包裝器', link: '/components/wrapper-kirby-mouthful-mode/' },
+              { text: 'Minecraft 方塊包裝器', link: '/components/wrapper-minecraft-block/' },
             ]
           },
           {
