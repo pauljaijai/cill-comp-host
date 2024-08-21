@@ -6,6 +6,9 @@ export default defineConfig({
   title: "🐟 鱈魚的酷酷元件",
   description: "設計各類惡搞、有趣且實用（？）的特殊元件",
   head: [
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'true' }],
+    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap' }],
     ['link', { rel: 'icon', href: '/favicon.webp' }],
     ['meta', { property: 'og:image', content: 'https://chillcomponent.codlin.me/og.jpg' }],
   ],
