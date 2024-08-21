@@ -5,8 +5,9 @@
 <script setup lang="ts">
 import { useElementBounding } from '@vueuse/core';
 import { ref } from 'vue';
+import { Color4, UniversalCamera, Vector3 } from '@babylonjs/core';
+
 import { useBabylonScene } from '../../composables/use-babylon-scene';
-import { UniversalCamera, Vector3 } from '@babylonjs/core';
 
 const { canvasRef, engine, camera, scene } = useBabylonScene({
   createCamera(param) {
@@ -21,6 +22,8 @@ const { canvasRef, engine, camera, scene } = useBabylonScene({
   },
   async init(param) {
     const { canvas, camera, scene } = param;
+
+    scene.clearColor = new Color4(0, 0, 0, 0);
   },
 });
 // #endregion Slots

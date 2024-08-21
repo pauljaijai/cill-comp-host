@@ -1,12 +1,18 @@
 <template>
   <div ref="blockRef">
     <slot />
+
+    <minecraft-world class="fixed top-0 left-0 w-full h-full pointer-events-none z-[9999]" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useElementBounding } from '@vueuse/core';
 import { ref } from 'vue';
+
+import { useElementBounding } from '@vueuse/core';
+
+import MinecraftWorld from './minecraft-world.vue';
+
 
 // #region Props
 interface Props {
