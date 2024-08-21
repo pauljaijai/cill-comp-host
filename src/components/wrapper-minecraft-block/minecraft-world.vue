@@ -1,16 +1,20 @@
 <template>
-  <canvas ref="canvasRef" />
+  <canvas
+    ref="canvasRef"
+    class=" opacity-80"
+  />
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
-import { Camera, Color4, Engine, Mesh, MeshBuilder, UniversalCamera, Vector3 } from '@babylonjs/core';
+import { computed, reactive, watch, watchEffect } from 'vue';
+import { Color4, Engine, Mesh, MeshBuilder, UniversalCamera, Vector3 } from '@babylonjs/core';
 import { BusData, eventKey } from './type';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
-import { useElementSize, useEventBus, useWindowScroll, useWindowSize } from '@vueuse/core';
+import { useEventBus, useWindowScroll, useWindowSize } from '@vueuse/core';
 
 const windowScroll = reactive(useWindowScroll());
+const windowSize = reactive(useWindowSize({ includeScrollbar: false }));
 
 const bus = useEventBus(eventKey);
 
@@ -22,18 +26,15 @@ const blocks: Mesh[] = [];
 bus.on((data) => {
   if (data.type === 'add') {
     elDataQueue.push(data);
-    // consumeElData();
-
-    console.log(`🚀 ~ data:`, data);
-    console.log(`🚀 ~ canvasSize:`, { ...canvasSize });
+    consumeElData();
   }
 
   if (data.type === 'update') {
-    console.log(`🚀 ~ data:`, data);
+    // console.log(`🚀 ~ data:`, data);
   }
 });
 
-const depth = 100;
+const cameraDistance = 1000;
 const { canvasRef, engine, camera, scene } = useBabylonScene({
   async createEngine({ canvas }) {
     return new Engine(canvas, true, {
@@ -44,7 +45,7 @@ const { canvasRef, engine, camera, scene } = useBabylonScene({
     const { scene, canvas } = param;
     const camera = new UniversalCamera(
       'camera',
-      new Vector3(0, 0, -1085),
+      new Vector3(0, 0, -cameraDistance),
       scene
     );
     // camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
@@ -56,22 +57,23 @@ const { canvasRef, engine, camera, scene } = useBabylonScene({
 
     scene.clearColor = new Color4(0, 0, 0, 0);
 
-    const block = MeshBuilder.CreateBox('block', {
-      width: 114,
-      height: 74,
-      depth,
-      sideOrientation: Mesh.BACKSIDE,
-    }, scene);
-
-    block.position.x = 0;
-    block.position.y = -115;
-    block.position.z = depth / 2;
-
-    // consumeElData();
+    consumeElData();
   },
 });
-const canvasSize = reactive(useElementSize(canvasRef));
 
+const fov = computed(() => {
+  const distance = Math.abs(camera.value?.position.z ?? 1000);
+  const hypotenuse = Math.sqrt((windowSize.height / 2) ** 2 + distance ** 2);
+
+  const cosine = distance / hypotenuse;
+  const halfAngle = Math.acos(cosine);
+
+  return halfAngle * 2;
+});
+watchEffect(() => {
+  if (!camera.value) return;
+  camera.value.fov = fov.value;
+});
 
 function consumeElData() {
   if (!scene.value) return;
@@ -80,17 +82,21 @@ function consumeElData() {
   const elData = elDataQueue.shift();
   if (!elData) return;
 
+  const depth = Math.max(elData.width, elData.height);
+
   const block = MeshBuilder.CreateBox('block', {
     width: elData.width,
     height: elData.height,
-    depth: 200,
+    depth,
     sideOrientation: Mesh.BACKSIDE,
   }, scene.value);
 
-  // block.position.x = elData.x - windowSize.width / 2 + elData.width / 2;
-  // block.position.y = elData.y - windowSize.height / 2 - elData.height;
-  block.position.x = -9;
-  block.position.y = 10;
+  console.log(`🚀 ~ elData:`, elData);
+  console.log(`🚀 ~ canvasSize:`, { ...windowSize });
+
+  block.position.x = elData.x + elData.width / 2 - windowSize.width / 2;
+  block.position.y = -elData.y - elData.height / 2 + windowSize.height / 2;
+  block.position.z = depth / 2;
 
   blocks.push(block);
 
