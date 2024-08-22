@@ -12,6 +12,9 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.webp' }],
     ['meta', { property: 'og:image', content: 'https://chillcomponent.codlin.me/og.jpg' }],
   ],
+  sitemap: {
+    hostname: 'https://chillcomponent.codlin.me'
+  },
   async transformHead() {
     return [
       [
