@@ -1,7 +1,7 @@
 <template>
   <canvas
     ref="canvasRef"
-    class=" opacity-80"
+    class="fixed top-0 left-0 w-full h-full pointer-events-none z-[9999] opacity-80"
   />
 </template>
 
@@ -9,11 +9,11 @@
 import { computed, reactive, watch, watchEffect } from 'vue';
 import { Color3, Color4, CSG, Engine, Mesh, MeshBuilder, Scene, StandardMaterial, UniversalCamera, Vector3 } from '@babylonjs/core';
 import { BusData, eventKey } from './type';
+import { pipe } from 'remeda';
+import { debounce } from 'lodash-es';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
 import { useEventBus, useWindowScroll, useWindowSize } from '@vueuse/core';
-import { debounce } from 'lodash-es';
-import { clone, pipe } from 'remeda';
 
 type ElData = Extract<BusData, { type: 'add' }>
 
@@ -111,7 +111,7 @@ const holes: Mesh[] = [];
 function createHole(data: ElData) {
   const depth = Math.max(data.width, data.height);
 
-  const hole = MeshBuilder.CreateBox('hole', {
+  const hole = MeshBuilder.CreateBox(data.id, {
     width: data.width,
     height: data.height,
     depth,

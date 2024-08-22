@@ -11,9 +11,13 @@
         我是方塊
       </div>
     </wrapper-minecraft-block> -->
+
+
+    <wrapper-minecraft-world />
   </div>
 </template>
 
 <script setup lang="ts">
 import WrapperMinecraftBlock from '../wrapper-minecraft-block.vue';
+import WrapperMinecraftWorld from '../wrapper-minecraft-world.vue';
 </script>

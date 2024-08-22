@@ -1,8 +1,11 @@
 <template>
-  <div ref="blockRef">
+  <div
+    ref="blockRef"
+    class=" relative"
+  >
     <slot />
 
-    <minecraft-world class="fixed top-0 left-0 w-full h-full pointer-events-none z-[9999]" />
+    <div class=" absolute inset-0 cursor-pointer" />
   </div>
 </template>
 
@@ -10,11 +13,11 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { eventKey } from './type';
 import { nanoid } from 'nanoid';
-
-import { useElementBounding, useEventBus } from '@vueuse/core';
-
-import MinecraftWorld from './minecraft-world.vue';
 import { pick } from 'remeda';
+
+import { onLongPress, OnLongPressOptions, useElementBounding, useEventBus, useMousePressed } from '@vueuse/core';
+import { useTimer } from '../../composables/use-timer';
+
 
 // #region Props
 interface Props {
@@ -37,19 +40,34 @@ const id = nanoid();
 
 const blockRef = ref<HTMLElement>();
 const blockBounding = reactive(useElementBounding(blockRef));
-
 watch(blockBounding, (value) => {
   if (value.width === 0) return;
 
   bus.emit({
     type: 'update',
+    id,
+    visible: lidVisible.value,
     ...pick(value, ['x', 'y']),
   });
 });
 
+const { pressed } = useMousePressed({ target: blockRef })
+useTimer({
+  playing: pressed,
+  onTick(time) {
+    console.log(`🚀 ~ time:`, time);
+  },
+  tickInterval: 100,
+});
+
+
+/** 蓋子，用來產生挖掘效果，消失表示被挖掉了 */
+const lidVisible = ref(false);
+
 onMounted(() => {
   bus.emit({
     type: 'add',
+    id,
     ...pick(blockBounding, ['x', 'y', 'width', 'height']),
   });
 });
