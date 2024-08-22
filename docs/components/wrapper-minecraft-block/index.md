@@ -1,5 +1,5 @@
 ---
-description: 讓元素變成方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
+description: 讓網頁元素變成方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
 ---
 
 <script setup>
@@ -10,7 +10,7 @@ import BasicUsage from '../../../src/components/wrapper-minecraft-block/examples
 
 # Minecraft 方塊包裝器
 
-讓元素變成方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
+讓網頁元素變成方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
 
 ## 使用範例
 
