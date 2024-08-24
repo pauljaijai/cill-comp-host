@@ -2,6 +2,8 @@
   <div
     ref="blockRef"
     class=" relative"
+    :class="{ 'opacity-0': isDug }"
+    @click.right.prevent="handleRightClick"
   >
     <slot />
 
@@ -17,8 +19,6 @@ import { pick } from 'remeda';
 
 import { useElementBounding, useEventBus, useMousePressed } from '@vueuse/core';
 import { useLongPressTimings } from '../../composables/use-long-press-timings';
-
-
 
 // #region Props
 interface Props {
@@ -71,13 +71,15 @@ useLongPressTimings(blockRef, [
   },
 ]);
 
-
-
+function handleRightClick() {
+  isDug.value = false;
+}
 
 onMounted(() => {
   bus.emit({
     type: 'add',
     id,
+    visible: !isDug.value,
     ...pick(blockBounding, ['x', 'y', 'width', 'height']),
   });
 });
@@ -89,7 +91,7 @@ const updateData = computed<
   type: 'update',
   id,
   visible: !isDug.value,
-  ...pick(blockBounding, ['x', 'y']),
+  ...pick(blockBounding, ['x', 'y', 'width', 'height']),
 }));
 
 watch(updateData, (value) => {

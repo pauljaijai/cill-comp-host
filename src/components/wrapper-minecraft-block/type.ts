@@ -8,10 +8,13 @@ export type BusData = {
   width: number;
   x: number;
   y: number;
+  visible: boolean;
 } |
 {
   type: 'update';
   id: string;
+  height: number;
+  width: number;
   x: number;
   y: number;
   visible: boolean;

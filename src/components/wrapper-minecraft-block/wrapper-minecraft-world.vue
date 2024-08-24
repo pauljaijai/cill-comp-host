@@ -49,6 +49,11 @@ bus.on((data) => {
   }
 
   if (data.type === 'update') {
+    const hole = holes.find((hole) => hole.name === data.id);
+
+    if (hole) {
+      hole.isVisible = !data.visible;
+    }
     // console.log(`🚀 ~ data:`, data);
   }
 });
@@ -112,11 +117,14 @@ function createHole(data: ElData) {
   const depth = Math.max(data.width, data.height);
 
   const hole = MeshBuilder.CreateBox(data.id, {
-    width: data.width,
-    height: data.height,
-    depth,
+    width: 1, height: 1, depth,
     sideOrientation: Mesh.BACKSIDE,
   }, scene.value);
+
+  // 使用縮放對應寬高，這樣就可以自由調整尺寸，而不用變更 mesh
+  hole.scaling.x = data.width;
+  hole.scaling.y = data.height;
+
   hole.renderingGroupId = 1;
 
   const material = new StandardMaterial('hole', scene.value);
@@ -127,6 +135,8 @@ function createHole(data: ElData) {
   hole.position.x = data.x + data.width / 2 - windowSize.width / 2;
   hole.position.y = -data.y - data.height / 2 + windowSize.height / 2;
   hole.position.z = depth / 2;
+
+  hole.isVisible = !data.visible;
 
   hole.metadata = {
     ...data,
