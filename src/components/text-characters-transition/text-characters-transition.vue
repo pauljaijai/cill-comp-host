@@ -20,7 +20,7 @@
 import anime from 'animejs';
 import { customAlphabet } from 'nanoid';
 import { join, map, pipe } from 'remeda';
-import { computed, onMounted, watch } from 'vue';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
 import { AnimeFuncParam, TransitionName, transitionProvider } from './transition-provider';
 
 // #region Props
@@ -191,6 +191,10 @@ watch(() => props.visible, (visible) => {
 onMounted(() => {
   props.visible ? startEnter(true) : startLeave(true)
 });
+
+onUnmounted(() => {
+  anime.remove(`.${id}`);
+})
 
 // #region Methods
 defineExpose({});
