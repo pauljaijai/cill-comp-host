@@ -13,11 +13,10 @@ import { pipe } from 'remeda';
 import { debounce } from 'lodash-es';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
-import { useEventBus, useWindowScroll, useWindowSize } from '@vueuse/core';
+import { useEventBus, useRafFn, useWindowScroll, useWindowSize } from '@vueuse/core';
 
 type ElData = Extract<BusData, { type: 'add' }>
 
-const windowScroll = reactive(useWindowScroll());
 const windowSize = reactive(useWindowSize({ includeScrollbar: false }));
 
 const bus = useEventBus(eventKey);
@@ -65,7 +64,7 @@ bus.on((data) => {
 
 
 /** 相機到 XY 平面距離 */
-const cameraDistance = 1500;
+const cameraDistance = 1000;
 const { canvasRef, camera, scene } = useBabylonScene({
   async createEngine({ canvas }) {
     return new Engine(canvas, true, {
@@ -107,9 +106,13 @@ watchEffect(() => {
   if (!camera.value) return;
   camera.value.fov = fov.value;
 });
+
 /** camera 同步捲動 */
-watch(windowScroll, ({ x, y }) => {
-  if (camera.value instanceof UniversalCamera) {
+useRafFn(() => {
+  if (camera.value) {
+    const x = window.scrollX;
+    const y = window.scrollY;
+
     camera.value.position.x = x;
     camera.value.position.y = -y;
   }
@@ -130,14 +133,11 @@ function createHole(data: ElData) {
       Texture.NEAREST_NEAREST
     ),
     (texture) => {
-      const ratio = data.width / data.height;
-      if (ratio > 1) {
-        texture.uScale = ratio;
-        texture.vScale = 1;
-      } else {
-        texture.uScale = 1;
-        texture.vScale = 1 / ratio;
-      }
+      /** 方塊基準尺寸 */
+      const baseSize = 80;
+
+      texture.uScale = data.width / baseSize;
+      texture.vScale = data.height / baseSize;
 
       return texture;
     }
@@ -146,10 +146,9 @@ function createHole(data: ElData) {
   const material = pipe(
     new StandardMaterial('hole', scene.value),
     (material) => {
-      // material.emissiveColor = new Color3(0.4, 0.4, 0.4);
+      material.emissiveColor = new Color3(0.1, 0.1, 0.1);
 
       material.diffuseTexture = texture;
-      material.emissiveTexture = texture;
 
       return material;
     },

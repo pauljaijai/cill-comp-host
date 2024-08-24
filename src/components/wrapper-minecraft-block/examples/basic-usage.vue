@@ -12,6 +12,12 @@
       </div>
     </wrapper-minecraft-block>
 
+    <wrapper-minecraft-block>
+      <div class="border p-6 py-12 text-4xl">
+        大方塊
+      </div>
+    </wrapper-minecraft-block>
+
     <wrapper-minecraft-world />
   </div>
 </template>
