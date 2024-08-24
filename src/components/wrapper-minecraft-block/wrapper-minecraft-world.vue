@@ -92,7 +92,7 @@ const fov = computed(() => {
 
   return halfAngle * 2;
 });
-/** camera 同步 fov */
+/** 同步 fov 至 camera */
 watchEffect(() => {
   if (!camera.value) return;
   camera.value.fov = fov.value;

@@ -5,18 +5,19 @@
   >
     <slot />
 
-    <div class=" absolute inset-0 cursor-pointer" />
+    <div class=" absolute inset-0 pointer-events-none" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue';
-import { eventKey } from './type';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { BusData, eventKey } from './type';
 import { nanoid } from 'nanoid';
 import { pick } from 'remeda';
 
-import { onLongPress, OnLongPressOptions, useElementBounding, useEventBus, useMousePressed } from '@vueuse/core';
-import { useTimer } from '../../composables/use-timer';
+import { useElementBounding, useEventBus, useMousePressed } from '@vueuse/core';
+import { useLongPressTimings } from '../../composables/use-long-press-timings';
+
 
 
 // #region Props
@@ -36,33 +37,42 @@ const emit = defineEmits<{
 
 const bus = useEventBus(eventKey);
 
+/** 方塊 ID */
 const id = nanoid();
 
 const blockRef = ref<HTMLElement>();
 const blockBounding = reactive(useElementBounding(blockRef));
-watch(blockBounding, (value) => {
-  if (value.width === 0) return;
 
-  bus.emit({
-    type: 'update',
-    id,
-    visible: lidVisible.value,
-    ...pick(value, ['x', 'y']),
-  });
-});
+/** 方塊是否被挖掉 */
+const isDug = ref(false);
+const isPressed = useMousePressed({ target: blockRef });
 
-const { pressed } = useMousePressed({ target: blockRef })
-useTimer({
-  playing: pressed,
-  onTick(time) {
-    console.log(`🚀 ~ time:`, time);
+useLongPressTimings(blockRef, [
+  {
+    delay: 500, handler() {
+      console.log('挖了 500ms');
+    }
   },
-  tickInterval: 100,
-});
+  {
+    delay: 1000, handler() {
+      console.log('挖了 1000ms');
+    }
+  },
+  {
+    delay: 1500, handler() {
+      console.log('挖了 1500ms');
+    }
+  },
+  {
+    delay: 2000, handler() {
+      console.log('挖了 2000ms');
+      isDug.value = true;
+    }
+  },
+]);
 
 
-/** 蓋子，用來產生挖掘效果，消失表示被挖掉了 */
-const lidVisible = ref(false);
+
 
 onMounted(() => {
   bus.emit({
@@ -71,6 +81,21 @@ onMounted(() => {
     ...pick(blockBounding, ['x', 'y', 'width', 'height']),
   });
 });
+
+/** 方塊更新資料 */
+const updateData = computed<
+  Extract<BusData, { type: 'update' }>
+>(() => ({
+  type: 'update',
+  id,
+  visible: !isDug.value,
+  ...pick(blockBounding, ['x', 'y']),
+}));
+
+watch(updateData, (value) => {
+  bus.emit(value);
+}, { deep: true });
+
 
 // #region Slots
 defineSlots<{
