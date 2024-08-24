@@ -21,8 +21,7 @@ import anime from 'animejs';
 import { customAlphabet } from 'nanoid';
 import { join, map, pipe } from 'remeda';
 import { computed, onMounted, watch } from 'vue';
-import { AnimeFuncParam } from './type';
-import { TransitionName, transitionProvider } from './transition-provider';
+import { AnimeFuncParam, TransitionName, transitionProvider } from './transition-provider';
 
 // #region Props
 interface Props {
