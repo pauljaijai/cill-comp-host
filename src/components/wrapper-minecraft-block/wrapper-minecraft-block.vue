@@ -15,9 +15,9 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { BusData, eventKey } from './type';
 import { nanoid } from 'nanoid';
-import { pick } from 'remeda';
+import { pick, sample } from 'remeda';
 
-import { useElementBounding, useEventBus, useMousePressed } from '@vueuse/core';
+import { useElementBounding, useEventBus, useIntervalFn, useMousePressed } from '@vueuse/core';
 import { useLongPressTimings } from '../../composables/use-long-press-timings';
 
 // #region Props
@@ -45,7 +45,30 @@ const blockBounding = reactive(useElementBounding(blockRef));
 
 /** 方塊是否被挖掉 */
 const isDug = ref(true);
-const isPressed = useMousePressed({ target: blockRef });
+const { pressed: isPressed } = useMousePressed({ target: blockRef });
+
+const sounds = [
+  '/minecraft/sounds/block/rooted_dirt/step1.ogg',
+  '/minecraft/sounds/block/rooted_dirt/step2.ogg',
+  '/minecraft/sounds/block/rooted_dirt/step3.ogg',
+  '/minecraft/sounds/block/rooted_dirt/step4.ogg',
+  '/minecraft/sounds/block/rooted_dirt/step5.ogg',
+  '/minecraft/sounds/block/rooted_dirt/step6.ogg',
+];
+const { pause, resume } = useIntervalFn(() => {
+  if (isDug.value) return;
+
+  const [path] = sample(sounds, 1);
+
+  new Audio(path).play();
+}, 150, {
+  immediate: false,
+  immediateCallback: true,
+});
+
+watch(isPressed, (value) => {
+  value ? resume() : pause();
+});
 
 useLongPressTimings(blockRef, [
   {
