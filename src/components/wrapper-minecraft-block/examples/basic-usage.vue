@@ -2,16 +2,15 @@
   <div class="flex flex-col items-center gap-14 w-full border border-gray-300 p-6">
     <wrapper-minecraft-block>
       <div class="border p-6">
-        我是方塊
+        方塊
       </div>
     </wrapper-minecraft-block>
 
-    <!-- <wrapper-minecraft-block>
+    <wrapper-minecraft-block>
       <div class="border p-6">
-        我是方塊
+        很長很長的方塊
       </div>
-    </wrapper-minecraft-block> -->
-
+    </wrapper-minecraft-block>
 
     <wrapper-minecraft-world />
   </div>

@@ -44,7 +44,7 @@ const blockRef = ref<HTMLElement>();
 const blockBounding = reactive(useElementBounding(blockRef));
 
 /** 方塊是否被挖掉 */
-const isDug = ref(false);
+const isDug = ref(true);
 const isPressed = useMousePressed({ target: blockRef });
 
 useLongPressTimings(blockRef, [

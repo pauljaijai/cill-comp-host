@@ -1,13 +1,13 @@
 <template>
   <canvas
     ref="canvasRef"
-    class="fixed top-0 left-0 w-full h-full pointer-events-none z-[9999] opacity-80"
+    class="fixed top-0 left-0 w-full h-full pointer-events-none"
   />
 </template>
 
 <script setup lang="ts">
 import { computed, reactive, watch, watchEffect } from 'vue';
-import { Color3, Color4, CSG, Engine, Mesh, MeshBuilder, Scene, StandardMaterial, UniversalCamera, Vector3 } from '@babylonjs/core';
+import { Color3, Color4, CSG, Engine, Mesh, MeshBuilder, Scene, StandardMaterial, Texture, UniversalCamera, Vector3 } from '@babylonjs/core';
 import { BusData, eventKey } from './type';
 import { pipe } from 'remeda';
 import { debounce } from 'lodash-es';
@@ -53,15 +53,20 @@ bus.on((data) => {
 
     if (hole) {
       hole.isVisible = !data.visible;
+
+      // hole.scaling.x = data.width;
+      // hole.scaling.y = data.height;
+
+      // hole.position.x = data.x + data.width / 2 - windowSize.width / 2;
+      // hole.position.y = -data.y - data.height / 2 + windowSize.height / 2;
     }
-    // console.log(`🚀 ~ data:`, data);
   }
 });
 
 
 /** 相機到 XY 平面距離 */
 const cameraDistance = 1500;
-const { canvasRef, engine, camera, scene } = useBabylonScene({
+const { canvasRef, camera, scene } = useBabylonScene({
   async createEngine({ canvas }) {
     return new Engine(canvas, true, {
       alpha: true,
@@ -116,32 +121,68 @@ const holes: Mesh[] = [];
 function createHole(data: ElData) {
   const depth = Math.max(data.width, data.height);
 
-  const hole = MeshBuilder.CreateBox(data.id, {
-    width: 1, height: 1, depth,
-    sideOrientation: Mesh.BACKSIDE,
-  }, scene.value);
+  const texture = pipe(
+    new Texture(
+      '/minecraft/textures/block/dirt.png',
+      scene.value,
+      true,
+      false,
+      Texture.NEAREST_NEAREST
+    ),
+    (texture) => {
+      const ratio = data.width / data.height;
+      if (ratio > 1) {
+        texture.uScale = ratio;
+        texture.vScale = 1;
+      } else {
+        texture.uScale = 1;
+        texture.vScale = 1 / ratio;
+      }
 
-  // 使用縮放對應寬高，這樣就可以自由調整尺寸，而不用變更 mesh
-  hole.scaling.x = data.width;
-  hole.scaling.y = data.height;
+      return texture;
+    }
+  )
 
-  hole.renderingGroupId = 1;
+  const material = pipe(
+    new StandardMaterial('hole', scene.value),
+    (material) => {
+      // material.emissiveColor = new Color3(0.4, 0.4, 0.4);
 
-  const material = new StandardMaterial('hole', scene.value);
-  material.emissiveColor = new Color3(0.2, 0.2, 0.2);
+      material.diffuseTexture = texture;
+      material.emissiveTexture = texture;
 
-  hole.material = material;
+      return material;
+    },
+  );
 
-  hole.position.x = data.x + data.width / 2 - windowSize.width / 2;
-  hole.position.y = -data.y - data.height / 2 + windowSize.height / 2;
-  hole.position.z = depth / 2;
+  const hole = pipe(
+    MeshBuilder.CreateBox(data.id, {
+      width: 1, height: 1, depth,
+      sideOrientation: Mesh.BACKSIDE,
+    }, scene.value),
+    (hole) => {
+      // 使用縮放對應寬高，這樣就可以自由調整尺寸，而不用變更 mesh
+      hole.scaling.x = data.width;
+      hole.scaling.y = data.height;
 
-  hole.isVisible = !data.visible;
+      hole.renderingGroupId = 1;
 
-  hole.metadata = {
-    ...data,
-    position: hole.position,
-  }
+      hole.material = material;
+
+      hole.position.x = data.x + data.width / 2 - windowSize.width / 2;
+      hole.position.y = -data.y - data.height / 2 + windowSize.height / 2;
+      hole.position.z = depth / 2;
+
+      hole.isVisible = !data.visible;
+
+      hole.metadata = {
+        ...data,
+        position: hole.position,
+      }
+
+      return hole;
+    },
+  );
 
   return hole;
 }
