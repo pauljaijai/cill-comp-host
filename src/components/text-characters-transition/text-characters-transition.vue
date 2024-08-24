@@ -153,7 +153,7 @@ async function startEnter(end = false) {
 
     return anime({
       ...data,
-      targets: `#${char.id}`,
+      targets: document.getElementById(char.id),
     }).finished;
   });
 
@@ -181,7 +181,7 @@ async function startLeave(end = false) {
 
     return anime({
       ...data,
-      targets: `#${char.id}`,
+      targets: document.getElementById(char.id),
     }).finished;
   });
 
