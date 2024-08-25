@@ -82,7 +82,7 @@ function createMesh(param: CreateHoleParam, scene: Scene) {
   return mesh;
 }
 
-function createParticle(param: CreateHoleParam, scene: Scene) {
+function createDiggingParticles(param: CreateHoleParam, scene: Scene) {
 
 }
 
