@@ -47,21 +47,36 @@ const blockBounding = reactive(useElementBounding(blockRef));
 const isDug = ref(true);
 const { pressed: isPressed } = useMousePressed({ target: blockRef });
 
-const sounds = [
-  '/minecraft/sounds/block/rooted_dirt/step1.ogg',
-  '/minecraft/sounds/block/rooted_dirt/step2.ogg',
-  '/minecraft/sounds/block/rooted_dirt/step3.ogg',
-  '/minecraft/sounds/block/rooted_dirt/step4.ogg',
-  '/minecraft/sounds/block/rooted_dirt/step5.ogg',
-  '/minecraft/sounds/block/rooted_dirt/step6.ogg',
-];
+const sound = {
+  dirt: {
+    dig: [
+      '/minecraft/sounds/block/rooted_dirt/step1.ogg',
+      '/minecraft/sounds/block/rooted_dirt/step2.ogg',
+      '/minecraft/sounds/block/rooted_dirt/step3.ogg',
+      '/minecraft/sounds/block/rooted_dirt/step4.ogg',
+      '/minecraft/sounds/block/rooted_dirt/step5.ogg',
+      '/minecraft/sounds/block/rooted_dirt/step6.ogg',
+    ],
+    place: [
+      '/minecraft/sounds/dig/gravel1.ogg',
+      '/minecraft/sounds/dig/gravel2.ogg',
+      '/minecraft/sounds/dig/gravel3.ogg',
+      '/minecraft/sounds/dig/gravel4.ogg',
+    ],
+    break: [
+      '/minecraft/sounds/dig/gravel1.ogg',
+      '/minecraft/sounds/dig/gravel2.ogg',
+      '/minecraft/sounds/dig/gravel3.ogg',
+      '/minecraft/sounds/dig/gravel4.ogg',
+    ],
+  }
+};
 const { pause, resume } = useIntervalFn(() => {
   if (isDug.value) return;
 
-  const [path] = sample(sounds, 1);
-
+  const [path] = sample(sound.dirt.dig, 1);
   new Audio(path).play();
-}, 150, {
+}, 200, {
   immediate: false,
   immediateCallback: true,
 });
@@ -73,29 +88,33 @@ watch(isPressed, (value) => {
 useLongPressTimings(blockRef, [
   {
     delay: 500, handler() {
-      console.log('挖了 500ms');
     }
   },
   {
     delay: 1000, handler() {
-      console.log('挖了 1000ms');
     }
   },
   {
     delay: 1500, handler() {
-      console.log('挖了 1500ms');
     }
   },
   {
     delay: 2000, handler() {
-      console.log('挖了 2000ms');
       isDug.value = true;
+
+      const [path] = sample(sound.dirt.break, 1);
+      new Audio(path).play();
     }
   },
-]);
+], {
+  distanceThreshold: 500,
+});
 
 function handleRightClick() {
   isDug.value = false;
+
+  const [path] = sample(sound.dirt.place, 1);
+  new Audio(path).play();
 }
 
 onMounted(() => {
