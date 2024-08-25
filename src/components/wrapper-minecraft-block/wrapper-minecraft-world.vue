@@ -7,14 +7,17 @@
 
 <script setup lang="ts">
 import { computed, reactive, watch, watchEffect } from 'vue';
-import { Color3, Color4, CSG, Engine, Mesh, MeshBuilder, Scene, StandardMaterial, Texture, UniversalCamera, Vector3 } from '@babylonjs/core';
+import { Color3, Color4, CSG, Engine, Mesh, MeshBuilder, ParticleSystem, Scene, StandardMaterial, Texture, UniversalCamera, Vector3 } from '@babylonjs/core';
 import { BusData, eventKey } from './type';
 import { pipe } from 'remeda';
 import { debounce } from 'lodash-es';
+import { createHole, Hole } from './hole';
+
+import '@babylonjs/core/Debug/debugLayer';
+import '@babylonjs/inspector';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
 import { useEventBus, useRafFn, useWindowScroll, useWindowSize } from '@vueuse/core';
-import { createHole, Hole } from './hole';
 
 type ElData = Extract<BusData, { type: 'add' }>
 
@@ -86,7 +89,6 @@ const { canvasRef, camera, scene } = useBabylonScene({
       new Vector3(0, 0, -cameraDistance),
       scene
     );
-    // camera.mode = Camera.ORTHOGRAPHIC_CAMERA;
 
     return camera;
   },
@@ -94,6 +96,8 @@ const { canvasRef, camera, scene } = useBabylonScene({
     const { canvas, camera, scene } = param;
 
     scene.clearColor = new Color4(0, 0, 0, 0);
+
+    scene.debugLayer.show();
 
     consumeElData();
   },

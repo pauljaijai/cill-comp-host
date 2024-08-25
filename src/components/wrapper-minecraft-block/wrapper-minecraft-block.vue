@@ -17,13 +17,18 @@ import { BlockType, BusData, eventKey } from './type';
 import { nanoid } from 'nanoid';
 import { pick, sample } from 'remeda';
 
-import { useElementBounding, useEventBus, useIntervalFn, useMousePressed } from '@vueuse/core';
+import {
+  useElementBounding,
+  useEventBus,
+  useIntervalFn,
+  useMousePressed
+} from '@vueuse/core';
 import { useLongPressTimings } from '../../composables/use-long-press-timings';
 
 // #region Props
 interface Props {
   /** 方塊種類 */
-  blockType: BlockType;
+  blockType?: BlockType;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -48,7 +53,7 @@ const blockBounding = reactive(useElementBounding(blockRef));
 
 /** 方塊是否被挖掉 */
 const isDug = ref(true);
-const { pressed: isPressed, sourceType } = useMousePressed({ target: blockRef });
+const { pressed: isPressed } = useMousePressed({ target: blockRef });
 
 const sound = {
   dirt: {
