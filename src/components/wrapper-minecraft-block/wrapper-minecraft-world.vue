@@ -6,18 +6,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, watch, watchEffect } from 'vue';
-import { Color3, Color4, CSG, Engine, Mesh, MeshBuilder, ParticleSystem, Scene, StandardMaterial, Texture, UniversalCamera, Vector3 } from '@babylonjs/core';
+import { computed, reactive, watchEffect } from 'vue';
+import {
+  Color4, CSG, Engine,
+  Mesh, MeshBuilder,
+  Scene, StandardMaterial,
+  UniversalCamera, Vector3
+} from '@babylonjs/core';
 import { BusData, eventKey } from './type';
 import { pipe } from 'remeda';
 import { debounce } from 'lodash-es';
 import { createHole, Hole } from './hole';
 
-import '@babylonjs/core/Debug/debugLayer';
-import '@babylonjs/inspector';
+// import '@babylonjs/core/Debug/debugLayer';
+// import '@babylonjs/inspector';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
-import { useEventBus, useRafFn, useWindowScroll, useWindowSize } from '@vueuse/core';
+import { useEventBus, useRafFn, useWindowSize } from '@vueuse/core';
 
 type ElData = Extract<BusData, { type: 'add' }>
 

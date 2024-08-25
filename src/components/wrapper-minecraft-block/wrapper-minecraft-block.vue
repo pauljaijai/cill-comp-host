@@ -16,24 +16,28 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { BlockType, BusData, eventKey } from './type';
 import { nanoid } from 'nanoid';
 import { pick, sample } from 'remeda';
+import { minecraftResource } from './constant';
 
 import {
   useElementBounding,
   useEventBus,
   useIntervalFn,
-  useMousePressed
+  useMousePressed,
+  useVibrate,
 } from '@vueuse/core';
 import { useLongPressTimings } from '../../composables/use-long-press-timings';
-import { minecraftResource } from './constant';
 
 // #region Props
 interface Props {
   /** 方塊種類。初始化後不可變更 */
   blockType?: BlockType;
+  /** 初始化是否為挖掉的狀態 */
+  isInitDug?: boolean;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   blockType: 'dirt',
+  isInitDug: false,
 });
 
 // #region Emits
@@ -53,7 +57,7 @@ const blockRef = ref<HTMLElement>();
 const blockBounding = reactive(useElementBounding(blockRef));
 
 /** 方塊是否被挖掉 */
-const isDug = ref(false);
+const isDug = ref(props.isInitDug);
 const { pressed: isPressed } = useMousePressed({ target: blockRef });
 
 /** 目前方塊對應的資源 */
@@ -63,6 +67,8 @@ async function playRandomSound(paths: string[]) {
   const [path] = sample(paths, 1);
   new Audio(path).play()
 }
+
+const { vibrate } = useVibrate({ pattern: 300 })
 
 const {
   pause: pauseSound,
@@ -111,6 +117,8 @@ useLongPressTimings(blockRef, [
       if (isDug.value) return;
 
       event.preventDefault();
+
+      vibrate();
 
       emit('dug');
       bus.emit({
