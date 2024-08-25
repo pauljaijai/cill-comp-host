@@ -7,4 +7,4 @@
 - Vitepress
 - Vue 3
 
-詳細說明文件請[點此](https://cod-chill-component.pages.dev/)
+詳細說明文件請[點此](https://chillcomponent.codlin.me/)

@@ -1,6 +1,12 @@
 import anime, { easings, random } from "animejs";
-import { AnimeFuncParam } from "./type";
 import { constant, first, map, pipe, piped, range, sample, times } from "remeda";
+
+export type AnimeFuncParam = (
+  /** 目前 index。例：第 3 個字，此值就是 2 */
+  index: number,
+  /** 動畫總數。例：共 10 個字，此值就會是 10 */
+  length: number,
+) => anime.AnimeParams;
 
 export enum TransitionName {
   FADE = 'fade',

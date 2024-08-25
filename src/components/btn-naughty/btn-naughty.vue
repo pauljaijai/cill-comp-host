@@ -22,8 +22,8 @@
       tabindex="0"
       @transitionend="toggleRunning(false)"
       @click="handleClick"
-      @keydown.enter="handleClick"
-      @mouseenter="handleMouseEnter"
+      @keydown.enter="handleTrigger"
+      @mouseenter="handleTrigger"
     >
       <!-- 彈跳容器 -->
       <div
@@ -105,28 +105,6 @@ const {
 } = useMouseInElement(carrierRef, {
   eventFilter: throttleFilter(35)
 });
-useIntersectionObserver(
-  carrierRef,
-  (value) => {
-    if (value[0]?.isIntersecting) return;
-    back();
-  },
-);
-
-function handleClick() {
-  emit('click');
-
-  if (!props.disabled) return;
-  run();
-}
-function handleMouseEnter() {
-  if (!props.disabled) return;
-  run();
-}
-watch(isOutside, (value) => {
-  if (value! || !props.disabled) return;
-  run();
-});
 
 const carrierOffset = ref({ x: 0, y: 0 });
 const carrierStyle = computed(() => {
@@ -141,15 +119,13 @@ const carrierStyle = computed(() => {
 });
 
 const counter = ref(0);
+const [isRunning, toggleRunning] = useToggle(false);
+
 /** 初始化時，不播放彈跳動畫 */
 const bounceStyle = computed(() => ({
   animationPlayState: counter.value === 0 ? 'paused' : 'running',
 }));
 
-watch(() => props.disabled, (value) => {
-  if (value) return;
-  back();
-});
 function back() {
   carrierOffset.value.x = 0;
   carrierOffset.value.y = 0;
@@ -157,8 +133,6 @@ function back() {
 
   emit('back');
 }
-
-const [isRunning, toggleRunning] = useToggle(false);
 
 const run = throttle(() => {
   toggleRunning(true);
@@ -197,6 +171,37 @@ const run = throttle(() => {
     emit('run');
   }
 }, 10, { trailing: false });
+
+
+/** disabled 解除時回歸原位 */
+watch(() => props.disabled, (value) => {
+  if (value) return;
+  back();
+});
+
+/** 滑鼠移動到按鈕上時 */
+watch(isOutside, (value) => {
+  if (value || !props.disabled) return;
+  run();
+});
+
+/** 按鈕被遮擋時回歸原位 */
+useIntersectionObserver(carrierRef, (value) => {
+  if (value[0]?.isIntersecting) return;
+  back();
+});
+
+function handleClick() {
+  emit('click');
+
+  if (!props.disabled) return;
+  run();
+}
+function handleTrigger() {
+  if (!props.disabled) return;
+  run();
+}
+
 
 // #region Methods
 defineExpose({

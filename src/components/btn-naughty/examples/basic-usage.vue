@@ -13,7 +13,7 @@
       />
     </div>
 
-    <div class="flex">
+    <div class="flex justify-center">
       <btn-naughty
         label="調皮的按鈕"
         class=" font-bold"

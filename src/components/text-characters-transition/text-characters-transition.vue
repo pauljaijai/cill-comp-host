@@ -20,9 +20,8 @@
 import anime from 'animejs';
 import { customAlphabet } from 'nanoid';
 import { join, map, pipe } from 'remeda';
-import { computed, onMounted, watch } from 'vue';
-import { AnimeFuncParam } from './type';
-import { TransitionName, transitionProvider } from './transition-provider';
+import { computed, onMounted, onBeforeUnmount, watch } from 'vue';
+import { AnimeFuncParam, TransitionName, transitionProvider } from './transition-provider';
 
 // #region Props
 interface Props {
@@ -49,10 +48,8 @@ interface Props {
 
   /** 過場名稱。使用預設內容 */
   name?: `${TransitionName}`;
-
   /** 進入動畫設定 */
   enter?: AnimeFuncParam;
-
   /** 離開動畫設定 */
   leave?: AnimeFuncParam;
 }
@@ -109,12 +106,12 @@ const chars = computed(() => pipe(
     return data.split(props.splitter ?? /.*?/u);
   },
   map.strict.indexed((data, i, array) => {
-    const idName = `${id}-${i}`;
+    const elId = `${id}-${i}`;
 
     if (typeof data === 'string') {
       return {
         value: data,
-        id: idName,
+        id: elId,
         i,
         enter: () => getAnimeParam('enter', i, array.length, props.enter),
         leave: () => getAnimeParam('leave', i, array.length, props.leave),
@@ -123,7 +120,7 @@ const chars = computed(() => pipe(
 
     return {
       value: data.value,
-      id: idName,
+      id: elId,
       i,
       enter: () => getAnimeParam('enter', i, array.length, data.enter),
       leave: () => getAnimeParam('leave', i, array.length, data.leave),
@@ -137,6 +134,10 @@ const labelText = computed(() => pipe(
   join(''),
 ));
 
+/** 進入動畫
+ * 
+ * @param end 用於初始化時，立即完成動畫
+ */
 async function startEnter(end = false) {
   anime.remove(`.${id}`);
 
@@ -152,7 +153,7 @@ async function startEnter(end = false) {
 
     return anime({
       ...data,
-      targets: `#${char.id}`,
+      targets: document.getElementById(char.id),
     }).finished;
   });
 
@@ -161,6 +162,10 @@ async function startEnter(end = false) {
   emit('after-enter');
 }
 
+/** 離開動畫
+ * 
+ * @param end 用於初始化時，立即完成動畫
+ */
 async function startLeave(end = false) {
   anime.remove(`.${id}`);
 
@@ -176,7 +181,7 @@ async function startLeave(end = false) {
 
     return anime({
       ...data,
-      targets: `#${char.id}`,
+      targets: document.getElementById(char.id),
     }).finished;
   });
 
@@ -192,6 +197,11 @@ watch(() => props.visible, (visible) => {
 onMounted(() => {
   props.visible ? startEnter(true) : startLeave(true)
 });
+
+/** 元件解除前刪除所有動畫 */
+onBeforeUnmount(() => {
+  anime.remove(`.${id}`);
+})
 
 // #region Methods
 defineExpose({});

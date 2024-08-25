@@ -1,4 +1,4 @@
-import { defineConfig, HeadConfig } from 'vitepress';
+import { defineConfig } from 'vitepress';
 import { version } from '../../package.json';
 
 // https://vitepress.dev/reference/site-config
@@ -10,8 +10,11 @@ export default defineConfig({
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'true' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap' }],
     ['link', { rel: 'icon', href: '/favicon.webp' }],
-    ['meta', { property: 'og:image', content: 'https://cod-chill-component.pages.dev/og.jpg' }],
+    ['meta', { property: 'og:image', content: 'https://chillcomponent.codlin.me/og.jpg' }],
   ],
+  sitemap: {
+    hostname: 'https://chillcomponent.codlin.me'
+  },
   async transformHead() {
     return [
       [
@@ -153,7 +156,7 @@ export default defineConfig({
         icon: {
           svg: '📚'
         },
-        link: 'https://vocus.cc/salon/cod-aquarium',
+        link: 'https://codlin.me',
       },
     ],
 
