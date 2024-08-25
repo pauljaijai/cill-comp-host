@@ -21,6 +21,7 @@
       </div>
     </wrapper-minecraft-block>
 
+    <!-- 必須放置一個 world 元件 -->
     <wrapper-minecraft-world />
   </div>
 </template>

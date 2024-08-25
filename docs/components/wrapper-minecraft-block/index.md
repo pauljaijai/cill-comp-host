@@ -28,6 +28,10 @@ import BasicUsage from '../../../src/components/wrapper-minecraft-block/examples
 
 ## 原理
 
+利用 babylon.js 建立一個覆蓋整個網頁的 3D 畫面，利用 CSG 裁切網格，製造出「凹洞」效果與每個方塊所需的粒子系統。
+
+最後 Block 元件接收使用者互動，管理聲音與狀態，並透過 EventBus 通知 World 各類事件。
+
 ## 原始碼
 
 <source-link-list name="wrapper-minecraft-block"/>
