@@ -73,7 +73,6 @@ bus.on((data) => {
   }
 });
 
-
 /** 相機到 XY 平面距離 */
 const cameraDistance = 1000;
 const { canvasRef, camera, scene } = useBabylonScene({
@@ -97,7 +96,7 @@ const { canvasRef, camera, scene } = useBabylonScene({
 
     scene.clearColor = new Color4(0, 0, 0, 0);
 
-    scene.debugLayer.show();
+    // scene.debugLayer.show();
 
     consumeElData();
   },

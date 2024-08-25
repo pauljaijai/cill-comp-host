@@ -9,12 +9,11 @@
       >
     </wrapper-minecraft-block>
 
-    <wrapper-minecraft-block>
+    <!-- <wrapper-minecraft-block>
       <div class="border p-6 select-none">
         我是方塊
       </div>
-    </wrapper-minecraft-block>
-
+    </wrapper-minecraft-block> -->
 
     <wrapper-minecraft-world />
   </div>

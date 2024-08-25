@@ -86,50 +86,45 @@ function createMesh(param: CreateHoleParam, scene: Scene) {
 function createDiggingParticles(param: CreateHoleParam, scene: Scene) {
   const { data, windowSize } = param;
   const { x, y, width, height } = data;
+  console.log(`🚀 ~ data:`, data);
 
-  // 創建粒子系統
-  const particleSystem = new ParticleSystem('particles', 50, scene);
+  const particleSystem = new ParticleSystem('particles', 2000, scene);
 
-  // 粒子紋理，這可以是方形的小方塊貼圖
-  particleSystem.particleTexture = new Texture('/minecraft/textures/block/dirt.png', scene);
+  //Texture of each particle
+  particleSystem.particleTexture = new Texture('/textures/flare.png', scene);
 
-  // 設置發射器位置
   particleSystem.emitter = new Vector3(
-    x + width / 2 - windowSize.width / 2,
-    -y - height / 2 + windowSize.height / 2,
-    0
+    x + width / 2,
+    -y - height / 2,
+    10
   );
 
-  particleSystem.minEmitBox = new Vector3(-width / 2, -height / 2, 0);
-  particleSystem.maxEmitBox = new Vector3(width / 2, height / 2, 0);
+  particleSystem.color1 = new Color4(0.7, 0.8, 1.0, 1.0);
+  particleSystem.color2 = new Color4(0.2, 0.5, 1.0, 1.0);
+  particleSystem.colorDead = new Color4(0, 0, 0.2, 0.0);
 
-  // 粒子顏色
-  particleSystem.color1 = new Color4(1, 1, 1, 1);
-  particleSystem.color2 = new Color4(0.8, 0.8, 0.8, 1);
-
-  // 粒子大小
   particleSystem.minSize = 0.1;
-  particleSystem.maxSize = 0.3;
+  particleSystem.maxSize = 0.5;
 
-  // 粒子壽命
+  // Life time of each particle (random between...
   particleSystem.minLifeTime = 0.3;
   particleSystem.maxLifeTime = 1.5;
 
-  // 粒子的發射速度
+  // Emission rate
+  particleSystem.emitRate = 1000;
+
+
+  /******* Emission Space ********/
+  particleSystem.createPointEmitter(
+    new Vector3(-7, 8, 3), new Vector3(7, 8, -3)
+  );
+
+  // Speed
   particleSystem.minEmitPower = 1;
   particleSystem.maxEmitPower = 3;
+  particleSystem.updateSpeed = 0.005;
 
-  // 粒子的方向
-  particleSystem.direction1 = new Vector3(-1, -1, -1);
-  particleSystem.direction2 = new Vector3(1, 1, 1);
-
-  // 粒子的重力影響
-  // particleSystem.gravity = new Vector3(0, -9.81, 0);
-
-  // 粒子的發射速率
-  particleSystem.emitRate = 100;
-
-  // 啟動粒子系統
+  // Start the particle system
   particleSystem.start();
 
   return particleSystem;
