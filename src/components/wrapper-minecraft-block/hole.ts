@@ -1,6 +1,7 @@
 import { Color3, Color4, Mesh, MeshBuilder, ParticleSystem, Scene, StandardMaterial, Texture, Vector3 } from "@babylonjs/core";
 import { BusData } from "./type";
 import { pick, pipe } from "remeda";
+import { minecraftResource } from "./constant";
 
 type ElData = Extract<BusData, { type: 'add' }>
 
@@ -21,12 +22,13 @@ interface CreateHoleParam {
 
 function createMesh(param: CreateHoleParam, scene: Scene) {
   const { data, windowSize } = param;
+  const resource = minecraftResource[data.blockType];
 
   const depth = Math.max(data.width, data.height);
 
   const texture = pipe(
     new Texture(
-      '/minecraft/textures/block/dirt.png',
+      resource.texture,
       scene,
       true,
       false,
@@ -85,11 +87,11 @@ function createMesh(param: CreateHoleParam, scene: Scene) {
 
 function createDiggingParticles(param: CreateHoleParam, scene: Scene) {
   const { data, windowSize } = param;
-  const { x, y, width, height } = data;
-
+  const { x, y, width, height, blockType } = data;
+  const resource = minecraftResource[blockType];
 
   const texture = new Texture(
-    '/minecraft/textures/block/dirt.png',
+    resource.texture,
     scene,
     true,
     false,
@@ -113,6 +115,8 @@ function createDiggingParticles(param: CreateHoleParam, scene: Scene) {
   particleSystem.renderingGroupId = 2;
 
   particleSystem.blendMode = ParticleSystem.BLENDMODE_STANDARD;
+  particleSystem.color1 = new Color4(1, 1, 1, 1);
+  particleSystem.color2 = new Color4(0.8, 0.8, 0.8, 1);
   particleSystem.colorDead = new Color4(1, 1, 1, 1);
 
   particleSystem.minSize = 10;

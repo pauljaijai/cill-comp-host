@@ -9,9 +9,15 @@
       >
     </wrapper-minecraft-block>
 
-    <wrapper-minecraft-block>
+    <wrapper-minecraft-block block-type="stone">
       <div class="border p-6 select-none">
-        我是方塊
+        我是俗投 ᕕ( ﾟ ∀。)ᕗ
+      </div>
+    </wrapper-minecraft-block>
+
+    <wrapper-minecraft-block block-type="sand">
+      <div class="border p-6 select-none">
+        我是沙子 (´,,•ω•,,)
       </div>
     </wrapper-minecraft-block>
 

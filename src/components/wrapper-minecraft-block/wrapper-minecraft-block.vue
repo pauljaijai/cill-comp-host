@@ -24,10 +24,11 @@ import {
   useMousePressed
 } from '@vueuse/core';
 import { useLongPressTimings } from '../../composables/use-long-press-timings';
+import { minecraftResource } from './constant';
 
 // #region Props
 interface Props {
-  /** 方塊種類 */
+  /** 方塊種類。初始化後不可變更 */
   blockType?: BlockType;
 }
 // #endregion Props
@@ -55,51 +56,48 @@ const blockBounding = reactive(useElementBounding(blockRef));
 const isDug = ref(false);
 const { pressed: isPressed } = useMousePressed({ target: blockRef });
 
-const sound = {
-  dirt: {
-    dig: [
-      '/minecraft/sounds/block/rooted_dirt/step1.ogg',
-      '/minecraft/sounds/block/rooted_dirt/step2.ogg',
-      '/minecraft/sounds/block/rooted_dirt/step3.ogg',
-      '/minecraft/sounds/block/rooted_dirt/step4.ogg',
-      '/minecraft/sounds/block/rooted_dirt/step5.ogg',
-      '/minecraft/sounds/block/rooted_dirt/step6.ogg',
-    ],
-    place: [
-      '/minecraft/sounds/dig/gravel1.ogg',
-      '/minecraft/sounds/dig/gravel2.ogg',
-      '/minecraft/sounds/dig/gravel3.ogg',
-      '/minecraft/sounds/dig/gravel4.ogg',
-    ],
-    break: [
-      '/minecraft/sounds/dig/gravel1.ogg',
-      '/minecraft/sounds/dig/gravel2.ogg',
-      '/minecraft/sounds/dig/gravel3.ogg',
-      '/minecraft/sounds/dig/gravel4.ogg',
-    ],
-  }
-};
-const { pause, resume } = useIntervalFn(() => {
+/** 目前方塊對應的資源 */
+const resource = minecraftResource[props.blockType];
+
+async function playRandomSound(paths: string[]) {
+  const [path] = sample(paths, 1);
+  new Audio(path).play()
+}
+
+const {
+  pause: pauseSound,
+  resume: playSound
+} = useIntervalFn(() => {
   if (isDug.value) return;
 
-  const [path] = sample(sound.dirt.dig, 1);
-  new Audio(path).play();
+  playRandomSound(resource.sound.dig);
 }, 200, {
   immediate: false,
   immediateCallback: true,
 });
 
 watch(isPressed, (value) => {
-  value ? resume() : pause();
+  if (value) return
+
+  pauseSound();
+
+  bus.emit({
+    type: 'dig',
+    id,
+    isActive: false,
+  });
 });
 
 useLongPressTimings(blockRef, [
+  // 按著 0.1s 才算開始挖
   {
-    delay: 10, handler() {
+    delay: 100, handler(event) {
       if (isDug.value) return;
 
-      emit('digging');
+      event.preventDefault();
 
+      playSound();
+      emit('digging');
       bus.emit({
         type: 'dig',
         id,
@@ -107,12 +105,14 @@ useLongPressTimings(blockRef, [
       });
     }
   },
+  // 1.5s 後挖掉方塊
   {
-    delay: 1500, handler() {
+    delay: 1500, handler(event) {
       if (isDug.value) return;
 
-      emit('dug');
+      event.preventDefault();
 
+      emit('dug');
       bus.emit({
         type: 'dig',
         id,
@@ -121,30 +121,21 @@ useLongPressTimings(blockRef, [
 
       isDug.value = true;
 
-      const [path] = sample(sound.dirt.break, 1);
-      new Audio(path).play();
+      playRandomSound(resource.sound.break);
     }
   },
 ], {
   distanceThreshold: 500,
-  onMouseUp() {
-    if (!isDug.value) {
-      bus.emit({
-        type: 'dig',
-        id,
-        isActive: false,
-      });
-    }
-  }
 });
 
 function placeBlock() {
+  if (!isDug.value) return;
+
   emit('place');
 
   isDug.value = false;
 
-  const [path] = sample(sound.dirt.place, 1);
-  new Audio(path).play();
+  playRandomSound(resource.sound.place);
 }
 
 onMounted(() => {
