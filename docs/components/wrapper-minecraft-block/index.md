@@ -18,7 +18,7 @@ import BasicUsage from '../../../src/components/wrapper-minecraft-block/examples
 
 按住滑鼠開始挖掘元素，持續一段時間後會將元素挖走。
 
-對洞口按右鍵則可將元素放回去。( ´ ▽ ` )ﾉ
+對洞口雙擊則可將元素放回去。( ´ ▽ ` )ﾉ
 
 <basic-usage/>
 

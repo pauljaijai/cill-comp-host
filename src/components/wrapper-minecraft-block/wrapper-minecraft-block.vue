@@ -3,7 +3,7 @@
     ref="blockRef"
     class=" relative"
     :class="{ 'opacity-0': isDug }"
-    @click.right.prevent="handleRightClick"
+    @dblclick.prevent="placeBlock"
   >
     <slot />
 
@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { BusData, eventKey } from './type';
+import { BlockType, BusData, eventKey } from './type';
 import { nanoid } from 'nanoid';
 import { pick, sample } from 'remeda';
 
@@ -22,16 +22,19 @@ import { useLongPressTimings } from '../../composables/use-long-press-timings';
 
 // #region Props
 interface Props {
-  modelValue?: string;
+  /** 方塊種類 */
+  blockType: BlockType;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
+  blockType: 'dirt',
 });
 
 // #region Emits
 const emit = defineEmits<{
-  'update:modelValue': [value: Props['modelValue']];
+  'digging': [];
+  'dug': [];
+  'place': [];
 }>();
 // #endregion Emits
 
@@ -87,19 +90,14 @@ watch(isPressed, (value) => {
 
 useLongPressTimings(blockRef, [
   {
-    delay: 500, handler() {
-    }
-  },
-  {
-    delay: 1000, handler() {
-    }
-  },
-  {
-    delay: 1500, handler() {
+    delay: 10, handler() {
+      emit('digging');
     }
   },
   {
     delay: 2000, handler() {
+      emit('dug');
+
       isDug.value = true;
 
       const [path] = sample(sound.dirt.break, 1);
@@ -110,7 +108,9 @@ useLongPressTimings(blockRef, [
   distanceThreshold: 500,
 });
 
-function handleRightClick() {
+function placeBlock() {
+  emit('place');
+
   isDug.value = false;
 
   const [path] = sample(sound.dirt.place, 1);
@@ -121,6 +121,7 @@ onMounted(() => {
   bus.emit({
     type: 'add',
     id,
+    blockType: props.blockType,
     visible: !isDug.value,
     ...pick(blockBounding, ['x', 'y', 'width', 'height']),
   });

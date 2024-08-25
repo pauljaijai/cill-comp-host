@@ -1,8 +1,11 @@
 import { EventBusKey } from "@vueuse/core";
 import { StringLiteral } from "typescript";
 
+export type BlockType = 'dirt' | 'stone' | 'sand';
+
 export type BusData = {
   type: 'add';
+  blockType: BlockType;
   id: string;
   height: number;
   width: number;

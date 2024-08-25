@@ -17,21 +17,6 @@ interface CreateHoleParam {
   windowSize: { width: number; height: number };
 }
 
-export function createHole(param: CreateHoleParam, scene: Scene): Hole {
-  const { data } = param;
-
-  const mesh = createMesh(param, scene);
-
-  function setVisible(value: boolean) {
-    mesh.isVisible = value;
-  }
-
-  return {
-    ...pick(data, ['id', 'width', 'height']),
-    mesh,
-    setVisible,
-  };
-}
 
 function createMesh(param: CreateHoleParam, scene: Scene) {
   const { data, windowSize } = param;
@@ -96,3 +81,24 @@ function createMesh(param: CreateHoleParam, scene: Scene) {
 
   return mesh;
 }
+
+function createParticle(param: CreateHoleParam, scene: Scene) {
+
+}
+
+export function createHole(param: CreateHoleParam, scene: Scene): Hole {
+  const { data } = param;
+
+  const mesh = createMesh(param, scene);
+
+  function setVisible(value: boolean) {
+    mesh.isVisible = value;
+  }
+
+  return {
+    ...pick(data, ['id', 'width', 'height']),
+    mesh,
+    setVisible,
+  };
+}
+
