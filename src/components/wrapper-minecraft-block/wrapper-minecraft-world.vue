@@ -14,6 +14,7 @@ import { debounce } from 'lodash-es';
 
 import { useBabylonScene } from '../../composables/use-babylon-scene';
 import { useEventBus, useRafFn, useWindowScroll, useWindowSize } from '@vueuse/core';
+import { createHole, Hole } from './hole';
 
 type ElData = Extract<BusData, { type: 'add' }>
 
@@ -23,6 +24,8 @@ const bus = useEventBus(eventKey);
 
 /** 儲存註冊資料 */
 const elDataQueue: ElData[] = [];
+/** 空洞 */
+const holes: Hole[] = [];
 
 /** 遞迴消耗 queue 資料並產生 hole */
 function consumeElData() {
@@ -35,7 +38,12 @@ function consumeElData() {
   const elData = elDataQueue.shift();
   if (!elData) return;
 
-  holes.push(createHole(elData));
+  holes.push(
+    createHole({
+      data: elData,
+      windowSize,
+    }, scene.value)
+  );
 
   consumeElData();
 }
@@ -48,10 +56,10 @@ bus.on((data) => {
   }
 
   if (data.type === 'update') {
-    const hole = holes.find((hole) => hole.name === data.id);
+    const hole = holes.find((hole) => hole.id === data.id);
 
     if (hole) {
-      hole.isVisible = !data.visible;
+      hole.setVisible(!data.visible);
 
       // hole.scaling.x = data.width;
       // hole.scaling.y = data.height;
@@ -118,70 +126,6 @@ useRafFn(() => {
   }
 });
 
-/** 空洞 */
-const holes: Mesh[] = [];
-
-function createHole(data: ElData) {
-  const depth = Math.max(data.width, data.height);
-
-  const texture = pipe(
-    new Texture(
-      '/minecraft/textures/block/dirt.png',
-      scene.value,
-      true,
-      false,
-      Texture.NEAREST_NEAREST
-    ),
-    (texture) => {
-      /** 方塊基準尺寸 */
-      const baseSize = 80;
-
-      texture.uScale = data.width / baseSize;
-      texture.vScale = data.height / baseSize;
-
-      return texture;
-    }
-  )
-
-  const material = pipe(
-    new StandardMaterial('hole', scene.value),
-    (material) => {
-      material.emissiveColor = new Color3(0.1, 0.1, 0.1);
-      material.diffuseTexture = texture;
-
-      return material;
-    },
-  );
-
-  const hole = pipe(
-    MeshBuilder.CreateBox(data.id, {
-      width: 1, height: 1, depth,
-      sideOrientation: Mesh.BACKSIDE,
-    }, scene.value),
-    (hole) => {
-      // 使用縮放對應寬高，這樣就可以自由調整尺寸，而不用變更 mesh
-      hole.scaling.x = data.width;
-      hole.scaling.y = data.height;
-
-      hole.renderingGroupId = 1;
-      hole.material = material;
-
-      hole.position.x = data.x + data.width / 2 - windowSize.width / 2;
-      hole.position.y = -data.y - data.height / 2 + windowSize.height / 2;
-      hole.position.z = depth / 2;
-
-      hole.isVisible = !data.visible;
-      hole.metadata = {
-        ...data,
-        position: hole.position,
-      }
-
-      return hole;
-    },
-  );
-
-  return hole;
-}
 
 /** XY 平面上的遮擋面 */
 let occluder: Mesh | undefined;
@@ -206,11 +150,11 @@ const initOccluder = debounce((scene: Scene) => {
     () => {
       const planeCSG = holes.reduce((accCSG, hole) => {
         const holeCutter = MeshBuilder.CreateBox('holeCutter', {
-          width: hole.metadata.width,
-          height: hole.metadata.height,
+          width: hole.width,
+          height: hole.height,
           depth: 10,
         }, scene);
-        holeCutter.position = hole.metadata.position;
+        holeCutter.position = hole.mesh.position;
         holeCutter.position.z = 0;
 
         const holeCSG = CSG.FromMesh(holeCutter);

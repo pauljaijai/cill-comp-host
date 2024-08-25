@@ -45,7 +45,7 @@ const blockBounding = reactive(useElementBounding(blockRef));
 
 /** 方塊是否被挖掉 */
 const isDug = ref(true);
-const { pressed: isPressed } = useMousePressed({ target: blockRef });
+const { pressed: isPressed, sourceType } = useMousePressed({ target: blockRef });
 
 const sound = {
   dirt: {
