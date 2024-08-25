@@ -21,6 +21,11 @@ export type BusData = {
   x: number;
   y: number;
   visible: boolean;
+} |
+{
+  type: 'dig';
+  id: string;
+  isActive: boolean;
 }
 
 export const eventKey: EventBusKey<BusData> = Symbol('wrapper-minecraft-block')

@@ -86,46 +86,53 @@ function createMesh(param: CreateHoleParam, scene: Scene) {
 function createDiggingParticles(param: CreateHoleParam, scene: Scene) {
   const { data, windowSize } = param;
   const { x, y, width, height } = data;
-  console.log(`🚀 ~ data:`, data);
 
-  const particleSystem = new ParticleSystem('particles', 2000, scene);
 
-  //Texture of each particle
-  particleSystem.particleTexture = new Texture('/textures/flare.png', scene);
+  const texture = new Texture(
+    '/minecraft/textures/block/dirt.png',
+    scene,
+    true,
+    false,
+    Texture.NEAREST_NEAREST
+  )
+
+  const particleSystem = new ParticleSystem('digging-particles', 50, scene);
+  particleSystem.particleTexture = texture;
+
+  // 切割圖片
+  particleSystem.isAnimationSheetEnabled = true;
+  particleSystem.spriteCellHeight = 2;
+  particleSystem.spriteCellWidth = 2;
 
   particleSystem.emitter = new Vector3(
-    x + width / 2,
-    -y - height / 2,
-    10
+    x + width / 2 - windowSize.width / 2,
+    -y - height / 2 + windowSize.height / 2,
+    0
   );
 
-  particleSystem.color1 = new Color4(0.7, 0.8, 1.0, 1.0);
-  particleSystem.color2 = new Color4(0.2, 0.5, 1.0, 1.0);
-  particleSystem.colorDead = new Color4(0, 0, 0.2, 0.0);
+  particleSystem.renderingGroupId = 2;
 
-  particleSystem.minSize = 0.1;
-  particleSystem.maxSize = 0.5;
+  particleSystem.blendMode = ParticleSystem.BLENDMODE_STANDARD;
+  particleSystem.colorDead = new Color4(1, 1, 1, 1);
 
-  // Life time of each particle (random between...
-  particleSystem.minLifeTime = 0.3;
+  particleSystem.minSize = 10;
+  particleSystem.maxSize = 15;
+
+  particleSystem.minLifeTime = 1;
   particleSystem.maxLifeTime = 1.5;
 
-  // Emission rate
-  particleSystem.emitRate = 1000;
 
 
-  /******* Emission Space ********/
-  particleSystem.createPointEmitter(
-    new Vector3(-7, 8, 3), new Vector3(7, 8, -3)
+  particleSystem.createBoxEmitter(
+    new Vector3(width / 2, height / 2, 0),
+    new Vector3(width / -2, height / 2, 0),
+    new Vector3(width / 2, height / 2, 0),
+    new Vector3(width / -2, height / -2, 0),
   );
 
-  // Speed
-  particleSystem.minEmitPower = 1;
-  particleSystem.maxEmitPower = 3;
-  particleSystem.updateSpeed = 0.005;
-
-  // Start the particle system
-  particleSystem.start();
+  particleSystem.gravity = new Vector3(0, -height, 0);
+  particleSystem.emitRate = 6;
+  particleSystem.updateSpeed = 0.02;
 
   return particleSystem;
 }

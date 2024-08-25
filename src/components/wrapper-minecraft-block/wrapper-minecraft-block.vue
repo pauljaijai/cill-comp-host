@@ -52,7 +52,7 @@ const blockRef = ref<HTMLElement>();
 const blockBounding = reactive(useElementBounding(blockRef));
 
 /** 方塊是否被挖掉 */
-const isDug = ref(true);
+const isDug = ref(false);
 const { pressed: isPressed } = useMousePressed({ target: blockRef });
 
 const sound = {
@@ -96,12 +96,28 @@ watch(isPressed, (value) => {
 useLongPressTimings(blockRef, [
   {
     delay: 10, handler() {
+      if (isDug.value) return;
+
       emit('digging');
+
+      bus.emit({
+        type: 'dig',
+        id,
+        isActive: true,
+      });
     }
   },
   {
-    delay: 2000, handler() {
+    delay: 1500, handler() {
+      if (isDug.value) return;
+
       emit('dug');
+
+      bus.emit({
+        type: 'dig',
+        id,
+        isActive: false,
+      });
 
       isDug.value = true;
 
@@ -111,6 +127,15 @@ useLongPressTimings(blockRef, [
   },
 ], {
   distanceThreshold: 500,
+  onMouseUp() {
+    if (!isDug.value) {
+      bus.emit({
+        type: 'dig',
+        id,
+        isActive: false,
+      });
+    }
+  }
 });
 
 function placeBlock() {

@@ -58,17 +58,24 @@ bus.on((data) => {
     consumeElData();
   }
 
+  const hole = holes.find((hole) => hole.id === data.id);
+  if (!hole) return;
+
   if (data.type === 'update') {
-    const hole = holes.find((hole) => hole.id === data.id);
+    hole.setVisible(!data.visible);
 
-    if (hole) {
-      hole.setVisible(!data.visible);
+    // hole.scaling.x = data.width;
+    // hole.scaling.y = data.height;
 
-      // hole.scaling.x = data.width;
-      // hole.scaling.y = data.height;
+    // hole.position.x = data.x + data.width / 2 - windowSize.width / 2;
+    // hole.position.y = -data.y - data.height / 2 + windowSize.height / 2;
+  }
 
-      // hole.position.x = data.x + data.width / 2 - windowSize.width / 2;
-      // hole.position.y = -data.y - data.height / 2 + windowSize.height / 2;
+  if (data.type === 'dig') {
+    if (data.isActive) {
+      hole.diggingParticles.start();
+    } else {
+      hole.diggingParticles.stop();
     }
   }
 });
