@@ -147,7 +147,6 @@ function createHole(data: ElData) {
     new StandardMaterial('hole', scene.value),
     (material) => {
       material.emissiveColor = new Color3(0.1, 0.1, 0.1);
-
       material.diffuseTexture = texture;
 
       return material;
@@ -165,7 +164,6 @@ function createHole(data: ElData) {
       hole.scaling.y = data.height;
 
       hole.renderingGroupId = 1;
-
       hole.material = material;
 
       hole.position.x = data.x + data.width / 2 - windowSize.width / 2;
@@ -173,7 +171,6 @@ function createHole(data: ElData) {
       hole.position.z = depth / 2;
 
       hole.isVisible = !data.visible;
-
       hole.metadata = {
         ...data,
         position: hole.position,
@@ -242,8 +239,6 @@ const initOccluder = debounce((scene: Scene) => {
 
   occluder = result;
 }, 10)
-
-
 
 </script>
 
