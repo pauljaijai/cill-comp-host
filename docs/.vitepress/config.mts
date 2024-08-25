@@ -155,7 +155,7 @@ export default defineConfig({
         icon: {
           svg: '📚'
         },
-        link: 'https://vocus.cc/salon/cod-aquarium',
+        link: 'https://codlin.me',
       },
     ],
 
