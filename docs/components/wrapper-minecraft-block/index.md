@@ -13,6 +13,10 @@ import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples
 
 讓網頁元素變成方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
 
+::: tip 記得開聲音！🔊
+更有挖方塊的感覺喔！◝(≧∀≦)◟
+:::
+
 ## 使用範例
 
 ### 基本用法

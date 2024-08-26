@@ -86,7 +86,7 @@ bus.on((data) => {
 });
 
 /** 相機到 XY 平面距離 */
-const cameraDistance = 1000;
+const cameraDistance = 1300;
 const { canvasRef, camera, scene } = useBabylonScene({
   async createEngine({ canvas }) {
     return new Engine(canvas, true, {
