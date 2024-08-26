@@ -6,6 +6,7 @@ description: 讓網頁元素變成方塊，在小小的網頁裡挖呀挖呀挖�
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/wrapper-minecraft-block/examples/basic-usage.vue'
+import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples/other-block.vue'
 </script>
 
 # Minecraft 方塊包裝器
@@ -24,6 +25,16 @@ import BasicUsage from '../../../src/components/wrapper-minecraft-block/examples
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-minecraft-block/examples/basic-usage.vue
+:::
+
+### 更多方塊
+
+還可以指定不同方塊。( ´ ▽ ` )ﾉ
+
+<other-block/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-minecraft-block/examples/other-block.vue
 :::
 
 ## 原理

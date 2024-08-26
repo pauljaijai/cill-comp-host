@@ -1,24 +1,32 @@
 <template>
-  <div class="flex flex-col items-center gap-14 w-full border border-gray-300 p-6">
+  <div class="flex justify-center flex-wrap gap-14 w-full border border-gray-300 p-6">
+    <div class="flex justify-center flex-wrap gap-14">
+      <wrapper-minecraft-block>
+        <img
+          src="/profile.webp"
+          width="200"
+          height="200"
+          class="p-2 border rounded pointer-events-none select-none"
+        >
+      </wrapper-minecraft-block>
+
+      <wrapper-minecraft-block>
+        <img
+          src="/profile-2.webp"
+          width="200"
+          height="200"
+          class="p-2 border rounded pointer-events-none select-none"
+        >
+      </wrapper-minecraft-block>
+    </div>
+
     <wrapper-minecraft-block>
       <img
-        src="/profile.webp"
-        width="200"
-        height="200"
+        src="/profile-3.webp"
+        width="160"
+        height="160"
         class="p-2 border rounded pointer-events-none select-none"
       >
-    </wrapper-minecraft-block>
-
-    <wrapper-minecraft-block block-type="stone">
-      <div class="border p-6 select-none">
-        我是俗投 ᕕ( ﾟ ∀。)ᕗ
-      </div>
-    </wrapper-minecraft-block>
-
-    <wrapper-minecraft-block block-type="sand">
-      <div class="border p-6 select-none">
-        我是沙子 (´,,•ω•,,)
-      </div>
     </wrapper-minecraft-block>
 
     <!-- 必須放置一個 world 元件 -->
