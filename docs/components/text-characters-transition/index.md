@@ -67,7 +67,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 ## 原理
 
-基於 anime.js 實現動畫效果
+切分文字後，將每個區塊建立唯一 id，利用 anime.js 實現動畫效果
 
 ## 原始碼
 
