@@ -22,8 +22,8 @@
 
     <wrapper-minecraft-block>
       <img
-        src="/profile-3.webp"
-        width="260"
+        src="/painting-codfish-bakery.webp"
+        width="400"
         height="260"
         class="p-2 border rounded pointer-events-none select-none"
       >
