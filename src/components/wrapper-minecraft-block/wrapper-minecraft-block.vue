@@ -68,7 +68,7 @@ async function playRandomSound(paths: string[]) {
   new Audio(path).play()
 }
 
-const { vibrate } = useVibrate({ pattern: 300 })
+const { vibrate } = useVibrate({ pattern: 100 })
 
 const {
   pause: pauseSound,
@@ -118,8 +118,6 @@ useLongPressTimings(blockRef, [
 
       event.preventDefault();
 
-      vibrate();
-
       emit('dug');
       bus.emit({
         type: 'dig',
@@ -130,6 +128,7 @@ useLongPressTimings(blockRef, [
       isDug.value = true;
 
       playRandomSound(resource.sound.break);
+      vibrate();
     }
   },
 ], {

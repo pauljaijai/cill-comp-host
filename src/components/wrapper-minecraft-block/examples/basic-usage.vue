@@ -23,8 +23,8 @@
     <wrapper-minecraft-block>
       <img
         src="/profile-3.webp"
-        width="160"
-        height="160"
+        width="260"
+        height="260"
         class="p-2 border rounded pointer-events-none select-none"
       >
     </wrapper-minecraft-block>

@@ -72,8 +72,8 @@ bus.on((data) => {
     // hole.scaling.x = data.width;
     // hole.scaling.y = data.height;
 
-    // hole.position.x = data.x + data.width / 2 - windowSize.width / 2;
-    // hole.position.y = -data.y - data.height / 2 + windowSize.height / 2;
+    // hole.mesh.position.x = data.x + data.width / 2 - windowSize.width / 2;
+    // hole.mesh.position.y = -data.y - data.height / 2 + windowSize.height / 2;
   }
 
   if (data.type === 'dig') {
