@@ -1,32 +1,9 @@
 <template>
-  <div class="flex justify-center flex-wrap gap-14 w-full border border-gray-300 p-6">
-    <div class="flex justify-center flex-wrap gap-14">
-      <wrapper-minecraft-block>
-        <img
-          src="/profile.webp"
-          width="200"
-          height="200"
-          class="p-2 border rounded pointer-events-none select-none"
-        >
-      </wrapper-minecraft-block>
-
-      <wrapper-minecraft-block>
-        <img
-          src="/profile-2.webp"
-          width="200"
-          height="200"
-          class="p-2 border rounded pointer-events-none select-none"
-        >
-      </wrapper-minecraft-block>
-    </div>
-
-    <wrapper-minecraft-block>
-      <img
-        src="/painting-codfish-bakery.webp"
-        width="400"
-        height="260"
-        class="p-2 border rounded pointer-events-none select-none"
-      >
+  <div class="flex flex-col items-center gap-14 w-full border border-gray-300 p-6">
+    <wrapper-minecraft-block class="w-1/2">
+      <div class="border py-20 select-none text-center">
+        其實我是方塊 (´,,•ω•,,)
+      </div>
     </wrapper-minecraft-block>
 
     <!-- 必須放置一個 world 元件 -->

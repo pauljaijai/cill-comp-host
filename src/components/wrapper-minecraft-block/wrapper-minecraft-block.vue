@@ -7,7 +7,10 @@
   >
     <slot />
 
-    <block-lid class=" absolute inset-0 pointer-events-none" />
+    <block-lid
+      :stage="destroyStage"
+      class=" absolute left-0 top-0 w-full h-full pointer-events-none"
+    />
   </div>
 </template>
 
@@ -15,7 +18,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { BlockType, BusData, eventKey } from './type';
 import { nanoid } from 'nanoid';
-import { pick, sample } from 'remeda';
+import { map, pick, pipe, range, sample } from 'remeda';
 import { minecraftResource } from './constant';
 
 import BlockLid from './wrapper-minecraft-block-lid.vue';
@@ -60,6 +63,8 @@ const blockBounding = reactive(useElementBounding(blockRef));
 
 /** 方塊是否被挖掉 */
 const isDug = ref(props.isInitDug);
+/** -1 ~ 9，-1 表示沒有裂痕 */
+const destroyStage = ref(-1);
 const { pressed: isPressed } = useMousePressed({ target: blockRef });
 
 /** 目前方塊對應的資源 */
@@ -87,6 +92,7 @@ const {
 watch(isPressed, (value) => {
   if (value) return
 
+  destroyStage.value = -1;
   pauseSound();
 
   bus.emit({
@@ -113,6 +119,16 @@ useLongPressTimings(blockRef, [
       });
     }
   },
+  /** 產生挖掘裂紋效果 */
+  ...pipe(
+    range(0, 10),
+    map((stage) => ({
+      delay: 100 + stage * 140,
+      handler() {
+        destroyStage.value = stage;
+      }
+    }))
+  ),
   // 1.5s 後挖掉方塊
   {
     delay: 1500, handler(event) {

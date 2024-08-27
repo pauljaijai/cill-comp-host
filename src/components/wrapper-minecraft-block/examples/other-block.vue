@@ -1,15 +1,32 @@
 <template>
-  <div class="flex flex-col items-center gap-14 w-full border border-gray-300 p-6">
-    <wrapper-minecraft-block block-type="stone">
-      <div class="border p-6 py-10 select-none">
-        我是俗投 ᕕ( ﾟ ∀。)ᕗ
-      </div>
-    </wrapper-minecraft-block>
+  <div class="flex justify-center flex-wrap gap-14 w-full border border-gray-300 p-6">
+    <div class="flex justify-center flex-wrap gap-14">
+      <wrapper-minecraft-block>
+        <img
+          src="/profile.webp"
+          width="200"
+          height="200"
+          class="p-2 border rounded pointer-events-none select-none"
+        >
+      </wrapper-minecraft-block>
 
-    <wrapper-minecraft-block block-type="sand">
-      <div class="border p-6 py-20 select-none">
-        我是沙子 (´,,•ω•,,)
-      </div>
+      <wrapper-minecraft-block block-type="sand">
+        <img
+          src="/profile-2.webp"
+          width="200"
+          height="200"
+          class="p-2 border rounded pointer-events-none select-none"
+        >
+      </wrapper-minecraft-block>
+    </div>
+
+    <wrapper-minecraft-block block-type="stone">
+      <img
+        src="/painting-codfish-bakery.webp"
+        width="400"
+        height="260"
+        class="p-2 border rounded pointer-events-none select-none"
+      >
     </wrapper-minecraft-block>
 
     <!-- 必須放置一個 world 元件 -->

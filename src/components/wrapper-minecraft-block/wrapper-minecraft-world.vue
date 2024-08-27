@@ -139,6 +139,8 @@ useRafFn(() => {
     camera.value.position.x = x;
     camera.value.position.y = -y;
   }
+}, {
+  fpsLimit: 120,
 });
 
 
