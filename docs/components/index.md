@@ -13,6 +13,7 @@ import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/
 import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-usage.vue';
 import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interactive-effect.vue';
 import WrapperKirbyMouthfulMode from '../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue';
+import WrapperMinecraftBlock from '../../src/components/wrapper-minecraft-block/examples/other-block.vue';
 
 import CursorSidekick from '../../src/components/cursor-sidekick/examples/basic-usage.vue';
 
@@ -123,6 +124,17 @@ const currentSection = ref('btn');
 讓粉紅惡魔來幫你吃掉畫面上的一切。( ͡• ͜ʖ ͡• )
 
 <wrapper-kirby-mouthful-mode class="h-[70vh]" />
+
+### [Minecraft 方塊包裝器](./wrapper-minecraft-block/) <Badge type="info" text="wrapper" />
+
+讓網頁元素變成 Minecraft 方塊！
+
+在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
+
+<!-- <wrapper-minecraft-block  /> -->
+::: warning 暫停展示
+由於在這裡展示會偏移，大家還是前往[元件頁面](./wrapper-minecraft-block/)看看吧。( ・ิω・ิ)
+:::
 
 </expansion-section>
 
