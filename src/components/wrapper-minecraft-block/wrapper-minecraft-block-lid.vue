@@ -35,5 +35,4 @@ const image = computed(() => {
   background-image: v-bind(image)
   background-position: center
   background-size: 100%
-
 </style>

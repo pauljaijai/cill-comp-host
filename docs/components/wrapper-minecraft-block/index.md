@@ -13,6 +13,12 @@ import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples
 
 讓網頁元素變成方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
 
+大家有看過 Google 的 Minecraft 15 周年紀念彩蛋嗎？
+
+沒看過的人[趕快來看看](https://gnn.gamer.com.tw/detail.php?sn=267898)。(/≧▽≦)/
+
+簡單來說
+
 ::: tip 記得開聲音！🔊
 更有挖方塊的感覺喔！◝(≧∀≦)◟
 :::
@@ -33,7 +39,7 @@ import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples
 
 ### 更多方塊
 
-還可以指定不同方塊。( ´ ▽ ` )ﾉ
+可以指定不同方塊喔。( ´ ▽ ` )ﾉ
 
 <other-block/>
 
@@ -43,9 +49,17 @@ import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples
 
 ## 原理
 
+由 World 與 Block 兩個主要元件組成。
+
+- World 提供 3D 畫面與網格管理。
+
+- Block 提供使用者互動、聲音與狀態管理。
+
+概念如下：
+
 利用 babylon.js 建立一個覆蓋整個網頁的 3D 畫面，接著使用 CSG 裁切網格，製造出「凹洞」效果與每個方塊所需的粒子系統。
 
-Block 元件負責管理使用者互動、聲音與狀態，並透過 EventBus 通知 World 各類事件。
+Block 元件負責管理互動、聲音、裂痕動畫與狀態，並透過 EventBus 通知 World 各類事件。
 
 ## 原始碼
 

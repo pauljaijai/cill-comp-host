@@ -1,7 +1,7 @@
 <template>
   <div
     ref="blockRef"
-    class=" relative"
+    class="mc-block relative"
     :class="{ 'opacity-0': isDug }"
     @dblclick.prevent="placeBlock"
   >
@@ -66,6 +66,11 @@ const isDug = ref(props.isInitDug);
 /** -1 ~ 9，-1 表示沒有裂痕 */
 const destroyStage = ref(-1);
 const { pressed: isPressed } = useMousePressed({ target: blockRef });
+
+const cursor = computed(() => {
+  if (isDug.value) return 'auto';
+  return `url('/minecraft/textures/item/wooden_pickaxe.png'), crosshair`;
+});
 
 /** 目前方塊對應的資源 */
 const resource = minecraftResource[props.blockType];
@@ -196,4 +201,7 @@ defineSlots<{
 </script>
 
 <style scoped lang="sass">
+.mc-block
+  cursor: v-bind(cursor)
+
 </style>
