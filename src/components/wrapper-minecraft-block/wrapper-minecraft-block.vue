@@ -18,7 +18,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { BlockType, BusData, eventKey } from './type';
 import { nanoid } from 'nanoid';
-import { map, pick, pipe, range, sample } from 'remeda';
+import { find, map, pick, pipe, range, sample } from 'remeda';
 import { minecraftResource } from './constant';
 
 import BlockLid from './wrapper-minecraft-block-lid.vue';
@@ -67,9 +67,30 @@ const isDug = ref(props.isInitDug);
 const destroyStage = ref(-1);
 const { pressed: isPressed } = useMousePressed({ target: blockRef });
 
+const cursorList: Array<{
+  types: BlockType[];
+  cursor: string;
+}> = [
+    {
+      types: ['dirt', 'sand'],
+      cursor: 'iron_shovel',
+    },
+    {
+      types: ['stone'],
+      cursor: 'iron_pickaxe',
+    },
+  ]
 const cursor = computed(() => {
   if (isDug.value) return 'auto';
-  return `url('/minecraft/textures/item/wooden_pickaxe.png'), crosshair`;
+
+  const cursor = pipe(
+    cursorList,
+    find(({ types }) => types.includes(props.blockType)),
+    (target) => target?.cursor,
+  );
+  if (!cursor) return 'crosshair';
+
+  return `url('/minecraft/textures/item/${cursor}.png'), crosshair`;
 });
 
 /** 目前方塊對應的資源 */
