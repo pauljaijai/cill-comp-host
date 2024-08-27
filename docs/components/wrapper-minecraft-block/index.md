@@ -13,9 +13,13 @@ import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples
 
 大家有玩過 [Minecraft](https://www.minecraft.net/zh-hant) 嗎？
 
-不瞞大家說，鱈魚我是資深玩家，還曾經在巴哈發表過地圖作品。(´,,•ω•,,)
+不瞞大家說，鱈魚我其實是資深玩家，還曾經在巴哈發表過地圖作品。(´,,•ω•,,)
 
-前陣子 Google 發布了的 Minecraft 15 周年紀念彩蛋。（沒看過的[趕快來看看](https://gnn.gamer.com.tw/detail.php?sn=267898)）
+前陣子 Google 發布了的 Minecraft 15 周年紀念彩蛋。
+
+::: info Minecraft 15 周年紀念彩蛋
+沒看過的[趕快來看看](https://gnn.gamer.com.tw/detail.php?sn=267898) ˋ( ° ▽、° )
+:::
 
 大受感動的我決定也來做一個自己的版本，不過礙於技術力不足，搞了好久才做出來。...(›´ω`‹ )
 
