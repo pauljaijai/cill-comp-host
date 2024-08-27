@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, CSSProperties, ref, watchEffect } from 'vue';
+import { computed, CSSProperties, ref } from 'vue';
 import { nanoid } from 'nanoid';
 
 import { useElementSize, useVModel } from '@vueuse/core';

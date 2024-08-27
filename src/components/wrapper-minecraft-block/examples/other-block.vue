@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center flex-wrap gap-10 w-full border border-gray-300 p-6">
+  <div class="flex justify-center flex-wrap gap-4 w-full p-6">
     <div class="flex justify-center flex-wrap gap-4">
       <wrapper-minecraft-block>
         <img

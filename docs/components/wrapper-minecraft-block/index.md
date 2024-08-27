@@ -53,13 +53,13 @@ import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples
 
 由 World 與 Block 兩個主要元件組成。
 
-- World 提供 3D 畫面與網格管理。
+- World 提供 3D 畫面。
 
-- Block 提供使用者互動、聲音與狀態管理。
+- Block 負責互動。
 
 概念如下：
 
-利用 babylon.js 建立一個覆蓋整個網頁的 3D 畫面，接著使用 CSG 裁切網格，製造出「凹洞」效果與每個方塊所需的粒子系統。
+利用 babylon.js 建立一個覆蓋整個網頁的 3D 畫面，接著使用 CSG 裁切網格，製造出「凹洞」效果並初始化每個方塊所需的粒子系統。
 
 Block 元件負責管理互動、聲音、裂痕動畫與狀態，並透過 EventBus 通知 World 各類事件。
 

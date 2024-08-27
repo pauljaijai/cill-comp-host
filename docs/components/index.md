@@ -127,9 +127,14 @@ const currentSection = ref('btn');
 
 ### [Minecraft 方塊包裝器](./wrapper-minecraft-block/) <Badge type="info" text="wrapper" />
 
-讓網頁元素變成 Minecraft 方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
+讓網頁元素變成 Minecraft 方塊！
 
-<wrapper-minecraft-block class="h-[70vh]" />
+在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
+
+<!-- <wrapper-minecraft-block  /> -->
+::: warning 暫停展示
+由於在這裡展示會偏移，大家還是前往[元件頁面](./wrapper-minecraft-block/)看看吧。( ・ิω・ิ)
+:::
 
 </expansion-section>
 
