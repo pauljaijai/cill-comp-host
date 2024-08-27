@@ -22,7 +22,6 @@ const imgs = pipe(
     return image;
   })
 )
-console.log(`🚀 ~ imgs:`, imgs);
 
 const image = computed(() => {
   if (props.stage < 0) return '';
