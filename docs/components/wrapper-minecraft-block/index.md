@@ -1,5 +1,5 @@
 ---
-description: 讓網頁元素變成方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
+description: 讓網頁元素變成 Minecraft 方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
 ---
 
 <script setup>
@@ -11,13 +11,15 @@ import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples
 
 # Minecraft 方塊包裝器
 
-讓網頁元素變成方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
+大家有玩過 [Minecraft](https://www.minecraft.net/zh-hant) 嗎？
 
-大家有看過 Google 的 Minecraft 15 周年紀念彩蛋嗎？
+不瞞大家說，其實鱈魚我是資深玩家，還曾經在巴哈發表過地圖作品。(´,,•ω•,,)
 
-沒看過的人[趕快來看看](https://gnn.gamer.com.tw/detail.php?sn=267898)。(/≧▽≦)/
+前陣子 Google 發布了的 Minecraft 15 周年紀念彩蛋。（沒看過的[趕快來看看](https://gnn.gamer.com.tw/detail.php?sn=267898)）
 
-簡單來說
+大受感動的我決定也來做一個自己的版本，不過礙於技術力不足，搞了好久才做出來。...(›´ω`‹ )
+
+讓我們一起把網頁元素變成 Minecraft 方塊，在小小的網頁裡挖呀挖呀挖！ᕕ( ﾟ ∀。)ᕗ
 
 ::: tip 記得開聲音！🔊
 更有挖方塊的感覺喔！◝(≧∀≦)◟

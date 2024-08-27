@@ -1,12 +1,12 @@
 <template>
-  <div class="flex justify-center flex-wrap gap-14 w-full border border-gray-300 p-6">
-    <div class="flex justify-center flex-wrap gap-14">
+  <div class="flex justify-center flex-wrap gap-10 w-full border border-gray-300 p-6">
+    <div class="flex justify-center flex-wrap gap-4">
       <wrapper-minecraft-block>
         <img
           src="/profile.webp"
           width="200"
           height="200"
-          class="p-2 border rounded pointer-events-none select-none"
+          class=" border rounded pointer-events-none select-none"
         >
       </wrapper-minecraft-block>
 
@@ -15,7 +15,7 @@
           src="/profile-2.webp"
           width="200"
           height="200"
-          class="p-2 border rounded pointer-events-none select-none"
+          class=" border rounded pointer-events-none select-none"
         >
       </wrapper-minecraft-block>
     </div>
@@ -23,9 +23,9 @@
     <wrapper-minecraft-block block-type="stone">
       <img
         src="/painting-codfish-bakery.webp"
-        width="400"
+        width="420"
         height="260"
-        class="p-2 border rounded pointer-events-none select-none"
+        class="border rounded pointer-events-none select-none"
       >
     </wrapper-minecraft-block>
 
