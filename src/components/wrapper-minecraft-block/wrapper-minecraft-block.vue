@@ -7,7 +7,7 @@
   >
     <slot />
 
-    <div class=" absolute inset-0 pointer-events-none" />
+    <block-lid class=" absolute inset-0 pointer-events-none" />
   </div>
 </template>
 
@@ -17,6 +17,8 @@ import { BlockType, BusData, eventKey } from './type';
 import { nanoid } from 'nanoid';
 import { pick, sample } from 'remeda';
 import { minecraftResource } from './constant';
+
+import BlockLid from './wrapper-minecraft-block-lid.vue';
 
 import {
   useElementBounding,
