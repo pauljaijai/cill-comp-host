@@ -13,7 +13,7 @@ import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples
 
 大家有玩過 [Minecraft](https://www.minecraft.net/zh-hant) 嗎？
 
-不瞞大家說，鱈魚我其實是資深玩家，還曾經在巴哈發表過地圖作品。(´,,•ω•,,)
+不瞞大家說，鱈魚我其實是老玩家了，還曾經在巴哈發表過地圖作品。(´,,•ω•,,)
 
 前陣子 Google 發布了的 Minecraft 15 周年紀念彩蛋。
 
