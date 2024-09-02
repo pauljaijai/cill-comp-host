@@ -186,7 +186,7 @@ const {
     }
 
     // 初始化粒子系統
-    particleSystem.value = await initParticles(param);
+    particleSystem.value = await createParticleSystem(param);
   },
 });
 
@@ -274,7 +274,7 @@ const meshProviders: (
 
 
 
-async function initParticles({ scene }: InitParam) {
+async function createParticleSystem({ scene }: InitParam) {
   const useModelMaterial = pipe(props.confetti,
     (data) => Array.isArray(data) ? data : [data],
     (data) => data.some(({ shape }) => shape === 'text'),
