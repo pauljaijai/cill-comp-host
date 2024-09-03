@@ -185,8 +185,7 @@ const {
       defaultLight.intensity = 1;
       defaultLight.direction = new Vector3(0.5, 1, 0);
 
-      defaultLight.diffuse = new Color3(1, 1, 1);
-      defaultLight.groundColor = new Color3(1, 1, 1);
+      defaultLight.groundColor = new Color3(0.9, 0.9, 0.9);
     }
 
     // 初始化粒子系統
