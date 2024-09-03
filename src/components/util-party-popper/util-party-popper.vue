@@ -11,7 +11,7 @@
 
 
 <script setup lang="ts">
-import { computed, onBeforeMount, ref, shallowRef, toRefs } from 'vue';
+import { computed, onBeforeMount, reactive, ref, shallowRef, toRefs } from 'vue';
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import {
   ArcRotateCamera, Camera,
@@ -153,6 +153,10 @@ const {
 } = toRefs(props);
 
 const particleSystem = shallowRef<SolidParticleSystem>();
+onBeforeMount(() => {
+  particleSystem.value?.dispose();
+});
+
 const {
   canvasRef,
   engine,
@@ -162,7 +166,7 @@ const {
       'camera',
       Math.PI / 2,
       Math.PI / 2,
-      Math.max(elWidth.value, elHeight.value),
+      Math.max(canvasBounding.width, canvasBounding.height),
       new Vector3(0, 0, 0),
       scene
     );
@@ -190,9 +194,21 @@ const {
   },
 });
 
-onBeforeMount(() => {
-  particleSystem.value?.dispose();
+const canvasBounding = reactive(useElementBounding(canvasRef));
+/** 畫布邊界 */
+const canvasBoundary = computed(() => {
+  // 抓大一點的範圍，讓粒子可以飄到畫布外
+  const x = canvasBounding.width / 3 * 2;
+  const y = canvasBounding.height / 3 * 2;
+
+  return {
+    left: -x,
+    right: x,
+    top: y,
+    bottom: -y,
+  }
 });
+
 
 const totalAmount = props.quantityOfPerEmit * props.maxConcurrency;
 const numberOfMeshType = pipe(props.confetti,
@@ -204,20 +220,6 @@ const fps = ref(0);
 useIntervalFn(() => {
   fps.value = Math.floor(engine.value?.getFps() ?? 0);
 }, 100);
-
-const { width: elWidth, height: elHeight } = useElementBounding(canvasRef);
-/** 畫布邊界 */
-const canvasBoundary = computed(() => {
-  const x = elWidth.value / 3 * 2;
-  const y = elHeight.value / 3 * 2;
-
-  return {
-    left: -x,
-    right: x,
-    top: y,
-    bottom: -y,
-  }
-});
 
 const meshProviders: (
   (param: Confetti) => Mesh | undefined
@@ -473,8 +475,8 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
       },
       (data) => ({
         /** babylon 中心點和網頁中心點位置不同，需要轉換 */
-        x: -(data.x - elWidth.value / 2),
-        y: -(data.y - elHeight.value / 2),
+        x: -(data.x - canvasBounding.width / 2),
+        y: -(data.y - canvasBounding.height / 2),
         velocity: data.velocity,
       }),
     );
