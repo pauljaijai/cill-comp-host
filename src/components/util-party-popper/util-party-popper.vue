@@ -11,7 +11,7 @@
 
 
 <script setup lang="ts">
-import { computed, ref, shallowRef, toRefs } from 'vue';
+import { computed, onBeforeMount, ref, shallowRef, toRefs } from 'vue';
 import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
 import {
   ArcRotateCamera, Camera,
@@ -190,6 +190,10 @@ const {
   },
 });
 
+onBeforeMount(() => {
+  particleSystem.value?.dispose();
+});
+
 const totalAmount = props.quantityOfPerEmit * props.maxConcurrency;
 const numberOfMeshType = pipe(props.confetti,
   (data) => Array.isArray(data) ? data.length : 1
@@ -280,7 +284,7 @@ async function createParticleSystem({ scene }: InitParam) {
     (data) => data.some(({ shape }) => shape === 'text'),
   );
 
-  const spSystem = new SolidParticleSystem('SPS', scene, {
+  const particleSystem = new SolidParticleSystem('SPS', scene, {
     useModelMaterial,
   });
 
@@ -303,14 +307,14 @@ async function createParticleSystem({ scene }: InitParam) {
       }),
     );
 
-    spSystem.addShape(mesh, numberOfEachMesh);
+    particleSystem.addShape(mesh, numberOfEachMesh);
     mesh.dispose();
   });
 
-  spSystem.buildMesh();
+  particleSystem.buildMesh();
 
-  spSystem.initParticles = () => {
-    spSystem.particles.forEach((particle) => {
+  particleSystem.initParticles = () => {
+    particleSystem.particles.forEach((particle) => {
       const colorValue = pipe(props.color,
         (param) => {
           if (param instanceof Function) {
@@ -335,10 +339,10 @@ async function createParticleSystem({ scene }: InitParam) {
     });
   };
 
-  spSystem.initParticles();
-  spSystem.setParticles();
+  particleSystem.initParticles();
+  particleSystem.setParticles();
 
-  spSystem.updateParticle = (particle) => {
+  particleSystem.updateParticle = (particle) => {
     if (!particle.isVisible) return particle;
 
     if (particle.position.y > canvasBoundary.value.top
@@ -390,10 +394,10 @@ async function createParticleSystem({ scene }: InitParam) {
 
   /** 播放動畫 */
   scene.onAfterRenderObservable.add(() => {
-    spSystem.setParticles();
+    particleSystem.setParticles();
   })
 
-  return spSystem;
+  return particleSystem;
 }
 function initParticle(particle: SolidParticle) {
   const velocityValue = pipe(props.velocity,

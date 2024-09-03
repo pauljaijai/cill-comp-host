@@ -110,6 +110,8 @@ export function useBabylonScene(param?: UseBabylonSceneParam) {
 
   onBeforeUnmount(() => {
     engine.value?.dispose();
+    scene.value?.dispose();
+
     window.removeEventListener('resize', handleResize);
   });
 
