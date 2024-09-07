@@ -6,7 +6,7 @@ description: 隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/util-party-popper/examples/basic-usage.vue'
-import EmitPosition from '../../../src/components/util-party-popper/examples/emit-position.vue'
+import WideAreaEmit from '../../../src/components/util-party-popper/examples/wide-area-emit.vue'
 import MousePopper from '../../../src/components/util-party-popper/examples/mouse-popper.vue'
 import ConfettiShape from '../../../src/components/util-party-popper/examples/confetti-shape.vue'
 import CustomText from '../../../src/components/util-party-popper/examples/custom-text.vue'
@@ -28,18 +28,16 @@ import CustomText from '../../../src/components/util-party-popper/examples/custo
 <<< ../../../src/components/util-party-popper/examples/basic-usage.vue
 :::
 
-### 發射範圍
+### 廣域發射
 
 不只可自訂發射位置，粒子發射範圍也可以調整。
 
-鱈魚：「讓你想怎麼射就怎麼射！ᕕ( ﾟ ∀。)ᕗ 」
+廣域發射更有派對的感覺！✧⁑｡٩(ˊᗜˋ*)و✧⁕｡
 
-路人：「這句話聽起來怎麼怪怪的...(˘･_･˘)」
-
-<emit-position/>
+<wide-area-emit/>
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/util-party-popper/examples/emit-position.vue
+<<< ../../../src/components/util-party-popper/examples/wide-area-emit.vue
 :::
 
 ### 各種形狀

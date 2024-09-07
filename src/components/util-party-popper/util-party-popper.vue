@@ -123,7 +123,7 @@ const props = withDefaults(defineProps<Props>(), {
   quantityOfPerEmit: 20,
   maxConcurrency: 10,
   maxAngularVelocity: Math.PI / 40,
-  gravity: -0.09,
+  gravity: -0.07,
   airResistance: 0.985,
   velocity: () => ({
     x: Scalar.RandomRange(-5, 5),
@@ -360,8 +360,8 @@ async function createParticleSystem({ scene }: InitParam) {
 
     // 模擬空氣擾動
     particle.velocity.addInPlaceFromFloats(
-      Scalar.RandomRange(-0.2, 0.2) * animationRatio,
-      Scalar.RandomRange(-0.2, 0.2) * animationRatio,
+      Scalar.RandomRange(-0.25, 0.25) * animationRatio,
+      Scalar.RandomRange(-0.25, 0.25) * animationRatio,
       0
     );
 
@@ -377,7 +377,7 @@ async function createParticleSystem({ scene }: InitParam) {
     particle.velocity.y *= airResistance;
 
     // 限制粒子最大掉落速度
-    if (particle.velocity.y > -3) {
+    if (particle.velocity.y > -5) {
       particle.velocity.y += gravity.value * animationRatio;
     }
     particle.position.addInPlace(

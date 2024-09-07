@@ -26,7 +26,7 @@ import BgSakuraFubuki from '../../src/components/bg-sakura-fubuki/examples/full-
 
 import TextCharactersTransition from '../../src/components/text-characters-transition/examples/custom-transition.vue';
 
-import UtilPartyPopper from '../../src/components/util-party-popper/examples/emit-position.vue';
+import UtilPartyPopper from '../../src/components/util-party-popper/examples/wide-area-emit.vue';
 
 import { ref } from 'vue';
 
