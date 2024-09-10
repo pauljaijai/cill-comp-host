@@ -11,8 +11,9 @@
 import { inject, ref, onMounted, computed, watch } from 'vue';
 import { PROVIDE_KEY, ProvideContent } from '.';
 import { nanoid } from 'nanoid';
-import { useElementBounding, useIntervalFn } from '@vueuse/core';
 import { conditional, constant } from 'remeda';
+
+import { useElementBounding, useIntervalFn } from '@vueuse/core';
 
 // #region Props
 interface Props {
@@ -36,6 +37,7 @@ interface Props {
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
+  polygon: 'rectangle',
   frictionAir: 0.01,
   friction: 0.1,
   restitution: 0.3,
