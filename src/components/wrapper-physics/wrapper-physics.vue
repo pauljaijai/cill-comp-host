@@ -36,11 +36,7 @@ interface Props {
    * 
    * x, y 為加速度的方向，scale 為加速度的大小
    */
-  gravity?: {
-    scale: number;
-    x: number;
-    y: number;
-  };
+  gravity?: Matter.Gravity;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
