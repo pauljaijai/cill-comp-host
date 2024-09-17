@@ -22,7 +22,7 @@ import { map, omit, pick, pipe } from 'remeda';
 import Matter from 'matter-js';
 
 const {
-  Engine, Render, Runner, Bodies, Composite, Body: MatterBody,
+  Engine, Render, Runner, Bodies, Composite, Body,
 } = Matter;
 
 import { useElementBounding, useIntervalFn } from '@vueuse/core';
@@ -86,10 +86,10 @@ function updateBody(id: string, param: UpdateParam) {
   param.frictionAir && (target.frictionAir = param.frictionAir);
   param.friction && (target.friction = param.friction);
   param.restitution && (target.restitution = param.restitution);
-  param.mass && MatterBody.setMass(target, param.mass);
-  param.isStatic && MatterBody.setStatic(target, param.isStatic);
-  param.velocity && MatterBody.setVelocity(target, param.velocity);
-  param.angularVelocity && MatterBody.setAngularVelocity(target, param.angularVelocity);
+  param.mass && Body.setMass(target, param.mass);
+  param.isStatic && Body.setStatic(target, param.isStatic);
+  param.velocity && Body.setVelocity(target, param.velocity);
+  param.angularVelocity && Body.setAngularVelocity(target, param.angularVelocity);
 }
 
 provide(PROVIDE_KEY, {
