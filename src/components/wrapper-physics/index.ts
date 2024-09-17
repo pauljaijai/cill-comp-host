@@ -15,12 +15,20 @@ interface BasicBodyParam {
   isStatic?: boolean;
 }
 
-export interface Body extends BasicBodyParam {
+/** 在物理世界中註冊的元素物體資訊 */
+export interface ElBody extends BasicBodyParam {
   id: string;
   width: number;
   height: number;
   x: number;
   y: number;
+
+  /** 初始值，用於計算偏移量 */
+  initial: {
+    offsetX: number;
+    offsetY: number;
+    rotate: number;
+  },
 
   /** 物體形狀，預設為 rectangle
    * 
@@ -39,7 +47,7 @@ export interface UpdateParam extends BasicBodyParam {
 
 
 export interface ProvideContent {
-  bindBody: (body: Body) => void;
+  bindBody: (body: ElBody) => void;
   unbindBody: (id: string) => void;
   updateBody: (id: string, param: UpdateParam) => void;
   getInfo: (id: string) => {

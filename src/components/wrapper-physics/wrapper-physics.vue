@@ -17,7 +17,7 @@
 import {
   onMounted, ref, provide, onBeforeUnmount, shallowRef, watch,
 } from 'vue';
-import { PROVIDE_KEY, Body, UpdateParam } from '.';
+import { PROVIDE_KEY, ElBody, UpdateParam } from '.';
 import { map, omit, pick, pipe } from 'remeda';
 import Matter from 'matter-js';
 
@@ -50,21 +50,15 @@ const props = withDefaults(defineProps<Props>(), {
 
 const debug = false;
 
-/** 儲存 body */
-const bodyMap = new Map<string, Body>();
-/** 初始狀態，因為 transform 是相對偏移，所以要記錄初始的位置 */
-const bodyInitInfoMap = new Map<string, {
-  offsetX: number;
-  offsetY: number;
-  rotate: number;
-}>();
+/** 儲存已建立的 body */
+const bodyMap = new Map<string, ElBody>();
 const bodyInfoMap = new Map<string, {
   offsetX: number;
   offsetY: number;
   rotate: number;
 }>();
 
-function bindBody(item: Body) {
+function bindBody(item: ElBody) {
   bodyMap.set(item.id, item);
 }
 function unbindBody(id: string) {
@@ -109,8 +103,11 @@ provide(PROVIDE_KEY, {
 
 const wrapperRef = ref<HTMLDivElement>();
 const canvasRef = ref<HTMLCanvasElement>();
-const wrapperBounding = useElementBounding(wrapperRef);
-/** 儲存初始值 */
+const wrapperBounding = useElementBounding(wrapperRef, {
+  windowResize: false,
+  windowScroll: false,
+});
+/** 物理世界座標初始值 */
 let wrapperInitBounding = {
   x: 0,
   y: 0,
@@ -139,15 +136,21 @@ const runner = shallowRef(Runner.create());
 function init() {
   const result = pipe(Array.from(bodyMap.values()),
     /** 初始化所有 body */
-    map((item) => {
+    map((elBody) => {
       const {
         polygon = 'rectangle',
         width, height
-      } = item;
+      } = elBody;
 
+      /** 
+       * el body 的 xy 是相對於網頁左上角為 0 點，
+       * 所以要先減去 wrapper 的 x, y 來取得相對於
+       * wrapper 的 x, y，再加上 width, height 的
+       * 一半，偏移自身中心
+       */
       const { x, y } = {
-        x: item.x - wrapperInitBounding.x + width / 2,
-        y: item.y - wrapperInitBounding.y + height / 2,
+        x: elBody.x - wrapperInitBounding.x + width / 2,
+        y: elBody.y - wrapperInitBounding.y + height / 2,
       }
 
       const body = pipe(0,
@@ -155,23 +158,30 @@ function init() {
           if (polygon === 'circle') {
             const r = Math.max(width, height) / 2;
             return Bodies.circle(x, y, r, {
-              ...pick(item, ['frictionAir', 'friction', 'restitution', 'mass', 'isStatic']),
-              label: item.id,
+              ...pick(elBody, ['frictionAir', 'friction', 'restitution', 'mass', 'isStatic']),
+              label: elBody.id,
             });
           }
 
           return Bodies.rectangle(x, y, width, height, {
-            ...pick(item, ['frictionAir', 'friction', 'restitution', 'mass', 'isStatic']),
-            label: item.id,
+            ...pick(elBody, ['frictionAir', 'friction', 'restitution', 'mass', 'isStatic']),
+            label: elBody.id,
           });
         }
       );
 
-      bodyInitInfoMap.set(item.id, {
-        offsetX: body.position.x,
-        offsetY: body.position.y,
-        rotate: body.angle,
-      });
+      // 更新初始值
+      const data = bodyMap.get(elBody.id);
+      if (data) {
+        bodyMap.set(elBody.id, {
+          ...data,
+          initial: {
+            offsetX: body.position.x,
+            offsetY: body.position.y,
+            rotate: body.angle,
+          },
+        });
+      }
 
       return body;
     }),
@@ -267,16 +277,17 @@ const {
   list.forEach((body) => {
     /** id 存在 label 中 */
     const id = body.label;
-    const initInfo = bodyInitInfoMap.get(id);
+    const info = bodyMap.get(id);
 
-    if (!bodyMap.has(id) || !initInfo) {
+    if (!bodyMap.has(id) || !info) {
       return;
     }
 
+    const { initial } = info;
     const value = {
       ...{
-        offsetX: body.position.x - initInfo.offsetX,
-        offsetY: body.position.y - initInfo.offsetY,
+        offsetX: body.position.x - initial.offsetX,
+        offsetY: body.position.y - initial.offsetY,
       },
       rotate: body.angle * 180 / Math.PI,
     }

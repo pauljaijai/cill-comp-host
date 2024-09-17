@@ -126,6 +126,11 @@ function bindBody() {
     height: height.value,
     x: x.value,
     y: y.value,
+    initial: {
+      offsetX: 0,
+      offsetY: 0,
+      rotate: 0,
+    },
     ...props,
   });
 }
