@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, onMounted, computed, watch } from 'vue';
+import { inject, ref, onMounted, computed, watch, reactive } from 'vue';
 import { PROVIDE_KEY } from '.';
 import { nanoid } from 'nanoid';
 import { conditional, constant } from 'remeda';
@@ -67,9 +67,9 @@ watch(() => props, () => {
 const id = nanoid();
 
 const containerRef = ref<HTMLDivElement>();
-const {
-  width, height, x, y,
-} = useElementBounding(containerRef);
+const containerBounding = reactive(
+  useElementBounding(containerRef)
+);
 
 const wrapper = inject(PROVIDE_KEY);
 if (!wrapper) {
@@ -122,10 +122,10 @@ const style = computed(() => {
 function bindBody() {
   wrapper?.bindBody({
     id,
-    width: width.value,
-    height: height.value,
-    x: x.value,
-    y: y.value,
+    width: containerBounding.width,
+    height: containerBounding.height,
+    x: containerBounding.x,
+    y: containerBounding.y,
     initial: {
       offsetX: 0,
       offsetY: 0,
@@ -142,8 +142,8 @@ onMounted(() => {
 const scopeProp = computed(() => {
   return {
     ...info.value,
-    width: width.value,
-    height: height.value,
+    width: containerBounding.width,
+    height: containerBounding.height,
   };
 });
 </script>
