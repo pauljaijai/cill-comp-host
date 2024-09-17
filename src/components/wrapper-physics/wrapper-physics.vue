@@ -52,6 +52,7 @@ const debug = false;
 
 /** 儲存已建立的 body */
 const bodyMap = new Map<string, ElBody>();
+/** body 物理模擬資料 */
 const bodyInfoMap = new Map<string, {
   offsetX: number;
   offsetY: number;
