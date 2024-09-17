@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import {
   onMounted, ref, provide, onBeforeUnmount, shallowRef, watch,
+  reactive,
 } from 'vue';
 import { PROVIDE_KEY, ElBody, UpdateParam } from '.';
 import { map, pick, pipe } from 'remeda';
@@ -104,19 +105,25 @@ provide(PROVIDE_KEY, {
 
 const wrapperRef = ref<HTMLDivElement>();
 const canvasRef = ref<HTMLCanvasElement>();
-const wrapperBounding = useElementBounding(wrapperRef, {
-  windowResize: false,
-  windowScroll: false,
-});
-/** 物理世界座標初始值 */
-let wrapperInitBounding = {
+const wrapperBounding = reactive(
+  useElementBounding(wrapperRef, {
+    windowResize: false,
+    windowScroll: false,
+  })
+);
+
+/** 物理世界座標初始值
+ *
+ * 以免畫面滾動後，重新建立物理世界時，物體位置不正確
+ */
+let wrapperInitPosition = {
   x: 0,
   y: 0,
 }
 onMounted(() => {
-  wrapperInitBounding = {
-    x: wrapperBounding.x.value,
-    y: wrapperBounding.y.value,
+  wrapperInitPosition = {
+    x: wrapperBounding.x,
+    y: wrapperBounding.y,
   }
 });
 
@@ -150,8 +157,8 @@ function init() {
        * 一半，偏移自身中心
        */
       const { x, y } = {
-        x: elBody.x - wrapperInitBounding.x + width / 2,
-        y: elBody.y - wrapperInitBounding.y + height / 2,
+        x: elBody.x - wrapperInitPosition.x + width / 2,
+        y: elBody.y - wrapperInitPosition.y + height / 2,
       }
 
       const body = pipe(0,
@@ -195,23 +202,23 @@ function init() {
 
       const list = [
         Bodies.rectangle(
-          width.value / 2, -thickness / 2 - offset,
-          width.value * 2, thickness,
+          width / 2, -thickness / 2 - offset,
+          width * 2, thickness,
           { isStatic: true, label: 'top' }
         ),
         Bodies.rectangle(
-          width.value + thickness / 2 + offset, height.value / 2,
-          thickness, height.value * 2,
+          width + thickness / 2 + offset, height / 2,
+          thickness, height * 2,
           { isStatic: true, label: 'right' }
         ),
         Bodies.rectangle(
-          width.value / 2, height.value + thickness / 2 + offset,
-          width.value * 2, thickness,
+          width / 2, height + thickness / 2 + offset,
+          width * 2, thickness,
           { isStatic: true, label: 'bottom' }
         ),
         Bodies.rectangle(
-          -thickness / 2 - offset, height.value / 2,
-          thickness, height.value * 2,
+          -thickness / 2 - offset, height / 2,
+          thickness, height * 2,
           { isStatic: true, label: 'left' }
         ),
       ];
@@ -231,11 +238,11 @@ function init() {
       engine: engine.value,
       bounds: {
         min: { x: 0, y: 0 },
-        max: { x: width.value, y: height.value },
+        max: { x: width, y: height },
       },
       options: {
-        width: width.value,
-        height: height.value,
+        width: width,
+        height: height,
         background: 'transparent',
         wireframeBackground: 'transparent',
         // showPerformance: true,
