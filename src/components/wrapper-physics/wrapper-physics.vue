@@ -18,14 +18,14 @@ import {
   onMounted, ref, provide, onBeforeUnmount, shallowRef, watch,
 } from 'vue';
 import { PROVIDE_KEY, ElBody, UpdateParam } from '.';
-import { map, omit, pick, pipe } from 'remeda';
+import { map, pick, pipe } from 'remeda';
 import Matter from 'matter-js';
+
+import { useElementBounding, useIntervalFn } from '@vueuse/core';
 
 const {
   Engine, Render, Runner, Bodies, Composite, Body,
 } = Matter;
-
-import { useElementBounding, useIntervalFn } from '@vueuse/core';
 
 // #region Props
 interface Props {

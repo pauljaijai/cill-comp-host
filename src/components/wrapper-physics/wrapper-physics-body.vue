@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { inject, ref, onMounted, computed, watch } from 'vue';
-import { PROVIDE_KEY, ProvideContent } from '.';
+import { PROVIDE_KEY } from '.';
 import { nanoid } from 'nanoid';
 import { conditional, constant } from 'remeda';
 
@@ -71,7 +71,7 @@ const {
   width, height, x, y,
 } = useElementBounding(containerRef);
 
-const wrapper = inject<ProvideContent>(PROVIDE_KEY);
+const wrapper = inject(PROVIDE_KEY);
 if (!wrapper) {
   console.warn('wrapper-physics-body 必須在 wrapper-physics 元件中使用');
 }
