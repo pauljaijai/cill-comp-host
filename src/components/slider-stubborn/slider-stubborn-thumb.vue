@@ -48,10 +48,6 @@ const props = withDefaults(defineProps<Props>(), {});
 
 const windowSize = reactive(useWindowSize());
 
-const isHeld = computed(() => props.isHeld);
-const ratio = computed(() => props.ratio);
-const mouseRatio = computed(() => props.mouseRatio);
-
 const svgRef = ref<SVGElement>();
 const mouseInSvg = reactive(useMouseInElement(
   svgRef, { eventFilter: throttleFilter(15) }
@@ -79,7 +75,7 @@ const svgAttrData = computed(() => ({
 useIntervalFn(() => {
   const newSize = pipe(0,
     () => {
-      if (!isHeld.value || !props.disabled) {
+      if (!props.isHeld || !props.disabled) {
         return props.thumbSize;
       }
 
@@ -116,10 +112,10 @@ const svgStyle = computed<CSSProperties>(() => {
   const leftValue = pipe(null,
     () => {
       if (props.disabled) {
-        return ratio.value;
+        return props.ratio;
       }
 
-      return isHeld.value ? mouseRatio.value : ratio.value;
+      return props.isHeld ? props.mouseRatio : props.ratio;
     }
   );
 
@@ -181,7 +177,7 @@ const midPointDamping = computed(() => mapNumber(
 ));
 
 /** 放開時，播放回彈動畫 */
-watch(isHeld, (value) => {
+watch(() => props.isHeld, (value) => {
   if (value) return;
 
   anime({
@@ -206,7 +202,7 @@ watch(() => [
 
 /** 處理終點動畫 */
 useIntervalFn(() => {
-  if (!isHeld.value || !props.disabled) return;
+  if (!props.isHeld || !props.disabled) return;
 
   const newPoint = {
     x: (mousePosition.value.x - endPoint.value.x) / 2 + endPoint.value.x,

@@ -29,7 +29,7 @@ import {
   useVModel
 } from '@vueuse/core';
 import { clamp, pipe } from 'remeda';
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 
 import SliderThumb from './slider-stubborn-thumb.vue'
 
@@ -80,6 +80,9 @@ watch(isHeld, (value) => {
   } else {
     document.body.classList.remove('grabbing')
   }
+})
+onBeforeMount(() => {
+  document.body.classList.remove('grabbing')
 })
 
 const ratio = computed(() => pipe(
