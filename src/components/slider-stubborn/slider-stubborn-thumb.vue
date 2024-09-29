@@ -126,6 +126,10 @@ const svgStyle = computed<CSSProperties>(() => {
   }
 });
 
+/** svg path 的 Q 指令只用一個控制點與終點，表達二次貝茲曲線
+ * 
+ * [文件](https://www.oxxostudio.tw/articles/201406/svg-04-path-1.html)
+ */
 const ctrlPoint = ref({ x: 0, y: 0 });
 const endPoint = ref({ x: 0, y: 0 });
 
