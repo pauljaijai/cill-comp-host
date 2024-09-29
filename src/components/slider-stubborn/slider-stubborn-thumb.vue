@@ -90,8 +90,10 @@ useIntervalFn(() => {
       }
 
       return size;
-    }
-  ) + props.thumbSize * 1.5;
+    },
+    /** 1.5 是安全係數 */
+    (value) => value + props.thumbSize * 1.5
+  );
 
   const delta = newSize - svgSize.value;
   if (Math.abs(delta) < 0.01) {
@@ -124,25 +126,25 @@ const svgStyle = computed<CSSProperties>(() => {
   }
 });
 
-const startPoint = computed(() => ({ x: 0, y: 0 }));
-const midPoint = ref({ x: 0, y: 0 });
+const ctrlPoint = ref({ x: 0, y: 0 });
 const endPoint = ref({ x: 0, y: 0 });
 
 const pathD = computed(() => {
-  const { x: halfX, y: halfY } = midPoint.value;
+  const { x: ctrlX, y: ctrlY } = ctrlPoint.value;
   const { x: endX, y: endY } = endPoint.value;
 
   return [
     `M0 0`,
-    `Q${halfX} ${halfY},`,
+    `Q${ctrlX} ${ctrlY},`,
     `${endX} ${endY}`,
   ].join(' ')
 });
 
 const length = computed(() => {
+  /** 因為起點是 0, 0，所以變化量直接等於終點座標 */
   const delta = {
-    x: endPoint.value.x - startPoint.value.x,
-    y: endPoint.value.y - startPoint.value.y,
+    x: endPoint.value.x,
+    y: endPoint.value.y,
   }
 
   return getVectorLength(delta);
@@ -157,10 +159,10 @@ const strokeWidth = computed(() => mapNumber(
   strokeMinWidth.value,
 ));
 
-/** 中間點速度，用來模擬震盪效果 */
-let midPointVelocity = { x: 0, y: 0 };
+/** 控制點速度，用來模擬震盪效果 */
+let ctrlPointVelocity = { x: 0, y: 0 };
 /** 彈性係數，越大震動越快 */
-const midPointStiffness = computed(() => mapNumber(
+const ctrlPointStiffness = computed(() => mapNumber(
   length.value,
   0,
   props.maxThumbLength,
@@ -168,7 +170,7 @@ const midPointStiffness = computed(() => mapNumber(
   4.5,
 ));
 /** 速度衰減率，範圍 0 ~ 1。越小速度衰減越快 */
-const midPointDamping = computed(() => mapNumber(
+const ctrlPointDamping = computed(() => mapNumber(
   length.value,
   0,
   props.maxThumbLength,
@@ -182,7 +184,8 @@ watch(() => props.isHeld, (value) => {
 
   anime({
     targets: endPoint.value,
-    ...startPoint.value,
+    x: 0,
+    y: 0,
     easing: 'easeOutElastic',
     duration: 300,
   });
@@ -196,7 +199,8 @@ watch(() => [
   if (props.disabled) return;
 
   endPoint.value = {
-    ...startPoint.value
+    x: 0,
+    y: 0,
   }
 }, { deep: true })
 
@@ -231,32 +235,32 @@ useIntervalFn(() => {
     y: endPoint.value.y / 2,
   }
 
-  const dx = targetPoint.x - midPoint.value.x
-  const dy = targetPoint.y - midPoint.value.y
+  const dx = targetPoint.x - ctrlPoint.value.x
+  const dy = targetPoint.y - ctrlPoint.value.y
 
   // 彈力公式：F = -k * x (k 是彈性係數，x 是位移)
-  midPointVelocity.x += midPointStiffness.value * dx
-  midPointVelocity.y += midPointStiffness.value * dy
+  ctrlPointVelocity.x += ctrlPointStiffness.value * dx
+  ctrlPointVelocity.y += ctrlPointStiffness.value * dy
 
   // 阻尼，減少速度
-  midPointVelocity.x *= midPointDamping.value
-  midPointVelocity.y *= midPointDamping.value
+  ctrlPointVelocity.x *= ctrlPointDamping.value
+  ctrlPointVelocity.y *= ctrlPointDamping.value
 
-  if (Math.abs(midPointVelocity.x) < 0.001 && Math.abs(midPointVelocity.y) < 0.001) {
-    midPointVelocity = { x: 0, y: 0 }
+  if (Math.abs(ctrlPointVelocity.x) < 0.001 && Math.abs(ctrlPointVelocity.y) < 0.001) {
+    ctrlPointVelocity = { x: 0, y: 0 }
     return;
   }
 
   // 更新座標
-  midPoint.value.x += midPointVelocity.x
-  midPoint.value.y += midPointVelocity.y
+  ctrlPoint.value.x += ctrlPointVelocity.x
+  ctrlPoint.value.y += ctrlPointVelocity.y
 
   // 不可以超出畫面
-  if (Math.abs(midPoint.value.x) > windowSize.width / 2) {
-    midPoint.value.x = midPoint.value.x > 0 ? windowSize.width / 2 : -windowSize.width / 2;
+  if (Math.abs(ctrlPoint.value.x) > windowSize.width / 2) {
+    ctrlPoint.value.x = ctrlPoint.value.x > 0 ? windowSize.width / 2 : -windowSize.width / 2;
   }
-  if (Math.abs(midPoint.value.y) > windowSize.height / 2) {
-    midPoint.value.y = midPoint.value.y > 0 ? windowSize.height / 2 : -windowSize.height / 2;
+  if (Math.abs(ctrlPoint.value.y) > windowSize.height / 2) {
+    ctrlPoint.value.y = ctrlPoint.value.y > 0 ? windowSize.height / 2 : -windowSize.height / 2;
   }
 }, 15)
 </script>
