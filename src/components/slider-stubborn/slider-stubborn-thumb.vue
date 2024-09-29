@@ -126,11 +126,11 @@ const svgStyle = computed<CSSProperties>(() => {
   }
 });
 
-/** svg path 的 Q 指令只用一個控制點與終點，表達二次貝茲曲線
+/** svg path 的 Q 指令需要控制點與終點，表達二次貝茲曲線
  * 
  * [文件](https://www.oxxostudio.tw/articles/201406/svg-04-path-1.html)
  */
-const ctrlPoint = ref({ x: 0, y: 0 });
+ const ctrlPoint = ref({ x: 0, y: 0 });
 const endPoint = ref({ x: 0, y: 0 });
 
 const pathD = computed(() => {
@@ -139,8 +139,7 @@ const pathD = computed(() => {
 
   return [
     `M0 0`,
-    `Q${ctrlX} ${ctrlY},`,
-    `${endX} ${endY}`,
+    `Q${ctrlX} ${ctrlY}, ${endX} ${endY}`,
   ].join(' ')
 });
 
@@ -232,7 +231,7 @@ useIntervalFn(() => {
   endPoint.value = newPoint;
 }, 15)
 
-/** 處理彈性動畫 */
+/** 處理控制點 */
 useIntervalFn(() => {
   const targetPoint = {
     x: endPoint.value.x / 2,
