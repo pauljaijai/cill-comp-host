@@ -3,6 +3,7 @@ description: Motion Graphic 風格的 Transition 元件
 ---
 
 <script setup>
+import SourceLinkList from '../../../src/components/source-link-list.vue'
 import ExpansionSection from '../../../src/components/expansion-section.vue';
 
 import BasicUsage from '../../../src/components/transition-shape/examples/basic-usage.vue'
