@@ -49,7 +49,7 @@
       <hr>
 
       <a
-        href="https://vocus.cc/salon/cod-aquarium"
+        href="https://codlin.me/"
         target="_blank"
       >
         鱈魚的魚缸

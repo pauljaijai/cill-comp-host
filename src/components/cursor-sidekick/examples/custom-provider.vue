@@ -135,9 +135,9 @@ const selectProviders: ContentProvider[] = [
           },
         },
         {
-          label: '✏️ 方格子',
+          label: '✏️ 鱈魚的魚缸',
           onClick() {
-            window.open('https://vocus.cc/salon/cod-aquarium', '_blank');
+            window.open('https://codlin.me/', '_blank');
           },
         },
       ],
