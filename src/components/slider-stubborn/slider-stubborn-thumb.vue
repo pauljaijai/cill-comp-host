@@ -130,7 +130,25 @@ const svgStyle = computed<CSSProperties>(() => {
  * 
  * [文件](https://www.oxxostudio.tw/articles/201406/svg-04-path-1.html)
  */
- const ctrlPoint = ref({ x: 0, y: 0 });
+const ctrlPoint = ref({ x: 0, y: 0 });
+/** 控制點速度，用來模擬震盪效果 */
+let ctrlPointVelocity = { x: 0, y: 0 };
+/** 彈性係數，根據目前長度映射，模擬拉越緊震動越快 */
+const ctrlPointStiffness = computed(() => mapNumber(
+  length.value,
+  0, props.maxThumbLength,
+  3.5, 4.5,
+));
+/** 速度衰減率，根據目前長度映射，模擬越短震動越快停止
+ * 
+ * 範圍 0 ~ 1。越小衰減越快
+ */
+const ctrlPointDamping = computed(() => mapNumber(
+  length.value,
+  0, props.maxThumbLength,
+  0.85, 0.75,
+));
+
 const endPoint = ref({ x: 0, y: 0 });
 
 const pathD = computed(() => {
@@ -143,6 +161,7 @@ const pathD = computed(() => {
   ].join(' ')
 });
 
+/** 目前長度 */
 const length = computed(() => {
   /** 因為起點是 0, 0，所以變化量直接等於終點座標 */
   const delta = {
@@ -160,25 +179,6 @@ const strokeWidth = computed(() => mapNumber(
   props.maxThumbLength,
   props.thumbSize,
   strokeMinWidth.value,
-));
-
-/** 控制點速度，用來模擬震盪效果 */
-let ctrlPointVelocity = { x: 0, y: 0 };
-/** 彈性係數，越大震動越快 */
-const ctrlPointStiffness = computed(() => mapNumber(
-  length.value,
-  0,
-  props.maxThumbLength,
-  3.5,
-  4.5,
-));
-/** 速度衰減率，範圍 0 ~ 1。越小速度衰減越快 */
-const ctrlPointDamping = computed(() => mapNumber(
-  length.value,
-  0,
-  props.maxThumbLength,
-  0.85,
-  0.75,
 ));
 
 /** 放開時，播放回彈動畫 */
