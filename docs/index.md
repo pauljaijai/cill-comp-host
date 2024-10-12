@@ -27,5 +27,8 @@ features:
   - title: 如何使用？
     details: 目前無發布計畫，如果大家有興趣可以告訴我。(≧∇≦)ﾉ
     icon: '🛠'
+    link: mailto:hi@codlin.me
+    linkText: 聯絡我
+    target: _blank
 ---
 
