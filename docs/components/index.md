@@ -7,6 +7,8 @@ import BtnNaughty from '../../src/components/btn-naughty/btn-naughty.vue';
 
 import SliderStubborn from '../../src/components/slider-stubborn/examples/basic-usage.vue';
 
+import ToggleProactive from '../../src/components/toggle-proactive/examples/basic-usage.vue';
+
 import WrapperStereoscopic from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic.vue';
 import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic-layer.vue';
 
@@ -69,6 +71,23 @@ const currentSection = ref('btn');
 停用時絕不妥協的滑動條。( ・ิω・ิ)
 
 <slider-stubborn class="h-[60vh]" z-index="999"/>
+
+</expansion-section>
+
+## 開關
+
+有趣、有個性的開關。(●′ω`●)
+
+<expansion-section
+  v-model="currentSection"
+  header-class="border p-2 rounded-lg"
+>
+
+### [主動的開關](./toggle-proactive/) <Badge type="info" text="slider" />
+
+停用時切換狀態會和你唱反調。( ´థ౪థ)
+
+<toggle-proactive class="h-[60vh]" z-index="999"/>
 
 </expansion-section>
 

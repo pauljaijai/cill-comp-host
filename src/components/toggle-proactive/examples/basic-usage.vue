@@ -6,7 +6,7 @@
       class="border p-4 rounded"
     />
 
-    <div class="flex justify-center">
+    <div class="flex-1 flex justify-center items-center">
       <toggle-proactive
         v-model="value"
         :disabled="disabled"
