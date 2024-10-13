@@ -6,6 +6,7 @@ description: 停用時切換狀態，會和你唱反調。( ´థ౪థ)
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/toggle-proactive/examples/basic-usage.vue'
+import CustomProp from '../../../src/components/toggle-proactive/examples/custom-prop.vue'
 </script>
 
 # 主動的開關
@@ -16,12 +17,22 @@ import BasicUsage from '../../../src/components/toggle-proactive/examples/basic-
 
 ### 基本用法
 
-當開關狀態為 disabled 時，切換開關會被貓貓手切回來。(◜௰◝)y
+開關停用時，切換開關會被貓貓手切回來。(◜௰◝)y
 
 <basic-usage/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/toggle-proactive/examples/basic-usage.vue
+:::
+
+### 元件參數
+
+樣式可隨意調整
+
+<custom-prop/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/toggle-proactive/examples/custom-prop.vue
 :::
 
 ## 原理
