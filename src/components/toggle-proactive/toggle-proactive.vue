@@ -1,16 +1,9 @@
 <template>
   <div
     class="toggle-proactive relative"
-    @click="start"
+    @click="toggle"
   >
-    <div class="track rounded-full bg-gray-600" />
-
-    <div class="thumb" />
-
-
     <svg
-      width="640"
-      height="155"
       viewBox="0 0 640 155"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +53,13 @@
         </g>
       </g>
     </svg>
+
+    <div class="track rounded-full bg-gray-500">
+      <div
+        class="thumb rounded-full bg-white"
+        :class="{ 'active': modelValue }"
+      />
+    </div>
 
     <div class="keyframes hidden">
       <!-- 1 -->
@@ -330,22 +330,20 @@
 
 <script setup lang="ts">
 import { omit, pipe } from 'remeda';
-import { ref } from 'vue';
-import anime, { easings } from 'animejs';
-import { promiseTimeout } from '@vueuse/core';
+import anime from 'animejs';
+import { promiseTimeout, useVModel } from '@vueuse/core';
+import { onBeforeMount } from 'vue';
 
 // #region Props
 interface Props {
-  modelValue?: string;
+  modelValue: boolean;
 }
 // #endregion Props
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
-});
+const props = withDefaults(defineProps<Props>(), {});
 
 // #region Emits
 const emit = defineEmits<{
-  'update:modelValue': [value: Props['modelValue']];
+  'update:modelValue': [value: boolean];
 }>();
 // #endregion Emits
 
@@ -354,6 +352,8 @@ defineSlots<{
   default?: () => unknown;
 }>();
 // #endregion Slots
+
+const modelValue = useVModel(props, 'modelValue');
 
 const objectIds = [
   'arm', 'elbow', 'metacarpal-pad', 'pads',
@@ -447,6 +447,11 @@ function toKeyframe(
   return Promise.all(tasks);
 }
 
+function toggle() {
+  modelValue.value = !modelValue.value;
+  start();
+}
+
 async function start() {
   await toKeyframe('in', 'cat-arm-2');
   await toKeyframe('in', 'cat-arm-3');
@@ -461,6 +466,10 @@ async function start() {
   await toKeyframe('out', 'cat-arm-1');
 }
 
+onBeforeMount(() => {
+  anime.remove(objectIds.map((id) => `#${id}`));
+})
+
 // #region Methods
 defineExpose({});
 // #endregion Methods
@@ -468,11 +477,22 @@ defineExpose({});
 
 <style scoped lang="sass">
 .toggle-proactive
-  width: 10rem
+  aspect-ratio: 2
   height: 5rem
   .track
+    position: relative
     width: 100%
     height: 100%
+  .thumb
+    position: absolute
+    height: 80%
+    top: 10%
+    left: 50%
+    aspect-ratio: 1
+    transition-duration: 0.4s
+    transform: translateX(-100%)
+    &.active
+      transform: translateX(0%)
   svg
     position: absolute
     top: 0
