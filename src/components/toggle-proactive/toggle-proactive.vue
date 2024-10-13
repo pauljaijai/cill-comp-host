@@ -396,7 +396,7 @@ interface Props {
   thumbActiveClass?: string;
 
 
-  /** @default '#F1EFEE' */
+  /** @default '#222' */
   furColor?: string;
   /** @default '#FFA5A5' */
   padColor?: string;

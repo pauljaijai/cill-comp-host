@@ -13,9 +13,17 @@
       track-inactive-class="bg-red-400"
       track-active-class="bg-[#DFDFDF]"
       disabled
-      fur-color="#5472FB"
+      fur-color="#8D6F64"
       pad-color="#000"
-      size="8rem"
+      size="6rem"
+    />
+
+    <toggle-proactive
+      :model-value="false"
+      track-active-class="bg-[#7DDAEA]"
+      disabled
+      fur-color="#F3F2F2"
+      size="4rem"
     />
   </div>
 </template>
