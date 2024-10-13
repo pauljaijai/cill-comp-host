@@ -37,8 +37,10 @@ import CustomProp from '../../../src/components/toggle-proactive/examples/custom
 
 ## 原理
 
+利用 anime.js 製作 svg 動畫。
+
 ::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則貓手會被切到
+請不要將 overflow 設定為 hidden，否則貓貓手會被狠心切割
 :::
 
 ## 原始碼
