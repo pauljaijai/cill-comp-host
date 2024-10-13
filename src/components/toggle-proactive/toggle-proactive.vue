@@ -85,6 +85,7 @@
 
 
       <div
+        v-if="keyframeVisible"
         :id="uid"
         class="keyframes hidden"
       >
@@ -360,7 +361,7 @@
 import { omit, pipe } from 'remeda';
 import anime from 'animejs';
 import { promiseTimeout, useToggle, useVModel } from '@vueuse/core';
-import { computed, CSSProperties, onBeforeMount } from 'vue';
+import { computed, CSSProperties, onBeforeMount, onMounted, ref } from 'vue';
 import { nanoid } from 'nanoid';
 
 const OBJECT_IDS = [
@@ -528,39 +529,72 @@ const currentThumbClass = computed(() => {
   return result;
 });
 
+/** 儲存 keyframe attr 資料後隱藏 keyframe DOM  */
+const keyframeVisible = ref(true);
+/** 儲存 keyframe attr 資料 */
+const keyframeAttrMap: Partial<Record<
+  (typeof KEYFRAME_IDS)[number],
+  Record<
+    (typeof OBJECT_IDS)[number],
+    Record<string, string>
+  >
+>> = {}
+onMounted(() => {
+  KEYFRAME_IDS.forEach((keyframeId) => {
+
+    OBJECT_IDS.forEach((objectId) => {
+      // 取得所有 attr
+      const attrMap = pipe(
+        document.querySelector(`#${uid} #${keyframeId} #${objectId}`)?.attributes,
+        (attrNode) => {
+          if (!attrNode) {
+            return {};
+          }
+
+          const result: Record<string, string> = {};
+          for (let i = 0; i < attrNode.length; i++) {
+            const node = attrNode[i];
+            if (!node) continue;
+
+            const { name, value } = node;
+            result[name] = value;
+          }
+          return result;
+        },
+        omit(['id', 'ref', 'fill', 'stroke', 'stroke-width', 'stroke-linecap'])
+      );
+
+      const data = {
+        ...keyframeAttrMap[keyframeId],
+        [objectId]: attrMap,
+      } as Record<typeof OBJECT_IDS[number], Record<string, string>>
+
+      keyframeAttrMap[keyframeId] = data;
+    })
+  })
+
+
+  keyframeVisible.value = false;
+})
+
 /** 播放至指定 keyframe */
 function toKeyframe(
   direction: keyof typeof keyframeOptionMap,
-  frameId: (typeof KEYFRAME_IDS)[number],
+  keyframeId: (typeof KEYFRAME_IDS)[number],
 ) {
-  const tasks = OBJECT_IDS.map((id) => {
+  const tasks = OBJECT_IDS.map((objectId) => {
     // 取得所有 attr
-    const attrMap = pipe(
-      document.querySelector(`#${uid} #${frameId} #${id}`)?.attributes,
-      (attrNode) => {
-        if (!attrNode) {
-          return {};
-        }
+    const attrMap = keyframeAttrMap[keyframeId]?.[objectId];
+    if (!attrMap) {
+      throw new Error(`找不到 keyframeAttrMap[${keyframeId}][${objectId}]`)
+    }
 
-        const result: Record<string, string> = {};
-        for (let i = 0; i < attrNode.length; i++) {
-          const node = attrNode[i];
-          if (!node) continue;
-
-          const { name, value } = node;
-          result[name] = value;
-        }
-        return result;
-      },
-      omit(['id', 'ref', 'fill', 'stroke', 'stroke-width', 'stroke-linecap'])
-    );
-
-    const objectAttr = keyframeOptionMap[direction][frameId].objectAttrMap?.[id];
+    const objectAttr = keyframeOptionMap[direction][keyframeId].objectAttrMap?.[objectId];
 
     return anime({
-      targets: `#${uid}-cat-arm #${id}`,
+      targets: `#${uid}-cat-arm #${objectId}`,
       ...attrMap,
-      ...keyframeOptionMap[direction][frameId],
+      ...keyframeOptionMap[direction][keyframeId],
       ...objectAttr,
     }).finished
   })
