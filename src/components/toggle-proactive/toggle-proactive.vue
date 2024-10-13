@@ -541,15 +541,12 @@ const keyframeAttrMap: Partial<Record<
 >> = {}
 onMounted(() => {
   KEYFRAME_IDS.forEach((keyframeId) => {
-
     OBJECT_IDS.forEach((objectId) => {
       // 取得所有 attr
       const attrMap = pipe(
         document.querySelector(`#${uid} #${keyframeId} #${objectId}`)?.attributes,
         (attrNode) => {
-          if (!attrNode) {
-            return {};
-          }
+          if (!attrNode) return {};
 
           const result: Record<string, string> = {};
           for (let i = 0; i < attrNode.length; i++) {
@@ -572,7 +569,6 @@ onMounted(() => {
       keyframeAttrMap[keyframeId] = data;
     })
   })
-
 
   keyframeVisible.value = false;
 })
