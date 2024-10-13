@@ -1,5 +1,5 @@
 ---
-description: 停用時切換狀態，會和你唱反調。( ´థ౪థ)
+description: 停用時切換狀態會和你唱反調。( ´థ౪థ)
 ---
 
 <script setup>
@@ -11,7 +11,7 @@ import CustomProp from '../../../src/components/toggle-proactive/examples/custom
 
 # 主動的開關
 
-停用時切換狀態，會和你唱反調。( ´థ౪థ)
+停用時切換狀態會和你唱反調。( ´థ౪థ)
 
 ## 使用範例
 

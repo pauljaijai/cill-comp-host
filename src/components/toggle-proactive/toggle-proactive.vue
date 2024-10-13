@@ -360,7 +360,7 @@
 import { omit, pipe } from 'remeda';
 import anime from 'animejs';
 import { promiseTimeout, useToggle, useVModel } from '@vueuse/core';
-import { computed, CSSProperties, onBeforeMount, ref } from 'vue';
+import { computed, CSSProperties, onBeforeMount } from 'vue';
 import { nanoid } from 'nanoid';
 
 const OBJECT_IDS = [
@@ -396,7 +396,7 @@ interface Props {
   thumbActiveClass?: string;
 
 
-  /** @default '#DFDFDF' */
+  /** @default '#F1EFEE' */
   furColor?: string;
   /** @default '#FFA5A5' */
   padColor?: string;
@@ -413,7 +413,7 @@ const prop = withDefaults(defineProps<Props>(), {
   thumbInactiveClass: '',
   thumbActiveClass: '',
 
-  furColor: '#F1EFEE',
+  furColor: '#222',
   padColor: '#FFA5A5',
 });
 
@@ -423,7 +423,7 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-const uid = nanoid();
+const uid = `id${nanoid()}`;
 const modelValue = useVModel(prop, 'modelValue');
 const [currentValue, toggleCurrentValue] = useToggle(modelValue.value)
 
@@ -446,6 +446,7 @@ const keyframeOptionMap: Record<
       easing: 'easeInOutQuad',
       duration: 200,
       objectAttrMap: {
+        // 動態切換 z-index，才能讓手肘伸出後，蓋在 toggle 上
         'cat-elbow': { zIndex: 1 },
       },
     },
@@ -580,11 +581,12 @@ function toggle() {
   modelValue.value = currentValue.value;
 }
 
+/** 開始貓貓手動畫 */
 async function start() {
   togglePlaying(true);
 
   // 等待隨機時間
-  const ms = Math.floor(Math.random() * 1000);
+  const ms = Math.floor(Math.random() * 1500);
   await promiseTimeout(ms);
 
   for (const id of [
