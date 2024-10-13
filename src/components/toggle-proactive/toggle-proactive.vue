@@ -1,65 +1,87 @@
 <template>
   <div
-    class="toggle-proactive relative"
+    class="toggle-proactive cursor-pointer select-none"
     @click="toggle"
   >
-    <svg
-      viewBox="0 0 640 155"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    <div
+      id="cat-arm"
+      class="w-full h-full relative"
     >
-      <g id="cat-arm">
-        <path
-          id="arm"
-          d="M308 75C319 75.0002 361.5 75.0002 373 75.0001"
-          stroke="#DFDFDF"
-          stroke-width="80"
-          stroke-linecap="round"
-        />
-
-        <path
-          id="elbow"
-          d="M322 75C345 75 383.5 75 399.5 75"
-          stroke="#DFDFDF"
-          stroke-width="80"
-          stroke-linecap="round"
-        />
-        <g id="pads">
+      <!-- arm -->
+      <svg
+        viewBox="0 0 640 155"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        :class="svgClass"
+      >
+        <g>
           <path
-            id="metacarpal-pad"
-            d="M408.941 75.0441C408.941 86.6665 399.875 96.0882 388.691 96.0882C377.507 96.0882 374 87.562 374 75.9396C374 64.3173 377.507 54 388.691 54C399.875 54 408.941 63.4218 408.941 75.0441Z"
-            fill="#FFA5A5"
-          />
-          <path
-            id="digital-pad-1"
-            d="M420.5 53.1618C420.5 56.0125 416.628 58.3235 413.338 58.3235C410.049 58.3235 407.382 56.0125 407.382 53.1618C407.382 50.311 410.049 48 413.338 48C416.628 48 420.5 50.311 420.5 53.1618Z"
-            fill="#FFA5A5"
-          />
-          <path
-            id="digital-pad-2"
-            d="M419 96.8383C419 99.689 415.834 102 412.544 102C409.255 102 406.588 99.689 406.588 96.8383C406.588 93.9875 409.255 91.6765 412.544 91.6765C415.834 91.6765 419 93.9875 419 96.8383Z"
-            fill="#FFA5A5"
-          />
-          <path
-            id="digital-pad-3"
-            d="M432 67.4559C432 70.7452 427.473 73.4118 422.868 73.4118C418.262 73.4118 414.529 70.7452 414.529 67.4559C414.529 64.1665 418.262 61.5 422.868 61.5C427.473 61.5 432 64.1665 432 67.4559Z"
-            fill="#FFA5A5"
-          />
-          <path
-            id="digital-pad-4"
-            d="M432 82.544C432 85.8334 427.473 88.4999 422.868 88.4999C418.262 88.4999 414.529 85.8334 414.529 82.544C414.529 79.2547 418.262 76.5881 422.868 76.5881C427.473 76.5881 432 79.2547 432 82.544Z"
-            fill="#FFA5A5"
+            id="arm"
+            d="M308 75C319 75.0002 361.5 75.0002 373 75.0001"
+            :stroke="furColor"
+            stroke-width="80"
+            stroke-linecap="round"
           />
         </g>
-      </g>
-    </svg>
+      </svg>
 
-    <div class="track rounded-full bg-gray-500">
+      <!-- elbow -->
+      <svg
+        id="cat-elbow"
+        viewBox="0 0 640 155"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        :class="svgClass"
+      >
+        <g>
+          <path
+            id="elbow"
+            d="M322 75C345 75 383.5 75 399.5 75"
+            :stroke="furColor"
+            stroke-width="80"
+            stroke-linecap="round"
+          />
+          <g id="pads">
+            <path
+              id="metacarpal-pad"
+              d="M408.941 75.0441C408.941 86.6665 399.875 96.0882 388.691 96.0882C377.507 96.0882 374 87.562 374 75.9396C374 64.3173 377.507 54 388.691 54C399.875 54 408.941 63.4218 408.941 75.0441Z"
+              :fill="padColor"
+            />
+            <path
+              id="digital-pad-1"
+              d="M420.5 53.1618C420.5 56.0125 416.628 58.3235 413.338 58.3235C410.049 58.3235 407.382 56.0125 407.382 53.1618C407.382 50.311 410.049 48 413.338 48C416.628 48 420.5 50.311 420.5 53.1618Z"
+              :fill="padColor"
+            />
+            <path
+              id="digital-pad-2"
+              d="M419 96.8383C419 99.689 415.834 102 412.544 102C409.255 102 406.588 99.689 406.588 96.8383C406.588 93.9875 409.255 91.6765 412.544 91.6765C415.834 91.6765 419 93.9875 419 96.8383Z"
+              :fill="padColor"
+            />
+            <path
+              id="digital-pad-3"
+              d="M432 67.4559C432 70.7452 427.473 73.4118 422.868 73.4118C418.262 73.4118 414.529 70.7452 414.529 67.4559C414.529 64.1665 418.262 61.5 422.868 61.5C427.473 61.5 432 64.1665 432 67.4559Z"
+              :fill="padColor"
+            />
+            <path
+              id="digital-pad-4"
+              d="M432 82.544C432 85.8334 427.473 88.4999 422.868 88.4999C418.262 88.4999 414.529 85.8334 414.529 82.544C414.529 79.2547 418.262 76.5881 422.868 76.5881C427.473 76.5881 432 79.2547 432 82.544Z"
+              :fill="padColor"
+            />
+          </g>
+        </g>
+      </svg>
+
       <div
-        class="thumb rounded-full bg-white"
-        :class="{ 'active': modelValue }"
-      />
+        class="track z-0"
+        :class="currentTrackClass"
+      >
+        <div
+          class="thumb rounded-full "
+          :class="currentThumbClass"
+        />
+      </div>
     </div>
+
 
     <div class="keyframes hidden">
       <!-- 1 -->
@@ -125,14 +147,14 @@
         <g id="cat-arm-2">
           <path
             id="arm"
-            d="M308 75C319 75.0002 490 75.0001 501.5 75"
+            d="M308 75C319 75.0002 518.5 75.0001 530 75"
             stroke="#DFDFDF"
             stroke-width="80"
             stroke-linecap="round"
           />
           <path
             id="elbow"
-            d="M502 75C525 75 563.5 75 579.5 75"
+            d="M531.5 75C554.5 75 563.5 75 579.5 75"
             stroke="#DFDFDF"
             stroke-width="80"
             stroke-linecap="round"
@@ -166,6 +188,7 @@
           </g>
         </g>
       </svg>
+
       <!-- 3 -->
       <svg
         width="640"
@@ -177,14 +200,14 @@
         <g id="cat-arm-3">
           <path
             id="arm"
-            d="M308 75.0002C319 75.0004 474 68.5002 501.5 75.0002"
+            d="M308 75.0002C319 75.0004 497 68.5002 524.5 75.0002"
             stroke="#DFDFDF"
             stroke-width="80"
             stroke-linecap="round"
           />
           <path
             id="elbow"
-            d="M502 75C516.5 76 524 73 529 80.5"
+            d="M514 74.76C528.5 75.76 536 72.76 541 80.26"
             stroke="#DFDFDF"
             stroke-width="80"
             stroke-linecap="round"
@@ -192,27 +215,27 @@
           <g id="pads">
             <path
               id="metacarpal-pad"
-              d="M533.317 80.3738C529.584 91.3803 527.242 102.063 519.799 99.5385C512.356 97.0143 509.955 85.3804 513.688 74.3738C517.421 63.3672 525.874 57.156 533.317 59.6802C540.76 62.2045 537.05 69.3672 533.317 80.3738Z"
+              d="M545.317 80.1338C541.584 91.1404 539.242 101.823 531.799 99.2985C524.356 96.7743 521.955 85.1404 525.688 74.1338C529.421 63.1272 537.874 56.916 545.317 59.4402C552.76 61.9645 549.05 69.1272 545.317 80.1338Z"
               fill="#FFA5A5"
             />
             <path
               id="digital-pad-1"
-              d="M541.5 57.9998C540.584 60.6995 539.756 62.7457 536.641 61.6892C533.525 60.6328 531.742 57.5878 532.658 54.888C533.574 52.1883 536.841 50.8562 539.956 51.9127C543.071 52.9691 542.416 55.3 541.5 57.9998Z"
+              d="M553.5 57.7598C552.584 60.4595 551.756 62.5057 548.641 61.4492C545.525 60.3928 543.742 57.3478 544.658 54.648C545.574 51.9483 548.841 50.6162 551.956 51.6727C555.071 52.7292 554.416 55.06 553.5 57.7598Z"
               fill="#FFA5A5"
             />
             <path
               id="digital-pad-2"
-              d="M525.139 104.171C524.223 106.871 523.756 108.746 520.641 107.689C517.525 106.633 515.742 103.588 516.658 100.888C517.574 98.1886 520.841 96.8564 523.956 97.9129C527.071 98.9694 526.054 101.471 525.139 104.171Z"
+              d="M537.139 103.931C536.223 106.631 535.756 108.506 532.641 107.449C529.525 106.393 527.742 103.348 528.658 100.648C529.574 97.9486 532.841 96.6165 535.956 97.6729C539.071 98.7294 538.054 101.231 537.139 103.931Z"
               fill="#FFA5A5"
             />
             <path
               id="digital-pad-3"
-              d="M542.633 75.2387C541.577 78.3538 540.869 80.9493 538.069 79.9999C535.269 79.0504 533.856 75.7554 534.913 72.6403C535.969 69.5253 539.095 67.7697 541.895 68.7192C544.694 69.6687 543.69 72.1237 542.633 75.2387Z"
+              d="M554.633 74.9987C553.577 78.1138 552.869 80.7094 550.069 79.7599C547.269 78.8104 545.856 75.5154 546.913 72.4003C547.969 69.2853 551.095 67.5297 553.895 68.4792C556.694 69.4287 555.69 71.8837 554.633 74.9987Z"
               fill="#FFA5A5"
             />
             <path
               id="digital-pad-4"
-              d="M536.366 89.7422C535.31 92.8572 534.335 95.7683 531.725 94.8832C529.115 93.9981 527.856 90.7554 528.913 87.6403C529.969 84.5253 532.941 82.7175 535.551 83.6026C538.161 84.4876 537.423 86.6271 536.366 89.7422Z"
+              d="M548.366 89.5022C547.31 92.6172 546.335 95.5283 543.725 94.6432C541.115 93.7582 539.856 90.5154 540.913 87.4003C541.969 84.2853 544.941 82.4775 547.551 83.3626C550.161 84.2477 549.423 86.3871 548.366 89.5022Z"
               fill="#FFA5A5"
             />
           </g>
@@ -230,14 +253,14 @@
         <g id="cat-arm-4">
           <path
             id="arm"
-            d="M308 75C319 75.0002 422 52.9998 501.5 75"
+            d="M308 75C319 75.0002 446.5 52.9998 526 75"
             stroke="#DFDFDF"
             stroke-width="80"
             stroke-linecap="round"
           />
           <path
             id="elbow"
-            d="M502 75C526.5 75 536 105 504.5 105"
+            d="M524 75C548.5 75 537.5 105 506 105"
             stroke="#DFDFDF"
             stroke-width="80"
             stroke-linecap="round"
@@ -245,27 +268,27 @@
           <g id="pads">
             <path
               id="metacarpal-pad"
-              d="M502.193 105.216C501.256 116.8 500.38 127.633 500.38 127.633C500.38 127.633 501.206 117.42 502.143 105.836C503.08 94.2513 503.773 85.6821 503.773 85.6821C503.773 85.6821 503.13 93.631 502.193 105.216Z"
+              d="M524.193 105.216C523.256 116.8 522.38 127.633 522.38 127.633C522.38 127.633 523.206 117.42 524.143 105.836C525.08 94.2513 525.773 85.6821 525.773 85.6821C525.773 85.6821 525.13 93.631 524.193 105.216Z"
               fill="#FFA5A5"
             />
             <path
               id="digital-pad-1"
-              d="M503.412 82.4362C503.182 85.2777 503.004 87.4745 503.004 87.4745C503.004 87.4745 503.19 85.171 503.42 82.3295C503.65 79.488 503.836 77.1846 503.836 77.1846C503.837 77.1846 503.642 79.5947 503.412 82.4362Z"
+              d="M525.412 82.4362C525.182 85.2777 525.004 87.4745 525.004 87.4745C525.004 87.4745 525.19 85.171 525.42 82.3295C525.65 79.488 525.836 77.1846 525.836 77.1846C525.837 77.1846 525.642 79.5947 525.412 82.4362Z"
               fill="#FFA5A5"
             />
             <path
               id="digital-pad-2"
-              d="M497.385 128.56C497.156 131.401 497 133.321 497 133.321C497 133.321 497.187 131.018 497.416 128.176C497.646 125.335 497.833 123.031 497.833 123.031C497.833 123.031 497.615 125.718 497.385 128.56Z"
+              d="M519.385 128.56C519.156 131.401 519 133.321 519 133.321C519 133.321 519.187 131.018 519.416 128.176C519.646 125.335 519.833 123.031 519.833 123.031C519.833 123.031 519.615 125.718 519.385 128.56Z"
               fill="#FFA5A5"
             />
             <path
               id="digital-pad-3"
-              d="M501.203 97.0482C500.938 100.327 500.721 103.004 500.721 103.004C500.721 103.004 500.936 100.346 501.201 97.0671C501.467 93.7885 501.682 91.1306 501.682 91.1306C501.682 91.1306 501.468 93.7696 501.203 97.0482Z"
+              d="M523.203 97.0482C522.938 100.327 522.721 103.004 522.721 103.004C522.721 103.004 522.936 100.346 523.201 97.0671C523.467 93.7885 523.682 91.1306 523.682 91.1306C523.682 91.1306 523.468 93.7696 523.203 97.0482Z"
               fill="#FFA5A5"
             />
             <path
               id="digital-pad-4"
-              d="M498.828 111.705C498.563 114.984 498.315 118.044 498.315 118.044C498.315 118.044 498.53 115.386 498.795 112.107C499.06 108.829 499.275 106.171 499.275 106.171C499.275 106.171 499.093 108.427 498.828 111.705Z"
+              d="M520.828 111.705C520.563 114.984 520.315 118.044 520.315 118.044C520.315 118.044 520.53 115.386 520.795 112.107C521.06 108.829 521.275 106.171 521.275 106.171C521.275 106.171 521.093 108.427 520.828 111.705Z"
               fill="#FFA5A5"
             />
           </g>
@@ -283,14 +306,14 @@
         <g id="cat-arm-5">
           <path
             id="arm"
-            d="M308 75.0001C319 75.0003 489 42 501.5 75.0001"
+            d="M308 75.0004C319 75.0006 521 50.4999 533.5 83.5"
             stroke="#DFDFDF"
             stroke-width="80"
             stroke-linecap="round"
           />
           <path
             id="elbow"
-            d="M502 75C530 84 449 122 405.5 102.5"
+            d="M531.5 82C559.5 91 449 122 405.5 102.5"
             stroke="#DFDFDF"
             stroke-width="80"
             stroke-linecap="round"
@@ -331,15 +354,62 @@
 <script setup lang="ts">
 import { omit, pipe } from 'remeda';
 import anime from 'animejs';
-import { promiseTimeout, useVModel } from '@vueuse/core';
-import { onBeforeMount } from 'vue';
+import { promiseTimeout, useToggle, useVModel } from '@vueuse/core';
+import { computed, CSSProperties, onBeforeMount, ref } from 'vue';
+
+const OBJECT_IDS = [
+  'cat-elbow',
+  'arm', 'elbow', 'metacarpal-pad', 'pads',
+  'digital-pad-1', 'digital-pad-2', 'digital-pad-3', 'digital-pad-4'
+] as const;
+
+const KEYFRAME_IDS = [
+  'cat-arm-1', 'cat-arm-2', 'cat-arm-3',
+  'cat-arm-4', 'cat-arm-5',
+] as const;
+
 
 // #region Props
 interface Props {
   modelValue: boolean;
+  disabled?: boolean;
+  /** @default '4rem' */
+  size?: string;
+
+  /** @default 'rounded-full' */
+  trackClass?: string;
+  /** @default 'bg-[#DFDFDF]' */
+  trackInactiveClass?: string;
+  /** @default 'bg-green-500' */
+  trackActiveClass?: string;
+  /** @default 'bg-white' */
+  thumbClass?: string;
+  /** @default '' */
+  thumbInactiveClass?: string;
+  /** @default '' */
+  thumbActiveClass?: string;
+
+
+  /** @default '#DFDFDF' */
+  furColor?: string;
+  /** @default '#FFA5A5' */
+  padColor?: string;
 }
 // #endregion Props
-const props = withDefaults(defineProps<Props>(), {});
+const prop = withDefaults(defineProps<Props>(), {
+  disabled: false,
+  size: '4rem',
+
+  trackClass: 'rounded-full',
+  trackInactiveClass: 'bg-[#DFDFDF]',
+  trackActiveClass: 'bg-green-500',
+  thumbClass: 'bg-white',
+  thumbInactiveClass: '',
+  thumbActiveClass: '',
+
+  furColor: '#F1EFEE',
+  padColor: '#FFA5A5',
+});
 
 // #region Emits
 const emit = defineEmits<{
@@ -347,28 +417,20 @@ const emit = defineEmits<{
 }>();
 // #endregion Emits
 
-// #region Slots
-defineSlots<{
-  default?: () => unknown;
-}>();
-// #endregion Slots
+const modelValue = useVModel(prop, 'modelValue');
+const [currentValue, toggleCurrentValue] = useToggle(modelValue.value)
 
-const modelValue = useVModel(props, 'modelValue');
-
-const objectIds = [
-  'arm', 'elbow', 'metacarpal-pad', 'pads',
-  'digital-pad-1', 'digital-pad-2', 'digital-pad-3', 'digital-pad-4'
-] as const;
-
-const keyframeIds = [
-  'cat-arm-1', 'cat-arm-2', 'cat-arm-3',
-  'cat-arm-4', 'cat-arm-5',
-] as const;
-
+interface KeyframeOption extends anime.AnimeParams {
+  action?: () => void;
+  objectAttrMap?: Partial<Record<
+    typeof OBJECT_IDS[number],
+    CSSProperties
+  >>;
+}
 const keyframeOptionMap: Record<
   'in' | 'out', Record<
-    typeof keyframeIds[number],
-    anime.AnimeParams
+    typeof KEYFRAME_IDS[number],
+    KeyframeOption
   >
 > = {
   in: {
@@ -376,14 +438,17 @@ const keyframeOptionMap: Record<
     'cat-arm-2': {
       easing: 'easeInOutQuad',
       duration: 200,
+      objectAttrMap: {
+        'cat-elbow': { zIndex: 1 },
+      },
     },
     'cat-arm-3': {
       easing: 'linear',
-      duration: 100,
+      duration: 50,
     },
     'cat-arm-4': {
       easing: 'linear',
-      duration: 100,
+      duration: 50,
     },
     'cat-arm-5': {
       easing: 'easeOutBack',
@@ -403,6 +468,9 @@ const keyframeOptionMap: Record<
     'cat-arm-2': {
       easing: 'linear',
       duration: 100,
+      objectAttrMap: {
+        'cat-elbow': { zIndex: 0 },
+      },
     },
     'cat-arm-1': {
       easing: 'linear',
@@ -411,11 +479,53 @@ const keyframeOptionMap: Record<
   },
 } as const
 
+const [isPlaying, togglePlaying] = useToggle(false)
+
+const svgClass = computed(() => {
+  const result: string[] = [];
+
+  if (prop.disabled && modelValue.value) {
+    result.push('mirror');
+  }
+
+  return result;
+});
+
+const currentTrackClass = computed(() => {
+  const result = [
+    prop.trackClass,
+  ];
+
+  if (currentValue.value) {
+    result.push(prop.trackActiveClass);
+  } else {
+    result.push(prop.trackInactiveClass);
+  }
+
+  return result;
+});
+
+const currentThumbClass = computed(() => {
+  const result = [
+    prop.thumbClass,
+  ];
+
+  if (currentValue.value) {
+    result.push(prop.thumbActiveClass);
+    result.push('active');
+  } else {
+    result.push(prop.thumbInactiveClass);
+  }
+
+  return result;
+});
+
+/** 播放至指定 keyframe */
 function toKeyframe(
   direction: keyof typeof keyframeOptionMap,
-  frameId: (typeof keyframeIds)[number],
+  frameId: (typeof KEYFRAME_IDS)[number],
 ) {
-  const tasks = objectIds.map((id) => {
+  const tasks = OBJECT_IDS.map((id) => {
     // 取得所有 attr
     const attrMap = pipe(
       document.querySelector(`#${frameId} #${id}`)?.attributes,
@@ -437,10 +547,13 @@ function toKeyframe(
       omit(['id', 'ref', 'fill', 'stroke', 'stroke-width', 'stroke-linecap'])
     );
 
+    const objectAttr = keyframeOptionMap[direction][frameId].objectAttrMap?.[id];
+
     return anime({
       targets: `#cat-arm #${id}`,
       ...attrMap,
       ...keyframeOptionMap[direction][frameId],
+      ...objectAttr,
     }).finished
   })
 
@@ -448,41 +561,57 @@ function toKeyframe(
 }
 
 function toggle() {
-  modelValue.value = !modelValue.value;
-  start();
+  if (isPlaying.value) return;
+
+  if (prop.disabled) {
+    toggleCurrentValue();
+    start();
+    return;
+  }
+
+  currentValue.value = !currentValue.value;
+  modelValue.value = currentValue.value;
 }
 
 async function start() {
-  await toKeyframe('in', 'cat-arm-2');
-  await toKeyframe('in', 'cat-arm-3');
-  await toKeyframe('in', 'cat-arm-4');
+  togglePlaying(true);
+
+  // 等待隨機時間
+  const ms = Math.floor(Math.random() * 1000);
+  await promiseTimeout(ms);
+
+  for (const id of [
+    'cat-arm-2', 'cat-arm-3', 'cat-arm-4',
+  ] as const) {
+    await toKeyframe('in', id);
+  }
+
+  // toggle 與 cat-arm-5 同時執行的時機看起來比較好
+  toggleCurrentValue();
   await toKeyframe('in', 'cat-arm-5');
 
-  await promiseTimeout(100);
-
-  await toKeyframe('out', 'cat-arm-4');
-  await toKeyframe('out', 'cat-arm-3');
-  await toKeyframe('out', 'cat-arm-2');
-  await toKeyframe('out', 'cat-arm-1');
+  for (const id of [
+    'cat-arm-4', 'cat-arm-3', 'cat-arm-2', 'cat-arm-1'
+  ] as const) {
+    await toKeyframe('out', id);
+  }
+  togglePlaying(false);
 }
 
 onBeforeMount(() => {
-  anime.remove(objectIds.map((id) => `#${id}`));
+  anime.remove(OBJECT_IDS.map((id) => `#${id}`));
 })
-
-// #region Methods
-defineExpose({});
-// #endregion Methods
 </script>
 
 <style scoped lang="sass">
 .toggle-proactive
   aspect-ratio: 2
-  height: 5rem
+  height: v-bind('prop.size')
   .track
     position: relative
     width: 100%
     height: 100%
+    transition-duration: 0.4s
   .thumb
     position: absolute
     height: 80%
@@ -491,6 +620,7 @@ defineExpose({});
     aspect-ratio: 1
     transition-duration: 0.4s
     transform: translateX(-100%)
+    transition-timing-function: cubic-bezier(0.505, -0.005, 0.005, 1.230)
     &.active
       transform: translateX(0%)
   svg
@@ -500,4 +630,8 @@ defineExpose({});
     height: 100%
     aspect-ratio: 640 / 155
     transform: translateX(-50%)
+
+.mirror
+  scale: -1 1
+  transform-origin: left center
 </style>
