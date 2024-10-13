@@ -1,6 +1,6 @@
 {
   "name": "chill-component",
-  "version": "0.19.5",
+  "version": "0.20.0",
   "scripts": {
     "docs:dev": "vitepress dev docs --force --host",
     "docs:build": "vitepress build docs",
