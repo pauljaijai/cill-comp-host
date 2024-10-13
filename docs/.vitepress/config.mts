@@ -87,6 +87,12 @@ export default defineConfig({
             ]
           },
           {
+            text: '開關',
+            items: [
+              { text: '主動的開關', link: '/components/toggle-proactive/' },
+            ]
+          },      
+          {
             text: '包裝器',
             items: [
               { text: '立體包裝器', link: '/components/wrapper-stereoscopic/' },
