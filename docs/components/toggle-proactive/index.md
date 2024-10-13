@@ -13,6 +13,10 @@ import CustomProp from '../../../src/components/toggle-proactive/examples/custom
 
 停用時切換狀態會和你唱反調。( ´థ౪థ)
 
+靈感來自 [Useless machine](https://en.wikipedia.org/wiki/Useless_machine)，這個小廢物可是自動控制的浪漫。(´,,•ω•,,)
+
+至於為甚麼要用貓手，因為貓手是我想的到最欠揍的小手手。ヾ(◍'౪`◍)ﾉﾞ
+
 ## 使用範例
 
 ### 基本用法
