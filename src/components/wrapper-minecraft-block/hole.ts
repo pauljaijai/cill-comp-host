@@ -19,6 +19,46 @@ interface CreateHoleParam {
   windowSize: { width: number; height: number };
 }
 
+/** 遮擋目前洞口位置，以免特定透視角度看到別的凹洞 */
+function createHoleOccluder(param: CreateHoleParam, scene: Scene) {
+  const { data, windowSize } = param;
+
+  const depth = 10;
+
+  const material = pipe(
+    new StandardMaterial('hole-occluder', scene),
+    (material) => {
+      material.forceDepthWrite = true;
+      material.disableLighting = true;
+
+      return material;
+    },
+  );
+
+  const mesh = pipe(
+    MeshBuilder.CreateBox(data.id, {
+      width: 1, height: 1, depth,
+      sideOrientation: Mesh.BACKSIDE,
+    }, scene),
+    (occluder) => {
+      // 使用縮放對應寬高，這樣就可以自由調整尺寸，而不用變更 mesh
+      occluder.scaling.x = data.width;
+      occluder.scaling.y = data.height;
+
+      occluder.position.x = data.x + data.width / 2 - windowSize.width / 2;
+      occluder.position.y = -data.y - data.height / 2 + windowSize.height / 2;
+
+      occluder.material = material;
+      occluder.visibility = 0.0001;
+      occluder.renderingGroupId = 0;
+
+      return occluder;
+    },
+  );
+
+  return mesh;
+}
+
 
 function createMesh(param: CreateHoleParam, scene: Scene) {
   const { data, windowSize } = param;
@@ -146,9 +186,11 @@ export function createHole(param: CreateHoleParam, scene: Scene): Hole {
 
   const mesh = createMesh(param, scene);
   const diggingParticles = createDiggingParticles(param, scene);
+  const occluder = createHoleOccluder(param, scene);
 
   function setVisible(value: boolean) {
     mesh.isVisible = value;
+    occluder.isVisible = !value;
   }
 
   return {
