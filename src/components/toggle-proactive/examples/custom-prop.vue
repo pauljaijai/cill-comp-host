@@ -3,27 +3,27 @@
     <toggle-proactive
       :model-value="false"
       disabled
+      size="3rem"
       fur-color="#DFC57B"
       pad-color="#FFF"
-      size="3rem"
     />
 
     <toggle-proactive
       :model-value="true"
+      disabled
+      size="6rem"
       track-inactive-class="bg-red-400"
       track-active-class="bg-[#DFDFDF]"
-      disabled
       fur-color="#8D6F64"
       pad-color="#000"
-      size="6rem"
     />
 
     <toggle-proactive
       :model-value="false"
-      track-active-class="bg-[#7DDAEA]"
       disabled
-      fur-color="#F3F2F2"
       size="4rem"
+      track-active-class="bg-[#7DDAEA]"
+      fur-color="#F3F2F2"
     />
   </div>
 </template>
