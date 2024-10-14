@@ -8,7 +8,7 @@
     </div>
 
     <div class="flex justify-center">
-      <{{kebabCase name}} />
+      <ex-comp />
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
-import {{pascalCase name}} from '../{{kebabCase name}}.vue'
+import ExComp from '../ex-comp.vue'
 
 const text = ref('')
 const disabled = ref(true)

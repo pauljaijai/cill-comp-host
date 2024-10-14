@@ -5,7 +5,7 @@ description:
 <script setup>
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
-import BasicUsage from '../../../src/components/{{kebabCase name}}/examples/basic-usage.vue'
+import BasicUsage from '../../../src/components/ex-comp/examples/basic-usage.vue'
 </script>
 
 # 標題 <Badge type="info" text="" />
@@ -21,7 +21,7 @@ import BasicUsage from '../../../src/components/{{kebabCase name}}/examples/basi
 <basic-usage/>
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/{{kebabCase name}}/examples/basic-usage.vue
+<<< ../../../src/components/ex-comp/examples/basic-usage.vue
 :::
 
 ## 原理
@@ -36,22 +36,22 @@ import BasicUsage from '../../../src/components/{{kebabCase name}}/examples/basi
 
 ## 原始碼
 
-<source-link-list name="{{kebabCase name}}"/>
+<source-link-list name="ex-comp"/>
 
 ## API
 
 ### Props
 
-<<< ../../../src/components/{{kebabCase name}}/{{kebabCase name}}.vue/#Props
+<<< ../../../src/components/ex-comp/ex-comp.vue/#Props
 
 ### Emits
 
-<<< ../../../src/components/{{kebabCase name}}/{{kebabCase name}}.vue/#Emits
+<<< ../../../src/components/ex-comp/ex-comp.vue/#Emits
 
 ### Methods
 
-<<< ../../../src/components/{{kebabCase name}}/{{kebabCase name}}.vue/#Methods
+<<< ../../../src/components/ex-comp/ex-comp.vue/#Methods
 
 ### Slots
 
-<<< ../../../src/components/{{kebabCase name}}/{{kebabCase name}}.vue/#Slots
+<<< ../../../src/components/ex-comp/ex-comp.vue/#Slots
