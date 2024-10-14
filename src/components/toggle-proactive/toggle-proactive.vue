@@ -360,6 +360,7 @@
 import type { CSSProperties } from 'vue'
 import { promiseTimeout, useToggle, useVModel } from '@vueuse/core'
 import anime from 'animejs'
+import { debounce } from 'lodash-es'
 import { omit, pipe } from 'remeda'
 import { computed, onBeforeMount, onMounted, ref, useId } from 'vue'
 
@@ -623,13 +624,25 @@ function toggle() {
   modelValue.value = currentValue.value
 }
 
+/** 延遲時間，會越按越短，更有不耐煩的感覺
+ *
+ * 最長 1 秒鐘
+ */
+let delayMs = 1000
+
+/** 沒有動作超過 2s 後重設 DelayMs */
+const resetDelayMs = debounce(() => {
+  delayMs = 1000
+}, 2000)
+
 /** 開始貓貓手動畫 */
 async function start() {
   togglePlaying(true)
 
-  // 等待隨機時間
-  const ms = Math.floor(Math.random() * 1500)
-  await promiseTimeout(ms)
+  delayMs = Math.max(0, delayMs - 300)
+  resetDelayMs()
+
+  await promiseTimeout(delayMs)
 
   for (const id of [
     'cat-arm-2',
