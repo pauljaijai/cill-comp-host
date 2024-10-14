@@ -364,47 +364,6 @@ import { nanoid } from 'nanoid'
 import { omit, pipe } from 'remeda'
 import { computed, onBeforeMount, onMounted, ref } from 'vue'
 
-// #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
-  disabled: false,
-  size: '4rem',
-
-  trackClass: 'rounded-full',
-  trackInactiveClass: 'bg-[#DFDFDF]',
-  trackActiveClass: 'bg-green-500',
-  thumbClass: 'bg-white',
-  thumbInactiveClass: '',
-  thumbActiveClass: '',
-
-  furColor: '#222',
-  padColor: '#FFA5A5',
-})
-
-// #region Emits
-const emit = defineEmits<{
-  'update:modelValue': [value: boolean];
-}>()
-
-const OBJECT_IDS = [
-  'cat-elbow',
-  'arm',
-  'elbow',
-  'metacarpal-pad',
-  'pads',
-  'digital-pad-1',
-  'digital-pad-2',
-  'digital-pad-3',
-  'digital-pad-4',
-] as const
-
-const KEYFRAME_IDS = [
-  'cat-arm-1',
-  'cat-arm-2',
-  'cat-arm-3',
-  'cat-arm-4',
-  'cat-arm-5',
-] as const
-
 // #region Props
 interface Props {
   modelValue: boolean;
@@ -430,7 +389,47 @@ interface Props {
   /** @default '#FFA5A5' */
   padColor?: string;
 }
+// #endregion Props
+const prop = withDefaults(defineProps<Props>(), {
+  disabled: false,
+  size: '4rem',
+
+  trackClass: 'rounded-full',
+  trackInactiveClass: 'bg-[#DFDFDF]',
+  trackActiveClass: 'bg-green-500',
+  thumbClass: 'bg-white',
+  thumbInactiveClass: '',
+  thumbActiveClass: '',
+
+  furColor: '#222',
+  padColor: '#FFA5A5',
+})
+
+// #region Emits
+const emit = defineEmits<{
+  'update:modelValue': [value: boolean];
+}>()
 // #endregion Emits
+
+const OBJECT_IDS = [
+  'cat-elbow',
+  'arm',
+  'elbow',
+  'metacarpal-pad',
+  'pads',
+  'digital-pad-1',
+  'digital-pad-2',
+  'digital-pad-3',
+  'digital-pad-4',
+] as const
+
+const KEYFRAME_IDS = [
+  'cat-arm-1',
+  'cat-arm-2',
+  'cat-arm-3',
+  'cat-arm-4',
+  'cat-arm-5',
+] as const
 
 const uid = `id${nanoid()}`
 const modelValue = useVModel(prop, 'modelValue')
