@@ -17,7 +17,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
 import BaseCheckbox from '../../base-checkbox.vue'
 import ToggleProactive from '../toggle-proactive.vue'
 
