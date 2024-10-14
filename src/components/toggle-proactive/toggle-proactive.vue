@@ -432,7 +432,7 @@ const KEYFRAME_IDS = [
 ] as const
 
 const uid = `id${nanoid()}`
-const modelValue = useVModel(prop, 'modelValue')
+const modelValue = useVModel(prop, 'modelValue', emit)
 const [currentValue, toggleCurrentValue] = useToggle(modelValue.value)
 
 interface KeyframeOption extends anime.AnimeParams {
