@@ -41,11 +41,17 @@ import CustomProp from '../../../src/components/toggle-proactive/examples/custom
 
 ## 原理
 
-利用 anime.js 製作 svg 動畫。
-
 ::: danger 注意！Σ(ˊДˋ;)
 請不要將 overflow 設定為 hidden，否則貓貓手會被狠心切割
 :::
+
+利用 anime.js 製作 svg 動畫。
+
+裡面有個小細節，就是貓手一開始藏在 toggle 背後（手臂與手肘都在背後），播放切換動畫時，手臂一樣在 toggle 背後，但是手肘會伸到 toggle 前面。
+
+SVG 內的物件為甚麼有辦法忽然變換堆疊順序？大家來猜猜看如何這個效果。(´,,•ω•,,)
+
+賣個關子，想知道的話可以看看原始碼或留言讓我知道你的猜想。( ´ ▽ ` )ﾉ
 
 ## 原始碼
 
