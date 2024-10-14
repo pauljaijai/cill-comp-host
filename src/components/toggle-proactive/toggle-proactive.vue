@@ -480,18 +480,18 @@ const keyframeOptionMap: Record<
     },
     'cat-arm-3': {
       easing: 'linear',
-      duration: 100,
+      duration: 60,
     },
     'cat-arm-2': {
       easing: 'linear',
-      duration: 100,
+      duration: 60,
       objectAttrMap: {
         'cat-elbow': { zIndex: 0 },
       },
     },
     'cat-arm-1': {
       easing: 'linear',
-      duration: 200,
+      duration: 100,
     },
   },
 } as const
