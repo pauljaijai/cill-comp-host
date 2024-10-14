@@ -1,10 +1,10 @@
-import { defineConfig } from 'vitepress';
-import { version } from '../../package.json';
+import { defineConfig } from 'vitepress'
+import { version } from '../../package.json'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "🐟 鱈魚的酷酷元件",
-  description: "設計各類惡搞、有趣且實用（？）的特殊元件",
+  title: '🐟 鱈魚的酷酷元件',
+  description: '設計各類惡搞、有趣且實用（？）的特殊元件',
   head: [
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'true' }],
@@ -13,7 +13,7 @@ export default defineConfig({
     ['meta', { property: 'og:image', content: 'https://chillcomponent.codlin.me/og.jpg' }],
   ],
   sitemap: {
-    hostname: 'https://chillcomponent.codlin.me'
+    hostname: 'https://chillcomponent.codlin.me',
   },
   async transformHead() {
     return [
@@ -28,19 +28,19 @@ export default defineConfig({
         `window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-2T520RHFM9');`
-      ]
+        gtag('config', 'G-2T520RHFM9');`,
+      ],
     ]
   },
   transformPageData(pageData) {
     pageData.frontmatter.head ??= []
     pageData.frontmatter.head.push(['meta', {
       property: 'og:description',
-      content: pageData?.frontmatter?.description ?? ''
+      content: pageData?.frontmatter?.description ?? '',
     }])
   },
   markdown: {
-    lineNumbers: true
+    lineNumbers: true,
   },
   appearance: {
     initialValue: undefined,
@@ -49,7 +49,7 @@ export default defineConfig({
   themeConfig: {
     footer: {
       message: `v${version}`,
-      copyright: 'MIT License<br>Copyright © 2024-present <a href="https://gitlab.com/codfish2140">Codfish</a>'
+      copyright: 'MIT License<br>Copyright © 2024-present <a href="https://gitlab.com/codfish2140">Codfish</a>',
     },
     outline: {
       label: '目錄',
@@ -68,7 +68,7 @@ export default defineConfig({
           { text: '緣起', link: '/origin' },
           { text: '設計概念', link: '/concept' },
           { text: '風格指南', link: '/style-guide' },
-        ]
+        ],
       },
       {
         text: '元件',
@@ -78,20 +78,20 @@ export default defineConfig({
             text: '按鈕',
             items: [
               { text: '調皮的按鈕', link: '/components/btn-naughty/' },
-            ]
+            ],
           },
           {
             text: '滑動條',
             items: [
               { text: '固執的滑動條', link: '/components/slider-stubborn/' },
-            ]
+            ],
           },
           {
             text: '開關',
             items: [
               { text: '主動的開關', link: '/components/toggle-proactive/' },
-            ]
-          },      
+            ],
+          },
           {
             text: '包裝器',
             items: [
@@ -100,46 +100,46 @@ export default defineConfig({
               { text: '貓耳包裝器', link: '/components/wrapper-cat-ear/' },
               { text: '塞滿嘴包裝器', link: '/components/wrapper-kirby-mouthful-mode/' },
               { text: 'Minecraft 方塊包裝器', link: '/components/wrapper-minecraft-block/' },
-            ]
+            ],
           },
           {
             text: '游標',
             items: [
               { text: '游標小跟班', link: '/components/cursor-sidekick/' },
-            ]
+            ],
           },
           {
             text: '輪播',
             items: [
               { text: '空間懸浮輪播', link: '/components/carousel-space-floating/' },
-            ]
+            ],
           },
           {
             text: '背景',
             items: [
               { text: '螢火蟲', link: '/components/bg-firefly/' },
               { text: '櫻吹雪', link: '/components/bg-sakura-fubuki/' },
-            ]
+            ],
           },
           {
             text: '轉場',
             items: [
               { text: '多邊形轉場', link: '/components/transition-shape/' },
-            ]
+            ],
           },
           {
             text: '文字',
             items: [
               { text: '逐字轉場', link: '/components/text-characters-transition/' },
-            ]
+            ],
           },
           {
             text: '實用',
             items: [
               { text: '拉炮', link: '/components/util-party-popper/' },
-            ]
+            ],
           },
-        ]
+        ],
       },
     ],
 
@@ -160,15 +160,15 @@ export default defineConfig({
       },
       {
         icon: {
-          svg: '📚'
+          svg: '📚',
         },
         link: 'https://codlin.me',
       },
     ],
 
     search: {
-      provider: 'local'
-    }
+      provider: 'local',
+    },
   },
-  rewrites: {}
+  rewrites: {},
 })
