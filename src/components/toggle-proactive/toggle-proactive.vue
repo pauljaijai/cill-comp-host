@@ -491,7 +491,7 @@ const keyframeOptionMap: Record<
     },
     'cat-arm-1': {
       easing: 'linear',
-      duration: 60,
+      duration: 100,
     },
   },
 } as const
