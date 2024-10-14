@@ -2,13 +2,13 @@
   <transition name="tooltip-opacity">
     <div
       v-if="tooltipVisible"
-      class=" tooltip-container pointer-events-none select-none "
+      class="tooltip-container pointer-events-none select-none"
       data-sidekick-ignore
     >
       <div
         v-if="tooltipContent"
         ref="tooltipRef"
-        class="tooltip p-2  pointer-events-auto"
+        class="tooltip pointer-events-auto p-2"
         data-sidekick-ignore
         :style="tooltipStyle"
       >
@@ -19,13 +19,13 @@
           <div
             ref="tooltipContentRef"
             :key="key"
-            class="tooltip-content flex flex-col gap-2 border rounded p-2 max-w-[90vw] min-w-[10rem]"
+            class="tooltip-content max-w-[90vw] min-w-[10rem] flex flex-col gap-2 border rounded p-2"
             :class="tooltipContent.class"
             data-sidekick-ignore
           >
             <div
               v-if="tooltipContent.text"
-              class=" text-base text-center"
+              class="text-center text-base"
               data-sidekick-ignore
               v-html="tooltipContent.text"
             />
@@ -40,7 +40,7 @@
                 :key="btn.label"
                 :label="btn.label"
                 data-sidekick-ignore
-                class=" text-nowrap text-sm "
+                class="text-nowrap text-sm"
                 @click="btn.onClick"
               />
             </div>
@@ -52,33 +52,37 @@
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, computed, ref } from 'vue';
-import { nanoid } from 'nanoid';
-import { filter, isTruthy, join, pipe } from 'remeda';
-
-import BaseBtn from '../base-btn.vue';
-
+import type { CSSProperties } from 'vue'
+import type { ContentProvider } from './use-content-provider'
 import {
-  useCycleList, useElementBounding,
-  useElementHover, useIntersectionObserver,
+  useCycleList,
+  useElementBounding,
+  useElementHover,
+  useIntersectionObserver,
   useMousePressed,
-} from '@vueuse/core';
-import { ContentProvider, useContentProvider } from './use-content-provider';
+} from '@vueuse/core'
+import { nanoid } from 'nanoid'
+
+import { filter, isTruthy, join, pipe } from 'remeda'
+
+import { computed, ref } from 'vue'
+import BaseBtn from '../base-btn.vue'
+import { useContentProvider } from './use-content-provider'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
 // #region Props
 interface Props {
   targetElement?: {
-    value: HTMLElement,
+    value: HTMLElement;
     bounding: ReturnType<typeof useElementBounding>;
   };
   activeElement?: {
-    value: HTMLElement,
+    value: HTMLElement;
     bounding: ReturnType<typeof useElementBounding>;
   };
   hoverElement?: {
-    value: HTMLElement,
+    value: HTMLElement;
     bounding: ReturnType<typeof useElementBounding>;
   };
   /** 已選取文字 */
@@ -88,13 +92,13 @@ interface Props {
   };
 
   /** 用於 active element 的 Provider。
-   * 
+   *
    * 通常用於可點擊或 focus 的元素。
    */
   activeProviders?: ContentProvider[];
 
-  /** 用於 hover element 的 Provider 
-   * 
+  /** 用於 hover element 的 Provider
+   *
    * 只要 hover 到符合條件的元素，即會觸發。
    */
   hoverProviders?: ContentProvider[];
@@ -112,34 +116,45 @@ const props = withDefaults(defineProps<Props>(), {
   activeProviders: () => [],
   hoverProviders: () => [],
   selectProviders: () => [],
-});
+})
 
+const {
+  state: currentPosition,
+  next: nextPosition,
+  go: setPositionByIndex,
+} = useCycleList<Position>([
+  'right',
+  'left',
+  'top',
+  'bottom',
+])
 
-const targetElementBounding = computed(() => props.targetElement?.bounding);
+const targetElementBounding = computed(() => props.targetElement?.bounding)
 
-const tooltipRef = ref<HTMLDivElement>();
+const tooltipRef = ref<HTMLDivElement>()
 const tooltipBounding = useElementBounding(tooltipRef, {
   reset: false,
-});
+})
 /** 偵測 tooltip 內容可見性 */
-const tooltipContentRef = ref<HTMLDivElement>();
+const tooltipContentRef = ref<HTMLDivElement>()
 useIntersectionObserver(
   tooltipContentRef,
   (data) => {
-    if (!data[0]) return;
+    if (!data[0])
+      return
 
-    const { isIntersecting } = data[0];
+    const { isIntersecting } = data[0]
     // console.log(`🚀 ~ useIntersectionObserver:`, isIntersecting);
 
     if (!isIntersecting) {
-      nextPosition?.();
+      nextPosition?.()
     }
   },
   { threshold: 0.98 },
 )
 
-const { pressed: mousePressed } = useMousePressed();
-const isContentHovered = useElementHover(tooltipContentRef);
+const { pressed: mousePressed } = useMousePressed()
+const isContentHovered = useElementHover(tooltipContentRef)
 
 const positionProviderMap: Record<
   Position,
@@ -163,38 +178,27 @@ const positionProviderMap: Record<
   ],
 }
 
-const {
-  state: currentPosition,
-  next: nextPosition,
-  go: setPositionByIndex,
-} = useCycleList<Position>([
-  'right', 'left', 'top', 'bottom'
-])
-
 const tooltipStyle = computed<CSSProperties>(() => {
-  const [x, y] = pipe(null,
-    () => {
-      if (targetElementBounding.value) {
-        return {
-          width: targetElementBounding.value.width.value,
-          height: targetElementBounding.value.height.value,
-        }
-      }
-
-      if (props.selectionState?.text && props.selectionState.rect) {
-        return {
-          width: props.selectionState.rect.width,
-          height: props.selectionState.rect.height,
-        }
-      }
-
+  const [x, y] = pipe(null, () => {
+    if (targetElementBounding.value) {
       return {
-        width: 0,
-        height: 0,
+        width: targetElementBounding.value.width.value,
+        height: targetElementBounding.value.height.value,
       }
-    },
-    positionProviderMap[currentPosition.value],
-  );
+    }
+
+    if (props.selectionState?.text && props.selectionState.rect) {
+      return {
+        width: props.selectionState.rect.width,
+        height: props.selectionState.rect.height,
+      }
+    }
+
+    return {
+      width: 0,
+      height: 0,
+    }
+  }, positionProviderMap[currentPosition.value])
 
   return {
     transform: [
@@ -202,20 +206,20 @@ const tooltipStyle = computed<CSSProperties>(() => {
       `translateY(${y}px)`,
     ].join(' '),
   }
-});
+})
 
 const tooltipVisible = computed(() => {
   if (isContentHovered.value) {
-    return true;
+    return true
   }
 
   // 按住且有選取文字時，不顯示 tooltip
   if (mousePressed.value && props.selectionState?.text) {
-    return false;
+    return false
   }
 
-  return props.targetElement || props.selectionState?.text;
-});
+  return props.targetElement || props.selectionState?.text
+})
 /** 為每一個目標產生專屬的 key */
 const key = computed(() => {
   if (props.targetElement) {
@@ -224,24 +228,26 @@ const key = computed(() => {
       props.targetElement.value.className,
       props.targetElement.value.tagName,
       props.targetElement.value.textContent,
-    ].join('-');
+    ].join('-')
   }
 
   if (props.selectionState?.text) {
-    const rect = props.selectionState.rect;
+    const rect = props.selectionState.rect
     return pipe(
       [
         props.selectionState?.text,
-        rect?.width, rect?.height,
-        rect?.x, rect?.y,
+        rect?.width,
+        rect?.height,
+        rect?.x,
+        rect?.y,
       ],
       filter(isTruthy),
       join('-'),
-    );
+    )
   }
 
   return nanoid()
-});
+})
 /** 目標發生變化時，將 position 重設 */
 // watch(key, () => {
 //   setPositionByIndex(0);
@@ -255,44 +261,43 @@ const {
   activeList: props.activeProviders,
   hoverList: props.hoverProviders,
   selectList: props.selectProviders,
-});
+})
 
 /** 優先順序為：active、hover、select */
 const tooltipContent = computed(() => {
-  const provider = pipe(null,
-    () => {
-      const {
-        activeElement, hoverElement, selectionState,
-      } = props;
+  const provider = pipe(null, () => {
+    const {
+      activeElement,
+      hoverElement,
+      selectionState,
+    } = props
 
-      if (activeElement) {
-        return activeContentProviders.value.find(
-          ({ match }) => match(activeElement.value)
-        );
-      }
-
-      if (hoverElement) {
-        return hoverContentProviders.value.find(
-          ({ match }) => match(hoverElement.value)
-        );
-      }
-
-      if (selectionState?.text) {
-        return selectContentProviders.value.find(
-          ({ match }) => match(selectionState)
-        );
-      }
+    if (activeElement) {
+      return activeContentProviders.value.find(
+        ({ match }) => match(activeElement.value),
+      )
     }
-  );
-  if (!provider) return;
+
+    if (hoverElement) {
+      return hoverContentProviders.value.find(
+        ({ match }) => match(hoverElement.value),
+      )
+    }
+
+    if (selectionState?.text) {
+      return selectContentProviders.value.find(
+        ({ match }) => match(selectionState),
+      )
+    }
+  })
+  if (!provider)
+    return
 
   return provider.getContent({
     element: props.targetElement,
     selectionState: props.selectionState,
-  });
-});
-
-
+  })
+})
 </script>
 
 <style scoped lang="sass">

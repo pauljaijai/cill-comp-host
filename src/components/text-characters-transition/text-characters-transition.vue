@@ -17,11 +17,12 @@
 </template>
 
 <script setup lang="ts">
-import anime from 'animejs';
-import { customAlphabet } from 'nanoid';
-import { join, map, pipe } from 'remeda';
-import { computed, onMounted, onBeforeUnmount, watch } from 'vue';
-import { AnimeFuncParam, TransitionName, transitionProvider } from './transition-provider';
+import type { AnimeFuncParam, TransitionName } from './transition-provider'
+import anime from 'animejs'
+import { customAlphabet } from 'nanoid'
+import { join, map, pipe } from 'remeda'
+import { computed, onBeforeUnmount, onMounted, watch } from 'vue'
+import { transitionProvider } from './transition-provider'
 
 // #region Props
 interface Props {
@@ -33,15 +34,15 @@ interface Props {
   }>;
 
   /** html tag
-   * 
+   *
    * @default 'p'
    */
   tag?: string;
 
   /** 如何切割文字
-   * 
+   *
    * 只有在 label 為 string 時有效
-   * 
+   *
    * @default /.*?/u
    */
   splitter?: RegExp | ((label: string) => string[]);
@@ -62,7 +63,7 @@ const props = withDefaults(defineProps<Props>(), {
   name: 'fade',
   enter: undefined,
   leave: undefined,
-});
+})
 
 // #region Emits
 const emit = defineEmits<{
@@ -70,10 +71,10 @@ const emit = defineEmits<{
   'after-enter': [];
   'before-leave': [];
   'after-leave': [];
-}>();
+}>()
 // #endregion Emits
 
-const id = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 10)();
+const id = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 10)()
 
 /** 沒有指定 TransitionName 的話預設都是 fade */
 function getAnimeParam(
@@ -82,8 +83,9 @@ function getAnimeParam(
   length: number,
   data?: AnimeFuncParam,
 ): anime.AnimeParams {
-  const defaultParam = transitionProvider[props.name][type](i, length);
-  if (!data) return defaultParam;
+  const defaultParam = transitionProvider[props.name][type](i, length)
+  if (!data)
+    return defaultParam
 
   return {
     ...defaultParam,
@@ -95,18 +97,18 @@ const chars = computed(() => pipe(
   props.label,
   (data) => {
     if (Array.isArray(data)) {
-      return data;
+      return data
     }
 
     if (typeof props.splitter === 'function') {
-      return props.splitter(data);
+      return props.splitter(data)
     }
 
     /** Regex 加上 u 才不會導致 emoji 被拆分成亂碼 */
-    return data.split(props.splitter ?? /.*?/u);
+    return data.split(props.splitter ?? /.*?/u)
   },
   map.strict.indexed((data, i, array) => {
-    const elId = `${id}-${i}`;
+    const elId = `${id}-${i}`
 
     if (typeof data === 'string') {
       return {
@@ -125,86 +127,86 @@ const chars = computed(() => pipe(
       enter: () => getAnimeParam('enter', i, array.length, data.enter),
       leave: () => getAnimeParam('leave', i, array.length, data.leave),
     }
-  })
-));
+  }),
+))
 
 const labelText = computed(() => pipe(
   chars.value,
   map((char) => char.value),
   join(''),
-));
+))
 
 /** 進入動畫
- * 
+ *
  * @param end 用於初始化時，立即完成動畫
  */
 async function startEnter(end = false) {
-  anime.remove(`.${id}`);
+  anime.remove(`.${id}`)
 
-  emit('before-enter');
+  emit('before-enter')
 
   const tasks = chars.value.map((char) => {
-    const data = char.enter();
+    const data = char.enter()
 
     if (end) {
-      data.duration = 0;
-      data.delay = 0;
+      data.duration = 0
+      data.delay = 0
     }
 
     return anime({
       ...data,
       targets: document.getElementById(char.id),
-    }).finished;
-  });
+    }).finished
+  })
 
-  await Promise.allSettled(tasks);
+  await Promise.allSettled(tasks)
 
-  emit('after-enter');
+  emit('after-enter')
 }
 
 /** 離開動畫
- * 
+ *
  * @param end 用於初始化時，立即完成動畫
  */
 async function startLeave(end = false) {
-  anime.remove(`.${id}`);
+  anime.remove(`.${id}`)
 
-  emit('before-leave');
+  emit('before-leave')
 
   const tasks = chars.value.map((char) => {
-    const data = char.leave();
+    const data = char.leave()
 
     if (end) {
-      data.duration = 0;
-      data.delay = 0;
+      data.duration = 0
+      data.delay = 0
     }
 
     return anime({
       ...data,
       targets: document.getElementById(char.id),
-    }).finished;
-  });
+    }).finished
+  })
 
-  await Promise.allSettled(tasks);
+  await Promise.allSettled(tasks)
 
-  emit('after-leave');
+  emit('after-leave')
 }
 
 watch(() => props.visible, (visible) => {
   visible ? startEnter() : startLeave()
-});
+})
 
 onMounted(() => {
   props.visible ? startEnter(true) : startLeave(true)
-});
+})
 
 /** 元件解除前刪除所有動畫 */
 onBeforeUnmount(() => {
-  anime.remove(`.${id}`);
+  anime.remove(`.${id}`)
 })
 
 // #region Methods
-defineExpose({});
+defineExpose({})
 // #endregion Methods
 </script>
 

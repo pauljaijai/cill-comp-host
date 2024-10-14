@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col gap-4 w-full">
-    <div class="flex-1 flex flex-col justify-around items-center gap-6 text-xl">
+  <div class="w-full flex flex-col gap-4">
+    <div class="flex flex-col flex-1 items-center justify-around gap-6 text-xl">
       <div
         v-for="(item, i) in list"
         :key="i"
-        class=" clickable-box border px-9 py-6"
+        class="clickable-box border px-9 py-6"
         :class="{ 'border-x-4': item.visible }"
         @click="toggleVisible(item)"
       >
@@ -15,20 +15,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { ExtractComponentProps } from '../../../types';
-import anime from 'animejs';
-import { sample } from 'remeda';
+import type { Writable } from 'type-fest'
+import type { ExtractComponentProps } from '../../../types'
+import anime from 'animejs'
+import { sample } from 'remeda'
+import { ref } from 'vue'
+import TextCharactersTransition from '../text-characters-transition.vue'
 
-import TextCharactersTransition from '../text-characters-transition.vue';
-
-type Param = ExtractComponentProps<typeof TextCharactersTransition>
+type Param = Writable<ExtractComponentProps<typeof TextCharactersTransition>>
 type Item = Pick<Param, 'label' | 'enter' | 'leave' | 'visible'> & {
   class?: string;
-};
+}
 
-const negativeList = [1, -1] as const;
-const randomNegative = () => sample(negativeList, 1)[0];
+const negativeList = [1, -1] as const
+const randomNegative = () => sample(negativeList, 1)[0]
 
 const list = ref<Item[]>([
   {
@@ -44,7 +44,7 @@ const list = ref<Item[]>([
       ],
       translateY: () => [
         anime.random(50, 60) * randomNegative(),
-        0
+        0,
       ],
       delay: i * 100,
       duration: 1600,
@@ -153,14 +153,14 @@ const list = ref<Item[]>([
 ])
 
 function toggleVisible(item: Pick<Param, 'visible'>) {
-  item.visible = !item.visible;
+  item.visible = !item.visible
 }
 </script>
 
 <style scoped lang="sass">
 @import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap')
 
-.font-wenkai 
+.font-wenkai
   font-family: "LXGW WenKai Mono TC", monospace
   font-weight: 400
   font-style: normal

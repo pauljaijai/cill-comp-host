@@ -1,8 +1,8 @@
 <template>
-  <div class=" relative overflow-hidden">
+  <div class="relative overflow-hidden">
     <canvas
       ref="canvasRef"
-      class=" absolute left-0 top-0 w-full h-full -z-1"
+      class="absolute left-0 top-0 h-full w-full -z-1"
     />
 
     <slot
@@ -13,33 +13,37 @@
 
     <div
       v-if="props.fpsVisible"
-      class=" absolute left-0 top-0 p-4 text-gray-400 "
+      class="absolute left-0 top-0 p-4 text-gray-400"
     >
       {{ fps }}
     </div>
   </div>
 </template>
 
-
 <script setup lang="ts">
-import { computed, ref, shallowRef } from 'vue';
+import type {
+  Mesh,
+} from '@babylonjs/core'
+import type { InitParam } from '../../composables/use-babylon-scene'
 import {
   Color3,
   Color4,
   DefaultRenderingPipeline,
   DepthOfFieldEffectBlurLevel,
-  Mesh, MeshBuilder,
+  MeshBuilder,
 
-  StandardMaterial, Texture, Vector3,
+  Scene,
+  StandardMaterial,
+  Texture,
   UniversalCamera,
   Vector2,
-  Scene
-} from '@babylonjs/core';
-import { add, clone, map, pipe, range, shuffle } from 'remeda';
-import anime from 'animejs';
-
-import { InitParam, useBabylonScene } from '../../composables/use-babylon-scene';
-import { useIntervalFn } from '@vueuse/core';
+  Vector3,
+} from '@babylonjs/core'
+import { useIntervalFn } from '@vueuse/core'
+import anime from 'animejs'
+import { add, clone, map, pipe, range, shuffle } from 'remeda'
+import { computed, ref, shallowRef } from 'vue'
+import { useBabylonScene } from '../../composables/use-babylon-scene'
 
 // import '@babylonjs/core/Debug/debugLayer';
 // import '@babylonjs/inspector';
@@ -73,7 +77,7 @@ const props = withDefaults(defineProps<Props>(), {
   clearColor: () => new Color4(1, 1, 1, 1),
   fogColor: () => new Color3(1, 1, 0.95),
   fogEnd: undefined,
-});
+})
 
 // #region Slots
 defineSlots<{
@@ -82,67 +86,69 @@ defineSlots<{
     isSwitching: boolean;
     stableTarget?: ImageInfo | string;
   }) => unknown;
-}>();
+}>()
 // #endregion Slots
 
-// #region Emits
-// const emit = defineEmits<{
-//   'update:modelValue': [value: Props['modelValue']];
-// }>();
-// #endregion Emits
+const defaultImageInfo: Required<Omit<ImageInfo, 'src'>> = {
+  offset: new Vector2(0, 0),
+  scale: 1,
+  rotation: new Vector3(0, 0, 0),
+  duration: 3000,
+}
 
-const fps = ref(0);
-useIntervalFn(() => {
-  fps.value = Math.floor(engine.value?.getFps() ?? 0);
-}, 100);
-
-const targetIndex = ref(props.initIndex);
-const isSwitching = ref(true);
+const targetIndex = ref(props.initIndex)
+const isSwitching = ref(true)
 /** 動畫結束後注視的目標 */
 const stableTarget = computed(() => {
-  if (isSwitching.value) return;
+  if (isSwitching.value)
+    return
 
-  return props.images[targetIndex.value];
-});
+  return props.images[targetIndex.value]
+})
 
-const boards = shallowRef<Mesh[]>([]);
+const boards = shallowRef<Mesh[]>([])
 
-const Z_OFFSET = 3;
-const CAMERA_OFFSET = 1;
+const Z_OFFSET = 3
+const CAMERA_OFFSET = 1
 
 const { canvasRef, engine, camera, scene } = useBabylonScene({
   createCamera(param) {
-    const { scene } = param;
+    const { scene } = param
     const camera = new UniversalCamera(
       'camera',
       new Vector3(0, 0, props.images.length * Z_OFFSET),
-      scene
-    );
+      scene,
+    )
 
-    return camera;
+    return camera
   },
   async init(param) {
-    const { canvas, camera, scene } = param;
+    const { canvas, camera, scene } = param
 
-    scene.clearColor = props.clearColor;
+    scene.clearColor = props.clearColor
 
-    scene.fogColor = props.fogColor;
-    scene.fogMode = Scene.FOGMODE_LINEAR;
-    scene.fogStart = 5;
-    scene.fogEnd = props.fogEnd ?? Z_OFFSET * props.images.length / 2;
+    scene.fogColor = props.fogColor
+    scene.fogMode = Scene.FOGMODE_LINEAR
+    scene.fogStart = 5
+    scene.fogEnd = props.fogEnd ?? Z_OFFSET * props.images.length / 2
 
     // camera.attachControl(canvas, true);
 
     // scene.debugLayer.show();
 
-    initRenderingPipeline(param);
+    initRenderingPipeline(param)
 
-    boards.value = await initBoards(param);
-    await processBoardsPosition(boards.value);
+    boards.value = await initBoards(param)
+    await processBoardsPosition(boards.value)
 
-    focusBoard(targetIndex.value);
+    focusBoard(targetIndex.value)
   },
-});
+})
+
+const fps = ref(0)
+useIntervalFn(() => {
+  fps.value = Math.floor(engine.value?.getFps() ?? 0)
+}, 100)
 
 function initRenderingPipeline(
   { scene, camera }: InitParam,
@@ -151,28 +157,30 @@ function initRenderingPipeline(
     'defaultPipeline',
     true,
     scene,
-    [camera]
-  );
+    [camera],
+  )
 
-  pipeline.depthOfFieldEnabled = true;
-  pipeline.depthOfField.focusDistance = (Z_OFFSET - CAMERA_OFFSET) * 1000;
-  pipeline.depthOfField.focalLength = 100000;
-  pipeline.depthOfField.fStop = 16;
-  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
+  pipeline.depthOfFieldEnabled = true
+  pipeline.depthOfField.focusDistance = (Z_OFFSET - CAMERA_OFFSET) * 1000
+  pipeline.depthOfField.focalLength = 100000
+  pipeline.depthOfField.fStop = 16
+  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low
 
-  pipeline.samples = 4;
+  pipeline.samples = 4
 
-  return pipeline;
+  return pipeline
 }
 
 async function initBoards(
-  { scene }: InitParam
+  { scene }: InitParam,
 ) {
   const boards = await pipe(
     props.images,
     map.indexed((item, i) => new Promise((resolve) => {
       const {
-        src, rotation, scale,
+        src,
+        rotation,
+        scale,
       } = pipe(
         item,
         (data) => {
@@ -180,7 +188,7 @@ async function initBoards(
             return {
               ...defaultImageInfo,
               src: data,
-            };
+            }
           }
 
           return {
@@ -188,75 +196,77 @@ async function initBoards(
             ...data,
           }
         },
-      );
+      )
 
-      const texture = new Texture(src, scene);
+      const texture = new Texture(src, scene)
 
       texture.onLoadObservable.add(() => {
-        const { width, height } = texture.getSize();
+        const { width, height } = texture.getSize()
 
         /** 根據圖片比例產生 plane */
         const board = MeshBuilder.CreatePlane(`board-${i}`, {
-          width: width / height, height: 1,
-        }, scene);
+          width: width / height,
+          height: 1,
+        }, scene)
 
-        const rotateZ = Math.PI / 2 * (i % 2);
-        board.rotation = new Vector3(0, 0, rotateZ).add(rotation);
+        const rotateZ = Math.PI / 2 * (i % 2)
+        board.rotation = new Vector3(0, 0, rotateZ).add(rotation)
         board.scaling = pipe(
           scale,
           (value) => {
             if (typeof value === 'number') {
-              return new Vector3(value, value, 1);
+              return new Vector3(value, value, 1)
             }
 
-            return new Vector3(value.x, value.y, 1);
+            return new Vector3(value.x, value.y, 1)
           },
-        );
+        )
 
-        const material = new StandardMaterial(`material-${i}`, scene);
-        material.diffuseTexture = texture;
+        const material = new StandardMaterial(`material-${i}`, scene)
+        material.diffuseTexture = texture
 
-        material.disableLighting = true;
-        material.emissiveColor = new Color3(1, 1, 1);
+        material.disableLighting = true
+        material.emissiveColor = new Color3(1, 1, 1)
 
-        board.material = material;
+        board.material = material
 
-        resolve(board);
+        resolve(board)
       })
     })),
     async (tasks) => {
-      const results = await Promise.allSettled(tasks);
+      const results = await Promise.allSettled(tasks)
 
       return results
         .filter((result): result is PromiseFulfilledResult<Mesh> =>
-          result.status === 'fulfilled'
+          result.status === 'fulfilled',
         )
-        .map(({ value }) => value);
+        .map(({ value }) => value)
     },
   )
 
-  return boards;
+  return boards
 }
 
 /** 取得指定分布範圍。
- * 
+ *
  * 例如：min = 3, max = 5，則回傳 -5 ~ -3 與 3 ~ 5 之間的隨機數
  */
 function getRandomRange(min: number, max: number): number {
-  const range = max - min;
-  return (Math.random() * range + min) * (Math.random() > 0.5 ? 1 : -1);
+  const range = max - min
+  return (Math.random() * range + min) * (Math.random() > 0.5 ? 1 : -1)
 }
 
 /** 分散每個 board 位置，每個 board 距離不小於 3 */
 function processBoardsPosition(boards: Mesh[]) {
-  const count = boards.length;
+  const count = boards.length
 
   const tasks = pipe(
     range(0, count),
     shuffle(),
     map.indexed((i, j) => {
-      const board = boards[i];
-      if (!board) return;
+      const board = boards[i]
+      if (!board)
+        return
 
       return anime({
         targets: board.position,
@@ -269,29 +279,26 @@ function processBoardsPosition(boards: Mesh[]) {
     }),
   )
 
-  return Promise.all(tasks);
+  return Promise.all(tasks)
 }
 
-const defaultImageInfo: Required<Omit<ImageInfo, 'src'>> = {
-  offset: new Vector2(0, 0),
-  scale: 1,
-  rotation: new Vector3(0, 0, 0),
-  duration: 3000,
-}
 async function focusBoard(index: number) {
-  const currentCamera = camera.value;
-  const currentScene = scene.value;
-  if (!currentCamera || !currentScene) return;
-  if (!(currentCamera instanceof UniversalCamera)) return;
+  const currentCamera = camera.value
+  const currentScene = scene.value
+  if (!currentCamera || !currentScene)
+    return
+  if (!(currentCamera instanceof UniversalCamera))
+    return
 
-  const board = boards.value[index];
-  if (!board) return;
+  const board = boards.value[index]
+  if (!board)
+    return
 
   const info = pipe(
     props.images[index],
     (data) => {
       if (!data || typeof data === 'string') {
-        return defaultImageInfo;
+        return defaultImageInfo
       }
 
       return {
@@ -299,21 +306,21 @@ async function focusBoard(index: number) {
         ...data,
       }
     },
-  );
+  )
 
   const currentPosition = currentCamera.position
     .clone()
-    .addInPlace(new Vector3(0, 0, CAMERA_OFFSET * 2));
-  const { x, y, z } = board.position;
-  const { z: rotateZ } = board.rotation;
+    .addInPlace(new Vector3(0, 0, CAMERA_OFFSET * 2))
+  const { x, y, z } = board.position
+  const { z: rotateZ } = board.rotation
 
   // 鏡頭移動動畫
-  anime.remove(currentCamera.position);
-  anime.remove(currentCamera.rotation);
+  anime.remove(currentCamera.position)
+  anime.remove(currentCamera.rotation)
 
-  const { offset } = info;
+  const { offset } = info
 
-  isSwitching.value = true;
+  isSwitching.value = true
   await Promise.all([
     anime({
       targets: currentCamera.position,
@@ -321,13 +328,13 @@ async function focusBoard(index: number) {
         {
           value: x + offset.x,
           easing: 'easeInOutQuart',
-        }
+        },
       ],
       y: [
         {
           value: y + offset.y,
           easing: 'easeInOutQuart',
-        }
+        },
       ],
       z: [
         {
@@ -348,7 +355,7 @@ async function focusBoard(index: number) {
         {
           value: z - CAMERA_OFFSET * 2,
           easing: 'easeInOutQuart',
-        }
+        },
       ],
       duration: info.duration,
     }).finished,
@@ -358,22 +365,22 @@ async function focusBoard(index: number) {
         {
           value: rotateZ,
           easing: 'easeInOutQuart',
-        }
+        },
       ],
       duration: info.duration,
-    }).finished
+    }).finished,
   ])
-  isSwitching.value = false;
+  isSwitching.value = false
 }
 
 function next() {
-  targetIndex.value = (targetIndex.value + 1) % props.images.length;
-  focusBoard(targetIndex.value);
+  targetIndex.value = (targetIndex.value + 1) % props.images.length
+  focusBoard(targetIndex.value)
 }
 
 function prev() {
-  targetIndex.value = (targetIndex.value - 1 + props.images.length) % props.images.length;
-  focusBoard(targetIndex.value);
+  targetIndex.value = (targetIndex.value - 1 + props.images.length) % props.images.length
+  focusBoard(targetIndex.value)
 }
 
 // #region Methods
@@ -386,7 +393,7 @@ defineExpose({
   next,
   /** 上一張圖片 */
   prev,
-});
+})
 // #endregion Methods
 </script>
 

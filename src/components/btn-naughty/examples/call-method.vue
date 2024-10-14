@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col items-center justify-center gap-4 w-full border border-gray-300 p-6">
-    <div class="flex gap-4 border p-4 rounded w-full">
+  <div class="w-full flex flex-col items-center justify-center gap-4 border border-gray-300 p-6">
+    <div class="w-full flex gap-4 border rounded p-4">
       <base-btn
         label="移動"
         @click="run"
@@ -20,16 +20,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
+import BaseBtn from '../../base-btn.vue'
+import BtnNaughty from '../btn-naughty.vue'
 
-import BaseBtn from '../../base-btn.vue';
-import BtnNaughty from '../btn-naughty.vue';
-
-const btn = ref<InstanceType<typeof BtnNaughty>>();
+const btn = ref<InstanceType<typeof BtnNaughty>>()
 function run() {
-  btn.value?.run();
+  btn.value?.run()
 }
 function back() {
-  btn.value?.back();
+  btn.value?.back()
 }
 </script>

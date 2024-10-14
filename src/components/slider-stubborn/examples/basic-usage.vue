@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col w-full border border-gray-300 p-6 gap-4">
+  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
     <base-checkbox
       v-model="disabled"
-      class="p-4 w-full border rounded"
+      class="w-full border rounded p-4"
       label="停用"
     />
 
-    <div class="flex flex-col justify-center flex-1">
+    <div class="flex flex-col flex-1 justify-center">
       目前數值：{{ Math.floor(value) }}
 
       <slider-stubborn
@@ -20,19 +20,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-
-import BaseCheckbox from '../../base-checkbox.vue';
-import SliderStubborn from '../slider-stubborn.vue';
-
-import { useWindowSize } from '@vueuse/core';
+import { useWindowSize } from '@vueuse/core'
+import { computed, ref } from 'vue'
+import BaseCheckbox from '../../base-checkbox.vue'
+import SliderStubborn from '../slider-stubborn.vue'
 
 const { width, height } = useWindowSize()
 
-const disabled = ref(false);
-const value = ref(50);
+const disabled = ref(false)
+const value = ref(50)
 
 const thumbLength = computed(() =>
-  Math.min(width.value, height.value) / 3
-);
+  Math.min(width.value, height.value) / 3,
+)
 </script>

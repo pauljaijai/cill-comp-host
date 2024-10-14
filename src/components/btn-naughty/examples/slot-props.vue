@@ -5,11 +5,10 @@
       z-index="30"
     >
       <template #rubbing="{ isRunning }">
-        <div class="rubbing ">
+        <div class="rubbing">
           {{ isRunning ? '😜' : '😗' }}
         </div>
       </template>
-
 
       <template #default="{ isRunning }">
         <div class="btn">
@@ -21,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import BtnNaughty from '../btn-naughty.vue';
+import BtnNaughty from '../btn-naughty.vue'
 </script>
 
 <style scoped lang="sass">

@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col items-start gap-4 w-full border border-gray-300 p-6">
+  <div class="w-full flex flex-col items-start gap-4 border border-gray-300 p-6">
     <base-btn
       class="w-full"
       label="更換"
       @click="change()"
     />
 
-    <div class="w-full flex flex-col gap-4 border bg-slate-100 rounded p-6 overflow-hidden">
+    <div class="w-full flex flex-col gap-4 overflow-hidden border rounded bg-slate-100 p-6">
       <div class="flex justify-center">
         <transition-shape
           :type="imgTransition"
@@ -15,12 +15,12 @@
           <img
             :key="index"
             :src="profile"
-            class=" w-60 h-60 rounded-full object-cover shadow-md border-[0.5rem] border-white"
+            class="h-60 w-60 border-[0.5rem] border-white rounded-full object-cover shadow-md"
           >
         </transition-shape>
       </div>
 
-      <div class=" text-2xl font-bold flex flex-col justify-center items-center gap-2">
+      <div class="flex flex-col items-center justify-center gap-2 text-2xl font-bold">
         鱈魚
         <transition-shape
           :type="fishTransition"
@@ -42,7 +42,7 @@
       >
         <div
           :key="index"
-          class=" p-8 "
+          class="p-8"
         >
           {{ introduction }}
         </div>
@@ -52,56 +52,59 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { hasAtLeast, piped, reverse } from 'remeda';
-import { debounce } from 'lodash-es';
+import type { TransitionType } from '../type'
+import { debounce } from 'lodash-es'
+import { hasAtLeast, piped, reverse } from 'remeda'
+import { computed, ref } from 'vue'
+import BaseBtn from '../../base-btn.vue'
+import TransitionShape from '../transition-shape.vue'
 
-import BaseBtn from '../../base-btn.vue';
-import TransitionShape, { TransitionType } from '../transition-shape.vue';
-
-const index = ref(0);
+const index = ref(0)
 
 const fishList = [
-  '🐟', '🐋🐋', '🐠', '🐡🐡'
-];
-const fish = computed(() => fishList[index.value % fishList.length]);
-
+  '🐟',
+  '🐋🐋',
+  '🐠',
+  '🐡🐡',
+]
+const fish = computed(() => fishList[index.value % fishList.length])
 
 const profileList = [
   '/profile.webp',
   '/profile-2.webp',
   '/profile-3.webp',
-];
-const profile = computed(() => profileList[index.value % profileList.length]);
+]
+const profile = computed(() => profileList[index.value % profileList.length])
 
 const introductionList = [
   `一隻熱愛程式的魚，但是沒有手指可以打鍵盤，更買不到能在水裡用的電腦。('◉◞⊖◟◉\` )`,
   '最擅長的球類是地瓜球，一打十輕輕鬆鬆。( •̀ ω •́ )✧',
   `不知道是不是在水裡躺平躺久了，最近喝水也會胖。\n_(:3」ㄥ)_`,
 ]
-const introduction = computed(() => introductionList[index.value % introductionList.length]);
+const introduction = computed(() => introductionList[index.value % introductionList.length])
 
-const isReady = ref(false);
+const isReady = ref(false)
 const handleReady = debounce(() => {
-  isReady.value = true;
-}, 500);
+  isReady.value = true
+}, 500)
 
 function change() {
-  if (!isReady.value) return;
-  isReady.value = false;
-  index.value++;
+  if (!isReady.value)
+    return
+  isReady.value = false
+  index.value++
 }
 
-const colors: [string, ...string[]] = ['#012030', '#13678A', '#45C4B0', '#9AEBA3', '#DAFDBA'];
+const colors: [string, ...string[]] = ['#012030', '#13678A', '#45C4B0', '#9AEBA3', '#DAFDBA']
 const reverseColors = piped(
   reverse<string[]>(),
   (result) => {
     if (!hasAtLeast(result, 1)) {
-      throw new Error('At least one color is required');
+      throw new Error('At least one color is required')
     }
-    return result;
-  }
-);
+    return result
+  },
+)
 
 const baseOption = {
   duration: 800,
@@ -121,7 +124,7 @@ const imgTransition: TransitionType = {
     ...baseOption,
   },
   colors,
-};
+}
 
 const fishTransition: TransitionType = {
   name: 'rect',
@@ -136,7 +139,7 @@ const fishTransition: TransitionType = {
     ...baseOption,
   },
   colors: reverseColors(colors),
-};
+}
 
 const textTransition: TransitionType = {
   name: 'fence',
@@ -151,5 +154,5 @@ const textTransition: TransitionType = {
     ...baseOption,
   },
   colors,
-};
+}
 </script>

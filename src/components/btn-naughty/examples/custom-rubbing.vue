@@ -5,11 +5,10 @@
       z-index="30"
     >
       <template #rubbing>
-        <div class="rubbing ">
+        <div class="rubbing">
           啪！跑了
         </div>
       </template>
-
 
       <template #default>
         <div class="btn">
@@ -21,9 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import BtnNaughty from '../btn-naughty.vue';
+import BtnNaughty from '../btn-naughty.vue'
 </script>
-
 
 <style scoped lang="sass">
 .btn

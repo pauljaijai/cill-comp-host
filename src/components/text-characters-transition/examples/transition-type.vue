@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 w-full">
+  <div class="w-full flex flex-col gap-4">
     <div class="flex flex-col items-center gap-2 text-3xl font-bold tracking-wider">
       <div
         v-for="(item, i) in list"
@@ -11,10 +11,10 @@
         <text-characters-transition
           label="一段展示用的文字"
           v-bind="item"
-          class=" pointer-events-none"
+          class="pointer-events-none"
         />
 
-        <div class=" absolute left-0 bottom-0 p-2 px-3 text-sm font-normal tracking-normal opacity-20">
+        <div class="absolute bottom-0 left-0 p-2 px-3 text-sm font-normal tracking-normal opacity-20">
           {{ item.name }}
         </div>
       </div>
@@ -23,14 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { ExtractComponentProps } from '../../../types';
-import { addProp, map } from 'remeda';
+import type { Writable } from 'type-fest'
+import type { ExtractComponentProps } from '../../../types'
+import { addProp, map } from 'remeda'
+import { ref } from 'vue'
+import TextCharactersTransition from '../text-characters-transition.vue'
 
-import TextCharactersTransition from '../text-characters-transition.vue';
-
-type Param = ExtractComponentProps<typeof TextCharactersTransition>
-type Item = Pick<Param, 'name' | 'visible'>;
+type Param = Writable<ExtractComponentProps<typeof TextCharactersTransition>>
+type Item = Pick<Param, 'name' | 'visible'>
 
 const list = ref(
   map(
@@ -45,11 +45,11 @@ const list = ref(
       { name: 'emerge' },
     ] satisfies Item[],
     addProp('visible', false),
-  )
-);
+  ),
+)
 
 function toggleVisible(item: Pick<Param, 'visible'>) {
-  item.visible = !item.visible;
+  item.visible = !item.visible
 }
 </script>
 

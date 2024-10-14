@@ -1,15 +1,15 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
+  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
     <cursor-sidekick v-if="enable" />
 
     <base-checkbox
       v-model="enable"
       label="啟用小跟班"
-      class="p-4 border rounded bg-gray-100"
+      class="border rounded bg-gray-100 p-4"
     />
 
     <div class="flex flex-col gap-2">
-      <div class=" text-2xl font-bold">
+      <div class="text-2xl font-bold">
         我是標題
       </div>
 
@@ -23,17 +23,17 @@
         v-model="text"
         label="文字輸入框"
       />
-      <div class=" border rounded w-1/2 h-[20vh]">
+      <div class="h-[20vh] w-1/2 border rounded">
         <textarea
           v-model="text"
           placeholder="多行文字"
-          class="w-full h-full p-2"
+          class="h-full w-full p-2"
         />
       </div>
 
       <div
         contenteditable
-        class="p-2 border rounded w-2/3"
+        class="w-2/3 border rounded p-2"
       >
         可編輯的 div
       </div>
@@ -64,13 +64,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
+import BaseBtn from '../../base-btn.vue'
+import BaseCheckbox from '../../base-checkbox.vue'
+import BaseInput from '../../base-input.vue'
+import CursorSidekick from '../cursor-sidekick.vue'
 
-import BaseCheckbox from '../../base-checkbox.vue';
-import BaseInput from '../../base-input.vue';
-import BaseBtn from '../../base-btn.vue';
-import CursorSidekick from '../cursor-sidekick.vue';
-
-const enable = ref(false);
-const text = ref('');
+const enable = ref(false)
+const text = ref('')
 </script>

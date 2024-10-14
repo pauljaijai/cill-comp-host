@@ -1,12 +1,12 @@
 <template>
   <div class="cursor-pointer select-none overflow-visible">
     <div
-      class="toggle-proactive "
+      class="toggle-proactive"
       @click="toggle"
     >
       <div
         :id="`${uid}-cat-arm`"
-        class="w-full h-full relative"
+        class="relative h-full w-full"
       >
         <!-- arm -->
         <svg
@@ -77,12 +77,11 @@
           :class="currentTrackClass"
         >
           <div
-            class="thumb rounded-full "
+            class="thumb rounded-full"
             :class="currentThumbClass"
           />
         </div>
       </div>
-
 
       <div
         v-if="keyframeVisible"
@@ -358,23 +357,53 @@
 </template>
 
 <script setup lang="ts">
-import { omit, pipe } from 'remeda';
-import anime from 'animejs';
-import { promiseTimeout, useToggle, useVModel } from '@vueuse/core';
-import { computed, CSSProperties, onBeforeMount, onMounted, ref } from 'vue';
-import { nanoid } from 'nanoid';
+import type { CSSProperties } from 'vue'
+import { promiseTimeout, useToggle, useVModel } from '@vueuse/core'
+import anime from 'animejs'
+import { nanoid } from 'nanoid'
+import { omit, pipe } from 'remeda'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
+
+// #endregion Props
+const prop = withDefaults(defineProps<Props>(), {
+  disabled: false,
+  size: '4rem',
+
+  trackClass: 'rounded-full',
+  trackInactiveClass: 'bg-[#DFDFDF]',
+  trackActiveClass: 'bg-green-500',
+  thumbClass: 'bg-white',
+  thumbInactiveClass: '',
+  thumbActiveClass: '',
+
+  furColor: '#222',
+  padColor: '#FFA5A5',
+})
+
+// #region Emits
+const emit = defineEmits<{
+  'update:modelValue': [value: boolean];
+}>()
 
 const OBJECT_IDS = [
   'cat-elbow',
-  'arm', 'elbow', 'metacarpal-pad', 'pads',
-  'digital-pad-1', 'digital-pad-2', 'digital-pad-3', 'digital-pad-4'
-] as const;
+  'arm',
+  'elbow',
+  'metacarpal-pad',
+  'pads',
+  'digital-pad-1',
+  'digital-pad-2',
+  'digital-pad-3',
+  'digital-pad-4',
+] as const
 
 const KEYFRAME_IDS = [
-  'cat-arm-1', 'cat-arm-2', 'cat-arm-3',
-  'cat-arm-4', 'cat-arm-5',
-] as const;
-
+  'cat-arm-1',
+  'cat-arm-2',
+  'cat-arm-3',
+  'cat-arm-4',
+  'cat-arm-5',
+] as const
 
 // #region Props
 interface Props {
@@ -396,36 +425,15 @@ interface Props {
   /** @default '' */
   thumbActiveClass?: string;
 
-
   /** @default '#222' */
   furColor?: string;
   /** @default '#FFA5A5' */
   padColor?: string;
 }
-// #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
-  disabled: false,
-  size: '4rem',
-
-  trackClass: 'rounded-full',
-  trackInactiveClass: 'bg-[#DFDFDF]',
-  trackActiveClass: 'bg-green-500',
-  thumbClass: 'bg-white',
-  thumbInactiveClass: '',
-  thumbActiveClass: '',
-
-  furColor: '#222',
-  padColor: '#FFA5A5',
-});
-
-// #region Emits
-const emit = defineEmits<{
-  'update:modelValue': [value: boolean];
-}>();
 // #endregion Emits
 
-const uid = `id${nanoid()}`;
-const modelValue = useVModel(prop, 'modelValue');
+const uid = `id${nanoid()}`
+const modelValue = useVModel(prop, 'modelValue')
 const [currentValue, toggleCurrentValue] = useToggle(modelValue.value)
 
 interface KeyframeOption extends anime.AnimeParams {
@@ -436,7 +444,8 @@ interface KeyframeOption extends anime.AnimeParams {
   >>;
 }
 const keyframeOptionMap: Record<
-  'in' | 'out', Record<
+  'in' | 'out',
+  Record<
     typeof KEYFRAME_IDS[number],
     KeyframeOption
   >
@@ -491,46 +500,48 @@ const keyframeOptionMap: Record<
 const [isPlaying, togglePlaying] = useToggle(false)
 
 const svgClass = computed(() => {
-  const result: string[] = [];
+  const result: string[] = []
 
   if (prop.disabled && modelValue.value) {
-    result.push('mirror');
+    result.push('mirror')
   }
 
-  return result;
-});
+  return result
+})
 
 const currentTrackClass = computed(() => {
   const result = [
     prop.trackClass,
-  ];
+  ]
 
   if (currentValue.value) {
-    result.push(prop.trackActiveClass);
-  } else {
-    result.push(prop.trackInactiveClass);
+    result.push(prop.trackActiveClass)
+  }
+  else {
+    result.push(prop.trackInactiveClass)
   }
 
-  return result;
-});
+  return result
+})
 
 const currentThumbClass = computed(() => {
   const result = [
     prop.thumbClass,
-  ];
+  ]
 
   if (currentValue.value) {
-    result.push(prop.thumbActiveClass);
-    result.push('active');
-  } else {
-    result.push(prop.thumbInactiveClass);
+    result.push(prop.thumbActiveClass)
+    result.push('active')
+  }
+  else {
+    result.push(prop.thumbInactiveClass)
   }
 
-  return result;
-});
+  return result
+})
 
 /** 儲存 keyframe attr 資料後隱藏 keyframe DOM  */
-const keyframeVisible = ref(true);
+const keyframeVisible = ref(true)
 /** 儲存 keyframe attr 資料 */
 const keyframeAttrMap: Partial<Record<
   (typeof KEYFRAME_IDS)[number],
@@ -546,31 +557,33 @@ onMounted(() => {
       const attrMap = pipe(
         document.querySelector(`#${uid} #${keyframeId} #${objectId}`)?.attributes,
         (attrNode) => {
-          if (!attrNode) return {};
+          if (!attrNode)
+            return {}
 
-          const result: Record<string, string> = {};
+          const result: Record<string, string> = {}
           for (let i = 0; i < attrNode.length; i++) {
-            const node = attrNode[i];
-            if (!node) continue;
+            const node = attrNode[i]
+            if (!node)
+              continue
 
-            const { name, value } = node;
-            result[name] = value;
+            const { name, value } = node
+            result[name] = value
           }
-          return result;
+          return result
         },
-        omit(['id', 'ref', 'fill', 'stroke', 'stroke-width', 'stroke-linecap'])
-      );
+        omit(['id', 'ref', 'fill', 'stroke', 'stroke-width', 'stroke-linecap']),
+      )
 
       const data = {
         ...keyframeAttrMap[keyframeId],
         [objectId]: attrMap,
       } as Record<typeof OBJECT_IDS[number], Record<string, string>>
 
-      keyframeAttrMap[keyframeId] = data;
+      keyframeAttrMap[keyframeId] = data
     })
   })
 
-  keyframeVisible.value = false;
+  keyframeVisible.value = false
 })
 
 /** 播放至指定 keyframe */
@@ -580,12 +593,12 @@ function toKeyframe(
 ) {
   const tasks = OBJECT_IDS.map((objectId) => {
     // 取得所有 attr
-    const attrMap = keyframeAttrMap[keyframeId]?.[objectId];
+    const attrMap = keyframeAttrMap[keyframeId]?.[objectId]
     if (!attrMap) {
       throw new Error(`找不到 keyframeAttrMap[${keyframeId}][${objectId}]`)
     }
 
-    const objectAttr = keyframeOptionMap[direction][keyframeId].objectAttrMap?.[objectId];
+    const objectAttr = keyframeOptionMap[direction][keyframeId].objectAttrMap?.[objectId]
 
     return anime({
       targets: `#${uid}-cat-arm #${objectId}`,
@@ -595,50 +608,56 @@ function toKeyframe(
     }).finished
   })
 
-  return Promise.all(tasks);
+  return Promise.all(tasks)
 }
 
 function toggle() {
-  if (isPlaying.value) return;
+  if (isPlaying.value)
+    return
 
   if (prop.disabled) {
-    toggleCurrentValue();
-    start();
-    return;
+    toggleCurrentValue()
+    start()
+    return
   }
 
-  currentValue.value = !currentValue.value;
-  modelValue.value = currentValue.value;
+  currentValue.value = !currentValue.value
+  modelValue.value = currentValue.value
 }
 
 /** 開始貓貓手動畫 */
 async function start() {
-  togglePlaying(true);
+  togglePlaying(true)
 
   // 等待隨機時間
-  const ms = Math.floor(Math.random() * 1500);
-  await promiseTimeout(ms);
+  const ms = Math.floor(Math.random() * 1500)
+  await promiseTimeout(ms)
 
   for (const id of [
-    'cat-arm-2', 'cat-arm-3', 'cat-arm-4',
+    'cat-arm-2',
+    'cat-arm-3',
+    'cat-arm-4',
   ] as const) {
-    await toKeyframe('in', id);
+    await toKeyframe('in', id)
   }
 
   // toggle 與 cat-arm-5 同時執行的時機看起來比較好
-  toggleCurrentValue();
-  await toKeyframe('in', 'cat-arm-5');
+  toggleCurrentValue()
+  await toKeyframe('in', 'cat-arm-5')
 
   for (const id of [
-    'cat-arm-4', 'cat-arm-3', 'cat-arm-2', 'cat-arm-1'
+    'cat-arm-4',
+    'cat-arm-3',
+    'cat-arm-2',
+    'cat-arm-1',
   ] as const) {
-    await toKeyframe('out', id);
+    await toKeyframe('out', id)
   }
-  togglePlaying(false);
+  togglePlaying(false)
 }
 
 onBeforeMount(() => {
-  anime.remove(OBJECT_IDS.map((id) => `#${id}`));
+  anime.remove(OBJECT_IDS.map((id) => `#${id}`))
 })
 </script>
 

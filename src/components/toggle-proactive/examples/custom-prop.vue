@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center w-full border border-gray-300 p-8 gap-10">
+  <div class="w-full flex flex-col items-center gap-10 border border-gray-300 p-8">
     <toggle-proactive
       :model-value="false"
       disabled
@@ -29,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import ToggleProactive from '../toggle-proactive.vue';
+import { ref } from 'vue'
+import ToggleProactive from '../toggle-proactive.vue'
 
-const value = ref(false);
+const value = ref(false)
 </script>

@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import BtnNaughty from '../btn-naughty.vue';
+import BtnNaughty from '../btn-naughty.vue'
 </script>
 
 <style scoped lang="sass">

@@ -3,7 +3,7 @@
     ref="svgRef"
     v-bind="svgAttrData"
     :style="svgStyle"
-    class="thumb-svg absolute pointer-events-none"
+    class="thumb-svg pointer-events-none absolute"
   >
     <path
       :d="pathD"
@@ -18,15 +18,17 @@
 </template>
 
 <script setup lang="ts">
+import type { CSSProperties } from 'vue'
 import {
-  throttleFilter, useIntervalFn,
+  throttleFilter,
+  useIntervalFn,
   useMouseInElement,
-  useWindowSize
-} from '@vueuse/core';
-import anime from 'animejs';
-import { computed, CSSProperties, reactive, ref, watch } from 'vue';
-import { getVectorLength, mapNumber } from '../../common/utils';
-import { add, pipe } from 'remeda';
+  useWindowSize,
+} from '@vueuse/core'
+import anime from 'animejs'
+import { pipe } from 'remeda'
+import { computed, reactive, ref, watch } from 'vue'
+import { getVectorLength, mapNumber } from '../../common/utils'
 
 interface Props {
   min: number;
@@ -40,26 +42,27 @@ interface Props {
   ratio: number;
   mouseRatio: number;
   sliderSize: {
-    width: number,
-    height: number,
+    width: number;
+    height: number;
   };
 }
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {})
 
-const windowSize = reactive(useWindowSize());
+const windowSize = reactive(useWindowSize())
 
-const svgRef = ref<SVGElement>();
+const svgRef = ref<SVGElement>()
 const mouseInSvg = reactive(useMouseInElement(
-  svgRef, { eventFilter: throttleFilter(15) }
-));
+  svgRef,
+  { eventFilter: throttleFilter(15) },
+))
 /** 以 svg 中心為 0 點 */
 const mousePosition = computed(() => ({
   x: mouseInSvg.elementX - mouseInSvg.elementWidth / 2,
   y: mouseInSvg.elementY - mouseInSvg.elementHeight / 2,
-}));
+}))
 
 /** 動態調整 svg 尺寸，避免拉動 slider 時頁面產生多餘滾動條 */
-const svgSize = ref(props.maxThumbLength + props.thumbSize * 1.5);
+const svgSize = ref(props.maxThumbLength + props.thumbSize * 1.5)
 const svgAttrData = computed(() => ({
   width: svgSize.value,
   height: svgSize.value,
@@ -68,15 +71,16 @@ const svgAttrData = computed(() => ({
     svgSize.value / -2,
     svgSize.value,
     svgSize.value,
-  ].join(' ')
-}));
+  ].join(' '),
+}))
 
 /** svgSize 動畫效果 */
 useIntervalFn(() => {
-  const newSize = pipe(0,
+  const newSize = pipe(
+    undefined,
     () => {
       if (!props.isHeld || !props.disabled) {
-        return props.thumbSize;
+        return props.thumbSize
       }
 
       const size = Math.max(
@@ -86,81 +90,45 @@ useIntervalFn(() => {
       ) * 2
 
       if (size > props.maxThumbLength * 2) {
-        return props.maxThumbLength * 2;
+        return props.maxThumbLength * 2
       }
 
-      return size;
+      return size
     },
     /** 1.5 是安全係數 */
-    (value) => value + props.thumbSize * 1.5
-  );
+    (value) => value + props.thumbSize * 1.5,
+  )
 
-  const delta = newSize - svgSize.value;
+  const delta = newSize - svgSize.value
   if (Math.abs(delta) < 0.01) {
-    svgSize.value = newSize;
-    return;
+    svgSize.value = newSize
+    return
   }
 
   // 長大要快，縮小要慢
   if (delta > 0) {
-    svgSize.value += delta;
-  } else {
-    svgSize.value += delta / 10;
+    svgSize.value += delta
+  }
+  else {
+    svgSize.value += delta / 10
   }
 }, 15)
 
-
 const svgStyle = computed<CSSProperties>(() => {
-  const leftValue = pipe(null,
-    () => {
-      if (props.disabled) {
-        return props.ratio;
-      }
-
-      return props.isHeld ? props.mouseRatio : props.ratio;
+  const leftValue = pipe(null, () => {
+    if (props.disabled) {
+      return props.ratio
     }
-  );
+
+    return props.isHeld ? props.mouseRatio : props.ratio
+  })
 
   return {
     left: `${leftValue}%`,
   }
-});
+})
 
-/** svg path 的 Q 指令需要控制點與終點，表達二次貝茲曲線
- * 
- * [文件](https://www.oxxostudio.tw/articles/201406/svg-04-path-1.html)
- */
-const ctrlPoint = ref({ x: 0, y: 0 });
-/** 控制點速度，用來模擬震盪效果 */
-let ctrlPointVelocity = { x: 0, y: 0 };
-/** 彈性係數，根據目前長度映射，模擬拉越緊震動越快 */
-const ctrlPointStiffness = computed(() => mapNumber(
-  length.value,
-  0, props.maxThumbLength,
-  3.5, 4.5,
-));
-/** 速度衰減率，根據目前長度映射，模擬越短震動越快停止
- * 
- * 範圍 0 ~ 1。越小衰減越快
- */
-const ctrlPointDamping = computed(() => mapNumber(
-  length.value,
-  0, props.maxThumbLength,
-  0.85, 0.75,
-));
-
-const endPoint = ref({ x: 0, y: 0 });
-
-const pathD = computed(() => {
-  const { x: ctrlX, y: ctrlY } = ctrlPoint.value;
-  const { x: endX, y: endY } = endPoint.value;
-
-  return [
-    `M0 0`,
-    `Q${ctrlX} ${ctrlY}, ${endX} ${endY}`,
-  ].join(' ')
-});
-
+const endPoint = ref({ x: 0, y: 0 })
 /** 目前長度 */
 const length = computed(() => {
   /** 因為起點是 0, 0，所以變化量直接等於終點座標 */
@@ -169,21 +137,59 @@ const length = computed(() => {
     y: endPoint.value.y,
   }
 
-  return getVectorLength(delta);
-});
+  return getVectorLength(delta)
+})
 
-const strokeMinWidth = computed(() => Math.max(props.thumbSize * 0.1, 5));
+/** svg path 的 Q 指令需要控制點與終點，表達二次貝茲曲線
+ *
+ * [文件](https://www.oxxostudio.tw/articles/201406/svg-04-path-1.html)
+ */
+const ctrlPoint = ref({ x: 0, y: 0 })
+/** 控制點速度，用來模擬震盪效果 */
+let ctrlPointVelocity = { x: 0, y: 0 }
+/** 彈性係數，根據目前長度映射，模擬拉越緊震動越快 */
+const ctrlPointStiffness = computed(() => mapNumber(
+  length.value,
+  0,
+  props.maxThumbLength,
+  3.5,
+  4.5,
+))
+/** 速度衰減率，根據目前長度映射，模擬越短震動越快停止
+ *
+ * 範圍 0 ~ 1。越小衰減越快
+ */
+const ctrlPointDamping = computed(() => mapNumber(
+  length.value,
+  0,
+  props.maxThumbLength,
+  0.85,
+  0.75,
+))
+
+const pathD = computed(() => {
+  const { x: ctrlX, y: ctrlY } = ctrlPoint.value
+  const { x: endX, y: endY } = endPoint.value
+
+  return [
+    `M0 0`,
+    `Q${ctrlX} ${ctrlY}, ${endX} ${endY}`,
+  ].join(' ')
+})
+
+const strokeMinWidth = computed(() => Math.max(props.thumbSize * 0.1, 5))
 const strokeWidth = computed(() => mapNumber(
   length.value,
   0,
   props.maxThumbLength,
   props.thumbSize,
   strokeMinWidth.value,
-));
+))
 
 /** 放開時，播放回彈動畫 */
 watch(() => props.isHeld, (value) => {
-  if (value) return;
+  if (value)
+    return
 
   anime({
     targets: endPoint.value,
@@ -191,7 +197,7 @@ watch(() => props.isHeld, (value) => {
     y: 0,
     easing: 'easeOutElastic',
     duration: 300,
-  });
+  })
 })
 
 /** 滑鼠移動時，更新終點位置 */
@@ -199,7 +205,8 @@ watch(() => [
   mousePosition,
   props.sliderSize,
 ], () => {
-  if (props.disabled) return;
+  if (props.disabled)
+    return
 
   endPoint.value = {
     x: 0,
@@ -209,26 +216,27 @@ watch(() => [
 
 /** 處理終點動畫 */
 useIntervalFn(() => {
-  if (!props.isHeld || !props.disabled) return;
+  if (!props.isHeld || !props.disabled)
+    return
 
   const newPoint = {
     x: (mousePosition.value.x - endPoint.value.x) / 2 + endPoint.value.x,
     y: (mousePosition.value.y - endPoint.value.y) / 2 + endPoint.value.y,
   }
 
-  const length = getVectorLength(newPoint);
+  const length = getVectorLength(newPoint)
 
   // 如果超過 maxThumbLength，則將 newPoint 限制在 maxThumbLength 範圍內
   if (length > props.maxThumbLength) {
     // 製造抖動效果
-    const noise = Math.random() * 4;
+    const noise = Math.random() * 4
 
-    const scaleFactor = props.maxThumbLength / length;
-    newPoint.x = newPoint.x * scaleFactor + noise;
-    newPoint.y = newPoint.y * scaleFactor + noise;
+    const scaleFactor = props.maxThumbLength / length
+    newPoint.x = newPoint.x * scaleFactor + noise
+    newPoint.y = newPoint.y * scaleFactor + noise
   }
 
-  endPoint.value = newPoint;
+  endPoint.value = newPoint
 }, 15)
 
 /** 處理控制點 */
@@ -251,7 +259,7 @@ useIntervalFn(() => {
 
   if (Math.abs(ctrlPointVelocity.x) < 0.001 && Math.abs(ctrlPointVelocity.y) < 0.001) {
     ctrlPointVelocity = { x: 0, y: 0 }
-    return;
+    return
   }
 
   // 更新座標
@@ -260,10 +268,10 @@ useIntervalFn(() => {
 
   // 不可以超出畫面
   if (Math.abs(ctrlPoint.value.x) > windowSize.width / 2) {
-    ctrlPoint.value.x = ctrlPoint.value.x > 0 ? windowSize.width / 2 : -windowSize.width / 2;
+    ctrlPoint.value.x = ctrlPoint.value.x > 0 ? windowSize.width / 2 : -windowSize.width / 2
   }
   if (Math.abs(ctrlPoint.value.y) > windowSize.height / 2) {
-    ctrlPoint.value.y = ctrlPoint.value.y > 0 ? windowSize.height / 2 : -windowSize.height / 2;
+    ctrlPoint.value.y = ctrlPoint.value.y > 0 ? windowSize.height / 2 : -windowSize.height / 2
   }
 }, 15)
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="frame flex flex-col gap-4 w-full border border-gray-300"
+    class="frame w-full flex flex-col gap-4 border border-gray-300"
     @click="next"
     @click.right.prevent="prev"
   >
@@ -11,11 +11,11 @@
       :fog-end="10"
       :init-index="0"
     >
-      <div class=" relative w-full h-full font-wenkai tracking-widest">
+      <div class="font-wenkai relative h-full w-full tracking-widest">
         <transition-group name="scale-in">
           <div
             v-if="isTarget('painting-codfish-bakery')"
-            class=" absolute right-0 top-0 w-1/3 h-full flex-center"
+            class="absolute right-0 top-0 h-full w-1/3 flex-center"
           >
             <div class="text text-xs md:text-xl">
               貪吃的鱈魚
@@ -24,18 +24,18 @@
 
           <div
             v-if="isTarget('painting-codfish-rain')"
-            class=" absolute right-3 bottom-2 "
+            class="absolute bottom-2 right-3"
           >
-            <div class=" text-xs md:text-sm text-white text-right p-3 leading-6">
+            <div class="p-3 text-right text-xs text-white leading-6 md:text-sm">
               陌生的冷雨捎來遠方氣漩的涼意<br>又是個美麗的雨天
             </div>
           </div>
 
           <div
             v-if="isTarget('photography-fireworks')"
-            class=" absolute left-0 top-0 w-2/5 h-full flex-center"
+            class="absolute left-0 top-0 h-full w-2/5 flex-center"
           >
-            <div class="text text-xs md:text-base text-center">
+            <div class="text text-center text-xs md:text-base">
               繁星想念夜空的擁抱
               <br><br>
               人們想念炫麗的煙花
@@ -46,27 +46,27 @@
 
           <div
             v-if="isTarget('photography-big-stupid-bird')"
-            class=" absolute right-0 top-0 w-1/3 h-full flex-center "
+            class="absolute right-0 top-0 h-full w-1/3 flex-center"
           >
-            <div class="text md:text-xl text-center">
+            <div class="text text-center md:text-xl">
               看<br>啥<br>？
             </div>
           </div>
 
           <div
             v-if="isTarget('photography-gaomei-windmill')"
-            class=" absolute right-1 bottom-1 "
+            class="absolute bottom-1 right-1"
           >
-            <div class="text md:text-xl !px-4">
+            <div class="text !px-4 md:text-xl">
               高美濕地
             </div>
           </div>
 
           <div
             v-if="isTarget('photography-spider-at-night')"
-            class=" absolute left-0 top-0 w-2/5 h-full flex-center"
+            class="absolute left-0 top-0 h-full w-2/5 flex-center"
           >
-            <div class="text-xs md:text-base text-white text-center md:leading-10">
+            <div class="text-center text-xs text-white md:text-base md:leading-10">
               在無月的夜
               <br>
               悄悄等待
@@ -79,9 +79,9 @@
 
           <div
             v-if="isTarget('photography-street-cat')"
-            class=" absolute left-0 top-0 w-1/2 h-full flex-center"
+            class="absolute left-0 top-0 h-full w-1/2 flex-center"
           >
-            <div class="text-xs md:text-base text-white text-center leading-7">
+            <div class="text-center text-xs text-white leading-7 md:text-base">
               欲言又止
               <br>
               肚子餓了？
@@ -94,16 +94,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Vector2, Vector3 } from '@babylonjs/core';
-import { ExtractComponentProps } from '../../../types/utils.type';
-import { addProp, map } from 'remeda';
+import type { ExtractComponentProps } from '../../../types/utils.type'
+import { Vector2, Vector3 } from '@babylonjs/core'
+import { addProp, map } from 'remeda'
+import { ref } from 'vue'
 
-import CarouselSpaceFloating from '../carousel-space-floating.vue';
+import CarouselSpaceFloating from '../carousel-space-floating.vue'
 
-type CarouselProp = ExtractComponentProps<typeof CarouselSpaceFloating>;
+type CarouselProp = ExtractComponentProps<typeof CarouselSpaceFloating>
 
-const duration = 4000;
+const duration = 4000
 
 const images: CarouselProp['images'] = map(
   [
@@ -145,25 +145,26 @@ const images: CarouselProp['images'] = map(
   addProp('duration', duration),
 )
 
+const carouselRef = ref<InstanceType<typeof CarouselSpaceFloating>>()
+
 function isTarget(name: string) {
-  const target = carouselRef.value?.stableTarget;
-  if (!target) return;
+  const target = carouselRef.value?.stableTarget
+  if (!target)
+    return
 
   if (typeof target === 'string') {
-    return target.includes(name);
+    return target.includes(name)
   }
 
-  return target.src.includes(name);
+  return target.src.includes(name)
 }
 
-const carouselRef = ref<InstanceType<typeof CarouselSpaceFloating>>();
-
 function next() {
-  carouselRef.value?.next();
+  carouselRef.value?.next()
 }
 
 function prev() {
-  carouselRef.value?.prev();
+  carouselRef.value?.prev()
 }
 </script>
 
@@ -173,7 +174,7 @@ function prev() {
 .frame
   aspect-ratio: 1.78
 
-.font-wenkai 
+.font-wenkai
   font-family: "LXGW WenKai Mono TC", monospace
   font-weight: 400
   font-style: normal
@@ -190,5 +191,4 @@ function prev() {
 .scale-in-enter-from, .scale-in-leave-to
   transform: scale(0.98) !important
   opacity: 0 !important
-
 </style>

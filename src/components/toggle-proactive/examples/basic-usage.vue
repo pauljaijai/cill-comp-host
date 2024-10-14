@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
+  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
     <base-checkbox
       v-model="disabled"
       label="停用開關"
-      class="border p-4 rounded"
+      class="border rounded p-4"
     />
 
-    <div class="flex-1 flex justify-center items-center">
+    <div class="flex flex-1 items-center justify-center">
       <toggle-proactive
         v-model="value"
         :disabled="disabled"
@@ -16,11 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-import BaseCheckbox from '../../base-checkbox.vue';
-import ToggleProactive from '../toggle-proactive.vue';
+import BaseCheckbox from '../../base-checkbox.vue'
+import ToggleProactive from '../toggle-proactive.vue'
 
-const disabled = ref(false);
-const value = ref(false);
+const disabled = ref(false)
+const value = ref(false)
 </script>

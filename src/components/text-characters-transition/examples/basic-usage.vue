@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
+  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
     <base-checkbox
       v-model="visible"
       label="顯示"
-      class="border p-4 rounded"
+      class="border rounded p-4"
     />
 
     <div class="flex flex-col gap-2">
@@ -28,10 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
+import BaseCheckbox from '../../base-checkbox.vue'
+import TextCharactersTransition from '../text-characters-transition.vue'
 
-import BaseCheckbox from '../../base-checkbox.vue';
-import TextCharactersTransition from '../text-characters-transition.vue';
-
-const visible = ref(false);
+const visible = ref(false)
 </script>

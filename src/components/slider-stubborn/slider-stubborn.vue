@@ -1,14 +1,14 @@
 <template>
   <div
     ref="sliderRef"
-    class="slider-stubborn relative py-3 cursor-grab"
+    class="slider-stubborn relative cursor-grab py-3"
     @mousedown="(e) => e.preventDefault()"
     @mousemove="(e) => e.preventDefault()"
     @touchstart="(e) => e.preventDefault()"
     @touchmove="(e) => e.preventDefault()"
   >
     <div
-      class="track rounded-full "
+      class="track rounded-full"
       :class="props.trackClass"
     />
 
@@ -24,13 +24,14 @@
 
 <script setup lang="ts">
 import {
-  throttleFilter, useElementSize,
-  useMouseInElement, useMousePressed,
-  useVModel
-} from '@vueuse/core';
-import { clamp, pipe } from 'remeda';
-import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
-
+  throttleFilter,
+  useElementSize,
+  useMouseInElement,
+  useMousePressed,
+  useVModel,
+} from '@vueuse/core'
+import { clamp, pipe } from 'remeda'
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue'
 import SliderThumb from './slider-stubborn-thumb.vue'
 
 // #region Props
@@ -54,21 +55,22 @@ const props = withDefaults(defineProps<Props>(), {
   thumbSize: 20,
   thumbColor: '#34c6eb',
   trackClass: ' bg-[#EEE]',
-});
+})
 
 // #region Emits
 const emit = defineEmits<{
   'update:modelValue': [value: Props['modelValue']];
-}>();
+}>()
 // #endregion Emits
 
-const modelValue = useVModel(props, 'modelValue', emit);
+const modelValue = useVModel(props, 'modelValue', emit)
 
-const sliderRef = ref<HTMLDivElement>();
+const sliderRef = ref<HTMLDivElement>()
 const mouseInSlider = reactive(useMouseInElement(
-  sliderRef, { eventFilter: throttleFilter(15) }
-));
-const sliderSize = reactive(useElementSize(sliderRef));
+  sliderRef,
+  { eventFilter: throttleFilter(15) },
+))
+const sliderSize = reactive(useElementSize(sliderRef))
 
 const { pressed: isHeld } = useMousePressed({
   target: sliderRef,
@@ -77,7 +79,8 @@ const { pressed: isHeld } = useMousePressed({
 watch(isHeld, (value) => {
   if (value) {
     document.body.classList.add('grabbing')
-  } else {
+  }
+  else {
     document.body.classList.remove('grabbing')
   }
 })
@@ -88,16 +91,17 @@ onBeforeMount(() => {
 const ratio = computed(() => pipe(
   modelValue.value / (props.max - props.min) * 100,
   clamp({ min: 0, max: 100 }),
-));
+))
 const mouseRatio = computed(() => pipe(
   mouseInSlider.elementX / mouseInSlider.elementWidth * 100,
   clamp({ min: 0, max: 100 }),
-));
+))
 
 watch(() => [mouseRatio, isHeld], () => {
-  if (props.disabled || !isHeld.value) return;
+  if (props.disabled || !isHeld.value)
+    return
 
-  modelValue.value = (props.max - props.min) * mouseRatio.value / 100;
+  modelValue.value = (props.max - props.min) * mouseRatio.value / 100
 }, { deep: true })
 </script>
 

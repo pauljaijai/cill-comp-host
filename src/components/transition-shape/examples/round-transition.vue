@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap justify-center gap-4 w-full border border-gray-300 p-6">
+  <div class="w-full flex flex-wrap justify-center gap-4 border border-gray-300 p-6">
     <div
       v-for="item in list"
       :key="item.key"
@@ -11,7 +11,7 @@
       >
         <div
           :key="fishIndex"
-          class="py-6 text-[5rem] text-center w-full cursor-pointer"
+          class="w-full cursor-pointer py-6 text-center text-[5rem]"
           @click="handleClick()"
         >
           {{ fishList[fishIndex] }}
@@ -22,51 +22,52 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { debounce, throttle } from 'lodash-es';
-import { hasAtLeast, map, pipe, shuffle } from 'remeda';
+import type { TransitionType } from '../type'
+import { useToggle } from '@vueuse/core'
+import { debounce, throttle } from 'lodash-es'
+import { hasAtLeast, map, pipe, shuffle } from 'remeda'
+import { ref } from 'vue'
+import TransitionShape from '../transition-shape.vue'
+import { RoundBaseAction, RoundEnterAction } from '../type'
 
-import TransitionShape, {
-  TransitionType, RoundEnterAction, RoundBaseAction
-} from '../transition-shape.vue';
-
-import { useToggle } from '@vueuse/core';
-
-const fishIndex = ref(0);
+const fishIndex = ref(0)
 const fishList = [
-  '🐟', '🐋', '🐠', '🐡'
-];
+  '🐟',
+  '🐋',
+  '🐠',
+  '🐡',
+]
 
 function changeFish() {
-  fishIndex.value++;
-  fishIndex.value %= fishList.length;
+  fishIndex.value++
+  fishIndex.value %= fishList.length
 }
 
-const [isReady, toggleReady] = useToggle(false);
+const [isReady, toggleReady] = useToggle(false)
 
 const handleInit = debounce(() => {
-  toggleReady(true);
-}, 1000);
+  toggleReady(true)
+}, 1000)
 
 const handleClick = throttle(() => {
   if (!isReady.value) {
-    handleClick.cancel();
-    return;
+    handleClick.cancel()
+    return
   }
 
-  changeFish();
+  changeFish()
 }, 4000, {
   leading: true,
   trailing: false,
-});
+})
 
-const leaveActions = Object.values(RoundBaseAction);
+const leaveActions = Object.values(RoundBaseAction)
 const enterActions = [
   RoundEnterAction.SPREAD_LEFT,
   RoundEnterAction.SPREAD_SCALE,
   RoundBaseAction.SCALE,
   RoundBaseAction.SCALE_LB,
-];
+]
 
 type Item = TransitionType & {
   key: string;
@@ -74,14 +75,14 @@ type Item = TransitionType & {
 const list: Item[] = pipe(
   enterActions,
   map.indexed((action, i) => {
-    const leaveAction = leaveActions[i % leaveActions.length];
+    const leaveAction = leaveActions[i % leaveActions.length]
     if (!leaveAction) {
-      throw new Error('Leave action is required');
+      throw new Error('Leave action is required')
     }
 
-    const colors = shuffle(['#27A4F2', '#44C1F2', '#85DEF2', '#DCEEF2', '#91E9F2',]);
+    const colors = shuffle(['#27A4F2', '#44C1F2', '#85DEF2', '#DCEEF2', '#91E9F2'])
     if (!hasAtLeast(colors, 1)) {
-      throw new Error('At least one color is required');
+      throw new Error('At least one color is required')
     }
 
     const result: Item = {
@@ -102,7 +103,7 @@ const list: Item[] = pipe(
       colors,
     }
 
-    return result;
+    return result
   }),
-);
+)
 </script>
