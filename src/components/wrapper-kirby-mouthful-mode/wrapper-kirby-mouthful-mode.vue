@@ -1,14 +1,14 @@
 <template>
   <div
     ref="wrapperRef"
-    class=" relative"
+    class="relative"
   >
     <slot />
 
     <svg
       v-bind="size"
       xmlns="http://www.w3.org/2000/svg"
-      class=" absolute pointer-events-none"
+      class="pointer-events-none absolute"
       :style="svgStyle"
     >
       <mask :id="maskId">
@@ -56,18 +56,22 @@
 </template>
 
 <script setup lang="ts">
-import anime from 'animejs';
+import type { CSSProperties } from 'vue'
+import type { Size, StyleMap } from './type'
+import { throttleFilter, useMouseInElement } from '@vueuse/core'
+import anime from 'animejs'
+import { nanoid } from 'nanoid'
+
 import {
-  CSSProperties, computed,
-  nextTick, onMounted, ref, watch
-} from 'vue';
-import { nanoid } from 'nanoid';
-import { Size, StyleMap } from './type';
+  computed,
+  nextTick,
+  onMounted,
+  ref,
+  watch,
+} from 'vue'
+import Blushes from './kirby-blushes.vue'
 
-import Eyes from './kirby-eyes.vue';
-import Blushes from './kirby-blushes.vue';
-
-import { throttleFilter, useMouseInElement } from '@vueuse/core';
+import Eyes from './kirby-eyes.vue'
 
 interface SvgElMap {
   maskEl: SVGRectElement;
@@ -80,7 +84,7 @@ interface Props {
   /** 是否塞滿嘴 */
   isMouthful?: boolean;
   /** 卡比皮膚的厚度。單位 px
-   * 
+   *
    * @default 10
    */
   thickness?: number;
@@ -101,21 +105,22 @@ const props = withDefaults(defineProps<Props>(), {
   blushColor: '#FF639B',
   bodyRounded: 20,
   mouthRounded: 10,
-});
+})
 
-const maskId = nanoid();
-const wrapperRef = ref<HTMLDivElement>();
+const maskId = nanoid()
+const wrapperRef = ref<HTMLDivElement>()
 const {
-  elementWidth, elementHeight,
+  elementWidth,
+  elementHeight,
 } = useMouseInElement(wrapperRef, {
   eventFilter: throttleFilter(500),
-});
+})
 
 /** 卡比尺寸 */
 const size = computed<Size>(() => ({
   width: elementWidth.value + props.thickness * 2,
   height: elementHeight.value + props.thickness * 2,
-}));
+}))
 
 /** 再大一點，保留動畫空間 */
 const svgStyle = computed<CSSProperties>(() => ({
@@ -123,9 +128,9 @@ const svgStyle = computed<CSSProperties>(() => ({
   height: size.value.height + props.thickness * 2,
   left: -props.thickness * 2,
   top: -props.thickness * 2,
-}));
+}))
 
-const maskRef = ref<SVGRectElement>();
+const maskRef = ref<SVGRectElement>()
 const maskStyleMap = computed<StyleMap>(() => {
   return {
     enter: {
@@ -142,10 +147,10 @@ const maskStyleMap = computed<StyleMap>(() => {
   }
 })
 
-const mouthRef = ref<SVGRectElement>();
+const mouthRef = ref<SVGRectElement>()
 const mouthStyleMap = computed<StyleMap>(() => {
-  const width = size.value.width / 2;
-  const height = size.value.height / 4;
+  const width = size.value.width / 2
+  const height = size.value.height / 4
 
   return {
     enter: {
@@ -161,9 +166,9 @@ const mouthStyleMap = computed<StyleMap>(() => {
       y: props.thickness * 2,
     },
   }
-});
+})
 
-const bodyRef = ref<SVGRectElement>();
+const bodyRef = ref<SVGRectElement>()
 const bodyStyleMap = computed<StyleMap>(() => {
   return {
     enter: {
@@ -178,13 +183,13 @@ const bodyStyleMap = computed<StyleMap>(() => {
       y: props.thickness * 2,
     },
   }
-});
+})
 
-const eyesRef = ref<InstanceType<typeof Eyes>>();
-const blushesRef = ref<InstanceType<typeof Blushes>>();
+const eyesRef = ref<InstanceType<typeof Eyes>>()
+const blushesRef = ref<InstanceType<typeof Blushes>>()
 
 function enterStuffed({ maskEl, bodyEl, mouthEl }: SvgElMap) {
-  anime.remove([maskEl, bodyEl, mouthEl]);
+  anime.remove([maskEl, bodyEl, mouthEl])
 
   anime({
     targets: maskEl,
@@ -207,25 +212,25 @@ function enterStuffed({ maskEl, bodyEl, mouthEl }: SvgElMap) {
   eyesRef.value?.enter({
     duration: 800,
     delay: 300,
-  });
+  })
   blushesRef.value?.enter({
     duration: 800,
     delay: 300,
-  });
+  })
 }
 function leaveStuffed({ maskEl, bodyEl, mouthEl }: SvgElMap) {
-  anime.remove([maskEl, bodyEl, mouthEl]);
+  anime.remove([maskEl, bodyEl, mouthEl])
 
   eyesRef.value?.leave({
     duration: 800,
     delay: 0,
     easing: 'easeInOutExpo',
-  });
+  })
   blushesRef.value?.leave({
     duration: 800,
     delay: 0,
     easing: 'easeInOutExpo',
-  });
+  })
   anime({
     targets: mouthEl,
     ...mouthStyleMap.value.leave,
@@ -247,36 +252,37 @@ function leaveStuffed({ maskEl, bodyEl, mouthEl }: SvgElMap) {
   })
 }
 function startAnimation(value: boolean) {
-  if (!maskRef.value || !bodyRef.value || !mouthRef.value) return;
+  if (!maskRef.value || !bodyRef.value || !mouthRef.value)
+    return
 
   if (value) {
     enterStuffed({
       maskEl: maskRef.value,
       bodyEl: bodyRef.value,
       mouthEl: mouthRef.value,
-    });
-    return;
+    })
+    return
   }
 
   leaveStuffed({
     maskEl: maskRef.value,
     bodyEl: bodyRef.value,
     mouthEl: mouthRef.value,
-  });
+  })
 }
 
 watch(() => props.isMouthful, () => {
-  startAnimation(props.isMouthful);
+  startAnimation(props.isMouthful)
 })
 
 onMounted(async () => {
   // 等待下一個 tick，確保 slot 內容已渲染
-  await nextTick();
-  startAnimation(props.isMouthful);
-});
+  await nextTick()
+  startAnimation(props.isMouthful)
+})
 
 // #region Methods
-defineExpose({});
+defineExpose({})
 // #endregion Methods
 </script>
 

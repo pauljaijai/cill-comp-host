@@ -2,7 +2,7 @@
   <div>
     <label
       v-if="props.label"
-      class=" text-sm font-bold"
+      class="text-sm font-bold"
       :class="props.labelClass"
     >
       {{ props.label }}
@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { useVModel } from '@vueuse/core';
-import { InputTypeHTMLAttribute, ref } from 'vue';
+import type { InputTypeHTMLAttribute } from 'vue'
+import { useVModel } from '@vueuse/core'
 
 interface Props {
   modelValue?: string | number;
@@ -40,13 +40,13 @@ const props = withDefaults(defineProps<Props>(), {
   inputClass: '',
   placeholder: undefined,
   type: 'text',
-});
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: Props['modelValue']): void;
-}>();
+}>()
 
-const modelValue = useVModel(props, 'modelValue');
+const modelValue = useVModel(props, 'modelValue')
 </script>
 
 <style scoped lang="sass">

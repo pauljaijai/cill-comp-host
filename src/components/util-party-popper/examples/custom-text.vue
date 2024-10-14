@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col gap-4 w-full">
-    <div class=" w-full h-full flex justify-center items-center gap-10 p-10">
+  <div class="w-full flex flex-col gap-4">
+    <div class="h-full w-full flex items-center justify-center gap-10 p-10">
       <div
-        class=" bg-white text-2xl rounded px-4 py-2 select-none cursor-pointer"
+        class="cursor-pointer select-none rounded bg-white px-4 py-2 text-2xl"
         @click="emit()"
       >
         🎉
@@ -12,7 +12,7 @@
     <util-party-popper
       ref="popperRef"
       :confetti="confettiList"
-      class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
+      class="pointer-events-none left-0 top-0 z-50 h-full w-full !fixed"
       :quantity-of-per-emit="20"
       :max-concurrency="50"
       :max-angular-velocity="Math.PI / 100"
@@ -22,20 +22,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Scalar } from '@babylonjs/core';
+import type { ExtractArrayType } from '../../../types/main.type'
+import { Scalar } from '@babylonjs/core'
+import { useElementBounding } from '@vueuse/core'
+import { ref } from 'vue'
+import UtilPartyPopper from '../util-party-popper.vue'
 
-import UtilPartyPopper from '../util-party-popper.vue';
-
-import { useElementBounding } from '@vueuse/core';
-import { ExtractArrayType } from '../../../types/main.type';
-
-const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
-const popperBounding = useElementBounding(popperRef);
+const popperRef = ref<InstanceType<typeof UtilPartyPopper>>()
+const popperBounding = useElementBounding(popperRef)
 
 type Confetti = ExtractArrayType<
   InstanceType<typeof UtilPartyPopper>['confetti']
->;
+>
 const confettiList: Confetti[] = [
   {
     shape: 'text',
@@ -71,7 +69,7 @@ function emit() {
       x: -Scalar.RandomRange(5, 10),
       y: Scalar.RandomRange(-5, 5),
     },
-  }));
+  }))
 
   popperRef.value?.emit(() => ({
     x: popperBounding.width.value,
@@ -80,6 +78,6 @@ function emit() {
       x: Scalar.RandomRange(5, 10),
       y: Scalar.RandomRange(-5, 5),
     },
-  }));
+  }))
 }
 </script>

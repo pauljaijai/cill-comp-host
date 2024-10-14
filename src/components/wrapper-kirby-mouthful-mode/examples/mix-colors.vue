@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full py-10 border border-gray-300 flex flex-col gap-10 justify-center items-center">
-    <div class="flex items-center p-10 border border-gray-300 rounded">
+  <div class="w-full flex flex-col items-center justify-center gap-10 border border-gray-300 py-10">
+    <div class="flex items-center border border-gray-300 rounded p-10">
       <input
         v-model="mainColor"
         type="color"
@@ -44,14 +44,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import type { Writable } from 'type-fest'
+import { ref } from 'vue'
+import WrapperKirbyMouthfulMode from '../wrapper-kirby-mouthful-mode.vue'
 
-import WrapperKirbyMouthfulMode from '../wrapper-kirby-mouthful-mode.vue';
+type Param = Writable<InstanceType<typeof WrapperKirbyMouthfulMode>['$props']>
 
-type Param = InstanceType<typeof WrapperKirbyMouthfulMode>['$props'];
-
-const mainColor = ref('#FF9DC0');
-const blushColor = ref('#FF639B');
+const mainColor = ref('#FF9DC0')
+const blushColor = ref('#FF639B')
 
 const list = ref<Param[]>([
   {
@@ -69,12 +69,12 @@ const list = ref<Param[]>([
     mainColor: '#f72a2a',
     blushColor: '#8f003e',
   },
-]);
+])
 
 function onMouseenter(param: Param) {
-  param.isMouthful = false;
+  param.isMouthful = false
 }
 function onMouseleave(param: Param) {
-  param.isMouthful = true;
+  param.isMouthful = true
 }
 </script>

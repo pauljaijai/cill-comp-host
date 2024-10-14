@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
   label: '',
   icon: '',
   to: undefined,
-});
+})
 </script>
 
 <style scoped lang="sass">

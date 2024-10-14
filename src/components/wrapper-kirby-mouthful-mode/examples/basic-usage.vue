@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col justify-center items-center gap-10 w-full p-6">
+  <div class="w-full flex flex-col items-center justify-center gap-10 p-6">
     <wrapper-kirby-mouthful-mode :is-mouthful="isMouthful">
-      <div class="flex flex-col gap-4 border  rounded">
+      <div class="flex flex-col gap-4 border rounded">
         <base-checkbox
           v-model="isMouthful"
-          class=" p-4"
+          class="p-4"
           label="召喚卡比"
         />
       </div>
@@ -17,23 +17,23 @@
     >
       <img
         src="/profile.webp"
-        class=" w-60 rounded-full object-cover shadow-xl border-[0.5rem] border-white"
+        class="w-60 border-[0.5rem] border-white rounded-full object-cover shadow-xl"
       >
     </wrapper-kirby-mouthful-mode>
 
     <wrapper-kirby-mouthful-mode :is-mouthful="isMouthful">
-      <div class="relative border bg-slate-100 rounded p-6 overflow-hidden">
+      <div class="relative overflow-hidden border rounded bg-slate-100 p-6">
         <div class="icon">
           <div class="fish">
             🐟
           </div>
         </div>
 
-        <div class=" text-xl font-bold text-center">
+        <div class="text-center text-xl font-bold">
           鱈魚
         </div>
 
-        <div class="  mt-2 ">
+        <div class="mt-2">
           一隻熱愛程式的魚，但是沒有手指可以打鍵盤，更買不到能在水裡用的電腦。<br>( ´•̥̥̥ ω •̥̥̥` )
         </div>
       </div>
@@ -42,12 +42,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-import BaseCheckbox from '../../base-checkbox.vue';
-import WrapperKirbyMouthfulMode from '../wrapper-kirby-mouthful-mode.vue';
+import BaseCheckbox from '../../base-checkbox.vue'
+import WrapperKirbyMouthfulMode from '../wrapper-kirby-mouthful-mode.vue'
 
-const isMouthful = ref(false);
+const isMouthful = ref(false)
 </script>
 
 <style scoped lang="sass">
@@ -68,5 +68,4 @@ const isMouthful = ref(false);
     transform: translate(0%)
   50%
     transform: translate(-5%, 2%) rotate(5deg)
-
 </style>

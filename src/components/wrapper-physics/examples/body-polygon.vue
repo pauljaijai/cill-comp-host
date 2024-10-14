@@ -1,26 +1,25 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300">
+  <div class="w-full flex flex-col gap-4 border border-gray-300">
     <wrapper-physics
       v-bind="env"
       immediate
-      class="flex items-center justify-center md:w-[40rem] w-full h-[30rem]"
+      class="h-[30rem] w-full flex items-center justify-center md:w-[40rem]"
     >
       <template v-for="item in list">
         <wrapper-physics-body
           v-for="index in item.quantity"
           :key="index"
           v-bind="bodyProp"
-          class=" flex justify-center items-center select-none bg-slate-300 rounded-full aspect-square"
+          class="aspect-square flex select-none items-center justify-center rounded-full bg-slate-300"
           :class="item.class"
         >
           🐟
         </wrapper-physics-body>
       </template>
-
     </wrapper-physics>
   </div>
 
-  <div class="flex p-4 gap-6">
+  <div class="flex gap-6 p-4">
     <div class="">
       重力方向:
       <analog-stick
@@ -32,12 +31,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, } from 'vue';
-
-import AnalogStick from '../../analog-stick.vue';
-import BaseInput from '../../base-input.vue';
-import WrapperPhysics from '../wrapper-physics.vue';
-import WrapperPhysicsBody from '../wrapper-physics-body.vue';
+import { ref } from 'vue'
+import AnalogStick from '../../analog-stick.vue'
+import WrapperPhysics from '../wrapper-physics.vue'
+import WrapperPhysicsBody from '../wrapper-physics-body.vue'
 
 const env = ref({
   gravity: {
@@ -45,19 +42,19 @@ const env = ref({
     x: 0,
     y: 1,
   },
-});
+})
 
 const bodyProp: InstanceType<typeof WrapperPhysicsBody>['$props'] = {
   polygon: 'circle',
   frictionAir: 0,
   friction: 0,
   restitution: 0.7,
-};
+}
 
-const handleTrigger = (e: { x: number, y: number }) => {
-  env.value.gravity.x = e.x;
-  env.value.gravity.y = e.y;
-};
+function handleTrigger(e: { x: number; y: number }) {
+  env.value.gravity.x = e.x
+  env.value.gravity.y = e.y
+}
 
 const list = [
   {

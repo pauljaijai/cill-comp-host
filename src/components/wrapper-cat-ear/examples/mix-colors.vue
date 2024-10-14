@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full py-10 border border-gray-300 flex flex-col gap-10 justify-center items-center">
-    <div class="flex items-center p-10 border border-gray-300 rounded">
+  <div class="w-full flex flex-col items-center justify-center gap-10 border border-gray-300 py-10">
+    <div class="flex items-center border border-gray-300 rounded p-10">
       <input
         v-model="mainColor"
         type="color"
@@ -17,7 +17,7 @@
         class="ml-10"
       >
         <div
-          class="rounded p-2 px-3  text-white "
+          class="rounded p-2 px-3 text-white"
           :style="{ backgroundColor: mainColor }"
           v-text="`◕ ω ◕`"
         />
@@ -29,7 +29,7 @@
       inner-color="#ffc2b8"
     >
       <div
-        class="rounded p-2 px-3 bg-[#3b3b3b] text-white"
+        class="rounded bg-[#3b3b3b] p-2 px-3 text-white"
         v-text="`◕ ω ◕`"
       />
     </wrapper-cat-ear>
@@ -39,7 +39,7 @@
       inner-color="#8f003e"
     >
       <div
-        class="rounded p-2 px-3 bg-[#03a1fc] text-white"
+        class="rounded bg-[#03a1fc] p-2 px-3 text-white"
         v-text="`◕ ω ◕`"
       />
     </wrapper-cat-ear>
@@ -50,7 +50,7 @@
       class="mt-10"
     >
       <div
-        class="rounded px-20 py-12 text-xl bg-[#ff852e] text-white"
+        class="rounded bg-[#ff852e] px-20 py-12 text-xl text-white"
         v-text="`> ◕ ω ◕ <`"
       />
     </wrapper-cat-ear>
@@ -58,10 +58,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
+import WrapperCatEar from '../wrapper-cat-ear.vue'
 
-import WrapperCatEar from '../wrapper-cat-ear.vue';
-
-const mainColor = ref('#b38546');
-const innerColor = ref('#ffc2b8');
+const mainColor = ref('#b38546')
+const innerColor = ref('#ffc2b8')
 </script>

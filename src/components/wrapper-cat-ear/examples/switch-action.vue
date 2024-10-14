@@ -1,13 +1,13 @@
 <template>
-  <div class="w-full h-[50vh] border border-gray-300 flex flex-col gap-16 justify-center items-center">
+  <div class="h-[50vh] w-full flex flex-col items-center justify-center gap-16 border border-gray-300">
     <wrapper-cat-ear
       :action="action"
       main-color="#999"
     >
-      <div class=" border-2 border-[#999] rounded">
+      <div class="border-2 border-[#999] rounded">
         <select
           v-model="action"
-          class="  p-2"
+          class="p-2"
         >
           <option
             v-for="option in options"
@@ -23,10 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
+import { ActionName } from '..'
+import WrapperCatEar from '../wrapper-cat-ear.vue'
 
-import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
-
-const action = ref<`${ActionName}`>('relaxed');
-const options = Object.values(ActionName);
+const action = ref<`${ActionName}`>('relaxed')
+const options = Object.values(ActionName)
 </script>

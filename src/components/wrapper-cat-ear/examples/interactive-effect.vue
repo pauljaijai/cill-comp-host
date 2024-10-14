@@ -1,13 +1,13 @@
 <template>
-  <div class="w-full py-20 border border-gray-300 flex flex-col gap-16 justify-center items-center">
+  <div class="w-full flex flex-col items-center justify-center gap-16 border border-gray-300 py-20">
     <wrapper-cat-ear
       :action="action"
       main-color="#666"
-      class="cat border-2 border-[#666] rounded "
+      class="cat border-2 border-[#666] rounded"
     >
       <div
         ref="catRef"
-        class=" px-16 py-8 bg-white flex justify-center items-center"
+        class="flex items-center justify-center bg-white px-16 py-8"
       >
         <transition
           name="cat"
@@ -15,7 +15,7 @@
         >
           <div
             :key="face"
-            class=" absolute text-2xl font-bold text-nowrap select-none"
+            class="absolute select-none text-nowrap text-2xl font-bold"
             v-text="face"
           />
         </transition>
@@ -25,12 +25,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { getVectorLength } from '../../../common/utils';
-
-import WrapperCatEar, { ActionName } from '../wrapper-cat-ear.vue';
-
-import { throttleFilter, useMouseInElement, useMousePressed } from '@vueuse/core';
+import type { ActionName } from '..'
+import { throttleFilter, useMouseInElement, useMousePressed } from '@vueuse/core'
+import { computed, ref } from 'vue'
+import { getVectorLength } from '../../../common/utils'
+import WrapperCatEar from '../wrapper-cat-ear.vue'
 
 const faceMap: Record<ActionName, string> = {
   peekaboo: '送出',
@@ -40,47 +39,48 @@ const faceMap: Record<ActionName, string> = {
   shake: '≧ X ≦',
 }
 
-const catRef = ref();
+const catRef = ref()
 const {
-  elementX, elementY,
-  elementWidth, elementHeight,
+  elementX,
+  elementY,
+  elementWidth,
+  elementHeight,
   isOutside,
 } = useMouseInElement(catRef, {
-  eventFilter: throttleFilter(35)
-});
-const { pressed } = useMousePressed();
+  eventFilter: throttleFilter(35),
+})
+const { pressed } = useMousePressed()
 
 /** 滑鼠與貓的距離 */
 const distance = computed(() => getVectorLength({
   x: elementX.value - elementWidth.value / 2,
   y: elementY.value - elementHeight.value / 2,
-}));
+}))
 /** 煩躁的距離 */
 const displeasedDistance = computed(
-  () => Math.max(elementWidth.value, elementHeight.value)
-);
+  () => Math.max(elementWidth.value, elementHeight.value),
+)
 /** 變成貓的距離 */
 const catDistance = computed(
-  () => displeasedDistance.value * 2
-);
-
+  () => displeasedDistance.value * 2,
+)
 
 const action = computed<`${ActionName}`>(() => {
   if (!isOutside.value) {
-    return pressed.value ? 'shake' : 'fear';
+    return pressed.value ? 'shake' : 'fear'
   }
 
   if (distance.value > catDistance.value) {
-    return 'peekaboo';
+    return 'peekaboo'
   }
 
   if (distance.value < displeasedDistance.value) {
-    return 'displeased';
+    return 'displeased'
   }
 
-  return 'relaxed';
-});
-const face = computed(() => faceMap[action.value]);
+  return 'relaxed'
+})
+const face = computed(() => faceMap[action.value])
 </script>
 
 <style lang="sass">

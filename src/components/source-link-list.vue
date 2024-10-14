@@ -9,7 +9,7 @@
       <a
         :href="item.href"
         target="_blank"
-        class=" link"
+        class="link"
       >
         {{ item.label }}
       </a>
@@ -18,12 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue'
 
 interface Props {
   name: string;
 }
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {})
 
 const list = computed(() => [
   {
@@ -34,7 +34,7 @@ const list = computed(() => [
     label: '範例',
     href: `https://gitlab.com/side_project/chill-component/-/tree/main/src/components/${props.name}/examples`,
   },
-]);
+])
 </script>
 
 <style scoped lang="sass">

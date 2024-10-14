@@ -1,7 +1,6 @@
-import { EventBusKey } from "@vueuse/core";
-import { StringLiteral } from "typescript";
+import type { EventBusKey } from '@vueuse/core'
 
-export type BlockType = 'dirt' | 'stone' | 'sand';
+export type BlockType = 'dirt' | 'stone' | 'sand'
 
 export type BusData = {
   type: 'add';

@@ -12,33 +12,36 @@
 </template>
 
 <script setup lang="ts">
-import { SVGAttributes, computed, ref, watch } from 'vue';
-import { AnimeComponent, Size } from './type';
-import { pipe } from 'remeda';
-import { pausableFilter, throttleFilter, useElementVisibility, useMouseInElement, watchThrottled } from '@vueuse/core';
-import { getUnitVector } from '../../common/utils';
+import type { SVGAttributes } from 'vue'
+import type { AnimeComponent, Size } from './type'
+import { pausableFilter, throttleFilter, useElementVisibility, useMouseInElement } from '@vueuse/core'
+import { pipe } from 'remeda'
+import { computed, ref, watch } from 'vue'
+import { getUnitVector } from '../../common/utils'
 
 interface Props {
   size: Size;
   style: SVGAttributes;
 }
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {})
 
 /** 眼睛反光 */
-const ballRef = ref<SVGEllipseElement>();
+const ballRef = ref<SVGEllipseElement>()
 
-const mouseControl = pausableFilter(throttleFilter(15));
+const mouseControl = pausableFilter(throttleFilter(15))
 const visible = useElementVisibility(ballRef)
 watch(visible, (value) => {
-  value ? mouseControl.resume() : mouseControl.pause();
-}, { immediate: true });
+  value ? mouseControl.resume() : mouseControl.pause()
+}, { immediate: true })
 
 const {
-  elementX, elementY,
-  elementWidth, elementHeight,
+  elementX,
+  elementY,
+  elementWidth,
+  elementHeight,
 } = useMouseInElement(ballRef, {
   eventFilter: mouseControl.eventFilter,
-});
+})
 
 const ballOffset = computed(() => {
   return pipe(
@@ -50,7 +53,7 @@ const ballOffset = computed(() => {
     getUnitVector,
     /** 調整範圍，最大距離為寬度的 1/5 */
     ({ x, y }) => {
-      const value = Number(props.style.rx) / 5;
+      const value = Number(props.style.rx) / 5
 
       return {
         x: x * value,
@@ -58,27 +61,29 @@ const ballOffset = computed(() => {
       }
     },
   )
-});
-
+})
 
 const ballStyle = computed<SVGAttributes>(() => {
-  const style = props.style;
+  const style = props.style
 
   const [rx, ry] = [
     Number(style.rx) / 2,
     Number(style.ry) / 2.5,
-  ];
+  ]
 
   const [cx, cy] = [
     Number(style.cx),
     Number(style.cy) - ry,
-  ];
+  ]
 
   return {
-    rx, ry, cx, cy,
+    rx,
+    ry,
+    cx,
+    cy,
     style: {
       transform: `translate(${ballOffset.value.x}px, ${ballOffset.value.y}px)`,
-    }
+    },
   }
 })
 
@@ -90,7 +95,7 @@ defineExpose<AnimeComponent>({
   leave(param) {
 
   },
-});
+})
 // #endregion Methods
 </script>
 

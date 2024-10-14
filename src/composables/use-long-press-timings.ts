@@ -1,9 +1,9 @@
-import { MaybeElementRef, toValue, useThrottleFn, useTimestamp } from "@vueuse/core";
-import { computed, MaybeRefOrGetter, ref, watch } from "vue"
-import { onLongPress, OnLongPressOptions } from '@vueuse/core';
+import type { MaybeElementRef, OnLongPressOptions } from '@vueuse/core'
+import { onLongPress } from '@vueuse/core'
 
 interface UseLongPressTimingsParam extends Omit<
-  OnLongPressOptions, 'delay'
+  OnLongPressOptions,
+  'delay'
 > { }
 
 /** 可以自定義 LongPress 多個觸發點 */
@@ -19,6 +19,6 @@ export function useLongPressTimings(
     onLongPress(target, timing.handler, {
       ...param,
       delay: timing.delay,
-    });
-  });
+    })
+  })
 }

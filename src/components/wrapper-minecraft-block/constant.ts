@@ -1,4 +1,4 @@
-import { BlockType } from "./type";
+import type { BlockType } from './type'
 
 export const minecraftResource: Record<
   BlockType,

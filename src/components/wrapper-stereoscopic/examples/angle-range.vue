@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <div class="flex gap-4 border p-4 rounded">
+  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
+    <div class="flex gap-4 border rounded p-4">
       <base-input
         v-model="x"
         type="range"
         :label="`X 最大角度: ${x} 度`"
-        class=" w-full "
+        class="w-full"
         :min="0"
         :max="90"
       />
@@ -14,7 +14,7 @@
         v-model="y"
         type="range"
         :label="`Y 軸最大角度: ${y} 度`"
-        class=" w-full "
+        class="w-full"
         :min="0"
         :max="90"
       />
@@ -25,7 +25,7 @@
         :x-max-angle="x"
         :y-max-angle="y"
       >
-        <div class="text-xl font-bold text-gray-600 border p-4 rounded-full">
+        <div class="border rounded-full p-4 text-xl text-gray-600 font-bold">
           ( •̀ ω •́ )✧
         </div>
       </wrapper-stereoscopic>
@@ -34,13 +34,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-import WrapperStereoscopic from '../wrapper-stereoscopic.vue';
-import BaseInput from '../../base-input.vue';
+import BaseInput from '../../base-input.vue'
+import WrapperStereoscopic from '../wrapper-stereoscopic.vue'
 
-const x = ref(15);
-const y = ref(15);
+const x = ref(15)
+const y = ref(15)
 </script>
 
 <style lang="sass" scoped>

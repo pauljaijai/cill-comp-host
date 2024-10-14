@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full py-16 border border-gray-300 flex flex-col gap-16 justify-center items-center">
+  <div class="w-full flex flex-col items-center justify-center gap-16 border border-gray-300 py-16">
     <wrapper-cat-ear main-color="#AAA">
       <base-btn
         class=""
@@ -10,14 +10,14 @@
     <wrapper-cat-ear main-color="#AAA">
       <div class="">
         <img
-          class="rounded w-80"
+          class="w-80 rounded"
           src="/codfish.webp"
         >
       </div>
     </wrapper-cat-ear>
 
     <wrapper-cat-ear main-color="#AAA">
-      <div class=" border border-[#AAA] rounded ">
+      <div class="border border-[#AAA] rounded">
         <select class="px-10 py-2">
           <option
             disabled
@@ -36,6 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import BaseBtn from '../../base-btn.vue';
-import WrapperCatEar from '../wrapper-cat-ear.vue';
+import BaseBtn from '../../base-btn.vue'
+import WrapperCatEar from '../wrapper-cat-ear.vue'
 </script>

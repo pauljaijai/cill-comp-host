@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 w-full">
+  <div class="w-full flex flex-col gap-4">
     <base-checkbox
       v-model="enable"
       class="border p-4"
@@ -8,7 +8,7 @@
 
     <util-party-popper
       ref="popperRef"
-      class=" !fixed left-0 top-0 w-full h-full z-50 pointer-events-none"
+      class="pointer-events-none left-0 top-0 z-50 h-full w-full !fixed"
       :confetti="confettiList"
       :quantity-of-per-emit="2"
       :max-concurrency="500"
@@ -19,20 +19,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { Scalar } from '@babylonjs/core';
+import type { ExtractArrayType } from '../../../types/main.type'
+import { Scalar } from '@babylonjs/core'
+import { throttleFilter, useMouseInElement, useMousePressed, whenever } from '@vueuse/core'
+import { ref, watch } from 'vue'
 
-import BaseCheckbox from '../../base-checkbox.vue';
-import UtilPartyPopper from '../util-party-popper.vue';
+import BaseCheckbox from '../../base-checkbox.vue'
+import UtilPartyPopper from '../util-party-popper.vue'
 
-import { throttleFilter, useMouseInElement, useMousePressed, whenever } from '@vueuse/core';
-import { ExtractArrayType } from '../../../types/main.type';
-
-const enable = ref(false);
+const enable = ref(false)
 
 type Confetti = ExtractArrayType<
   InstanceType<typeof UtilPartyPopper>['confetti']
->;
+>
 const confettiList: Confetti[] = [
   {
     shape: 'text',
@@ -48,39 +47,41 @@ const confettiList: Confetti[] = [
   },
 ]
 
-const popperRef = ref<InstanceType<typeof UtilPartyPopper>>();
+const popperRef = ref<InstanceType<typeof UtilPartyPopper>>()
 const {
-  elementX, elementY,
+  elementX,
+  elementY,
 } = useMouseInElement(popperRef, {
   eventFilter: throttleFilter(10),
   scroll: false,
-});
-const { pressed } = useMousePressed();
+})
+const { pressed } = useMousePressed()
 
 whenever(pressed, () => {
-  if (!enable.value) return;
+  if (!enable.value)
+    return
 
   popperRef.value?.emit(() => ({
     x: elementX.value,
     y: elementY.value,
     velocity: {
       x: Scalar.RandomRange(-10, 10),
-      y: Scalar.RandomRange(-10, 10)
+      y: Scalar.RandomRange(-10, 10),
     },
-  }));
+  }))
 })
 
 watch(() => [elementX, elementY], () => {
-  if (!enable.value) return;
+  if (!enable.value)
+    return
 
   popperRef.value?.emit(() => ({
     x: elementX.value,
     y: elementY.value,
     velocity: {
       x: Scalar.RandomRange(-2, 2),
-      y: Scalar.RandomRange(-2, 2)
+      y: Scalar.RandomRange(-2, 2),
     },
-  }));
-}, { deep: true });
-
+  }))
+}, { deep: true })
 </script>

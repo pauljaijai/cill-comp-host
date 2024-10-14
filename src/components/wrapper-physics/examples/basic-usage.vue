@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300">
+  <div class="w-full flex flex-col gap-4 border border-gray-300">
     <wrapper-physics
       ref="wrapperRef"
-      class="flex flex-col items-start p-4 gap-1 md:w-[40rem] w-full h-[30rem]"
+      class="h-[30rem] w-full flex flex-col items-start gap-1 p-4 md:w-[40rem]"
     >
       <div class="flex gap-20 pl-10">
         <wrapper-physics-body>
@@ -22,13 +22,13 @@
       <div
         v-for="section, i in sections"
         :key="i"
-        class="flex "
+        class="flex"
         :class="section.class"
       >
         <wrapper-physics-body
           v-for="text, j in section.texts"
           :key="j"
-          class=" whitespace-nowrap"
+          class="whitespace-nowrap"
         >
           {{ text }}
         </wrapper-physics-body>
@@ -44,13 +44,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
+import BaseBtn from '../../base-btn.vue'
+import WrapperPhysics from '../wrapper-physics.vue'
+import WrapperPhysicsBody from '../wrapper-physics-body.vue'
 
-import BaseBtn from '../../base-btn.vue';
-import WrapperPhysics from '../wrapper-physics.vue';
-import WrapperPhysicsBody from '../wrapper-physics-body.vue';
-
-const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>();
+const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>()
 
 const sections = [
   {

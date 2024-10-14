@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 export interface RouteMeta {
   name: string;
@@ -13,18 +14,18 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     redirect: {
       name: RouteName.HOME,
-    }
+    },
   },
 
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/'
+    redirect: '/',
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router

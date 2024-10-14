@@ -24,17 +24,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { version } from '../package.json'
+import MenuDrawer from './layout/menu-drawer.vue'
 
-import MenuDrawer from './layout/menu-drawer.vue';
-
-import { useMouse } from '@vueuse/core';
-import { useMainStore } from './stores/main.store';
-
-const store = useMainStore();
-const { x, y } = useMouse();
-
-document.title += ` v${import.meta.env.PACKAGE_VERSION}`
+document.title += ` v${version}`
 </script>
 
 <style lang="sass">

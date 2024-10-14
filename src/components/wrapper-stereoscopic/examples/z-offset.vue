@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <div class="flex gap-4 border p-4 rounded">
+  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
+    <div class="flex gap-4 border rounded p-4">
       <base-input
         v-model="zOffset"
         type="range"
         :label="`懸浮距離: ${zOffset} px`"
-        class=" w-full "
+        class="w-full"
         :min="0"
         :max="200"
       />
@@ -17,17 +17,17 @@
         :z-offset="zOffset"
       >
         <div
-          class=" w-80 h-80 bg-gray-300 rounded flex-center"
+          class="h-80 w-80 flex-center rounded bg-gray-300"
           :style="wrapper.style"
         >
           <wrapper-stereoscopic-layer v-slot="layer01">
             <div
-              class=" w-40 h-40 bg-gray-200 rounded flex-center"
+              class="h-40 w-40 flex-center rounded bg-gray-200"
               :style="layer01.style"
             >
               <wrapper-stereoscopic-layer v-slot="layer02">
                 <div
-                  class="text-xl font-bold bg-gray-100 rounded p-4"
+                  class="rounded bg-gray-100 p-4 text-xl font-bold"
                   :style="layer02.style"
                 >
                   安安
@@ -42,13 +42,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-import WrapperStereoscopic from '../wrapper-stereoscopic.vue';
-import WrapperStereoscopicLayer from '../wrapper-stereoscopic-layer.vue';
-import BaseInput from '../../base-input.vue';
+import BaseInput from '../../base-input.vue'
+import WrapperStereoscopic from '../wrapper-stereoscopic.vue'
+import WrapperStereoscopicLayer from '../wrapper-stereoscopic-layer.vue'
 
-const zOffset = ref(100);
+const zOffset = ref(100)
 </script>
 
 <style lang="sass" scoped>

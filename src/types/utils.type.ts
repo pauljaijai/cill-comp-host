@@ -1,7 +1,7 @@
-import { DefineComponent } from "vue";
+import type { DefineComponent } from 'vue'
 
 /** 提取 Vue Component 之內部 props
- * 
+ *
  * 會將 style、class、event 全部取出來
  */
 export type ExtractComponentProps<TComponent> =
@@ -9,7 +9,7 @@ export type ExtractComponentProps<TComponent> =
     $props: infer P;
   }
   ? P
-  : never;
+  : never
 
 /** 提取 Vue Component slots */
 export type ExtractComponentSlots<TComponent> =
@@ -17,17 +17,23 @@ export type ExtractComponentSlots<TComponent> =
     $slots: infer P;
   }
   ? P
-  : never;
-
+  : never
 
 /** 提取 Vue SFC 之 props 參數部分
- * 
+ *
  * 也就是 setup script 之 Props 定義。
  */
 export type ExtractComponentParam<TComponent> =
   TComponent extends DefineComponent<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    infer P, any, any, any, any, any, any, any, any
+    infer P,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any
   >
   ? P
-  : never;
+  : never

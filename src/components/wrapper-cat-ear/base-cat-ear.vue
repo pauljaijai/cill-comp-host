@@ -26,10 +26,16 @@
 </template>
 
 <script lang="ts">
+</script>
+
+<script setup lang="ts">
+import type { ActionName } from '.'
+import { onMounted, ref, watch } from 'vue'
+
 export interface AnimateInstance {
   stop: () => void;
 }
-export type AnimateMap = Record<ActionName, () => AnimateInstance>;
+export type AnimateMap = Record<ActionName, () => AnimateInstance>
 
 export interface Props {
   action?: `${ActionName}`;
@@ -42,51 +48,46 @@ export interface Props {
   }) => AnimateMap;
 }
 
-</script>
-
-<script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { ActionName } from './wrapper-cat-ear.vue';
-
 const props = withDefaults(defineProps<Props>(), {
   action: 'relaxed',
   mainColor: '#CECECE',
   innerColor: '#E7E7E7',
-});
+})
 
-const earRef = ref<SVGElement>();
-const insideRef = ref<SVGPathElement>();
-const outsideRef = ref<SVGPathElement>();
+const earRef = ref<SVGElement>()
+const insideRef = ref<SVGPathElement>()
+const outsideRef = ref<SVGPathElement>()
 
-let animateMap: AnimateMap | undefined;
-let prevAnimate: AnimateInstance | undefined;
+let animateMap: AnimateMap | undefined
+let prevAnimate: AnimateInstance | undefined
 watch(() => props.action, (value) => {
-  if (!animateMap) return;
+  if (!animateMap)
+    return
 
-  prevAnimate?.stop();
+  prevAnimate?.stop()
 
-  prevAnimate = animateMap?.[value]?.();
-});
+  prevAnimate = animateMap?.[value]?.()
+})
 
 onMounted(() => {
   if (
     !earRef.value || !insideRef.value || !outsideRef.value
   ) {
-    console.error('Missing ref');
-    return;
+    console.error('Missing ref')
+    return
   }
 
   animateMap = props.initAnimate({
     earEl: earRef.value!,
     insideEl: insideRef.value!,
     outsideEl: outsideRef.value!,
-  });
+  })
 
-  prevAnimate = animateMap?.[props.action]?.();
-});
+  prevAnimate = animateMap?.[props.action]?.()
+})
 
 // #region Methods
-defineExpose({});
+defineExpose({})
 // #endregion Methods
 </script>
 

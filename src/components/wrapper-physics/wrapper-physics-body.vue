@@ -8,17 +8,16 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, onMounted, computed, watch, reactive } from 'vue';
-import { PROVIDE_KEY } from '.';
-import { nanoid } from 'nanoid';
-import { conditional, constant } from 'remeda';
-
-import { useElementBounding, useIntervalFn } from '@vueuse/core';
+import { useElementBounding, useIntervalFn } from '@vueuse/core'
+import { nanoid } from 'nanoid'
+import { conditional, constant } from 'remeda'
+import { computed, inject, onMounted, reactive, ref, watch } from 'vue'
+import { PROVIDE_KEY } from '.'
 
 // #region Props
 interface Props {
   /** 物體形狀，預設為 rectangle
-   * 
+   *
    * - rectangle：尺寸同 DOM 之長寬
    * - circle：取 DOM 長寬最大值為直徑
    */
@@ -43,7 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
   restitution: 0.3,
   mass: undefined,
   isStatic: false,
-});
+})
 
 // #region Slots
 defineSlots<{
@@ -57,30 +56,29 @@ defineSlots<{
     /** 旋轉量 */
     rotate: number;
   }) => unknown;
-}>();
+}>()
 // #endregion Slots
 
+const id = nanoid()
+const wrapper = inject(PROVIDE_KEY)
+if (!wrapper) {
+  console.warn('wrapper-physics-body 必須在 wrapper-physics 元件中使用')
+}
+
 watch(() => props, () => {
-  wrapper?.updateBody(id, props);
+  wrapper?.updateBody(id, props)
 }, { deep: true })
 
-const id = nanoid();
-
-const containerRef = ref<HTMLDivElement>();
+const containerRef = ref<HTMLDivElement>()
 const containerBounding = reactive(
-  useElementBounding(containerRef)
-);
-
-const wrapper = inject(PROVIDE_KEY);
-if (!wrapper) {
-  console.warn('wrapper-physics-body 必須在 wrapper-physics 元件中使用');
-}
+  useElementBounding(containerRef),
+)
 
 const info = ref({
   offsetX: 0,
   offsetY: 0,
   rotate: 0,
-});
+})
 /** 數字最小不能小於 0.0001 */
 const adjAccuracy = conditional(
   [(value: number) => Math.abs(value) < 0.0001, constant(0)],
@@ -88,36 +86,38 @@ const adjAccuracy = conditional(
 )
 
 useIntervalFn(() => {
-  const newInfo = wrapper?.getInfo(id);
+  const newInfo = wrapper?.getInfo(id)
   if (!newInfo) {
     info.value = {
       offsetX: adjAccuracy(info.value.offsetX - info.value.offsetX * 0.05),
       offsetY: adjAccuracy(info.value.offsetY - info.value.offsetY * 0.05),
       rotate: adjAccuracy(info.value.rotate - info.value.rotate * 0.05),
-    };
-    return;
+    }
+    return
   }
 
   info.value = {
     offsetX: info.value.offsetX + (newInfo.offsetX - info.value.offsetX) * 0.8,
     offsetY: info.value.offsetY + (newInfo.offsetY - info.value.offsetY) * 0.8,
     rotate: info.value.rotate + (newInfo.rotate - info.value.rotate) * 0.8,
-  };
-}, 10);
+  }
+}, 10)
 
 const style = computed(() => {
   if (!wrapper) {
-    return undefined;
+    return undefined
   }
 
   const {
-    offsetX, offsetY, rotate
-  } = info.value;
+    offsetX,
+    offsetY,
+    rotate,
+  } = info.value
 
   return {
     transform: `translate(${offsetX}px, ${offsetY}px) rotate(${rotate}deg)`,
   }
-});
+})
 
 function bindBody() {
   wrapper?.bindBody({
@@ -132,20 +132,20 @@ function bindBody() {
       rotate: 0,
     },
     ...props,
-  });
+  })
 }
 
 onMounted(() => {
-  bindBody();
-});
+  bindBody()
+})
 
 const scopeProp = computed(() => {
   return {
     ...info.value,
     width: containerBounding.width,
     height: containerBounding.height,
-  };
-});
+  }
+})
 </script>
 
 <style scoped lang="sass">

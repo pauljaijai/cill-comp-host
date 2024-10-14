@@ -1,5 +1,5 @@
-import { InjectionKey } from 'vue';
-import Matter from 'matter-js';
+import type Matter from 'matter-js'
+import type { InjectionKey } from 'vue'
 
 /** DOM 物體基本參數 */
 interface BasicBodyParam {
@@ -28,10 +28,10 @@ export interface ElBody extends BasicBodyParam {
     offsetX: number;
     offsetY: number;
     rotate: number;
-  },
+  };
 
   /** 物體形狀，預設為 rectangle
-   * 
+   *
    * - rectangle：尺寸同 DOM 之長寬
    * - circle：取 DOM 長寬最大值為直徑
    */
@@ -45,7 +45,6 @@ export interface UpdateParam extends BasicBodyParam {
   angularVelocity?: number;
 }
 
-
 export interface ProvideContent {
   bindBody: (body: ElBody) => void;
   unbindBody: (id: string) => void;
@@ -57,4 +56,4 @@ export interface ProvideContent {
   } | undefined;
 }
 
-export const PROVIDE_KEY = Symbol('wrapper-physics') as InjectionKey<ProvideContent>;
+export const PROVIDE_KEY = Symbol('wrapper-physics') as InjectionKey<ProvideContent>

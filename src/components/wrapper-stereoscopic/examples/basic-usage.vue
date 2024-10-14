@@ -1,39 +1,39 @@
 <template>
-  <div class="flex flex-col gap-4 w-full border border-gray-300 p-6">
-    <div class="flex gap-4 border p-4 rounded">
+  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
+    <div class="flex gap-4 border rounded p-4">
       <base-checkbox
         v-model="enable"
         label="懸浮開關"
-        class=" w-full "
+        class="w-full"
       />
     </div>
 
-    <div class=" flex flex-col items-start gap-4">
+    <div class="flex flex-col items-start gap-4">
       <wrapper-stereoscopic :enable="enable">
-        <div class=" w-80 h-80 bg-gray-300 rounded flex-center">
-          <div class=" w-40 h-40 bg-gray-100 rounded flex-center">
-            <div class="text-xl font-bold text-gray-600">
+        <div class="h-80 w-80 flex-center rounded bg-gray-300">
+          <div class="h-40 w-40 flex-center rounded bg-gray-100">
+            <div class="text-xl text-gray-600 font-bold">
               安安
             </div>
           </div>
         </div>
       </wrapper-stereoscopic>
 
-      <div class="flex flex-col justify-start items-start gap-4">
+      <div class="flex flex-col items-start justify-start gap-4">
         <wrapper-stereoscopic :enable="enable">
-          <div class="text-xl font-bold text-gray-600 border p-4 rounded-full">
+          <div class="border rounded-full p-4 text-xl text-gray-600 font-bold">
             漂起來惹
           </div>
         </wrapper-stereoscopic>
 
         <wrapper-stereoscopic :enable="enable">
-          <div class="text-xl font-bold text-gray-600 border p-4 rounded-full">
+          <div class="border rounded-full p-4 text-xl text-gray-600 font-bold">
             酷酷的漂浮
           </div>
         </wrapper-stereoscopic>
 
         <wrapper-stereoscopic :enable="enable">
-          <div class="text-xl font-bold text-gray-600 border p-4 rounded-full">
+          <div class="border rounded-full p-4 text-xl text-gray-600 font-bold">
             安安
           </div>
         </wrapper-stereoscopic>
@@ -43,12 +43,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-import WrapperStereoscopic from '../wrapper-stereoscopic.vue';
-import BaseCheckbox from '../../base-checkbox.vue';
+import BaseCheckbox from '../../base-checkbox.vue'
+import WrapperStereoscopic from '../wrapper-stereoscopic.vue'
 
-const enable = ref(true);
+const enable = ref(true)
 </script>
 
 <style lang="sass" scoped>

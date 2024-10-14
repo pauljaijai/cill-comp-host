@@ -3,38 +3,37 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, onBeforeUnmount, onMounted, StyleValue } from 'vue';
-import { nanoid } from 'nanoid';
-
-import { ProvideContent, PROVIDE_KEY } from './wrapper-stereoscopic.vue';
+import type { StyleValue } from 'vue'
+import type { ProvideContent } from '.'
+import { nanoid } from 'nanoid'
+import { computed, inject, onBeforeUnmount, onMounted } from 'vue'
+import { PROVIDE_KEY } from '.'
 
 interface Props {
   index?: number;
 }
 const props = withDefaults(defineProps<Props>(), {
   index: 1,
-});
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
-}>();
+}>()
 
-const id = nanoid();
+const id = nanoid()
+const wrapper = inject<ProvideContent>(PROVIDE_KEY)
 
 const style = computed<StyleValue>(() => {
   return {
     transform: `translateZ(${wrapper?.zOffset.value}px)`,
     transformStyle: 'preserve-3d',
   }
-});
-
-const wrapper = inject<ProvideContent>(PROVIDE_KEY);
+})
 
 onMounted(() => {
-  wrapper?.bindLayer?.({ id });
-});
+  wrapper?.bindLayer?.({ id })
+})
 onBeforeUnmount(() => {
-  wrapper?.unbindLayer?.(id);
-});
-
+  wrapper?.unbindLayer?.(id)
+})
 </script>

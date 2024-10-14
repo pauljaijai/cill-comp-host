@@ -9,28 +9,29 @@
 
     <block-lid
       :stage="destroyStage"
-      class=" absolute left-0 top-0 w-full h-full pointer-events-none"
+      class="pointer-events-none absolute left-0 top-0 h-full w-full"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { BlockType, BusData, eventKey } from './type';
-import { nanoid } from 'nanoid';
-import { find, map, pick, pipe, range, sample } from 'remeda';
-import { minecraftResource } from './constant';
-
-import BlockLid from './wrapper-minecraft-block-lid.vue';
-
+import type { BlockType, BusData } from './type'
 import {
   useElementBounding,
   useEventBus,
   useIntervalFn,
   useMousePressed,
   useVibrate,
-} from '@vueuse/core';
-import { useLongPressTimings } from '../../composables/use-long-press-timings';
+} from '@vueuse/core'
+import { nanoid } from 'nanoid'
+import { find, map, pick, pipe, range, sample } from 'remeda'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+
+import { useLongPressTimings } from '../../composables/use-long-press-timings'
+
+import { minecraftResource } from './constant'
+import { eventKey } from './type'
+import BlockLid from './wrapper-minecraft-block-lid.vue'
 
 // #region Props
 interface Props {
@@ -43,61 +44,65 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   blockType: 'dirt',
   isInitDug: false,
-});
+})
 
 // #region Emits
 const emit = defineEmits<{
-  'digging': [];
-  'dug': [];
-  'place': [];
-}>();
+  digging: [];
+  dug: [];
+  place: [];
+}>()
+// #region Slots
+defineSlots<{
+  default?: () => unknown;
+}>()
+
 // #endregion Emits
 
-const bus = useEventBus(eventKey);
+const bus = useEventBus(eventKey)
 
 /** 方塊 ID */
-const id = nanoid();
+const id = nanoid()
 
-const blockRef = ref<HTMLElement>();
-const blockBounding = reactive(useElementBounding(blockRef));
+const blockRef = ref<HTMLElement>()
+const blockBounding = reactive(useElementBounding(blockRef))
 
 /** 方塊是否被挖掉 */
-const isDug = ref(props.isInitDug);
+const isDug = ref(props.isInitDug)
 /** -1 ~ 9，-1 表示沒有裂痕 */
-const destroyStage = ref(-1);
-const { pressed: isPressed } = useMousePressed({ target: blockRef });
+const destroyStage = ref(-1)
+const { pressed: isPressed } = useMousePressed({ target: blockRef })
 
 const cursorList: Array<{
   types: BlockType[];
   cursor: string;
-}> = [
-    {
-      types: ['dirt', 'sand'],
-      cursor: 'iron_shovel',
-    },
-    {
-      types: ['stone'],
-      cursor: 'iron_pickaxe',
-    },
-  ]
+}> = [{
+  types: ['dirt', 'sand'],
+  cursor: 'iron_shovel',
+}, {
+  types: ['stone'],
+  cursor: 'iron_pickaxe',
+}]
 const cursor = computed(() => {
-  if (isDug.value) return 'auto';
+  if (isDug.value)
+    return 'auto'
 
   const cursor = pipe(
     cursorList,
     find(({ types }) => types.includes(props.blockType)),
     (target) => target?.cursor,
-  );
-  if (!cursor) return 'crosshair';
+  )
+  if (!cursor)
+    return 'crosshair'
 
-  return `url('/minecraft/textures/item/${cursor}.png'), crosshair`;
-});
+  return `url('/minecraft/textures/item/${cursor}.png'), crosshair`
+})
 
 /** 目前方塊對應的資源 */
-const resource = minecraftResource[props.blockType];
+const resource = minecraftResource[props.blockType]
 
 async function playRandomSound(paths: string[]) {
-  const [path] = sample(paths, 1);
+  const [path] = sample(paths, 1)
   new Audio(path).play()
 }
 
@@ -105,45 +110,49 @@ const { vibrate } = useVibrate({ pattern: 100 })
 
 const {
   pause: pauseSound,
-  resume: playSound
+  resume: playSound,
 } = useIntervalFn(() => {
-  if (isDug.value) return;
+  if (isDug.value)
+    return
 
-  playRandomSound(resource.sound.dig);
+  playRandomSound(resource.sound.dig)
 }, 200, {
   immediate: false,
   immediateCallback: true,
-});
+})
 
 watch(isPressed, (value) => {
-  if (value) return
+  if (value)
+    return
 
-  destroyStage.value = -1;
-  pauseSound();
+  destroyStage.value = -1
+  pauseSound()
 
   bus.emit({
     type: 'dig',
     id,
     isActive: false,
-  });
-});
+  })
+})
 
 useLongPressTimings(blockRef, [
   // 按著 0.1s 才算開始挖
   {
-    delay: 100, handler(event) {
-      if (isDug.value) return;
+    delay: 100,
+    handler(event) {
+      if (isDug.value)
+        return
 
-      event.preventDefault();
+      event.preventDefault()
 
-      playSound();
-      emit('digging');
+      playSound()
+      emit('digging')
       bus.emit({
         type: 'dig',
         id,
         isActive: true,
-      });
-    }
+      })
+    },
   },
   /** 產生挖掘裂紋效果 */
   ...pipe(
@@ -151,42 +160,45 @@ useLongPressTimings(blockRef, [
     map((stage) => ({
       delay: 100 + stage * 140,
       handler() {
-        destroyStage.value = stage;
-      }
-    }))
+        destroyStage.value = stage
+      },
+    })),
   ),
   // 1.5s 後挖掉方塊
   {
-    delay: 1500, handler(event) {
-      if (isDug.value) return;
+    delay: 1500,
+    handler(event) {
+      if (isDug.value)
+        return
 
-      event.preventDefault();
+      event.preventDefault()
 
-      emit('dug');
+      emit('dug')
       bus.emit({
         type: 'dig',
         id,
         isActive: false,
-      });
+      })
 
-      isDug.value = true;
+      isDug.value = true
 
-      playRandomSound(resource.sound.break);
-      vibrate();
-    }
+      playRandomSound(resource.sound.break)
+      vibrate()
+    },
   },
 ], {
   distanceThreshold: 500,
-});
+})
 
 function placeBlock() {
-  if (!isDug.value) return;
+  if (!isDug.value)
+    return
 
-  emit('place');
+  emit('place')
 
-  isDug.value = false;
+  isDug.value = false
 
-  playRandomSound(resource.sound.place);
+  playRandomSound(resource.sound.place)
 }
 
 onMounted(() => {
@@ -196,8 +208,8 @@ onMounted(() => {
     blockType: props.blockType,
     visible: !isDug.value,
     ...pick(blockBounding, ['x', 'y', 'width', 'height']),
-  });
-});
+  })
+})
 
 /** 方塊更新資料 */
 const updateData = computed<
@@ -207,22 +219,16 @@ const updateData = computed<
   id,
   visible: !isDug.value,
   ...pick(blockBounding, ['x', 'y', 'width', 'height']),
-}));
+}))
 
 watch(updateData, (value) => {
-  bus.emit(value);
-}, { deep: true });
+  bus.emit(value)
+}, { deep: true })
 
-
-// #region Slots
-defineSlots<{
-  default?: () => unknown;
-}>();
 // #endregion Slots
 </script>
 
 <style scoped lang="sass">
 .mc-block
   cursor: v-bind(cursor)
-
 </style>

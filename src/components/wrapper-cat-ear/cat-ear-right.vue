@@ -11,40 +11,40 @@
 </template>
 
 <script setup lang="ts">
-import anime from 'animejs';
-import { ref, computed } from 'vue';
-
-import CatEar, {
+import type {
   AnimateInstance,
   AnimateMap,
   Props as EarProps,
-} from './base-cat-ear.vue';
-
-import { throttleFilter, useMouseInElement } from '@vueuse/core';
-import { runTasks } from '../../common/utils';
+} from './base-cat-ear.vue'
+import { throttleFilter, useMouseInElement } from '@vueuse/core'
+import anime from 'animejs'
+import { computed, ref } from 'vue'
+import { runTasks } from '../../common/utils'
+import CatEar from './base-cat-ear.vue'
 
 interface Props extends Pick<
-  EarProps, 'action' | 'mainColor' | 'innerColor'
+  EarProps,
+  'action' | 'mainColor' | 'innerColor'
 > { }
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-const frameRef = ref<HTMLDivElement>();
+const frameRef = ref<HTMLDivElement>()
 const { isOutside } = useMouseInElement(frameRef, {
-  eventFilter: throttleFilter(35)
-});
+  eventFilter: throttleFilter(35),
+})
 
 const earProps = computed(() => {
   if (props.action === 'peekaboo') {
-    return props;
+    return props
   }
 
   return {
     ...props,
     action: isOutside.value ? props.action : 'shake',
   }
-});
+})
 
-type InitAnimate = InstanceType<typeof CatEar>['$props']['initAnimate'];
+type InitAnimate = InstanceType<typeof CatEar>['$props']['initAnimate']
 type GetAnimateParam = Parameters<InitAnimate>[0]
 interface ResetAnimateOption {
   duration?: number;
@@ -53,7 +53,7 @@ interface ResetAnimateOption {
 /** 回復初始外觀，消除 SVG 變形動畫 */
 async function resetEarAnimate(
   { insideEl, outsideEl }: GetAnimateParam,
-  option?: ResetAnimateOption
+  option?: ResetAnimateOption,
 ) {
   const { duration = 500 } = option ?? {}
 
@@ -70,7 +70,7 @@ async function resetEarAnimate(
 }
 
 function startPeekabooAnimate(param: GetAnimateParam): AnimateInstance {
-  const { earEl } = param;
+  const { earEl } = param
 
   anime({
     targets: earEl,
@@ -80,17 +80,17 @@ function startPeekabooAnimate(param: GetAnimateParam): AnimateInstance {
 
   return {
     stop() {
-      anime.remove(earEl);
+      anime.remove(earEl)
     },
-  };
+  }
 }
 function startRelaxedAnimate(param: GetAnimateParam): AnimateInstance {
-  const { earEl, insideEl, outsideEl } = param;
-  const finalValue = 10;
+  const { earEl, insideEl, outsideEl } = param
+  const finalValue = 10
 
   runTasks([
     () => {
-      resetEarAnimate(param);
+      resetEarAnimate(param)
 
       return anime({
         targets: earEl,
@@ -109,18 +109,17 @@ function startRelaxedAnimate(param: GetAnimateParam): AnimateInstance {
         loop: true,
       })
     },
-  ]);
-
+  ])
 
   return {
     stop() {
-      anime.remove([earEl, insideEl, outsideEl]);
+      anime.remove([earEl, insideEl, outsideEl])
     },
-  };
+  }
 }
 function startFearAnimate(param: GetAnimateParam): AnimateInstance {
-  const { earEl, insideEl, outsideEl } = param;
-  const finalValue = 93;
+  const { earEl, insideEl, outsideEl } = param
+  const finalValue = 93
 
   runTasks([
     () => {
@@ -139,7 +138,7 @@ function startFearAnimate(param: GetAnimateParam): AnimateInstance {
         targets: earEl,
         rotate: finalValue,
         duration: 500,
-      }).finished;
+      }).finished
     },
     async () => {
       anime({
@@ -151,18 +150,18 @@ function startFearAnimate(param: GetAnimateParam): AnimateInstance {
         duration: 100,
         loop: true,
       })
-    }
-  ]);
+    },
+  ])
 
   return {
     stop() {
-      anime.remove([earEl, insideEl, outsideEl]);
+      anime.remove([earEl, insideEl, outsideEl])
     },
-  };
+  }
 }
 function startDispleasedAnimate(param: GetAnimateParam): AnimateInstance {
-  const { earEl, insideEl, outsideEl } = param;
-  const finalValue = 70;
+  const { earEl, insideEl, outsideEl } = param
+  const finalValue = 70
 
   runTasks([
     () => {
@@ -190,17 +189,17 @@ function startDispleasedAnimate(param: GetAnimateParam): AnimateInstance {
       ],
       duration: 1000,
       loop: true,
-    }).finished
-  ]);
+    }).finished,
+  ])
 
   return {
     stop() {
-      anime.remove([earEl, insideEl, outsideEl]);
+      anime.remove([earEl, insideEl, outsideEl])
     },
-  };
+  }
 }
 function startShakeAnimate(param: GetAnimateParam): AnimateInstance {
-  const { earEl } = param;
+  const { earEl } = param
 
   resetEarAnimate(param)
   anime({
@@ -220,9 +219,9 @@ function startShakeAnimate(param: GetAnimateParam): AnimateInstance {
 
   return {
     stop() {
-      anime.remove(earEl);
+      anime.remove(earEl)
     },
-  };
+  }
 }
 
 const initAnimate: InitAnimate = (param) => {
@@ -234,7 +233,7 @@ const initAnimate: InitAnimate = (param) => {
     shake: () => startShakeAnimate(param),
   }
 
-  return result;
+  return result
 }
 </script>
 

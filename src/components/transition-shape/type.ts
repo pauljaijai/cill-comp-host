@@ -1,4 +1,4 @@
-import { EasingOptions } from "animejs";
+import type { EasingOptions } from 'animejs'
 
 // #region TransitionRect
 export enum RectAction {
@@ -13,14 +13,14 @@ export enum RectAction {
 interface TransitionRect {
   name: 'rect';
   enter: {
-    action: `${RectAction}`,
+    action: `${RectAction}`;
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
   leave: {
-    action: `${RectAction}`,
+    action: `${RectAction}`;
     duration: number;
     delay: number;
     easing: EasingOptions;
@@ -37,7 +37,7 @@ export enum ConvergingRectAction {
 interface TransitionConvergingRect {
   name: 'converging-rect';
   enter: {
-    action: `${ConvergingRectAction}`,
+    action: `${ConvergingRectAction}`;
     angle?: number;
     duration: number;
     /** 每個 shape 延遲間距  */
@@ -45,7 +45,7 @@ interface TransitionConvergingRect {
     easing: EasingOptions;
   };
   leave: {
-    action: `${ConvergingRectAction}`,
+    action: `${ConvergingRectAction}`;
     duration: number;
     delay: number;
     easing: EasingOptions;
@@ -73,14 +73,14 @@ export enum RoundBaseAction {
 interface TransitionRound {
   name: 'round';
   enter: {
-    action: `${RoundBaseAction}` | `${RoundEnterAction}`,
+    action: `${RoundBaseAction}` | `${RoundEnterAction}`;
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
   leave: {
-    action: `${RoundBaseAction}`,
+    action: `${RoundBaseAction}`;
     duration: number;
     delay: number;
     easing: EasingOptions;
@@ -100,14 +100,14 @@ export enum FenceAction {
 interface TransitionFence {
   name: 'fence';
   enter: {
-    action: `${FenceAction}`,
+    action: `${FenceAction}`;
     duration: number;
     /** 每個 shape 延遲間距  */
     delay: number;
     easing: EasingOptions;
   };
   leave: {
-    action: `${FenceAction}`,
+    action: `${FenceAction}`;
     duration: number;
     delay: number;
     easing: EasingOptions;
@@ -123,7 +123,7 @@ export enum SequentialLineAction {
 interface TransitionSequentialLine {
   name: 'sequential-line';
   enter: {
-    action: `${SequentialLineAction}`,
+    action: `${SequentialLineAction}`;
     /** @default 0 */
     angle?: number;
     duration: number;
@@ -132,7 +132,7 @@ interface TransitionSequentialLine {
     easing: EasingOptions;
   };
   leave: {
-    action: `${SequentialLineAction}`,
+    action: `${SequentialLineAction}`;
     duration: number;
     delay: number;
     easing: EasingOptions;

@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 
 interface State {
   data: string;
@@ -6,6 +6,6 @@ interface State {
 
 export const useMainStore = defineStore('main', {
   state: (): State => ({
-    data: 'codfish'
-  })
+    data: 'codfish',
+  }),
 })

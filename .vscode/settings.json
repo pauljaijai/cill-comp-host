@@ -4,12 +4,14 @@
     "animejs",
     "antfu",
     "babylonjs",
+    "composables",
     "endregion",
     "fubuki",
     "havok",
     "Inputable",
     "nord",
     "occluder",
+    "pausable",
     "pinia",
     "pixi",
     "prismjs",
@@ -25,5 +27,14 @@
     "vueuse",
     "webp",
     "yoyo"
-  ]
+  ],
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    "class=\"([^\"]+)\""
+  ],
+  "tailwindCSS.emmetCompletions": true
 }

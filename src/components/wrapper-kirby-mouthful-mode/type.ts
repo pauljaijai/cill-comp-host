@@ -1,9 +1,9 @@
-import { SVGAttributes } from "vue";
+import type { SVGAttributes } from 'vue'
 
 export type StyleMap = Record<
   'enter' | 'leave',
   Omit<SVGAttributes, 'direction' | 'begin'>
->;
+>
 
 export interface Size {
   width: number;

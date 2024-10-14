@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 interface Props {
   label?: string;
@@ -25,26 +25,28 @@ const props = withDefaults(defineProps<Props>(), {
   label: '',
   disabled: false,
   ignoreClick: false,
-});
+})
 
 const emit = defineEmits<{
-  'click': [];
-}>();
+  click: [];
+}>()
 
 const classes = computed(() => {
-  const result: string[] = [];
+  const result: string[] = []
 
   if (props.disabled) {
-    result.push('!cursor-not-allowed');
-  } else {
-    result.push('cursor-pointer');
+    result.push('!cursor-not-allowed')
+  }
+  else {
+    result.push('cursor-pointer')
   }
 
-  return result;
-});
+  return result
+})
 
 function handleClick() {
-  if (props.ignoreClick && props.disabled) return;
+  if (props.ignoreClick && props.disabled)
+    return
 
   emit('click')
 }
