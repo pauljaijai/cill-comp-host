@@ -7,10 +7,10 @@
     "docs:preview": "npm run docs:build && vitepress preview docs",
     "version:minor": "npm version minor",
     "version:patch": "npm version patch",
+    "blueprint": "vite-node scripts/create-blueprint.ts",
     "check": "vue-tsc --noEmit --skipLibCheck",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "blueprint": "vite-node scripts/create-blueprint.ts"
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.7.3",
