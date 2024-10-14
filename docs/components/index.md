@@ -83,7 +83,7 @@ const currentSection = ref('btn');
   header-class="border p-2 rounded-lg"
 >
 
-### [主動的開關](./toggle-proactive/) <Badge type="info" text="slider" />
+### [主動的開關](./toggle-proactive/) <Badge type="info" text="toggle" />
 
 停用時切換狀態會和你唱反調。( ´థ౪థ)
 
