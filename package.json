@@ -12,6 +12,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^3.7.3",
     "@babylonjs/core": "^7.29.0",
     "@babylonjs/gui": "^7.29.0",
     "@babylonjs/gui-editor": "^7.29.0",
