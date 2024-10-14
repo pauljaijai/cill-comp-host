@@ -360,9 +360,8 @@
 import type { CSSProperties } from 'vue'
 import { promiseTimeout, useToggle, useVModel } from '@vueuse/core'
 import anime from 'animejs'
-import { nanoid } from 'nanoid'
 import { omit, pipe } from 'remeda'
-import { computed, onBeforeMount, onMounted, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, ref, useId } from 'vue'
 
 // #region Props
 interface Props {
@@ -431,8 +430,8 @@ const KEYFRAME_IDS = [
   'cat-arm-5',
 ] as const
 
-const uid = `id${nanoid()}`
-const modelValue = useVModel(prop, 'modelValue')
+const uid = useId()
+const modelValue = useVModel(prop, 'modelValue', emit)
 const [currentValue, toggleCurrentValue] = useToggle(modelValue.value)
 
 interface KeyframeOption extends anime.AnimeParams {
@@ -640,7 +639,7 @@ async function start() {
     await toKeyframe('in', id)
   }
 
-  // toggle 與 cat-arm-5 同時執行的時機看起來比較好
+  // toggle 與 cat-arm-5 同時執行的動畫效果看起來更好
   toggleCurrentValue()
   await toKeyframe('in', 'cat-arm-5')
 
