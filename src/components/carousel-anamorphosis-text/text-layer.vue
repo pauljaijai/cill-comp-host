@@ -54,19 +54,11 @@ onMounted(async () => {
 <style scoped lang="sass">
 .text-layer
   position: absolute
-  font-size: 12rem
-  line-height: 0.8
-  letter-spacing: -0.25rem
   inset: 0%
-  font-weight: bold
-  word-break: break-all
-  white-space: pre-wrap
-  word-wrap: break-word
-  background: url('/painting-codfish-bakery.webp')
+  background: url('/photography-street-cat.jpg')
   background-size: cover
   background-clip: text
   -webkit-text-fill-color: transparent
-  transform: translateZ(100px)
   animation-name: in-1
   animation-duration: 4s
   animation-fill-mode: forwards
@@ -74,7 +66,15 @@ onMounted(async () => {
   opacity: 0
 
 .text-box
+  // 擴大文字框，讓文字填充且超出文字層
   margin: -20%
+  font-size: 12rem
+  line-height: 0.8
+  letter-spacing: -0.25rem
+  font-weight: bold
+  word-break: break-all
+  white-space: pre-wrap
+  word-wrap: break-word
 
 @keyframes in-1
   0%

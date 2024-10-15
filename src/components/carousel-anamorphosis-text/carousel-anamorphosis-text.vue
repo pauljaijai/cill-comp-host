@@ -2,7 +2,7 @@
   <div class="carousel-anamorphosis-text relative overflow-hidden">
     <text-layer-container />
 
-    <img src="/painting-codfish-bakery.webp">
+    <img src="/photography-street-cat.jpg">
   </div>
 </template>
 
