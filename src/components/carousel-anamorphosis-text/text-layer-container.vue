@@ -1,13 +1,9 @@
 <template>
-  <div class="carousel-anamorphosis-text relative overflow-hidden">
-    <text-layer-container />
-
-    <img src="/painting-codfish-bakery.webp">
-  </div>
+  <text-layer text="cod" />
 </template>
 
 <script setup lang="ts">
-import TextLayerContainer from './text-layer-container.vue'
+import TextLayer from './text-layer.vue'
 
 // #region Props
 interface Props {
@@ -34,6 +30,4 @@ defineExpose({})
 </script>
 
 <style scoped lang="sass">
-.carousel-anamorphosis-text
-  perspective: 1000px
 </style>
