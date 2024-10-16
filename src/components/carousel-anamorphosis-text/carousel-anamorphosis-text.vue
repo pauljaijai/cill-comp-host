@@ -1,19 +1,26 @@
 <template>
   <div
-    class="carousel-anamorphosis-text relative overflow-hidden"
-    @click="isPlaying = !isPlaying"
+    class="overflow-hidden"
+    :style
+    @click="next"
   >
-    <text-layer-container
-      :text="prop.text"
-      :is-playing
-    />
+    <div class="wrapper relative">
+      <text-layer-container
+        :text="prop.text"
+        :src
+      />
 
-    <img src="/photography-street-cat.jpg">
+      <img
+        :src
+        class="object-cover"
+      >
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { CSSProperties } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import TextLayerContainer from './text-layer-container.vue'
 
 // #region Props
@@ -28,9 +35,14 @@ interface Props {
     /** 額外的 CSS class */
     class?: string;
   }>;
+
+  srcList: string[];
+  height?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {})
+const prop = withDefaults(defineProps<Props>(), {
+  height: '400px',
+})
 
 // #region Emits
 // const emit = defineEmits<{
@@ -44,7 +56,19 @@ defineSlots<{
 }>()
 // #endregion Slots
 
-const isPlaying = ref(false)
+const currentIndex = ref(0)
+const src = computed(() => prop.srcList[currentIndex.value] as string)
+watchEffect(() => {
+  console.log(`🚀 ~ src:`, src)
+})
+
+const style = computed<CSSProperties>(() => ({
+  height: prop.height,
+}))
+
+function next() {
+  currentIndex.value = (currentIndex.value + 1) % prop.srcList.length
+}
 
 // #region Methods
 defineExpose({})
@@ -52,6 +76,6 @@ defineExpose({})
 </script>
 
 <style scoped lang="sass">
-.carousel-anamorphosis-text
+.wrapper
   perspective: 1000px
 </style>

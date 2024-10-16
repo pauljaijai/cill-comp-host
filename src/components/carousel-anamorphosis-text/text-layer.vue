@@ -18,10 +18,10 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 
 // #region Props
 interface Props {
+  src: string;
   text: string;
   rotate: number;
   index: number;
-  isPlaying: boolean;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {})
@@ -38,6 +38,7 @@ const texts = computed(() => `${prop.text} `.repeat(repeatTimes.value))
 const rotateValue = computed(() => `${prop.rotate}deg`)
 const delayValue = computed(() => `${prop.index * 500}ms`)
 const marginValue = computed(() => `-${prop.index * 5}%`)
+const backgroundValue = computed(() => `url('${prop.src}')`)
 
 onMounted(async () => {
   // 需要等到資源載入完成才能取得元素尺寸
@@ -60,7 +61,7 @@ onMounted(async () => {
 
 /** 實現 restart animation */
 const animationValue = ref<'text-in' | 'none'>('text-in')
-watch(() => prop.isPlaying, async () => {
+watch(() => prop.src, async () => {
   animationValue.value = 'none'
 
   // nextTick 沒用，改為土炮法
@@ -74,7 +75,7 @@ watch(() => prop.isPlaying, async () => {
 .text-layer
   position: absolute
   inset: 0%
-  background: url('/photography-street-cat.jpg')
+  background: v-bind(backgroundValue)
   background-size: cover
   background-clip: text
   -webkit-text-fill-color: transparent

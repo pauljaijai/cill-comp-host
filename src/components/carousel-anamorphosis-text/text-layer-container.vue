@@ -7,7 +7,7 @@
     :rotate
     :index
     class="layer pointer-events-none"
-    :is-playing="prop.isPlaying"
+    :src="prop.src"
   />
 </template>
 
@@ -18,11 +18,11 @@ import TextLayer from './text-layer.vue'
 
 // #region Props
 interface Props {
+  src: string;
   text: string | string[] | Array<{
     value: string;
     class?: string;
   }>;
-  isPlaying: boolean;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {})
