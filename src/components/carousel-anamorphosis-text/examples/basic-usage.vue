@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col gap-4 border border-gray-300">
     <div class="flex justify-center">
-      <carousel-anamorphosis-text />
+      <carousel-anamorphosis-text text="cod" />
     </div>
   </div>
 </template>
