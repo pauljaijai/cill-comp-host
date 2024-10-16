@@ -12,9 +12,9 @@
 </template>
 
 <script setup lang="ts">
-import { until, useElementSize } from '@vueuse/core'
+import { useElementSize } from '@vueuse/core'
 import { divide, floor, multiply, pipe, when } from 'remeda'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 
 // #region Props
 interface Props {
@@ -40,10 +40,7 @@ const delayValue = computed(() => `${prop.index * 500}ms`)
 const marginValue = computed(() => `-${prop.index * 5}%`)
 const backgroundValue = computed(() => `url('${prop.src}')`)
 
-onMounted(async () => {
-  // 需要等到資源載入完成才能取得元素尺寸
-  await until(() => textLayerSize.width > 0 && textSize.width > 0).toBeTruthy()
-
+watch(() => [textLayerSize.width, textSize.width], () => {
   // 計算目前文字框面積與文字層面積的比例
   const ratio = pipe(
     textLayerSize.width * textLayerSize.height,
@@ -53,10 +50,10 @@ onMounted(async () => {
     multiply(2),
     when(Number.isNaN, () => 1),
   )
+  if (ratio < 1)
+    return
 
   repeatTimes.value = ratio
-  textSize.stop()
-  textLayerSize.stop()
 })
 
 /** 實現 restart animation */
@@ -77,6 +74,7 @@ watch(() => prop.src, async () => {
   inset: 0%
   background: v-bind(backgroundValue)
   background-size: cover
+  background-position: center
   background-clip: text
   -webkit-text-fill-color: transparent
   animation-name: v-bind(animationValue)

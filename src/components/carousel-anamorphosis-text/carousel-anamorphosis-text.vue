@@ -1,20 +1,18 @@
 <template>
   <div
-    class="overflow-hidden"
+    class="wrapper relative h-full w-full overflow-hidden"
     :style
     @click="next"
   >
-    <div class="wrapper relative">
-      <text-layer-container
-        :text="prop.text"
-        :src
-      />
+    <text-layer-container
+      :text="prop.text"
+      :src
+    />
 
-      <img
-        :src
-        class="object-cover"
-      >
-    </div>
+    <div
+      role="img"
+      class="img h-full w-full"
+    />
   </div>
 </template>
 
@@ -37,6 +35,7 @@ interface Props {
   }>;
 
   srcList: string[];
+  /** @default 400px */
   height?: string;
 }
 // #endregion Props
@@ -58,6 +57,7 @@ defineSlots<{
 
 const currentIndex = ref(0)
 const src = computed(() => prop.srcList[currentIndex.value] as string)
+const backgroundValue = computed(() => `url('${src.value}')`)
 watchEffect(() => {
   console.log(`🚀 ~ src:`, src)
 })
@@ -78,4 +78,9 @@ defineExpose({})
 <style scoped lang="sass">
 .wrapper
   perspective: 1000px
+
+.img
+  background: v-bind(backgroundValue)
+  background-size: cover
+  background-position: center
 </style>

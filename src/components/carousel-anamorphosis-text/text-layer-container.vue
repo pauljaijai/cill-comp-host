@@ -6,14 +6,14 @@
     :class="item.class"
     :rotate
     :index
-    class="layer pointer-events-none"
+    class="pointer-events-none"
     :src="prop.src"
   />
 </template>
 
 <script setup lang="ts">
 import { randomInteger, sample } from 'remeda'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import TextLayer from './text-layer.vue'
 
 // #region Props
@@ -50,6 +50,9 @@ const texts = computed(() => {
 
 /** 旋轉角度 */
 const rotate = ref(getRotate())
+watch(() => prop.src, () => {
+  rotate.value = getRotate()
+})
 
 /** 取得 30~10、-30~-10 度 */
 function getRotate() {
@@ -58,6 +61,4 @@ function getRotate() {
 </script>
 
 <style scoped lang="sass">
-.layer
-  backface-visibility: hidden
 </style>
