@@ -3,18 +3,18 @@
     ref="textLayerRef"
     class="text-layer"
   >
-    <div
-      ref="textBoxRef"
-      class="text-box"
-    >
-      {{ texts }}
+    <div class="text-box flex">
+      <div ref="textRef">
+        {{ texts }}
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useElementSize, useIntervalFn } from '@vueuse/core'
-import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+import { until, useElementSize } from '@vueuse/core'
+import { divide, floor, multiply, pipe, when } from 'remeda'
+import { computed, onMounted, reactive, ref } from 'vue'
 
 // #region Props
 interface Props {
@@ -26,28 +26,30 @@ const prop = withDefaults(defineProps<Props>(), {})
 const textLayerRef = ref<HTMLDivElement>()
 const textLayerSize = reactive(useElementSize(textLayerRef))
 
-const textBoxRef = ref<HTMLDivElement>()
-const textBoxSize = reactive(useElementSize(textBoxRef))
+const textRef = ref<HTMLDivElement>()
+const textSize = reactive(useElementSize(textRef))
 
 const repeatTimes = ref(1)
-const texts = computed(() => `${prop.text}  ${prop.text} `.repeat(repeatTimes.value))
+/** 刻意加上不對稱空白，製造文字錯落效果 */
+const texts = computed(() => `${prop.text} `.repeat(repeatTimes.value))
 
-// 不斷填充文字，直到文字框高度超過文字層高度的 1.2 倍
 onMounted(async () => {
-  let isPadding = false
-  const { pause } = useIntervalFn(async () => {
-    if (isPadding)
-      return
+  // 需要等到資源載入完成才能取得元素尺寸
+  await until(() => textLayerSize.width > 0 && textSize.width > 0).toBeTruthy()
 
-    repeatTimes.value++
-    isPadding = true
-    await nextTick()
-    isPadding = false
+  // 計算目前文字框面積與文字層面積的比例
+  const ratio = pipe(
+    textLayerSize.width * textLayerSize.height,
+    divide(textSize.width * textSize.height),
+    floor(0),
+    // 因為文字框向外擴大 10%，需要補償比例
+    multiply(1.5),
+    when(Number.isNaN, () => 1),
+  )
 
-    if (textBoxSize.height > textLayerSize.height * 1.5) {
-      pause()
-    }
-  }, 1)
+  repeatTimes.value = ratio
+  textSize.stop()
+  textLayerSize.stop()
 })
 </script>
 
@@ -67,7 +69,7 @@ onMounted(async () => {
 
 .text-box
   // 擴大文字框，讓文字填充且超出文字層
-  margin: -20%
+  margin: -10%
   font-size: 12rem
   line-height: 0.8
   letter-spacing: -0.25rem
