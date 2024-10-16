@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { useElementSize } from '@vueuse/core'
-import { divide, floor, multiply, pipe, when } from 'remeda'
+import { divide, floor, multiply, pipe } from 'remeda'
 import { computed, reactive, ref, watch } from 'vue'
 
 // #region Props
@@ -47,13 +47,11 @@ watch(() => [textLayerSize.width, textSize.width], () => {
     divide(textSize.width * textSize.height),
     floor(0),
     // 因為文字框向外擴大，需要補償比例
-    multiply(2),
-    when(Number.isNaN, () => 1),
+    multiply(1.5),
   )
-  if (ratio < 1)
-    return
-
-  repeatTimes.value = ratio
+  if (ratio > 1) {
+    repeatTimes.value = ratio
+  }
 })
 
 /** 實現 restart animation */
