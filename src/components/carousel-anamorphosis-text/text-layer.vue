@@ -1,7 +1,7 @@
 <template>
   <div
     ref="textLayerRef"
-    class="text-layer"
+    class="text-layer flex items-center justify-center"
   >
     <div class="text-box flex">
       <div ref="textRef">
@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { useElementSize } from '@vueuse/core'
-import { divide, floor, multiply, pipe } from 'remeda'
+import { divide, multiply, pipe, round } from 'remeda'
 import { computed, reactive, ref, watch } from 'vue'
 
 // #region Props
@@ -40,21 +40,31 @@ const texts = computed(() => `${prop.text} `.repeat(repeatTimes.value))
 const rotateValue = computed(() => `${prop.rotate}deg`)
 const durationValue = computed(() => `${prop.animationDuration}s`)
 const delayValue = computed(() => `${prop.index * prop.animationDelay}s`)
-const marginValue = computed(() => `-${prop.index * 5}%`)
+const marginValue = computed(() => `-${prop.index * 10}%`)
 const backgroundValue = computed(() => `url('${prop.src}')`)
 
-watch(() => [textLayerSize.width, textSize.width], () => {
-  // 計算目前文字框面積與文字層面積的比例
-  const ratio = pipe(
-    textLayerSize.width * textLayerSize.height,
-    divide(textSize.width * textSize.height),
-    floor(0),
-    // 因為文字框向外擴大，需要補償比例
-    multiply(1.5),
-  )
-  if (ratio > 1 && ratio > repeatTimes.value) {
-    repeatTimes.value = ratio
-  }
+watch(() => [
+  textLayerSize.width,
+  textSize.width,
+  prop.text,
+], async () => {
+  setTimeout(() => {
+    // 計算目前文字框面積與文字層面積的比例
+    const ratio = pipe(
+      textLayerSize.width * textLayerSize.height,
+      divide(textSize.width * textSize.height),
+      round(0),
+      // 因為文字框向外擴大，需要補償比例
+      multiply(2),
+    )
+
+    console.log(`🚀 ~ ratio:`, ratio)
+    if (ratio > 1 && ratio > repeatTimes.value) {
+      repeatTimes.value = ratio
+    }
+  }, 1)
+}, {
+  flush: 'post',
 })
 
 /** 實現 restart animation */
@@ -90,7 +100,6 @@ watch(() => prop.src, async () => {
   margin: v-bind(marginValue)
   line-height: 0.9
   letter-spacing: -0.25rem
-  font-weight: 900
   word-break: break-all
   white-space: pre-wrap
   word-wrap: break-word

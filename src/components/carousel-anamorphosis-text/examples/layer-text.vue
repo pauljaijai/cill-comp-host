@@ -4,6 +4,7 @@
       <carousel-anamorphosis-text
         ref="carouselRef"
         :src-list
+        height="60vh"
       />
     </div>
 
@@ -31,24 +32,21 @@ type SrcList = InstanceType<typeof CarouselAnamorphosisText>['srcList']
 
 const srcList: SrcList = [
   {
-    url: '/photography-street-cat.jpg',
-    text: 'CAT',
+    url: '/profile.webp',
+    text: ['FISH', 'COD', 'CHILL'],
   },
   {
-    url: '/photography-ears-of-rice.jpg',
-    text: 'RICE',
+    url: '/profile-2.webp',
+    text: [
+      { value: '肥', class: 'text-[18vmin]' },
+      { value: '肥', class: 'text-[24vmin]' },
+      { value: '魚', class: 'text-[18vmin]' },
+      { value: '魚', class: 'text-[24vmin]' },
+    ],
   },
   {
-    url: '/photography-morning-light-of-rice.jpg',
-    text: 'LIGHT',
-  },
-  {
-    url: '/photography-fireworks.jpg',
-    text: 'FIREWORKS',
-  },
-  {
-    url: '/photography-big-stupid-bird.jpg',
-    text: 'BIRD',
+    url: '/profile-3.webp',
+    text: ['吃', '爽', '魚'],
   },
 ]
 

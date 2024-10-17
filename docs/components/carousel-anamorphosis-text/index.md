@@ -1,22 +1,23 @@
 ---
-description:
+description: 圖片文字遮罩在透視移動中組成圖片，看不懂說明？那就趕快來看看吧。(*´∀`)~♥
 ---
 
 <script setup>
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/carousel-anamorphosis-text/examples/basic-usage.vue'
+import LayerText from '../../../src/components/carousel-anamorphosis-text/examples/layer-text.vue'
 </script>
 
-# 標題 <Badge type="info" text="carousel" />
+# 錯視文字輪播 <Badge type="info" text="carousel" />
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+圖片文字遮罩在透視移動中組成圖片，看不懂說明？那就趕快來看看吧。(*´∀`)~♥
 
 ## 使用範例
 
 ### 基本用法
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+酷酷的錯視文字輪播。(≖‿ゝ≖)✧
 
 <basic-usage/>
 
@@ -24,15 +25,21 @@ import BasicUsage from '../../../src/components/carousel-anamorphosis-text/examp
 <<< ../../../src/components/carousel-anamorphosis-text/examples/basic-usage.vue
 :::
 
+### 自訂每層文字
+
+可以自由調整文字內容。◝( •ω• )◟
+
+<layer-text/>
+
+雖然看不太清楚文字寫啥就是了 (́⊙◞౪◟⊙‵)
+
+::: details 查看範例原始碼
+<<< ../../../src/components/carousel-anamorphosis-text/examples/layer-text.vue
+:::
+
 ## 原理
 
 文字文字文字文字文字文字文字文字文字文字文字文字
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
-:::
 
 ## 原始碼
 
