@@ -176,7 +176,7 @@ async function initBoards(
 ) {
   const boards = await pipe(
     props.images,
-    map.indexed((item, i) => new Promise((resolve) => {
+    map((item, i) => new Promise((resolve) => {
       const {
         src,
         rotation,
@@ -263,7 +263,7 @@ function processBoardsPosition(boards: Mesh[]) {
   const tasks = pipe(
     range(0, count),
     shuffle(),
-    map.indexed((i, j) => {
+    map((i, j) => {
       const board = boards[i]
       if (!board)
         return
