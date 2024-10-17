@@ -21,12 +21,21 @@
       :animation-duration="prop.animationDuration"
       :animation-delay="prop.animationDelay"
     />
+
+    <!-- 預先載入所有圖片 -->
+    <div class="hidden">
+      <img
+        v-for="src in imgs"
+        :key="src"
+        :src="src"
+      >
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import { add, multiply, pipe } from 'remeda'
+import { add, map, multiply, pipe, unique } from 'remeda'
 import { computed, ref } from 'vue'
 import TextLayerContainer from './text-layer-container.vue'
 
@@ -76,6 +85,12 @@ defineSlots<{
 const style = computed<CSSProperties>(() => ({
   height: prop.height,
 }))
+
+const imgs = computed(() => pipe(
+  prop.srcList,
+  map(({ url }) => url),
+  unique(),
+))
 
 /** 目標圖片 index */
 const currentIndex = ref(0)
