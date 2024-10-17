@@ -18,6 +18,8 @@
     <text-layer-container
       :text="srcItem.text"
       :src="srcItem.url"
+      :animation-duration="prop.animationDuration"
+      :animation-delay="prop.animationDelay"
     />
   </div>
 </template>
@@ -26,7 +28,6 @@
 import type { CSSProperties } from 'vue'
 import { add, multiply, pipe } from 'remeda'
 import { computed, ref } from 'vue'
-import { ANIMATION_DELAY, ANIMATION_DURATION } from './constant'
 import TextLayerContainer from './text-layer-container.vue'
 
 // #region Props
@@ -49,10 +50,15 @@ interface Props {
   }>;
   /** @default 400px */
   height?: string;
+
+  animationDuration?: number;
+  animationDelay?: number;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   height: '400px',
+  animationDuration: 3.4,
+  animationDelay: 0.4,
 })
 
 // #region Emits
@@ -84,37 +90,39 @@ const imgStyle = computed(() => ({
 
 /** 總動畫時間。單位 ms
  *
- * 目前 animation-duration 為 4s，每層延遲 0.5s
+ * 目前每層延遲 0.5s
  */
 const totalAnimationDuration = computed(() => pipe(
   srcItem.value,
   ({ text }) => {
+    const { animationDelay, animationDuration } = prop
+
     if (typeof text === 'string') {
       /** 預設 3 層 */
-      return ANIMATION_DURATION + (ANIMATION_DELAY * 3 - 1)
+      return animationDuration + (animationDelay * 3 - 1)
     }
 
-    return ANIMATION_DURATION + (ANIMATION_DELAY * text.length - 1)
+    return animationDuration + (animationDelay * text.length - 1)
   },
   multiply(1000),
   /** 安全係數 */
   add(200),
 ))
 
-let isPlaying = true
+const isPlaying = ref(true)
 setTimeout(() => {
-  isPlaying = false
+  isPlaying.value = false
 }, totalAnimationDuration.value)
 
 function next() {
-  if (isPlaying)
+  if (isPlaying.value)
     return
 
-  isPlaying = true
+  isPlaying.value = true
   currentIndex.value = (currentIndex.value + 1) % prop.srcList.length
 
   setTimeout(() => {
-    isPlaying = false
+    isPlaying.value = false
   }, totalAnimationDuration.value)
 
   // 中途才更換圖片
@@ -124,14 +132,14 @@ function next() {
 }
 
 function prev() {
-  if (isPlaying)
+  if (isPlaying.value)
     return
 
-  isPlaying = true
+  isPlaying.value = true
   currentIndex.value = (currentIndex.value - 1 + prop.srcList.length) % prop.srcList.length
 
   setTimeout(() => {
-    isPlaying = false
+    isPlaying.value = false
   }, totalAnimationDuration.value)
 
   // 中途才更換圖片
@@ -143,6 +151,7 @@ function prev() {
 // #region Methods
 defineExpose({
   currentItem: srcItem,
+  isPlaying: computed(() => isPlaying.value),
   next,
   prev,
 })

@@ -15,7 +15,6 @@
 import { useElementSize } from '@vueuse/core'
 import { divide, floor, multiply, pipe } from 'remeda'
 import { computed, reactive, ref, watch } from 'vue'
-import { ANIMATION_DELAY, ANIMATION_DURATION } from './constant'
 
 // #region Props
 interface Props {
@@ -23,6 +22,8 @@ interface Props {
   text: string;
   rotate: number;
   index: number;
+  animationDuration: number;
+  animationDelay: number;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {})
@@ -37,8 +38,8 @@ const repeatTimes = ref(1)
 const texts = computed(() => `${prop.text} `.repeat(repeatTimes.value))
 
 const rotateValue = computed(() => `${prop.rotate}deg`)
-const durationValue = computed(() => `${ANIMATION_DURATION}s`)
-const delayValue = computed(() => `${prop.index * ANIMATION_DELAY}s`)
+const durationValue = computed(() => `${prop.animationDuration}s`)
+const delayValue = computed(() => `${prop.index * prop.animationDelay}s`)
 const marginValue = computed(() => `-${prop.index * 5}%`)
 const backgroundValue = computed(() => `url('${prop.src}')`)
 
@@ -102,12 +103,12 @@ watch(() => prop.src, async () => {
     rotate: v-bind(rotateValue)
     // 太卡惹，狠心關掉 ( ´•̥̥̥ ω •̥̥̥` )
     // filter: blur(4px)
-    filter: brightness(1.4)
+    filter: brightness(1.4) hue-rotate(-30deg)
     opacity: 1
   100%
     translate: 0 0 0
     rotate: 0deg
     // filter: blur(0px)
-    filter: brightness(1)
+    filter: brightness(1) hue-rotate(0deg)
     opacity: 1
 </style>

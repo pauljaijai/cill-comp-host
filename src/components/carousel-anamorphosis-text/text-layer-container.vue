@@ -8,6 +8,8 @@
     :index
     class="pointer-events-none"
     :src="prop.src"
+    :animation-duration="prop.animationDuration"
+    :animation-delay="prop.animationDelay"
   />
 </template>
 
@@ -23,6 +25,8 @@ interface Props {
     value: string;
     class?: string;
   }>;
+  animationDuration: number;
+  animationDelay: number;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {})
