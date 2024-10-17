@@ -1,5 +1,14 @@
 <template>
-  <div class="lid object-cover" />
+  <div class="lid object-cover">
+    <!-- 預下載紋理，以免切換時閃爍 -->
+    <div class="hidden">
+      <img
+        v-for="img in imgs"
+        :key="img"
+        :src="img"
+      >
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -12,15 +21,9 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), {})
 
-/** 預下載紋理，以免切換時閃爍 */
 const imgs = pipe(
   range(0, 10),
-  map((stage) => {
-    const image = new Image()
-    image.src = `/minecraft/textures/block/destroy_stage_${stage}.png`
-
-    return image
-  }),
+  map((stage) => `/minecraft/textures/block/destroy_stage_${stage}.png`),
 )
 
 const image = computed(() => {
