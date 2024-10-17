@@ -1,5 +1,5 @@
 ---
-description: 圖片文字遮罩在透視移動中組成圖片，看不懂說明？那就趕快來看看吧。(*´∀`)~♥
+description: 圖片被文字遮罩裁切後，邊移動移動邊組成圖片，看不懂說明？來看看就懂啦。(*´∀`)~♥
 ---
 
 <script setup>
@@ -11,7 +11,7 @@ import LayerText from '../../../src/components/carousel-anamorphosis-text/exampl
 
 # 錯視文字輪播 <Badge type="info" text="carousel" />
 
-圖片文字遮罩在透視移動中組成圖片，看不懂說明？那就趕快來看看吧。(*´∀`)~♥
+圖片被文字遮罩裁切後，邊移動移動邊組成圖片，看不懂說明？來看看就懂啦。(*´∀`)~♥
 
 ## 使用範例
 
