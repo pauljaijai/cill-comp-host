@@ -39,12 +39,12 @@ const srcList: SrcList = [
     text: 'RICE',
   },
   {
-    url: '/photography-morning-light-of-rice.jpg',
-    text: 'LIGHT',
-  },
-  {
     url: '/photography-fireworks.jpg',
     text: 'FIREWORKS',
+  },
+  {
+    url: '/photography-morning-light-of-rice.jpg',
+    text: 'LIGHT',
   },
   {
     url: '/photography-big-stupid-bird.jpg',
