@@ -38,7 +38,7 @@ const texts = computed(() => {
       if (typeof item === 'string') {
         return {
           value: item,
-          class: 'text-[20vmin]',
+          class: 'text-[20vmin] font-extrabold',
         }
       }
 
@@ -48,7 +48,7 @@ const texts = computed(() => {
 
   return Array.from({ length: 3 }, () => ({
     value: text,
-    class: 'text-[20vmin]',
+    class: 'text-[20vmin] font-extrabold',
   }))
 })
 

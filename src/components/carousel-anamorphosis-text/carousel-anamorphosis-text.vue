@@ -18,8 +18,8 @@
     <text-layer-container
       :text="srcItem.text"
       :src="srcItem.url"
-      :animation-duration="prop.animationDuration"
-      :animation-delay="prop.animationDelay"
+      :animation-duration
+      :animation-delay
     />
 
     <!-- 預先載入所有圖片 -->
@@ -56,6 +56,11 @@ interface Props {
       /** 額外的 CSS class */
       class?: string;
     }>;
+
+    /** 為空則以 Props.animationDuration 為主 */
+    animationDuration?: number;
+    /** 為空則以 Props.animationDelay 為主 */
+    animationDelay?: number;
   }>;
   /** @default 400px */
   height?: string;
@@ -103,6 +108,13 @@ const imgStyle = computed(() => ({
   'background-image': `url('${imgSrcItem.value.url}')`,
 }))
 
+const animationDuration = computed(
+  () => srcItem.value.animationDuration ?? prop.animationDuration,
+)
+const animationDelay = computed(
+  () => srcItem.value.animationDelay ?? prop.animationDelay,
+)
+
 /** 總動畫時間。單位 ms
  *
  * 目前每層延遲 0.5s
@@ -123,6 +135,8 @@ const totalAnimationDuration = computed(() => pipe(
   /** 安全係數 */
   add(200),
 ))
+/** 圖片切換時間長度 */
+const imgTransitionDurationValue = computed(() => `${totalAnimationDuration.value / 3}ms`)
 
 const isPlaying = ref(true)
 setTimeout(() => {
@@ -183,7 +197,7 @@ defineExpose({
   background-position: center
 
 .opacity-enter-active, .opacity-leave-active
-  transition-duration: 1s
+  transition-duration: v-bind(imgTransitionDurationValue)
 .opacity-enter-from, .opacity-leave-to
   opacity: 0 !important
 </style>
