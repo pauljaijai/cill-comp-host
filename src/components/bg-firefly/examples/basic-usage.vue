@@ -79,6 +79,6 @@ function refresh() {
 </script>
 
 <style scoped lang="sass">
-.bg
+.text-layer
   background: linear-gradient(to top, #102b19, #191f1b)
 </style>

@@ -225,7 +225,7 @@ async function initParticleSystem({ scene, canvas }: InitParam) {
       }
       return [colorValue] as const
     },
-    map.strict((value) => {
+    map((value) => {
       if (typeof value === 'string') {
         return Color3.FromHexString(value).toColor4()
       }
@@ -240,7 +240,7 @@ async function initParticleSystem({ scene, canvas }: InitParam) {
   const hideColor = new Color4()
   pipe(
     range(0, blinkMaxStep),
-    forEach.indexed((value, i) => {
+    forEach((value, i) => {
       const gradient = value / blinkMaxStep
       if (i % 4) {
         particleSystem.addColorGradient(gradient, color1, color2)

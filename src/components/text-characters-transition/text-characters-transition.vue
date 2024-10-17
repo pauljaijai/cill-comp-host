@@ -107,7 +107,7 @@ const chars = computed(() => pipe(
     /** Regex 加上 u 才不會導致 emoji 被拆分成亂碼 */
     return data.split(props.splitter ?? /.*?/u)
   },
-  map.strict.indexed((data, i, array) => {
+  map((data, i, array) => {
     const elId = `${id}-${i}`
 
     if (typeof data === 'string') {

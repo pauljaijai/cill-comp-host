@@ -74,7 +74,7 @@ type Item = TransitionType & {
 }
 const list: Item[] = pipe(
   enterActions,
-  map.indexed((action, i) => {
+  map((action, i) => {
     const leaveAction = leaveActions[i % leaveActions.length]
     if (!leaveAction) {
       throw new Error('Leave action is required')
