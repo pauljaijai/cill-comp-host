@@ -2,7 +2,6 @@
   <div
     class="wrapper relative h-full w-full overflow-hidden"
     :style
-    @click="next"
   >
     <transition
       name="opacity"
