@@ -17,32 +17,37 @@
     </transition>
 
     <text-layer-container
-      :text="prop.text"
-      :src
+      :text="srcItem.text"
+      :src="srcItem.url"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import { multiply, pipe } from 'remeda'
+import { add, multiply, pipe } from 'remeda'
 import { computed, ref } from 'vue'
+import { ANIMATION_DELAY, ANIMATION_DURATION } from './constant'
 import TextLayerContainer from './text-layer-container.vue'
 
 // #region Props
 interface Props {
-  /** 文字內容。
-   *
-   * 如果給 `string[]`，則對應每一層的的文字內容。
-   */
-  text: string | string[] | Array<{
-    /** 文字內容 */
-    value: string;
-    /** 額外的 CSS class */
-    class?: string;
-  }>;
+  srcList: Array<{
+    /** 圖片 url */
+    url: string;
 
-  srcList: string[];
+    /** 文字內容。
+     *
+     * 如果給 `string[]`，則對應每一層的的文字內容。
+     */
+    text: string | string[] | Array<{
+      /** 文字內容 */
+      value: string;
+
+      /** 額外的 CSS class */
+      class?: string;
+    }>;
+  }>;
   /** @default 400px */
   height?: string;
 }
@@ -72,10 +77,10 @@ const currentIndex = ref(0)
 /** 目前圖片 index。因為新圖片會比文字的圖片延遲更換，所以需要分開 */
 const imgIndex = ref(0)
 
-const src = computed(() => prop.srcList[currentIndex.value] as string)
-const imgSrc = computed(() => prop.srcList[imgIndex.value] as string)
+const srcItem = computed(() => prop.srcList[currentIndex.value]!)
+const imgSrcItem = computed(() => prop.srcList[imgIndex.value]!)
 const imgStyle = computed(() => ({
-  'background-image': `url('${imgSrc.value}')`,
+  'background-image': `url('${imgSrcItem.value.url}')`,
 }))
 
 /** 總動畫時間。單位 ms
@@ -83,40 +88,76 @@ const imgStyle = computed(() => ({
  * 目前 animation-duration 為 4s，每層延遲 0.5s
  */
 const totalAnimationDuration = computed(() => pipe(
-  prop.text,
-  (text) => {
+  srcItem.value,
+  ({ text }) => {
     if (typeof text === 'string') {
       /** 預設 3 層 */
-      return 4 + (0.5 * 3 - 1)
+      return ANIMATION_DURATION + (ANIMATION_DELAY * 3 - 1)
     }
 
-    return 4 + (0.5 * text.length - 1)
+    return ANIMATION_DURATION + (ANIMATION_DELAY * text.length - 1)
   },
   multiply(1000),
+  /** 安全係數 */
+  add(200),
 ))
 
+let isPlaying = true
+setTimeout(() => {
+  isPlaying = false
+}, totalAnimationDuration.value)
+
 function next() {
+  if (isPlaying)
+    return
+
+  isPlaying = true
   currentIndex.value = (currentIndex.value + 1) % prop.srcList.length
 
-  // 執行到一半才更換圖片
+  setTimeout(() => {
+    isPlaying = false
+  }, totalAnimationDuration.value)
+
+  // 中途才更換圖片
   setTimeout(() => {
     imgIndex.value = currentIndex.value
-  }, totalAnimationDuration.value / 2)
+  }, totalAnimationDuration.value / 3 * 2)
+}
+
+function prev() {
+  if (isPlaying)
+    return
+
+  isPlaying = true
+  currentIndex.value = (currentIndex.value - 1 + prop.srcList.length) % prop.srcList.length
+
+  setTimeout(() => {
+    isPlaying = false
+  }, totalAnimationDuration.value)
+
+  // 中途才更換圖片
+  setTimeout(() => {
+    imgIndex.value = currentIndex.value
+  }, totalAnimationDuration.value / 3 * 2)
 }
 
 // #region Methods
-defineExpose({})
+defineExpose({
+  currentItem: srcItem,
+  next,
+  prev,
+})
 // #endregion Methods
 </script>
 
 <style scoped lang="sass">
 .wrapper
   perspective: 1000px
+  background: #000
 
 .img
   background-size: cover
   background-position: center
-  box-shadow: 0px 0px 0px 0px #000
 
 .opacity-enter-active, .opacity-leave-active
   transition-duration: 1s

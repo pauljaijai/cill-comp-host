@@ -15,6 +15,7 @@
 import { useElementSize } from '@vueuse/core'
 import { divide, floor, multiply, pipe } from 'remeda'
 import { computed, reactive, ref, watch } from 'vue'
+import { ANIMATION_DELAY, ANIMATION_DURATION } from './constant'
 
 // #region Props
 interface Props {
@@ -36,7 +37,8 @@ const repeatTimes = ref(1)
 const texts = computed(() => `${prop.text} `.repeat(repeatTimes.value))
 
 const rotateValue = computed(() => `${prop.rotate}deg`)
-const delayValue = computed(() => `${prop.index * 500}ms`)
+const durationValue = computed(() => `${ANIMATION_DURATION}s`)
+const delayValue = computed(() => `${prop.index * ANIMATION_DELAY}s`)
 const marginValue = computed(() => `-${prop.index * 5}%`)
 const backgroundValue = computed(() => `url('${prop.src}')`)
 
@@ -49,7 +51,7 @@ watch(() => [textLayerSize.width, textSize.width], () => {
     // 因為文字框向外擴大，需要補償比例
     multiply(1.5),
   )
-  if (ratio > 1) {
+  if (ratio > 1 && ratio > repeatTimes.value) {
     repeatTimes.value = ratio
   }
 })
@@ -76,7 +78,7 @@ watch(() => prop.src, async () => {
   background-clip: text
   -webkit-text-fill-color: transparent
   animation-name: v-bind(animationValue)
-  animation-duration: 4s
+  animation-duration: v-bind(durationValue)
   animation-delay: v-bind(delayValue)
   animation-fill-mode: forwards
   animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1)
@@ -87,7 +89,7 @@ watch(() => prop.src, async () => {
   margin: v-bind(marginValue)
   line-height: 0.9
   letter-spacing: -0.25rem
-  font-weight: bold
+  font-weight: 900
   word-break: break-all
   white-space: pre-wrap
   word-wrap: break-word
@@ -98,11 +100,14 @@ watch(() => prop.src, async () => {
   0%
     translate: 0 0 1000px
     rotate: v-bind(rotateValue)
-    // filter: blur(2px)
+    // 太卡惹，狠心關掉 ( ´•̥̥̥ ω •̥̥̥` )
+    // filter: blur(4px)
+    filter: brightness(1.4)
     opacity: 1
   100%
     translate: 0 0 0
     rotate: 0deg
     // filter: blur(0px)
+    filter: brightness(1)
     opacity: 1
 </style>
