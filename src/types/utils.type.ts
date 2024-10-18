@@ -8,16 +8,16 @@ export type ExtractComponentProps<TComponent> =
   TComponent extends new () => {
     $props: infer P;
   }
-  ? P
-  : never
+    ? P
+    : never
 
 /** 提取 Vue Component slots */
 export type ExtractComponentSlots<TComponent> =
   TComponent extends new () => {
     $slots: infer P;
   }
-  ? P
-  : never
+    ? P
+    : never
 
 /** 提取 Vue SFC 之 props 參數部分
  *
@@ -35,5 +35,5 @@ export type ExtractComponentParam<TComponent> =
     any,
     any
   >
-  ? P
-  : never
+    ? P
+    : never
