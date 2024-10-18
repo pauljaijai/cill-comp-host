@@ -52,12 +52,13 @@ const emit = defineEmits<{
   dug: [];
   place: [];
 }>()
+// #endregion Emits
+
 // #region Slots
 defineSlots<{
   default?: () => unknown;
 }>()
-
-// #endregion Emits
+// #endregion Slots
 
 const bus = useEventBus(eventKey)
 
@@ -224,8 +225,6 @@ const updateData = computed<
 watch(updateData, (value) => {
   bus.emit(value)
 }, { deep: true })
-
-// #endregion Slots
 </script>
 
 <style scoped lang="sass">
