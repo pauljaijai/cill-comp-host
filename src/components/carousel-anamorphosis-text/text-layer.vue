@@ -58,7 +58,6 @@ watch(() => [
       multiply(2),
     )
 
-    console.log(`🚀 ~ ratio:`, ratio)
     if (ratio > 1 && ratio > repeatTimes.value) {
       repeatTimes.value = ratio
     }
