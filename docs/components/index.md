@@ -194,7 +194,7 @@ const currentSection = ref('btn');
 
 ### [錯視文字輪播](./carousel-anamorphosis-text/) <Badge type="info" text="carousel" />
 
-圖片被文字遮罩裁切後，邊移動移動邊組成圖片，看不懂說明？來看看就懂啦。(*´∀`)~♥
+文字作為遮罩裁切圖片後，邊移動移動邊組成圖片，看不懂說明？來看看就懂啦。(*´∀`)~♥
 
 <div>
   <carousel-anamorphosis-text  />
