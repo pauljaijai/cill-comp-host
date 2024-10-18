@@ -20,6 +20,7 @@ import WrapperMinecraftBlock from '../../src/components/wrapper-minecraft-block/
 import CursorSidekick from '../../src/components/cursor-sidekick/examples/basic-usage.vue';
 
 import CarouselSpaceFloating from '../../src/components/carousel-space-floating/examples/custom-posture.vue';
+import CarouselAnamorphosisText from '../../src/components/carousel-anamorphosis-text/examples/basic-usage.vue';
 
 import TransitionShape from '../../src/components/transition-shape/examples/basic-usage.vue';
 
@@ -189,6 +190,14 @@ const currentSection = ref('btn');
 
 <div class="h-[70vh]">
   <carousel-space-floating  />
+</div>
+
+### [錯視文字輪播](./carousel-anamorphosis-text/) <Badge type="info" text="carousel" />
+
+文字作為遮罩裁切圖片後，邊移動移動邊組成圖片，看不懂說明？來看看就懂啦。(*´∀`)~♥
+
+<div>
+  <carousel-anamorphosis-text  />
 </div>
 
 </expansion-section>

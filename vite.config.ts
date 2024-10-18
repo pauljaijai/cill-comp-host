@@ -10,13 +10,13 @@ export default defineConfig(({ command, mode }) => {
 
   const legacyTargets = isBuild
     ? [
-      'Android > 39',
-      'Chrome >= 60',
-      'Safari >= 10.1',
-      'iOS >= 10.3',
-      'Firefox >= 54',
-      'Edge >= 15',
-    ]
+        'Android > 39',
+        'Chrome >= 60',
+        'Safari >= 10.1',
+        'iOS >= 10.3',
+        'Firefox >= 54',
+        'Edge >= 15',
+      ]
     : undefined
 
   return {
@@ -32,6 +32,13 @@ export default defineConfig(({ command, mode }) => {
         targets: legacyTargets,
       }),
     ],
+    css: {
+      preprocessorOptions: {
+        sass: {
+          silenceDeprecations: ['legacy-js-api'],
+        },
+      },
+    },
     test: {
       environment: 'happy-dom',
       coverage: {

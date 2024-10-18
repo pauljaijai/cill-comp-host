@@ -2,7 +2,7 @@ import type { Mesh } from '@babylonjs/core'
 import type { TransitionType } from './type'
 import { Angle } from '@babylonjs/core'
 import anime from 'animejs'
-import { chunk, filter, flatten, isTruthy, map, pipe } from 'remeda'
+import { chunk, filter, flat, isTruthy, map, pipe } from 'remeda'
 
 export function isTypeEnter<
   Name extends TransitionType['name'],
@@ -64,17 +64,21 @@ const rectProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, index) => {
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: [rect.width, 0],
-          y: [0, 0],
-          ...option,
-          delay: option.delay * index,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [rect.width, 0],
+            y: [0, 0],
+            ...option,
+            delay: option.delay * index,
+          }).finished
+        }),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'rect'
@@ -83,17 +87,21 @@ const rectProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: [0, -rect.width],
-          y: [0, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [0, -rect.width],
+            y: [0, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished
+        }),
+      )
     },
   ],
   // slide-left
@@ -105,17 +113,21 @@ const rectProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: [-rect.width, 0],
-          y: [0, 0],
-          ...option,
-          delay: option.delay * index,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [-rect.width, 0],
+            y: [0, 0],
+            ...option,
+            delay: option.delay * index,
+          }).finished
+        }),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'rect'
@@ -124,17 +136,21 @@ const rectProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: [0, rect.width],
-          y: [0, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [0, rect.width],
+            y: [0, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished
+        }),
+      )
     },
   ],
   // slide-up
@@ -146,17 +162,21 @@ const rectProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: [0, 0],
-          y: [-rect.height, 0],
-          ...option,
-          delay: option.delay * index,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [0, 0],
+            y: [-rect.height, 0],
+            ...option,
+            delay: option.delay * index,
+          }).finished
+        }),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'rect'
@@ -165,17 +185,21 @@ const rectProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: [0, 0],
-          y: [0, rect.height],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [0, 0],
+            y: [0, rect.height],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished
+        }),
+      )
     },
   ],
   // slide-down
@@ -187,17 +211,21 @@ const rectProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: [0, 0],
-          y: [rect.height, 0],
-          ...option,
-          delay: option.delay * index,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [0, 0],
+            y: [rect.height, 0],
+            ...option,
+            delay: option.delay * index,
+          }).finished
+        }),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'rect'
@@ -206,17 +234,21 @@ const rectProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: [0, 0],
-          y: [0, -rect.height],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [0, 0],
+            y: [0, -rect.height],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished
+        }),
+      )
     },
   ],
   // scale
@@ -228,17 +260,21 @@ const rectProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.position.setAll(0)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.position.setAll(0)
 
-        return anime({
-          targets: mesh.scaling,
-          x: [0, 1],
-          y: [0, 1],
-          ...option,
-          delay: option.delay * index,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1],
+            y: [0, 1],
+            ...option,
+            delay: option.delay * index,
+          }).finished
+        }),
+      )
     },
     ({ type, meshes }) => {
       const name = 'rect'
@@ -247,17 +283,21 @@ const rectProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.position.setAll(0)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.position.setAll(0)
 
-        return anime({
-          targets: mesh.scaling,
-          x: [1, 0],
-          y: [1, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 0],
+            y: [1, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished
+        }),
+      )
     },
   ],
   // scale-x
@@ -268,17 +308,21 @@ const rectProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.position.setAll(0)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.position.setAll(0)
 
-        return anime({
-          targets: mesh.scaling,
-          x: [0, 1],
-          y: [1, 1],
-          ...option,
-          delay: option.delay * index,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1],
+            y: [1, 1],
+            ...option,
+            delay: option.delay * index,
+          }).finished
+        }),
+      )
     },
     ({ type, meshes }) => {
       const name = 'rect'
@@ -287,16 +331,20 @@ const rectProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.position.setAll(0)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.position.setAll(0)
 
-        return anime({
-          targets: mesh.scaling,
-          x: [1, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished
+        }),
+      )
     },
   ],
   // scale-y
@@ -307,17 +355,21 @@ const rectProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.position.setAll(0)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.position.setAll(0)
 
-        return anime({
-          targets: mesh.scaling,
-          x: [1, 1],
-          y: [0, 1],
-          ...option,
-          delay: option.delay * index,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 1],
+            y: [0, 1],
+            ...option,
+            delay: option.delay * index,
+          }).finished
+        }),
+      )
     },
     ({ type, meshes }) => {
       const name = 'rect'
@@ -326,17 +378,21 @@ const rectProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName('rect')), map.indexed((mesh, index) => {
-        mesh.position.setAll(0)
+      return pipe(
+        meshes,
+        filter(isMeshName('rect')),
+        map((mesh, index) => {
+          mesh.position.setAll(0)
 
-        return anime({
-          targets: mesh.scaling,
-          x: [1, 1],
-          y: [1, 0],
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: [1, 1],
+            y: [1, 0],
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished
+        }),
+      )
     },
   ],
 ]
@@ -355,39 +411,45 @@ const convergingRectProviders: Providers = [
       const startX = rect.width + rect.width / 2
       const endX = rect.width / 2
 
-      return pipe(meshes, filter(isMeshName(name)), chunk(2), map.indexed(([mesh01, mesh02], index) => {
-        const delay = option.delay * index
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        chunk(2),
+        map(([mesh01, mesh02], index) => {
+          const delay = option.delay * index
 
-        mesh01.scaling.setAll(1)
-        mesh01.position.y = 0
-        mesh01.rotation.z = rotate
+          mesh01.scaling.setAll(1)
+          mesh01.position.y = 0
+          mesh01.rotation.z = rotate
 
-        const result = [
-          anime({
-            targets: mesh01.position,
-            x: [-startX, -endX],
-            ...option,
-            delay,
-          }).finished,
-        ]
-
-        if (mesh02) {
-          mesh02.scaling.setAll(1)
-          mesh02.position.y = 0
-          mesh02.rotation.z = rotate
-
-          result.push(
+          const result = [
             anime({
-              targets: mesh02.position,
-              x: [startX, endX],
+              targets: mesh01.position,
+              x: [-startX, -endX],
               ...option,
               delay,
             }).finished,
-          )
-        }
+          ]
 
-        return result
-      }), flatten())
+          if (mesh02) {
+            mesh02.scaling.setAll(1)
+            mesh02.position.y = 0
+            mesh02.rotation.z = rotate
+
+            result.push(
+              anime({
+                targets: mesh02.position,
+                x: [startX, endX],
+                ...option,
+                delay,
+              }).finished,
+            )
+          }
+
+          return result
+        }),
+        flat(),
+      )
     },
     ({ rect, type, meshes }) => {
       const name: TransitionType['name'] = 'converging-rect'
@@ -397,36 +459,42 @@ const convergingRectProviders: Providers = [
       const option = type.leave
       const endX = rect.width + rect.width / 2
 
-      return pipe(meshes, filter(isMeshName(name)), chunk(2), map.indexed(([mesh01, mesh02], index) => {
-        const delay = option.delay * (type.colors.length - index)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        chunk(2),
+        map(([mesh01, mesh02], index) => {
+          const delay = option.delay * (type.colors.length - index)
 
-        mesh01.scaling.setAll(1)
-        mesh01.position.y = 0
+          mesh01.scaling.setAll(1)
+          mesh01.position.y = 0
 
-        const result = [
-          anime({
-            targets: mesh01.position,
-            x: -endX,
-            ...option,
-            delay,
-          }).finished,
-        ]
-
-        if (mesh02) {
-          mesh02.scaling.setAll(1)
-          mesh02.position.y = 0
-          result.push(
+          const result = [
             anime({
-              targets: mesh02.position,
-              x: endX,
+              targets: mesh01.position,
+              x: -endX,
               ...option,
               delay,
             }).finished,
-          )
-        }
+          ]
 
-        return result
-      }), flatten())
+          if (mesh02) {
+            mesh02.scaling.setAll(1)
+            mesh02.position.y = 0
+            result.push(
+              anime({
+                targets: mesh02.position,
+                x: endX,
+                ...option,
+                delay,
+              }).finished,
+            )
+          }
+
+          return result
+        }),
+        flat(),
+      )
     },
   ],
 ]
@@ -442,17 +510,21 @@ const roundProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter((item) => item.name === name), map.indexed((mesh, index) => {
-        mesh.position.setAll(0)
+      return pipe(
+        meshes,
+        filter((item) => item.name === name),
+        map((mesh, index) => {
+          mesh.position.setAll(0)
 
-        return anime({
-          targets: mesh.scaling,
-          x: [0, 1],
-          y: [0, 1],
-          ...option,
-          delay: option.delay * index,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1],
+            y: [0, 1],
+            ...option,
+            delay: option.delay * index,
+          }).finished
+        }),
+      )
     },
     ({ type, meshes }) => {
       const name = 'round'
@@ -461,17 +533,21 @@ const roundProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter((item) => item.name === 'round'), map.indexed((mesh, index) => {
-        mesh.position.setAll(0)
+      return pipe(
+        meshes,
+        filter((item) => item.name === 'round'),
+        map((mesh, index) => {
+          mesh.position.setAll(0)
 
-        return anime({
-          targets: mesh.scaling,
-          x: 0,
-          y: 0,
-          ...option,
-          delay: option.delay * (type.colors.length - index),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: 0,
+            y: 0,
+            ...option,
+            delay: option.delay * (type.colors.length - index),
+          }).finished
+        }),
+      )
     },
   ],
   // scale-lb
@@ -483,28 +559,33 @@ const roundProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, index) => {
-        mesh.position.x = rect.width / 2
-        mesh.position.y = -rect.height / 2
-        const delay = option.delay * index
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, index) => {
+          mesh.position.x = rect.width / 2
+          mesh.position.y = -rect.height / 2
+          const delay = option.delay * index
 
-        return [
-          anime({
-            targets: mesh.scaling,
-            x: [0, 1],
-            y: [0, 1],
-            ...option,
-            delay,
-          }).finished,
-          anime({
-            targets: mesh.position,
-            x: 0,
-            y: 0,
-            ...option,
-            delay,
-          }).finished,
-        ]
-      }), flatten())
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [0, 1],
+              y: [0, 1],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished,
+          ]
+        }),
+        flat(),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'round'
@@ -513,26 +594,31 @@ const roundProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, index) => {
-        const delay = option.delay * (type.colors.length - index)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, index) => {
+          const delay = option.delay * (type.colors.length - index)
 
-        return [
-          anime({
-            targets: mesh.scaling,
-            x: 0,
-            y: 0,
-            ...option,
-            delay,
-          }).finished,
-          anime({
-            targets: mesh.position,
-            x: rect.width / 2,
-            y: -rect.height / 2,
-            ...option,
-            delay,
-          }).finished,
-        ]
-      }), flatten())
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: rect.width / 2,
+              y: -rect.height / 2,
+              ...option,
+              delay,
+            }).finished,
+          ]
+        }),
+        flat(),
+      )
     },
   ],
   // scale-lt
@@ -544,28 +630,33 @@ const roundProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, index) => {
-        mesh.position.x = rect.width / 2
-        mesh.position.y = rect.height / 2
-        const delay = option.delay * index
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, index) => {
+          mesh.position.x = rect.width / 2
+          mesh.position.y = rect.height / 2
+          const delay = option.delay * index
 
-        return [
-          anime({
-            targets: mesh.scaling,
-            x: [0, 1],
-            y: [0, 1],
-            ...option,
-            delay,
-          }).finished,
-          anime({
-            targets: mesh.position,
-            x: 0,
-            y: 0,
-            ...option,
-            delay,
-          }).finished,
-        ]
-      }), flatten())
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [0, 1],
+              y: [0, 1],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished,
+          ]
+        }),
+        flat(),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'round'
@@ -574,30 +665,35 @@ const roundProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, index) => {
-        const [x, y] = [
-          rect.width / 2,
-          rect.height / 2,
-        ]
-        const delay = option.delay * (type.colors.length - index)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, index) => {
+          const [x, y] = [
+            rect.width / 2,
+            rect.height / 2,
+          ]
+          const delay = option.delay * (type.colors.length - index)
 
-        return [
-          anime({
-            targets: mesh.scaling,
-            x: 0,
-            y: 0,
-            ...option,
-            delay,
-          }).finished,
-          anime({
-            targets: mesh.position,
-            x,
-            y,
-            ...option,
-            delay,
-          }).finished,
-        ]
-      }), flatten())
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x,
+              y,
+              ...option,
+              delay,
+            }).finished,
+          ]
+        }),
+        flat(),
+      )
     },
   ],
   // scale-rb
@@ -609,28 +705,33 @@ const roundProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, index) => {
-        mesh.position.x = -rect.width / 2
-        mesh.position.y = -rect.height / 2
-        const delay = option.delay * index
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, index) => {
+          mesh.position.x = -rect.width / 2
+          mesh.position.y = -rect.height / 2
+          const delay = option.delay * index
 
-        return [
-          anime({
-            targets: mesh.scaling,
-            x: [0, 1],
-            y: [0, 1],
-            ...option,
-            delay,
-          }).finished,
-          anime({
-            targets: mesh.position,
-            x: 0,
-            y: 0,
-            ...option,
-            delay,
-          }).finished,
-        ]
-      }), flatten())
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [0, 1],
+              y: [0, 1],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished,
+          ]
+        }),
+        flat(),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'round'
@@ -639,30 +740,35 @@ const roundProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, index) => {
-        const [x, y] = [
-          -rect.width / 2,
-          -rect.height / 2,
-        ]
-        const delay = option.delay * (type.colors.length - index)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, index) => {
+          const [x, y] = [
+            -rect.width / 2,
+            -rect.height / 2,
+          ]
+          const delay = option.delay * (type.colors.length - index)
 
-        return [
-          anime({
-            targets: mesh.scaling,
-            x: 0,
-            y: 0,
-            ...option,
-            delay,
-          }).finished,
-          anime({
-            targets: mesh.position,
-            x,
-            y,
-            ...option,
-            delay,
-          }).finished,
-        ]
-      }), flatten())
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x,
+              y,
+              ...option,
+              delay,
+            }).finished,
+          ]
+        }),
+        flat(),
+      )
     },
   ],
   // scale-rt
@@ -674,28 +780,33 @@ const roundProviders: Providers = [
 
       const option = type.enter
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, index) => {
-        mesh.position.x = -rect.width / 2
-        mesh.position.y = rect.height / 2
-        const delay = option.delay * index
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, index) => {
+          mesh.position.x = -rect.width / 2
+          mesh.position.y = rect.height / 2
+          const delay = option.delay * index
 
-        return [
-          anime({
-            targets: mesh.scaling,
-            x: [0, 1],
-            y: [0, 1],
-            ...option,
-            delay,
-          }).finished,
-          anime({
-            targets: mesh.position,
-            x: 0,
-            y: 0,
-            ...option,
-            delay,
-          }).finished,
-        ]
-      }), flatten())
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: [0, 1],
+              y: [0, 1],
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished,
+          ]
+        }),
+        flat(),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'round'
@@ -704,30 +815,35 @@ const roundProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, index) => {
-        const [x, y] = [
-          -rect.width / 2,
-          rect.height / 2,
-        ]
-        const delay = option.delay * (type.colors.length - index)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, index) => {
+          const [x, y] = [
+            -rect.width / 2,
+            rect.height / 2,
+          ]
+          const delay = option.delay * (type.colors.length - index)
 
-        return [
-          anime({
-            targets: mesh.scaling,
-            x: 0,
-            y: 0,
-            ...option,
-            delay,
-          }).finished,
-          anime({
-            targets: mesh.position,
-            x,
-            y,
-            ...option,
-            delay,
-          }).finished,
-        ]
-      }), flatten())
+          return [
+            anime({
+              targets: mesh.scaling,
+              x: 0,
+              y: 0,
+              ...option,
+              delay,
+            }).finished,
+            anime({
+              targets: mesh.position,
+              x,
+              y,
+              ...option,
+              delay,
+            }).finished,
+          ]
+        }),
+        flat(),
+      )
     },
   ],
 
@@ -747,19 +863,23 @@ const roundProviders: Providers = [
 
       const offset = diameter / type.colors.length
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.scaling.setAll(1)
-        mesh.position.y = 0
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.scaling.setAll(1)
+          mesh.position.y = 0
 
-        const delay = option.delay * i
+          const delay = option.delay * i
 
-        return anime({
-          targets: mesh.position,
-          x: [-diameter, -i * offset],
-          ...option,
-          delay,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [-diameter, -i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
     },
   ],
   // spread-right
@@ -778,19 +898,23 @@ const roundProviders: Providers = [
 
       const offset = diameter / type.colors.length
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.scaling.setAll(1)
-        mesh.position.y = 0
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.scaling.setAll(1)
+          mesh.position.y = 0
 
-        const delay = option.delay * i
+          const delay = option.delay * i
 
-        return anime({
-          targets: mesh.position,
-          x: [diameter, i * offset],
-          ...option,
-          delay,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: [diameter, i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
     },
   ],
   // spread-up
@@ -809,19 +933,23 @@ const roundProviders: Providers = [
 
       const offset = diameter / (type.colors.length + 1)
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.scaling.setAll(1)
-        mesh.position.x = 0
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.scaling.setAll(1)
+          mesh.position.x = 0
 
-        const delay = option.delay * i
+          const delay = option.delay * i
 
-        return anime({
-          targets: mesh.position,
-          y: [diameter, i * offset],
-          ...option,
-          delay,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            y: [diameter, i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
     },
   ],
   // spread-down
@@ -840,19 +968,23 @@ const roundProviders: Providers = [
 
       const offset = diameter / (type.colors.length + 1)
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.scaling.setAll(1)
-        mesh.position.x = 0
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.scaling.setAll(1)
+          mesh.position.x = 0
 
-        const delay = option.delay * i
+          const delay = option.delay * i
 
-        return anime({
-          targets: mesh.position,
-          y: [-diameter, -i * offset],
-          ...option,
-          delay,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            y: [-diameter, -i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
     },
   ],
   // spread-scale
@@ -866,19 +998,23 @@ const roundProviders: Providers = [
 
       const offset = 1 / type.colors.length
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.position.setAll(0)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.position.setAll(0)
 
-        const delay = option.delay * i
+          const delay = option.delay * i
 
-        return anime({
-          targets: mesh.scaling,
-          x: [0, 1 - i * offset],
-          y: [0, 1 - i * offset],
-          ...option,
-          delay,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1 - i * offset],
+            y: [0, 1 - i * offset],
+            ...option,
+            delay,
+          }).finished
+        }),
+      )
     },
   ],
 ]
@@ -897,22 +1033,26 @@ const fenceProviders: Providers = [
       const eachWidth = width / type.colors.length
       const oriX = width / 2 + eachWidth / 2
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.position.y = 0
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.position.y = 0
+          mesh.scaling.setAll(1)
 
-        const x = [
-          oriX,
-          i * eachWidth - width / 2 + eachWidth / 2,
-        ]
+          const x = [
+            oriX,
+            i * eachWidth - width / 2 + eachWidth / 2,
+          ]
 
-        return anime({
-          targets: mesh.position,
-          x,
-          ...option,
-          delay: option.delay * (type.colors.length - i),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x,
+            ...option,
+            delay: option.delay * (type.colors.length - i),
+          }).finished
+        }),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'fence'
@@ -925,17 +1065,21 @@ const fenceProviders: Providers = [
       const eachWidth = width / type.colors.length
       const oriX = width / 2 + eachWidth / 2
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.position.y = 0
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.position.y = 0
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: oriX,
-          ...option,
-          delay: option.delay * i,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: oriX,
+            ...option,
+            delay: option.delay * i,
+          }).finished
+        }),
+      )
     },
   ],
   // spread-right
@@ -951,22 +1095,26 @@ const fenceProviders: Providers = [
       const eachWidth = width / type.colors.length
       const oriX = width / 2 + eachWidth / 2
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.position.y = 0
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.position.y = 0
+          mesh.scaling.setAll(1)
 
-        const x = [
-          -oriX,
-          i * eachWidth - width / 2 + eachWidth / 2,
-        ]
+          const x = [
+            -oriX,
+            i * eachWidth - width / 2 + eachWidth / 2,
+          ]
 
-        return anime({
-          targets: mesh.position,
-          x,
-          ...option,
-          delay: option.delay * i,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x,
+            ...option,
+            delay: option.delay * i,
+          }).finished
+        }),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'fence'
@@ -979,17 +1127,21 @@ const fenceProviders: Providers = [
       const eachWidth = width / type.colors.length
       const oriX = width / 2 + eachWidth / 2
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.position.y = 0
-        mesh.scaling.setAll(1)
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.position.y = 0
+          mesh.scaling.setAll(1)
 
-        return anime({
-          targets: mesh.position,
-          x: -oriX,
-          ...option,
-          delay: option.delay * (type.colors.length - i),
-        }).finished
-      }))
+          return anime({
+            targets: mesh.position,
+            x: -oriX,
+            ...option,
+            delay: option.delay * (type.colors.length - i),
+          }).finished
+        }),
+      )
     },
   ],
   // scale-y
@@ -1004,17 +1156,21 @@ const fenceProviders: Providers = [
       const { width } = rect
       const eachWidth = width / type.colors.length
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.position.x = i * eachWidth - width / 2 + eachWidth / 2
-        mesh.scaling.x = 1
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.position.x = i * eachWidth - width / 2 + eachWidth / 2
+          mesh.scaling.x = 1
 
-        return anime({
-          targets: mesh.scaling,
-          y: [0, 1],
-          ...option,
-          delay: option.delay * i,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            y: [0, 1],
+            ...option,
+            delay: option.delay * i,
+          }).finished
+        }),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'fence'
@@ -1023,14 +1179,18 @@ const fenceProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        return anime({
-          targets: mesh.scaling,
-          y: 0,
-          ...option,
-          delay: option.delay * (type.colors.length - i),
-        }).finished
-      }))
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          return anime({
+            targets: mesh.scaling,
+            y: 0,
+            ...option,
+            delay: option.delay * (type.colors.length - i),
+          }).finished
+        }),
+      )
     },
   ],
   // scale-x
@@ -1045,17 +1205,21 @@ const fenceProviders: Providers = [
       const { width } = rect
       const eachWidth = width / type.colors.length
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        mesh.position.x = i * eachWidth - width / 2 + eachWidth / 2
-        mesh.scaling.y = 1
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          mesh.position.x = i * eachWidth - width / 2 + eachWidth / 2
+          mesh.scaling.y = 1
 
-        return anime({
-          targets: mesh.scaling,
-          x: [0, 1],
-          ...option,
-          delay: option.delay * i,
-        }).finished
-      }))
+          return anime({
+            targets: mesh.scaling,
+            x: [0, 1],
+            ...option,
+            delay: option.delay * i,
+          }).finished
+        }),
+      )
     },
     ({ rect, type, meshes }) => {
       const name = 'fence'
@@ -1064,14 +1228,18 @@ const fenceProviders: Providers = [
 
       const option = type.leave
 
-      return pipe(meshes, filter(isMeshName(name)), map.indexed((mesh, i) => {
-        return anime({
-          targets: mesh.scaling,
-          x: 0,
-          ...option,
-          delay: option.delay * (type.colors.length - i),
-        }).finished
-      }))
+      return pipe(
+        meshes,
+        filter(isMeshName(name)),
+        map((mesh, i) => {
+          return anime({
+            targets: mesh.scaling,
+            x: 0,
+            ...option,
+            delay: option.delay * (type.colors.length - i),
+          }).finished
+        }),
+      )
     },
   ],
 ]

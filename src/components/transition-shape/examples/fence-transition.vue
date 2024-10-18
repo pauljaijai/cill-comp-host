@@ -70,7 +70,7 @@ type Item = TransitionType & {
 }
 const list: Item[] = pipe(
   actions,
-  map.indexed((action, i) => {
+  map((action, i) => {
     const targetAction = reverseActions[i] ?? action
 
     const colors = shuffle(['#27A4F2', '#44C1F2', '#85DEF2', '#DCEEF2', '#91E9F2'])

@@ -112,6 +112,7 @@ export default defineConfig({
             text: '輪播',
             items: [
               { text: '空間懸浮輪播', link: '/components/carousel-space-floating/' },
+              { text: '錯視文字輪播', link: '/components/carousel-anamorphosis-text/' },
             ],
           },
           {
