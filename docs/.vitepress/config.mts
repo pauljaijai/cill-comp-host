@@ -172,4 +172,13 @@ export default defineConfig({
     },
   },
   rewrites: {},
+  vite: {
+    css: {
+      preprocessorOptions: {
+        sass: {
+          silenceDeprecations: ['legacy-js-api'],
+        },
+      },
+    },
+  },
 })
