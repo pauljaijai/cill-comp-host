@@ -154,10 +154,7 @@ function next() {
     isPlaying.value = false
   }, totalAnimationDuration.value)
 
-  // 中途才更換圖片
-  setTimeout(() => {
-    imgIndex.value = currentIndex.value
-  }, totalAnimationDuration.value / 3 * 2)
+  processChangeImg()
 }
 
 function prev() {
@@ -171,10 +168,14 @@ function prev() {
     isPlaying.value = false
   }, totalAnimationDuration.value)
 
-  // 中途才更換圖片
+  processChangeImg()
+}
+
+/** 中途才更換圖片 */
+function processChangeImg() {
   setTimeout(() => {
     imgIndex.value = currentIndex.value
-  }, totalAnimationDuration.value / 3 * 2)
+  }, totalAnimationDuration.value / 3)
 }
 
 // #region Methods
