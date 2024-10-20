@@ -1,5 +1,5 @@
 ---
-description: 文字作為遮罩裁切圖片後，邊移動移動邊組成圖片，看不懂說明？來看看就懂啦。(*´∀`)~♥
+description: 文字作為遮罩裁切圖片後，邊移動移動邊組成圖片。看不懂說明？沒關係我也看不太懂，來看看就懂啦。ᕕ( ﾟ ∀。)ᕗ
 ---
 
 <script setup>
@@ -11,7 +11,9 @@ import LayerText from '../../../src/components/carousel-anamorphosis-text/exampl
 
 # 錯視文字輪播 <Badge type="info" text="carousel" />
 
-文字作為遮罩裁切圖片後，邊移動移動邊組成圖片，看不懂說明？來看看就懂啦。(*´∀`)~♥
+文字作為遮罩裁切圖片後，邊移動移動邊組成圖片。
+
+看不懂說明？沒關係我也看不太懂，來看看就懂啦。ᕕ( ﾟ ∀。)ᕗ
 
 靈感來自我在 Envato 路過的一個[輪播效果](https://elements.envato.com/inspired-slideshow-V4Z2QX8)。
 
