@@ -45,7 +45,7 @@ import LayerText from '../../../src/components/carousel-anamorphosis-text/exampl
 
 ## 原理
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+使用 `background-clip: text` 實現文字遮罩效果，配合 `perspective` 和 `transform` 屬性實現 3D 移動效果。
 
 ## 原始碼
 
