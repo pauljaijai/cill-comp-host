@@ -29,6 +29,17 @@ import {
 } from 'vue'
 import { PROVIDE_KEY } from '.'
 
+// #region Props
+interface Props {
+  /** 立即開始，物體會在元件建立完成後馬上會開始掉落 */
+  immediate?: boolean;
+
+  /** 重力加速度
+   *
+   * x, y 為加速度的方向，scale 為加速度的大小
+   */
+  gravity?: Matter.Gravity;
+}
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   immediate: false,
@@ -48,17 +59,6 @@ const {
   Body,
 } = Matter
 
-// #region Props
-interface Props {
-  /** 立即開始，物體會在元件建立完成後馬上會開始掉落 */
-  immediate?: boolean;
-
-  /** 重力加速度
-   *
-   * x, y 為加速度的方向，scale 為加速度的大小
-   */
-  gravity?: Matter.Gravity;
-}
 const debug = false
 
 const wrapperRef = ref<HTMLDivElement>()
@@ -98,6 +98,100 @@ watch(() => props.gravity, (value) => {
 })
 
 const runner = shallowRef(Runner.create())
+
+/** 儲存已建立的 body */
+const bodyMap = new Map<string, ElBody>()
+/** body 物理模擬資料 */
+const bodyInfoMap = new Map<string, {
+  offsetX: number;
+  offsetY: number;
+  rotate: number;
+}>()
+
+function bindBody(item: ElBody) {
+  bodyMap.set(item.id, item)
+}
+function unbindBody(id: string) {
+  bodyMap.delete(id)
+  bodyInfoMap.delete(id)
+}
+function updateBody(id: string, param: UpdateParam) {
+  const bodyData = bodyMap.get(id)
+  if (bodyData) {
+    bodyMap.set(id, {
+      ...bodyData,
+      frictionAir: param.frictionAir,
+      friction: param.friction,
+      restitution: param.restitution,
+      mass: param.mass,
+      isStatic: param.isStatic,
+    })
+  }
+
+  const target = Composite.allBodies(engine.value.world).find(
+    (body) => body.label === id,
+  )
+  if (!target)
+    return
+
+  param.frictionAir && (target.frictionAir = param.frictionAir)
+  param.friction && (target.friction = param.friction)
+  param.restitution && (target.restitution = param.restitution)
+  param.mass && Body.setMass(target, param.mass)
+  param.isStatic && Body.setStatic(target, param.isStatic)
+  param.velocity && Body.setVelocity(target, param.velocity)
+  param.angularVelocity && Body.setAngularVelocity(target, param.angularVelocity)
+}
+
+// 持續更新狀態
+const {
+  pause: pauseUpdate,
+  resume: resumeUpdate,
+} = useIntervalFn(() => {
+  const list = Composite.allBodies(engine.value.world)
+
+  list.forEach((body) => {
+    /** id 存在 label 中 */
+    const id = body.label
+    const info = bodyMap.get(id)
+
+    if (!bodyMap.has(id) || !info) {
+      return
+    }
+
+    const { initial } = info
+    const value = {
+      ...{
+        offsetX: body.position.x - initial.offsetX,
+        offsetY: body.position.y - initial.offsetY,
+      },
+      rotate: body.angle * 180 / Math.PI,
+    }
+
+    bodyInfoMap.set(id, value)
+  })
+}, 10)
+
+onMounted(() => {
+  init()
+
+  if (props.immediate) {
+    start()
+  }
+})
+
+onBeforeUnmount(() => {
+  clear()
+})
+
+provide(PROVIDE_KEY, {
+  bindBody,
+  unbindBody,
+  updateBody,
+  getInfo(id) {
+    return bodyInfoMap.get(id)
+  },
+})
 
 function init() {
   const result = pipe(Array.from(bodyMap.values()),
@@ -238,100 +332,6 @@ function reset() {
   init()
   pauseUpdate()
 }
-
-// 持續更新狀態
-const {
-  pause: pauseUpdate,
-  resume: resumeUpdate,
-} = useIntervalFn(() => {
-  const list = Composite.allBodies(engine.value.world)
-
-  list.forEach((body) => {
-    /** id 存在 label 中 */
-    const id = body.label
-    const info = bodyMap.get(id)
-
-    if (!bodyMap.has(id) || !info) {
-      return
-    }
-
-    const { initial } = info
-    const value = {
-      ...{
-        offsetX: body.position.x - initial.offsetX,
-        offsetY: body.position.y - initial.offsetY,
-      },
-      rotate: body.angle * 180 / Math.PI,
-    }
-
-    bodyInfoMap.set(id, value)
-  })
-}, 10)
-
-onMounted(() => {
-  init()
-
-  if (props.immediate) {
-    start()
-  }
-})
-
-onBeforeUnmount(() => {
-  clear()
-})
-
-/** 儲存已建立的 body */
-const bodyMap = new Map<string, ElBody>()
-/** body 物理模擬資料 */
-const bodyInfoMap = new Map<string, {
-  offsetX: number;
-  offsetY: number;
-  rotate: number;
-}>()
-
-function bindBody(item: ElBody) {
-  bodyMap.set(item.id, item)
-}
-function unbindBody(id: string) {
-  bodyMap.delete(id)
-  bodyInfoMap.delete(id)
-}
-function updateBody(id: string, param: UpdateParam) {
-  const bodyData = bodyMap.get(id)
-  if (bodyData) {
-    bodyMap.set(id, {
-      ...bodyData,
-      frictionAir: param.frictionAir,
-      friction: param.friction,
-      restitution: param.restitution,
-      mass: param.mass,
-      isStatic: param.isStatic,
-    })
-  }
-
-  const target = Composite.allBodies(engine.value.world).find(
-    (body) => body.label === id,
-  )
-  if (!target)
-    return
-
-  param.frictionAir && (target.frictionAir = param.frictionAir)
-  param.friction && (target.friction = param.friction)
-  param.restitution && (target.restitution = param.restitution)
-  param.mass && Body.setMass(target, param.mass)
-  param.isStatic && Body.setStatic(target, param.isStatic)
-  param.velocity && Body.setVelocity(target, param.velocity)
-  param.angularVelocity && Body.setAngularVelocity(target, param.angularVelocity)
-}
-
-provide(PROVIDE_KEY, {
-  bindBody,
-  unbindBody,
-  updateBody,
-  getInfo(id) {
-    return bodyInfoMap.get(id)
-  },
-})
 
 // #region Methods
 defineExpose({
