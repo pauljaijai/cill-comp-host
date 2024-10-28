@@ -109,6 +109,12 @@ export default defineConfig({
             ],
           },
           {
+            text: '卡片',
+            items: [
+              { text: '科幻卡片', link: '/components/card-futuristic/' },
+            ],
+          },
+          {
             text: '輪播',
             items: [
               { text: '空間懸浮輪播', link: '/components/carousel-space-floating/' },
