@@ -8,7 +8,7 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 import BasicUsage from '../../../src/components/card-futuristic/examples/basic-usage.vue'
 </script>
 
-# 標題 <Badge type="info" text="" />
+# 科幻卡片 <Badge type="info" text="card" />
 
 文字文字文字文字文字文字文字文字文字文字文字文字
 
@@ -18,7 +18,7 @@ import BasicUsage from '../../../src/components/card-futuristic/examples/basic-u
 
 文字文字文字文字文字文字文字文字文字文字文字文字
 
-<basic-usage/>
+<basic-usage class="h-[60vh]"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/card-futuristic/examples/basic-usage.vue
