@@ -10,7 +10,6 @@
 <script setup lang="ts">
 import { useElementBounding, useIntervalFn } from '@vueuse/core'
 import { nanoid } from 'nanoid'
-import { conditional, constant } from 'remeda'
 import { computed, inject, onMounted, reactive, ref, watch } from 'vue'
 import { PROVIDE_KEY } from '.'
 
@@ -80,10 +79,9 @@ const info = ref({
   rotate: 0,
 })
 /** 數字最小不能小於 0.0001 */
-const adjAccuracy = conditional(
-  [(value: number) => Math.abs(value) < 0.0001, constant(0)],
-  conditional.defaultCase((value) => value),
-)
+function adjAccuracy(value: number) {
+  return Math.abs(value) < 0.0001 ? 0 : value
+}
 
 useIntervalFn(() => {
   const newInfo = wrapper?.getInfo(id)

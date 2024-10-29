@@ -498,15 +498,7 @@ const keyframeOptionMap: Record<
 
 const [isPlaying, togglePlaying] = useToggle(false)
 
-const svgClass = computed(() => {
-  const result: string[] = []
-
-  if (prop.disabled && modelValue.value) {
-    result.push('mirror')
-  }
-
-  return result
-})
+const svgClass = ref<string[]>([])
 
 const currentTrackClass = computed(() => {
   const result = [
@@ -637,6 +629,13 @@ const resetDelayMs = debounce(() => {
 
 /** 開始貓貓手動畫 */
 async function start() {
+  if (currentValue.value) {
+    svgClass.value = []
+  }
+  else {
+    svgClass.value = ['mirror']
+  }
+
   togglePlaying(true)
 
   delayMs = Math.max(0, delayMs - 300)
