@@ -7,7 +7,7 @@
     />
 
     <div class="flex justify-center">
-      <card-futuristic>
+      <card-futuristic :visible>
         <div class="text-xl">
           Title
         </div>
