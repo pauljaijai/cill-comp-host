@@ -4,20 +4,14 @@
     :view-box
     :style
     fill="none"
+    class="card-border"
     xmlns="http://www.w3.org/2000/svg"
   >
     <g>
-      <!-- t -->
-      <line v-bind="lineStyle.t" />
-
-      <!-- l -->
-      <line v-bind="lineStyle.l" />
-
-      <!-- b -->
-      <line v-bind="lineStyle.b" />
-
-      <!-- r -->
-      <line v-bind="lineStyle.r" />
+      <line v-bind="lineStyleMap.t" />
+      <line v-bind="lineStyleMap.l" />
+      <line v-bind="lineStyleMap.b" />
+      <line v-bind="lineStyleMap.r" />
     </g>
   </svg>
 </template>
@@ -28,62 +22,57 @@ import { PROVIDE_KEY } from './type'
 
 // #region Props
 interface Props {
-  modelValue?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
-  modelValue: '',
-})
+const prop = withDefaults(defineProps<Props>(), {})
 
 const svgRef = ref<SVGAElement>()
 
 const card = inject(PROVIDE_KEY)
-
-const size = computed(() => {
-  return {
-    width: card?.bodySize.value.width ?? 0,
-    height: card?.bodySize.value.height ?? 0,
-  }
-})
+const cardSize = computed(() => ({
+  width: card?.bodySize.value.width ?? 0,
+  height: card?.bodySize.value.height ?? 0,
+}))
 
 const style = computed(() => ({
-  width: size.value.width,
-  height: size.value.height,
+  width: `${cardSize.value.width}px`,
+  height: `${cardSize.value.height}px`,
 }))
 
 const viewBox = computed(
-  () => `0 0 ${size.value.width} ${size.value.height}`,
+  () => `0 0 ${cardSize.value.width} ${cardSize.value.height}`,
 )
 
-const lineStyle = computed(() => ({
+const lineStyleMap = computed(() => ({
   t: {
-    y1: 0,
-    x2: size.value.width,
-    y2: 0,
-    stroke: '#777',
-    strokeWidth: 4,
+    'y1': 0,
+    'x2': cardSize.value.width,
+    'y2': 0,
+    'stroke': '#777',
+    // 寫成小駝峰（strokeWidth）沒有作用
+    'stroke-width': '2',
   },
   l: {
-    x1: 0,
-    x2: 0,
-    y2: size.value.height,
-    stroke: '#777',
-    strokeWidth: 4,
+    'x1': 0,
+    'x2': 0,
+    'y2': cardSize.value.height,
+    'stroke': '#777',
+    'stroke-width': '4',
   },
   b: {
-    y1: size.value.height,
-    x2: size.value.width,
-    y2: size.value.height,
-    stroke: '#777',
-    strokeWidth: 4,
+    'y1': cardSize.value.height,
+    'x2': cardSize.value.width,
+    'y2': cardSize.value.height,
+    'stroke': '#777',
+    'stroke-width': '2',
   },
   r: {
-    x1: size.value.width,
-    y1: 0,
-    x2: size.value.width,
-    y2: size.value.height,
-    stroke: '#777',
-    strokeWidth: 4,
+    'x1': cardSize.value.width,
+    'y1': 0,
+    'x2': cardSize.value.width,
+    'y2': cardSize.value.height,
+    'stroke': '#777',
+    'stroke-width': '4',
   },
 }))
 </script>

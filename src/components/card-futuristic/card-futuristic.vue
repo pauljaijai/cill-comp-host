@@ -1,10 +1,13 @@
 <template>
   <div class="relative">
-    <card-border class="pointer-events-none absolute" />
+    <card-bg class="pointer-events-none absolute z-[-1]" />
+    <card-border class="pointer-events-none absolute z-[-1]" />
+    <card-corner class="pointer-events-none absolute z-[-1]" />
 
     <div
       ref="bodyRef"
-      class="box-content p-4"
+      class="z-0"
+      :class="prop.bodyClass"
     >
       <slot />
     </div>
@@ -15,16 +18,20 @@
 import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { computed, provide, reactive, ref, watch } from 'vue'
+import CardBg from './card-bg.vue'
 import CardBorder from './card-border.vue'
+import CardCorner from './card-corner.vue'
 import { PROVIDE_KEY } from './type'
 
 // #region Props
 interface Props {
   visible?: boolean;
+  bodyClass?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   visible: true,
+  bodyClass: 'p-4',
 })
 
 // #region Emits
