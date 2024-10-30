@@ -18,8 +18,9 @@
 
 <script setup lang="ts">
 import { useElementSize } from '@vueuse/core'
+import anime from 'animejs'
 import { addProp, mapValues, pipe } from 'remeda'
-import { computed, inject, reactive, ref } from 'vue'
+import { computed, inject, reactive, ref, watch } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 // #region Props
@@ -86,6 +87,43 @@ const cornerStyleMap = computed(() => pipe(
   },
   mapValues(addProp('fill', prop.cornerColor)),
 ))
+
+watch(() => card, (data) => {
+  const { visible } = data ?? {}
+
+  if (visible?.value) {
+    anime({
+      targets: svgRef.value,
+      opacity: [
+        0,
+        0.1,
+        0.8,
+        0.3,
+        1,
+      ],
+      duration: 200,
+      easing: 'linear',
+    })
+  }
+  else {
+    anime({
+      targets: svgRef.value,
+      opacity: [
+        1,
+        0.6,
+        0.1,
+        0.8,
+        0.3,
+        0,
+      ],
+      duration: 200,
+      delay: 600,
+      easing: 'linear',
+    })
+  }
+}, {
+  deep: true,
+})
 </script>
 
 <style scoped lang="sass">

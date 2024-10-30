@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="bodyRef"
     :style
     class="bg"
   />
@@ -7,7 +8,9 @@
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import { computed } from 'vue'
+import anime from 'animejs'
+import { computed, inject, ref, watch } from 'vue'
+import { PROVIDE_KEY } from './type'
 
 // #region Props
 interface Props {
@@ -23,10 +26,14 @@ const prop = withDefaults(defineProps<Props>(), {
   patternColor: '#FAFAFA',
 })
 
-// const card = inject(PROVIDE_KEY)
+const card = inject(PROVIDE_KEY)
+
+// const card = computedInject(PROVIDE_KEY, (source) => source)
+
+const bodyRef = ref<HTMLDivElement>()
 
 const style = computed<CSSProperties>(() => ({
-  inset: `10px`,
+  inset: `8px`,
   backgroundImage: [
     'repeating-linear-gradient(',
     `${prop.angle}, transparent,`,
@@ -35,6 +42,42 @@ const style = computed<CSSProperties>(() => ({
     `${prop.patternColor} calc(${prop.patternSize} * 2))`,
   ].join(''),
 }))
+
+watch(() => card, (data) => {
+  const { visible } = data ?? {}
+
+  if (visible?.value) {
+    anime({
+      targets: bodyRef.value,
+      opacity: [
+        0,
+        0.1,
+        0.8,
+        0.3,
+        1,
+      ],
+      duration: 200,
+      easing: 'linear',
+    })
+  }
+  else {
+    anime({
+      targets: bodyRef.value,
+      opacity: [
+        1,
+        0.6,
+        0.1,
+        0.8,
+        0.3,
+        0,
+      ],
+      duration: 200,
+      easing: 'linear',
+    })
+  }
+}, {
+  deep: true,
+})
 </script>
 
 <style scoped lang="sass">

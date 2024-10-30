@@ -3,6 +3,7 @@ import type { ComputedRef, InjectionKey } from 'vue'
 export type State = ''
 
 export interface ProvideContent {
+  visible: ComputedRef<boolean>;
   bodySize: ComputedRef<{
     width: number;
     height: number;

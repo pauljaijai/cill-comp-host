@@ -57,13 +57,14 @@ watch(() => prop.visible, (value) => {
       targets: bodyRef.value,
       opacity: [
         0,
-        0.6,
         0.1,
         0.8,
         0.3,
         1,
       ],
-      duration: 300,
+      duration: 200,
+      delay: 600,
+      easing: 'linear',
     })
   }
   else {
@@ -73,16 +74,18 @@ watch(() => prop.visible, (value) => {
         1,
         0.6,
         0.1,
-        0.8,
         0.3,
         0,
       ],
-      duration: 300,
+      duration: 200,
+      delay: 300,
+      easing: 'linear',
     })
   }
 })
 
 provide(PROVIDE_KEY, {
+  visible: computed(() => prop.visible),
   bodySize: computed(() => ({
     width: bodySize.width,
     height: bodySize.height,
