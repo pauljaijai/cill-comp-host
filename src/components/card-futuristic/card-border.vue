@@ -13,28 +13,28 @@
         y1="0"
         y2="0"
         :stroke="prop.color"
-        stroke-width="2"
+        stroke-width="1"
       />
       <line
         v-bind="lineStyleMap.l"
         x1="0"
         x2="0"
         :stroke="prop.color"
-        stroke-width="4"
+        stroke-width="1"
       />
       <line
         v-bind="lineStyleMap.b"
         :y1="cardSize.height"
         :y2="cardSize.height"
         :stroke="prop.color"
-        stroke-width="2"
+        stroke-width="1"
       />
       <line
         v-bind="lineStyleMap.r"
         :x1="cardSize.width"
         :x2="cardSize.width"
         :stroke="prop.color"
-        stroke-width="4"
+        stroke-width="1"
       />
     </g>
   </svg>

@@ -10,7 +10,7 @@ import BasicUsage from '../../../src/components/card-futuristic/examples/basic-u
 
 # 科幻卡片 <Badge type="info" text="card" />
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+不過度花俏、實用的科幻風格（Sci-Fi、Futuristic）資訊容器。
 
 ## 使用範例
 

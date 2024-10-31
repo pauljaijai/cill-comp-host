@@ -1,7 +1,17 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 
-export type State = 'visible' | 'hidden'
-export type Part = 'border' | 'bg' | 'corner' | 'content'
+export type State =
+  'visible' |
+  'hidden'
+
+// select hover active
+
+export type Part =
+  'border' |
+  'bg' |
+  'corner' |
+  'content' |
+  'ornament'
 
 export type AnimeMap = Record<
   State,
