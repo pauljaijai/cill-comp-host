@@ -18,20 +18,33 @@
 import type { AnimeMap, Part, ProvideContent, State } from './type'
 import { until, useElementSize } from '@vueuse/core'
 import anime from 'animejs'
-import { entries, map, pipe } from 'remeda'
+import { defaultsDeep } from 'lodash-es'
+import { clone, entries, map, pipe } from 'remeda'
 import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
 import CardBg from './card-bg.vue'
 import CardBorder from './card-border.vue'
 import CardCorner from './card-corner.vue'
 import { PROVIDE_KEY } from './type'
 
+type AnimeSequence = Record<
+  State,
+  Partial<Record<Part, {
+    duration?: number;
+    delay?: number;
+  }>>
+>
+
 // #region Props
 interface Props {
+  animeSequence?: Partial<AnimeSequence>;
+
   visible?: boolean;
   contentClass?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
+  animeSequence: undefined,
+
   visible: true,
   contentClass: 'p-4',
 })
@@ -68,13 +81,7 @@ provide(PROVIDE_KEY, {
   bindPart,
 })
 
-const animeSequence: Record<
-  State,
-  Partial<Record<Part, {
-    duration?: number;
-    delay?: number;
-  }>>
-> = {
+const defaultAnimeSequence: AnimeSequence = {
   visible: {
     corner: {},
     bg: {},
@@ -88,6 +95,11 @@ const animeSequence: Record<
     corner: { delay: 200 },
   },
 }
+
+const animeSequence = computed<AnimeSequence>(() => defaultsDeep(
+  clone(prop.animeSequence),
+  clone(defaultAnimeSequence),
+))
 
 /** slot 容器動畫 */
 const contentAnimeMap: AnimeMap = {
@@ -149,7 +161,7 @@ bindPart({
 watch(() => prop.visible, (value) => {
   if (value) {
     pipe(
-      animeSequence.visible,
+      animeSequence.value.visible,
       entries(),
       map(([key, animeParam]) => {
         const target = partMap.get(key)
@@ -159,7 +171,7 @@ watch(() => prop.visible, (value) => {
   }
   else {
     pipe(
-      animeSequence.hidden,
+      animeSequence.value.hidden,
       entries(),
       map(([key, animeParam]) => {
         const target = partMap.get(key)
@@ -178,7 +190,7 @@ onMounted(async () => {
   const { visible } = prop
   if (visible) {
     pipe(
-      animeSequence.visible,
+      animeSequence.value.visible,
       entries(),
       map(([key]) => {
         const target = partMap.get(key)
@@ -188,7 +200,7 @@ onMounted(async () => {
   }
   else {
     pipe(
-      animeSequence.hidden,
+      animeSequence.value.hidden,
       entries(),
       map(([key]) => {
         const target = partMap.get(key)
