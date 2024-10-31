@@ -12,21 +12,29 @@
         v-bind="lineStyleMap.t"
         y1="0"
         y2="0"
+        :stroke="prop.color"
+        stroke-width="2"
       />
       <line
         v-bind="lineStyleMap.l"
         x1="0"
         x2="0"
+        :stroke="prop.color"
+        stroke-width="4"
       />
       <line
         v-bind="lineStyleMap.b"
         :y1="cardSize.height"
         :y2="cardSize.height"
+        :stroke="prop.color"
+        stroke-width="2"
       />
       <line
         v-bind="lineStyleMap.r"
         :x1="cardSize.width"
         :x2="cardSize.width"
+        :stroke="prop.color"
+        stroke-width="4"
       />
     </g>
   </svg>
@@ -66,31 +74,10 @@ const viewBox = computed(
 )
 
 const lineStyleMap = ref({
-  t: {
-    'x1': 0,
-    'x2': cardSize.value.width,
-    'stroke': prop.color,
-    // 寫成小駝峰（strokeWidth）沒有作用
-    'stroke-width': 2,
-  },
-  l: {
-    'y1': 0,
-    'y2': cardSize.value.height,
-    'stroke': prop.color,
-    'stroke-width': 4,
-  },
-  b: {
-    'x1': 0,
-    'x2': cardSize.value.width,
-    'stroke': prop.color,
-    'stroke-width': 2,
-  },
-  r: {
-    'y1': 0,
-    'y2': cardSize.value.height,
-    'stroke': prop.color,
-    'stroke-width': 4,
-  },
+  t: { x1: 0, x2: 0 },
+  l: { y1: 0, y2: 0 },
+  b: { x1: 0, x2: 0 },
+  r: { y1: 0, y2: 0 },
 })
 
 const animeMap: AnimeMap = {
