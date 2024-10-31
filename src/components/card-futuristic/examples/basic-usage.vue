@@ -7,13 +7,18 @@
     />
 
     <div class="flex justify-center">
-      <card-futuristic :visible>
-        <div class="text-xl">
-          Title
-        </div>
+      <card-futuristic
+        :visible
+        class="font-orbitron"
+      >
+        <div class="flex flex-col gap-4">
+          <div class="text-xl font-bold">
+            Title
+          </div>
 
-        <div>
-          codfish codfish codfish codfish codfish codfish
+          <div>
+            The best things in life are actually really expensive.
+          </div>
         </div>
       </card-futuristic>
     </div>
@@ -25,5 +30,15 @@ import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import CardFuturistic from '../card-futuristic.vue'
 
-const visible = ref(false)
+const visible = ref(true)
 </script>
+
+<style lang="sass">
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Orbitron:wght@400..900&family=Oxanium:wght@200..800&display=swap')
+
+.font-orbitron
+  font-family: "Orbitron", sans-serif
+
+.font-oxanium
+  font-family: "Oxanium", sans-serif
+</style>

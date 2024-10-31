@@ -84,7 +84,7 @@ const animeSequence: Record<
   hidden: {
     content: {},
     bg: {},
-    border: {},
+    border: { delay: 100 },
     corner: { delay: 200 },
   },
 }
