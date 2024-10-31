@@ -17,14 +17,14 @@ import { PROVIDE_KEY } from './type'
 interface Props {
   /** @default 45deg */
   angle?: string;
-  patternSize?: string;
-  patternColor?: string;
+  size?: string;
+  color?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   angle: '-45deg',
-  patternSize: '4px',
-  patternColor: '#FAFAFA',
+  size: '4px',
+  color: '#FAFAFA',
 })
 
 const card = inject(PROVIDE_KEY)
@@ -38,9 +38,9 @@ const style = computed<CSSProperties>(() => ({
   backgroundImage: [
     'repeating-linear-gradient(',
     `${prop.angle}, transparent,`,
-    `transparent ${prop.patternSize},`,
-    `${prop.patternColor} ${prop.patternSize},`,
-    `${prop.patternColor} calc(${prop.patternSize} * 2))`,
+    `transparent ${prop.size},`,
+    `${prop.color} ${prop.size},`,
+    `${prop.color} calc(${prop.size} * 2))`,
   ].join(''),
 }))
 

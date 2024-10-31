@@ -16,10 +16,10 @@
 
 <script setup lang="ts">
 import type { AnimeMap, Part, ProvideContent, State } from './type'
-import { useElementSize } from '@vueuse/core'
+import { until, useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { entries, map, pipe } from 'remeda'
-import { computed, provide, reactive, ref, watch } from 'vue'
+import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
 import CardBg from './card-bg.vue'
 import CardBorder from './card-border.vue'
 import CardCorner from './card-corner.vue'
@@ -61,7 +61,7 @@ const bindPart: ProvideContent['bindPart'] = ({ name, animeMap }) => {
 
 provide(PROVIDE_KEY, {
   visible: computed(() => prop.visible),
-  bodySize: computed(() => ({
+  contentSize: computed(() => ({
     width: contentSize.width,
     height: contentSize.height,
   })),
@@ -79,7 +79,7 @@ const animeSequence: Record<
     corner: {},
     bg: {},
     border: { delay: 200 },
-    content: { delay: 600 },
+    content: { delay: 400 },
   },
   hidden: {
     content: {},
@@ -91,7 +91,12 @@ const animeSequence: Record<
 
 /** slot 容器動畫 */
 const contentAnimeMap: AnimeMap = {
-  async visible() {
+  async visible(param) {
+    const {
+      duration = 300,
+      delay = 0,
+    } = param ?? {}
+
     const tasks = [
       anime({
         targets: contentRef.value,
@@ -102,14 +107,20 @@ const contentAnimeMap: AnimeMap = {
           0.3,
           1,
         ],
-        duration: 300,
+        duration,
+        delay,
         easing: 'linear',
       }).finished,
     ]
 
     await Promise.all(tasks)
   },
-  async hidden() {
+  async hidden(param) {
+    const {
+      duration = 300,
+      delay = 0,
+    } = param ?? {}
+
     const tasks = [
       anime({
         targets: contentRef.value,
@@ -120,7 +131,8 @@ const contentAnimeMap: AnimeMap = {
           0.3,
           0,
         ],
-        duration: 300,
+        duration,
+        delay,
         easing: 'linear',
       }).finished,
     ]
@@ -152,6 +164,35 @@ watch(() => prop.visible, (value) => {
       map(([key, animeParam]) => {
         const target = partMap.get(key)
         return target?.hidden(animeParam)
+      }),
+    )
+  }
+})
+
+/** 初始化時播放一次 */
+onMounted(async () => {
+  // 確定 contentSize 有值才進行初始化動畫
+  await until(() => contentSize.width).toBeTruthy()
+  await until(() => contentSize.height).toBeTruthy()
+
+  const { visible } = prop
+  if (visible) {
+    pipe(
+      animeSequence.visible,
+      entries(),
+      map(([key]) => {
+        const target = partMap.get(key)
+        return target?.visible({ duration: 0 })
+      }),
+    )
+  }
+  else {
+    pipe(
+      animeSequence.hidden,
+      entries(),
+      map(([key]) => {
+        const target = partMap.get(key)
+        return target?.hidden({ duration: 0 })
       }),
     )
   }

@@ -8,17 +8,32 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <g>
-      <line v-bind="lineStyleMap.t" />
-      <line v-bind="lineStyleMap.l" />
-      <line v-bind="lineStyleMap.b" />
-      <line v-bind="lineStyleMap.r" />
+      <line
+        v-bind="lineStyleMap.t"
+        y1="0"
+        y2="0"
+      />
+      <line
+        v-bind="lineStyleMap.l"
+        x1="0"
+        x2="0"
+      />
+      <line
+        v-bind="lineStyleMap.b"
+        :y1="cardSize.height"
+        :y2="cardSize.height"
+      />
+      <line
+        v-bind="lineStyleMap.r"
+        :x1="cardSize.width"
+        :x2="cardSize.width"
+      />
     </g>
   </svg>
 </template>
 
 <script setup lang="ts">
 import type { AnimeMap } from './type'
-import { whenever } from '@vueuse/core'
 import anime from 'animejs'
 import { map, pipe } from 'remeda'
 import { computed, inject, onMounted, ref } from 'vue'
@@ -26,16 +41,19 @@ import { PROVIDE_KEY } from './type'
 
 // #region Props
 interface Props {
+  color?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {})
+const prop = withDefaults(defineProps<Props>(), {
+  color: '#777',
+})
 
 const svgRef = ref<SVGAElement>()
 
 const card = inject(PROVIDE_KEY)
 const cardSize = computed(() => ({
-  width: card?.bodySize.value.width ?? 0,
-  height: card?.bodySize.value.height ?? 0,
+  width: card?.contentSize.value.width ?? 0,
+  height: card?.contentSize.value.height ?? 0,
 }))
 
 const style = computed(() => ({
@@ -50,79 +68,30 @@ const viewBox = computed(
 const lineStyleMap = ref({
   t: {
     'x1': 0,
-    'y1': 0,
     'x2': cardSize.value.width,
-    'y2': 0,
-    'stroke': '#777',
+    'stroke': prop.color,
     // 寫成小駝峰（strokeWidth）沒有作用
     'stroke-width': 2,
   },
   l: {
-    'x1': 0,
     'y1': 0,
-    'x2': 0,
     'y2': cardSize.value.height,
-    'stroke': '#777',
+    'stroke': prop.color,
     'stroke-width': 4,
   },
   b: {
     'x1': 0,
-    'y1': cardSize.value.height,
     'x2': cardSize.value.width,
-    'y2': cardSize.value.height,
-    'stroke': '#777',
+    'stroke': prop.color,
     'stroke-width': 2,
   },
   r: {
-    'x1': cardSize.value.width,
     'y1': 0,
-    'x2': cardSize.value.width,
     'y2': cardSize.value.height,
-    'stroke': '#777',
+    'stroke': prop.color,
     'stroke-width': 4,
   },
 })
-
-function initLineStyleMap() {
-  lineStyleMap.value = {
-    t: {
-      'x1': 0,
-      'y1': 0,
-      'x2': cardSize.value.width,
-      'y2': 0,
-      'stroke': '#777',
-      // 寫成小駝峰（strokeWidth）沒有作用
-      'stroke-width': 2,
-    },
-    l: {
-      'x1': 0,
-      'y1': 0,
-      'x2': 0,
-      'y2': cardSize.value.height,
-      'stroke': '#777',
-      'stroke-width': 4,
-    },
-    b: {
-      'x1': 0,
-      'y1': cardSize.value.height,
-      'x2': cardSize.value.width,
-      'y2': cardSize.value.height,
-      'stroke': '#777',
-      'stroke-width': 2,
-    },
-    r: {
-      'x1': cardSize.value.width,
-      'y1': 0,
-      'x2': cardSize.value.width,
-      'y2': cardSize.value.height,
-      'stroke': '#777',
-      'stroke-width': 4,
-    },
-  }
-}
-whenever(() => cardSize.value.width && cardSize.value.height, () => {
-  initLineStyleMap()
-}, { once: true })
 
 const animeMap: AnimeMap = {
   async visible(param) {

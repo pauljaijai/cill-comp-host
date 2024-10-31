@@ -25,5 +25,5 @@ import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import CardFuturistic from '../card-futuristic.vue'
 
-const visible = ref(true)
+const visible = ref(false)
 </script>

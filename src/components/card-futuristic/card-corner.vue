@@ -8,10 +8,26 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <g>
-      <path v-bind="cornerStyleMap.lt" />
-      <path v-bind="cornerStyleMap.rt" />
-      <path v-bind="cornerStyleMap.br" />
-      <path v-bind="cornerStyleMap.bl" />
+      <path
+        v-bind="cornerStyleMap.lt"
+        stroke="white"
+        stroke-width="1.6"
+      />
+      <path
+        v-bind="cornerStyleMap.rt"
+        stroke="white"
+        stroke-width="1.6"
+      />
+      <path
+        v-bind="cornerStyleMap.br"
+        stroke="white"
+        stroke-width="1.6"
+      />
+      <path
+        v-bind="cornerStyleMap.bl"
+        stroke="white"
+        stroke-width="1.6"
+      />
     </g>
   </svg>
 </template>
@@ -20,19 +36,19 @@
 import type { AnimeMap } from './type'
 import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
-import { addProp, mapValues, pipe } from 'remeda'
+import { mapValues, pipe } from 'remeda'
 import { computed, inject, onMounted, reactive, ref } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 // #region Props
 interface Props {
-  cornerSize?: number;
-  cornerColor?: string;
+  size?: number;
+  color?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
-  cornerSize: 10,
-  cornerColor: '#444',
+  size: 10,
+  color: '#777',
 })
 
 const svgRef = ref<SVGAElement>()
@@ -42,11 +58,11 @@ const svgSize = reactive(useElementSize(svgRef, undefined, {
 
 const card = inject(PROVIDE_KEY)
 const cardSize = computed(() => ({
-  width: card?.bodySize.value.width ?? 0,
-  height: card?.bodySize.value.height ?? 0,
+  width: card?.contentSize.value.width ?? 0,
+  height: card?.contentSize.value.height ?? 0,
 }))
 
-const offset = ref(prop.cornerSize / 4)
+const offset = ref(prop.size / 4)
 const style = computed(() => ({
   left: `-${offset.value}px`,
   top: `-${offset.value}px`,
@@ -61,32 +77,36 @@ const viewBox = computed(
 const cornerStyleMap = computed(() => pipe(
   {
     lt: {
-      d: `M0 0H${prop.cornerSize}L0 ${prop.cornerSize}V0Z`,
+      d: `M0 0 H${prop.size} L0 ${prop.size}V0 Z`,
     },
     rt: {
       d: [
-        `M${svgSize.width} 0L${svgSize.width}`,
-        `${prop.cornerSize}L${svgSize.width - prop.cornerSize} 0 0Z`,
+        `M${svgSize.width} 0`,
+        `L${svgSize.width} ${prop.size}`,
+        `L${svgSize.width - prop.size} 0Z`,
       ].join(' '),
     },
     br: {
       d: [
         `M${svgSize.width} ${svgSize.height}`,
-        `L${svgSize.width - prop.cornerSize} ${svgSize.height}`,
-        `L${svgSize.width} ${svgSize.height - prop.cornerSize}`,
-        `L${svgSize.width} ${svgSize.height}Z`,
+        `L${svgSize.width - prop.size} ${svgSize.height}`,
+        `L${svgSize.width} ${svgSize.height - prop.size}`,
+        `L${svgSize.width} ${svgSize.height} Z`,
       ].join(' '),
     },
     bl: {
       d: [
         `M0 ${svgSize.height}`,
-        `L0 ${svgSize.height - prop.cornerSize}`,
-        `L${prop.cornerSize} ${svgSize.height}`,
-        `L0 ${svgSize.height}Z`,
+        `L0 ${svgSize.height - prop.size}`,
+        `L${prop.size} ${svgSize.height}`,
+        `L0 ${svgSize.height} Z`,
       ].join(' '),
     },
   },
-  mapValues(addProp('fill', prop.cornerColor)),
+  mapValues((value) => ({
+    ...value,
+    fill: prop.color,
+  })),
 ))
 
 const animeMap: AnimeMap = {
@@ -99,7 +119,7 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: offset,
-        value: prop.cornerSize / 4,
+        value: prop.size / 4,
         opacity: 1,
         duration,
         delay,
@@ -127,7 +147,7 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: offset,
-        value: prop.cornerSize,
+        value: prop.size,
         duration,
         delay,
         easing: 'easeInExpo',

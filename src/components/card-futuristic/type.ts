@@ -13,7 +13,7 @@ export type AnimeMap = Record<
 
 export interface ProvideContent {
   visible: ComputedRef<boolean>;
-  bodySize: ComputedRef<{
+  contentSize: ComputedRef<{
     width: number;
     height: number;
   }>;
