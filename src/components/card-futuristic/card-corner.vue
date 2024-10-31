@@ -90,38 +90,53 @@ const cornerStyleMap = computed(() => pipe(
 ))
 
 const animeMap: AnimeMap = {
-  async visible() {
+  async visible(param) {
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
     const tasks = [
       anime({
         targets: offset,
         value: prop.cornerSize / 4,
         opacity: 1,
-        duration: 400,
+        duration,
+        delay,
         easing: 'easeOutExpo',
       }).finished,
       anime({
         targets: svgRef.value,
         opacity: 1,
-        duration: 400,
+        duration,
+        delay,
         easing: 'linear',
       }).finished,
     ]
 
     await Promise.all(tasks)
   },
-  async hidden() {
+  async hidden(param) {
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
+    const svgDuration = duration / 4
+
     const tasks = [
       anime({
         targets: offset,
         value: prop.cornerSize,
-        duration: 400,
+        duration,
+        delay,
         easing: 'easeInExpo',
       }).finished,
       anime({
         targets: svgRef.value,
         opacity: 0,
-        duration: 100,
-        delay: 300,
+        duration: svgDuration,
+        delay: svgDuration * 3 + delay,
         easing: 'linear',
       }).finished,
     ]

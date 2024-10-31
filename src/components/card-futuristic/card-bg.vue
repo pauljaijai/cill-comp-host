@@ -45,7 +45,12 @@ const style = computed<CSSProperties>(() => ({
 }))
 
 const animeMap: AnimeMap = {
-  async visible() {
+  async visible(param) {
+    const {
+      duration = 200,
+      delay = 0,
+    } = param ?? {}
+
     const tasks = [
       anime({
         targets: bodyRef.value,
@@ -56,14 +61,20 @@ const animeMap: AnimeMap = {
           0.3,
           1,
         ],
-        duration: 200,
+        duration,
+        delay,
         easing: 'linear',
       }).finished,
     ]
 
     await Promise.all(tasks)
   },
-  async hidden() {
+  async hidden(param) {
+    const {
+      duration = 200,
+      delay = 0,
+    } = param ?? {}
+
     const tasks = [
       anime({
         targets: bodyRef.value,
@@ -75,7 +86,8 @@ const animeMap: AnimeMap = {
           0.3,
           0,
         ],
-        duration: 200,
+        duration,
+        delay,
         easing: 'linear',
       }).finished,
     ]

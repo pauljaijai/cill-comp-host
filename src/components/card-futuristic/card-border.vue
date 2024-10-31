@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import type { State } from './type'
+import type { AnimeMap } from './type'
 import { whenever } from '@vueuse/core'
 import anime from 'animejs'
 import { map, pipe } from 'remeda'
@@ -124,11 +124,13 @@ whenever(() => cardSize.value.width && cardSize.value.height, () => {
   initLineStyleMap()
 }, { once: true })
 
-const animeMap: Record<
-  State,
-  () => Promise<void>
-> = {
-  async visible() {
+const animeMap: AnimeMap = {
+  async visible(param) {
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
     const tasks = [
       ...pipe(
         [
@@ -139,7 +141,8 @@ const animeMap: Record<
           targets,
           x1: 0,
           x2: cardSize.value.width,
-          duration: 400,
+          duration,
+          delay,
           easing: 'easeOutExpo',
         }).finished),
       ),
@@ -152,8 +155,8 @@ const animeMap: Record<
           targets,
           y1: 0,
           y2: cardSize.value.height,
-          duration: 400,
-          delay: 200,
+          duration,
+          delay: 200 + delay,
           easing: 'easeOutExpo',
         }).finished),
       ),
@@ -161,7 +164,12 @@ const animeMap: Record<
 
     await Promise.all(tasks)
   },
-  async hidden() {
+  async hidden(param) {
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
     const tasks = [
       ...pipe(
         [
@@ -172,8 +180,9 @@ const animeMap: Record<
           targets,
           x1: cardSize.value.width / 2,
           x2: cardSize.value.width / 2,
-          duration: 400,
-          easing: 'easeOutExpo',
+          duration,
+          delay,
+          easing: 'easeInOutCirc',
         }).finished),
       ),
 
@@ -186,9 +195,9 @@ const animeMap: Record<
           targets,
           y1: cardSize.value.height / 2,
           y2: cardSize.value.height / 2,
-          duration: 400,
-          delay: 200,
-          easing: 'easeInExpo',
+          duration,
+          delay: 200 + delay,
+          easing: 'easeInOutCirc',
         }).finished),
       ),
     ]

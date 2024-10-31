@@ -76,16 +76,16 @@ const animeSequence: Record<
   }>>
 > = {
   visible: {
-    corner: { duration: 400 },
-    bg: { duration: 400 },
-    border: { duration: 400, delay: 200 },
-    content: { duration: 400, delay: 600 },
+    corner: {},
+    bg: {},
+    border: { delay: 200 },
+    content: { delay: 600 },
   },
   hidden: {
-    content: { duration: 400 },
-    bg: { duration: 400 },
-    border: { duration: 400 },
-    corner: { duration: 400, delay: 400 },
+    content: {},
+    bg: {},
+    border: {},
+    corner: { delay: 200 },
   },
 }
 
