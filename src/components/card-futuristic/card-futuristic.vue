@@ -5,9 +5,9 @@
     <card-corner class="pointer-events-none absolute z-[-1]" />
 
     <div
-      ref="bodyRef"
+      ref="contentRef"
       class="z-0"
-      :class="prop.bodyClass"
+      :class="prop.contentClass"
     >
       <slot />
     </div>
@@ -15,8 +15,10 @@
 </template>
 
 <script setup lang="ts">
+import type { AnimeMap, Part, ProvideContent, State } from './type'
 import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
+import { entries, map, pipe } from 'remeda'
 import { computed, provide, reactive, ref, watch } from 'vue'
 import CardBg from './card-bg.vue'
 import CardBorder from './card-border.vue'
@@ -26,12 +28,12 @@ import { PROVIDE_KEY } from './type'
 // #region Props
 interface Props {
   visible?: boolean;
-  bodyClass?: string;
+  contentClass?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   visible: true,
-  bodyClass: 'p-4',
+  contentClass: 'p-4',
 })
 
 // #region Emits
@@ -46,50 +48,113 @@ defineSlots<{
 }>()
 // #endregion Slots
 
-const bodyRef = ref<HTMLDivElement>()
-const bodySize = reactive(useElementSize(bodyRef, undefined, {
+const contentRef = ref<HTMLDivElement>()
+const contentSize = reactive(useElementSize(contentRef, undefined, {
   box: 'border-box',
 }))
 
-watch(() => prop.visible, (value) => {
-  if (value) {
-    anime({
-      targets: bodyRef.value,
-      opacity: [
-        0,
-        0.1,
-        0.8,
-        0.3,
-        1,
-      ],
-      duration: 200,
-      delay: 600,
-      easing: 'linear',
-    })
-  }
-  else {
-    anime({
-      targets: bodyRef.value,
-      opacity: [
-        1,
-        0.6,
-        0.1,
-        0.3,
-        0,
-      ],
-      duration: 200,
-      delay: 300,
-      easing: 'linear',
-    })
-  }
-})
+const partMap = new Map<Part, AnimeMap>()
+
+const bindPart: ProvideContent['bindPart'] = ({ name, animeMap }) => {
+  partMap.set(name, animeMap)
+}
 
 provide(PROVIDE_KEY, {
   visible: computed(() => prop.visible),
   bodySize: computed(() => ({
-    width: bodySize.width,
-    height: bodySize.height,
+    width: contentSize.width,
+    height: contentSize.height,
   })),
+  bindPart,
+})
+
+const animeSequence: Record<
+  State,
+  Partial<Record<Part, {
+    duration?: number;
+    delay?: number;
+  }>>
+> = {
+  visible: {
+    corner: { duration: 400 },
+    bg: { duration: 400 },
+    border: { duration: 400, delay: 200 },
+    content: { duration: 400, delay: 600 },
+  },
+  hidden: {
+    content: { duration: 400 },
+    bg: { duration: 400 },
+    border: { duration: 400 },
+    corner: { duration: 400, delay: 400 },
+  },
+}
+
+/** slot 容器動畫 */
+const contentAnimeMap: AnimeMap = {
+  async visible() {
+    const tasks = [
+      anime({
+        targets: contentRef.value,
+        opacity: [
+          0,
+          0.1,
+          0.8,
+          0.3,
+          1,
+        ],
+        duration: 300,
+        easing: 'linear',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
+  },
+  async hidden() {
+    const tasks = [
+      anime({
+        targets: contentRef.value,
+        opacity: [
+          1,
+          0.6,
+          0.1,
+          0.3,
+          0,
+        ],
+        duration: 300,
+        easing: 'linear',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
+  },
+}
+
+bindPart({
+  name: 'content',
+  animeMap: contentAnimeMap,
+})
+
+watch(() => prop.visible, (value) => {
+  if (value) {
+    pipe(
+      animeSequence.visible,
+      entries(),
+      map(([key, animeParam]) => {
+        const target = partMap.get(key)
+        return target?.visible(animeParam)
+      }),
+    )
+  }
+  else {
+    pipe(
+      animeSequence.hidden,
+      entries(),
+      map(([key, animeParam]) => {
+        const target = partMap.get(key)
+        return target?.hidden(animeParam)
+      }),
+    )
+  }
 })
 </script>
 

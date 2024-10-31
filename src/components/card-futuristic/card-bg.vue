@@ -8,8 +8,9 @@
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
+import type { AnimeMap } from './type'
 import anime from 'animejs'
-import { computed, inject, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 // #region Props
@@ -22,7 +23,7 @@ interface Props {
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   angle: '-45deg',
-  patternSize: '3px',
+  patternSize: '4px',
   patternColor: '#FAFAFA',
 })
 
@@ -43,40 +44,56 @@ const style = computed<CSSProperties>(() => ({
   ].join(''),
 }))
 
-watch(() => card, (data) => {
-  const { visible } = data ?? {}
+const animeMap: AnimeMap = {
+  async visible() {
+    const tasks = [
+      anime({
+        targets: bodyRef.value,
+        opacity: [
+          0,
+          0.1,
+          0.8,
+          0.3,
+          1,
+        ],
+        duration: 200,
+        easing: 'linear',
+      }).finished,
+    ]
 
-  if (visible?.value) {
-    anime({
-      targets: bodyRef.value,
-      opacity: [
-        0,
-        0.1,
-        0.8,
-        0.3,
-        1,
-      ],
-      duration: 200,
-      easing: 'linear',
-    })
+    await Promise.all(tasks)
+  },
+  async hidden() {
+    const tasks = [
+      anime({
+        targets: bodyRef.value,
+        opacity: [
+          1,
+          0.6,
+          0.1,
+          0.8,
+          0.3,
+          0,
+        ],
+        duration: 200,
+        easing: 'linear',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
+  },
+}
+
+onMounted(() => {
+  if (!card) {
+    console.warn('此元件必須包在 CardFuturistic 元件中')
+    return
   }
-  else {
-    anime({
-      targets: bodyRef.value,
-      opacity: [
-        1,
-        0.6,
-        0.1,
-        0.8,
-        0.3,
-        0,
-      ],
-      duration: 200,
-      easing: 'linear',
-    })
-  }
-}, {
-  deep: true,
+
+  card.bindPart({
+    name: 'bg',
+    animeMap,
+  })
 })
 </script>
 

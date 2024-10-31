@@ -17,8 +17,11 @@
 </template>
 
 <script setup lang="ts">
+import type { State } from './type'
+import { whenever } from '@vueuse/core'
 import anime from 'animejs'
-import { computed, inject, ref, watch } from 'vue'
+import { map, pipe } from 'remeda'
+import { computed, inject, onMounted, ref } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 // #region Props
@@ -44,28 +47,31 @@ const viewBox = computed(
   () => `0 0 ${cardSize.value.width} ${cardSize.value.height}`,
 )
 
-const lineStyleMap = computed(() => ({
+const lineStyleMap = ref({
   t: {
+    'x1': 0,
     'y1': 0,
     'x2': cardSize.value.width,
     'y2': 0,
     'stroke': '#777',
     // 寫成小駝峰（strokeWidth）沒有作用
-    'stroke-width': '2',
+    'stroke-width': 2,
   },
   l: {
     'x1': 0,
+    'y1': 0,
     'x2': 0,
     'y2': cardSize.value.height,
     'stroke': '#777',
-    'stroke-width': '4',
+    'stroke-width': 4,
   },
   b: {
+    'x1': 0,
     'y1': cardSize.value.height,
     'x2': cardSize.value.width,
     'y2': cardSize.value.height,
     'stroke': '#777',
-    'stroke-width': '2',
+    'stroke-width': 2,
   },
   r: {
     'x1': cardSize.value.width,
@@ -73,46 +79,148 @@ const lineStyleMap = computed(() => ({
     'x2': cardSize.value.width,
     'y2': cardSize.value.height,
     'stroke': '#777',
-    'stroke-width': '4',
+    'stroke-width': 4,
   },
-}))
-
-watch(() => card, (data) => {
-  const { visible } = data ?? {}
-
-  if (visible?.value) {
-    anime({
-      targets: svgRef.value,
-      opacity: [
-        0,
-        0.1,
-        0.8,
-        0.3,
-        1,
-      ],
-      duration: 200,
-      delay: 300,
-      easing: 'linear',
-    })
-  }
-  else {
-    anime({
-      targets: svgRef.value,
-      opacity: [
-        1,
-        0.6,
-        0.1,
-        0.8,
-        0.3,
-        0,
-      ],
-      duration: 200,
-      easing: 'linear',
-    })
-  }
-}, {
-  deep: true,
 })
+
+function initLineStyleMap() {
+  lineStyleMap.value = {
+    t: {
+      'x1': 0,
+      'y1': 0,
+      'x2': cardSize.value.width,
+      'y2': 0,
+      'stroke': '#777',
+      // 寫成小駝峰（strokeWidth）沒有作用
+      'stroke-width': 2,
+    },
+    l: {
+      'x1': 0,
+      'y1': 0,
+      'x2': 0,
+      'y2': cardSize.value.height,
+      'stroke': '#777',
+      'stroke-width': 4,
+    },
+    b: {
+      'x1': 0,
+      'y1': cardSize.value.height,
+      'x2': cardSize.value.width,
+      'y2': cardSize.value.height,
+      'stroke': '#777',
+      'stroke-width': 2,
+    },
+    r: {
+      'x1': cardSize.value.width,
+      'y1': 0,
+      'x2': cardSize.value.width,
+      'y2': cardSize.value.height,
+      'stroke': '#777',
+      'stroke-width': 4,
+    },
+  }
+}
+whenever(() => cardSize.value.width && cardSize.value.height, () => {
+  initLineStyleMap()
+}, { once: true })
+
+const animeMap: Record<
+  State,
+  () => Promise<void>
+> = {
+  async visible() {
+    const tasks = [
+      ...pipe(
+        [
+          lineStyleMap.value.t,
+          lineStyleMap.value.b,
+        ],
+        map((targets) => anime({
+          targets,
+          x1: 0,
+          x2: cardSize.value.width,
+          duration: 400,
+          easing: 'easeOutExpo',
+        }).finished),
+      ),
+      ...pipe(
+        [
+          lineStyleMap.value.l,
+          lineStyleMap.value.r,
+        ],
+        map((targets) => anime({
+          targets,
+          y1: 0,
+          y2: cardSize.value.height,
+          duration: 400,
+          delay: 200,
+          easing: 'easeOutExpo',
+        }).finished),
+      ),
+    ]
+
+    await Promise.all(tasks)
+  },
+  async hidden() {
+    const tasks = [
+      ...pipe(
+        [
+          lineStyleMap.value.t,
+          lineStyleMap.value.b,
+        ],
+        map((targets) => anime({
+          targets,
+          x1: cardSize.value.width / 2,
+          x2: cardSize.value.width / 2,
+          duration: 400,
+          easing: 'easeOutExpo',
+        }).finished),
+      ),
+
+      ...pipe(
+        [
+          lineStyleMap.value.l,
+          lineStyleMap.value.r,
+        ],
+        map((targets) => anime({
+          targets,
+          y1: cardSize.value.height / 2,
+          y2: cardSize.value.height / 2,
+          duration: 400,
+          delay: 200,
+          easing: 'easeInExpo',
+        }).finished),
+      ),
+    ]
+
+    await Promise.all(tasks)
+  },
+}
+
+onMounted(() => {
+  if (!card) {
+    console.warn('此元件必須包在 CardFuturistic 元件中')
+    return
+  }
+
+  card.bindPart({
+    name: 'border',
+    animeMap,
+  })
+})
+
+// watch(() => card?.visible.value, (visible) => {
+//   console.log(`🚀 ~ visible:`, visible)
+
+//   if (visible) {
+//     animeMap.visible()
+//   }
+//   else {
+//     animeMap.hidden()
+//   }
+// }, {
+//   deep: true,
+// })
 </script>
 
 <style scoped lang="sass">

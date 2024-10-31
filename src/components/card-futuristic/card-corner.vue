@@ -17,10 +17,11 @@
 </template>
 
 <script setup lang="ts">
+import type { AnimeMap } from './type'
 import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { addProp, mapValues, pipe } from 'remeda'
-import { computed, inject, reactive, ref, watch } from 'vue'
+import { computed, inject, onMounted, reactive, ref } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 // #region Props
@@ -30,7 +31,7 @@ interface Props {
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
-  cornerSize: 14,
+  cornerSize: 10,
   cornerColor: '#444',
 })
 
@@ -45,7 +46,7 @@ const cardSize = computed(() => ({
   height: card?.bodySize.value.height ?? 0,
 }))
 
-const offset = computed(() => prop.cornerSize / 4)
+const offset = ref(prop.cornerSize / 4)
 const style = computed(() => ({
   left: `-${offset.value}px`,
   top: `-${offset.value}px`,
@@ -88,42 +89,71 @@ const cornerStyleMap = computed(() => pipe(
   mapValues(addProp('fill', prop.cornerColor)),
 ))
 
-watch(() => card, (data) => {
-  const { visible } = data ?? {}
+const animeMap: AnimeMap = {
+  async visible() {
+    const tasks = [
+      anime({
+        targets: offset,
+        value: prop.cornerSize / 4,
+        opacity: 1,
+        duration: 400,
+        easing: 'easeOutExpo',
+      }).finished,
+      anime({
+        targets: svgRef.value,
+        opacity: 1,
+        duration: 400,
+        easing: 'linear',
+      }).finished,
+    ]
 
-  if (visible?.value) {
-    anime({
-      targets: svgRef.value,
-      opacity: [
-        0,
-        0.1,
-        0.8,
-        0.3,
-        1,
-      ],
-      duration: 200,
-      easing: 'linear',
-    })
+    await Promise.all(tasks)
+  },
+  async hidden() {
+    const tasks = [
+      anime({
+        targets: offset,
+        value: prop.cornerSize,
+        duration: 400,
+        easing: 'easeInExpo',
+      }).finished,
+      anime({
+        targets: svgRef.value,
+        opacity: 0,
+        duration: 100,
+        delay: 300,
+        easing: 'linear',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
+  },
+}
+
+onMounted(() => {
+  if (!card) {
+    console.warn('此元件必須包在 CardFuturistic 元件中')
+    return
   }
-  else {
-    anime({
-      targets: svgRef.value,
-      opacity: [
-        1,
-        0.6,
-        0.1,
-        0.8,
-        0.3,
-        0,
-      ],
-      duration: 200,
-      delay: 600,
-      easing: 'linear',
-    })
-  }
-}, {
-  deep: true,
+
+  card.bindPart({
+    name: 'corner',
+    animeMap,
+  })
 })
+
+// watch(() => card, (data) => {
+//   const { visible } = data ?? {}
+
+//   if (visible?.value) {
+//     animeMap.visible()
+//   }
+//   else {
+//     animeMap.hidden()
+//   }
+// }, {
+//   deep: true,
+// })
 </script>
 
 <style scoped lang="sass">
