@@ -12,7 +12,24 @@ import BasicUsage from '../../../src/components/card-futuristic/examples/basic-u
 
 不過度花俏、實用的科幻風格（Sci-Fi、Futuristic）資訊容器。
 
+我終於做出我夢想中的元件了！
+
+在學階段的專業是自動控制，一直對於科幻風格的元件情有獨鍾。
+
+過去最接近的作品如下：
+
+- [平衡車控制](https://www.youtube.com/watch?v=M7zT4Zw0azc)
+- [LED Cube 控制](https://www.youtube.com/watch?v=6dSCRM2puSs)
+
+礙於技術力不足，可以看得出來介面非常陽春，勉強沾上科幻的邊。
+
+這次終於做出我心目中的樣子了！
+
 ## 使用範例
+
+此元件主要由 border、bg、corner、content 與 ornament 子元件組成，由 card 父元件負責調度動畫。
+
+子元件可以任意組合，藉此達到多種有趣的視覺效果。
 
 ### 基本用法
 
