@@ -7,28 +7,26 @@
     class="card-corner"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g>
-      <path
-        v-bind="cornerStyleMap.lt"
-        :stroke="prop.stroke"
-        stroke-width="1.6"
-      />
-      <path
-        v-bind="cornerStyleMap.rt"
-        :stroke="prop.stroke"
-        stroke-width="1.6"
-      />
-      <path
-        v-bind="cornerStyleMap.br"
-        :stroke="prop.stroke"
-        stroke-width="1.6"
-      />
-      <path
-        v-bind="cornerStyleMap.bl"
-        :stroke="prop.stroke"
-        stroke-width="1.6"
-      />
-    </g>
+    <path
+      v-bind="cornerStyleMap.lt"
+      :stroke="prop.stroke"
+      stroke-width="1.6"
+    />
+    <path
+      v-bind="cornerStyleMap.rt"
+      :stroke="prop.stroke"
+      stroke-width="1.6"
+    />
+    <path
+      v-bind="cornerStyleMap.br"
+      :stroke="prop.stroke"
+      stroke-width="1.6"
+    />
+    <path
+      v-bind="cornerStyleMap.bl"
+      :stroke="prop.stroke"
+      stroke-width="1.6"
+    />
   </svg>
 </template>
 
