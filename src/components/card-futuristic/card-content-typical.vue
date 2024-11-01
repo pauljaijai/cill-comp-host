@@ -94,7 +94,22 @@ const animeMap: AnimeMap = {
     this.visible(param)
   },
   async hover(param) {
-    this.normal(param)
+    const {
+      duration = 300,
+      delay = 0,
+    } = param ?? {}
+
+    const tasks = [
+      anime({
+        targets: contentRef.value,
+        opacity: 0.6,
+        duration,
+        delay,
+        easing: 'linear',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
   },
 }
 

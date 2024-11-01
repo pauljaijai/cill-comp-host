@@ -64,14 +64,17 @@ const cardSize = computed(() => ({
   height: card?.contentSize.value.height ?? 0,
 }))
 
-const offset = ref(prop.size / 4)
-const color = ref(prop.color)
+const attr = reactive({
+  rotate: 0,
+  offset: prop.size / 4,
+  color: prop.color,
+})
 
 const style = computed(() => ({
-  left: `${-offset.value}px`,
-  top: `${-offset.value}px`,
-  width: `${cardSize.value.width + offset.value * 2}px`,
-  height: `${cardSize.value.height + offset.value * 2}px`,
+  left: `${-attr.offset}px`,
+  top: `${-attr.offset}px`,
+  width: `${cardSize.value.width + attr.offset * 2}px`,
+  height: `${cardSize.value.height + attr.offset * 2}px`,
 }))
 
 const viewBox = computed(
@@ -82,6 +85,7 @@ const cornerStyleMap = computed(() => pipe(
   {
     lt: {
       d: `M0 0 H${prop.size} L0 ${prop.size}V0 Z`,
+      transform: `rotate(${attr.rotate}, ${prop.size / 2}, ${prop.size / 2})`,
     },
     rt: {
       d: [
@@ -89,6 +93,7 @@ const cornerStyleMap = computed(() => pipe(
         `L${svgSize.width} ${prop.size}`,
         `L${svgSize.width - prop.size} 0Z`,
       ].join(' '),
+      transform: `rotate(${attr.rotate}, ${svgSize.width - prop.size / 2}, ${prop.size / 2})`,
     },
     br: {
       d: [
@@ -97,6 +102,7 @@ const cornerStyleMap = computed(() => pipe(
         `L${svgSize.width} ${svgSize.height - prop.size}`,
         `L${svgSize.width} ${svgSize.height} Z`,
       ].join(' '),
+      transform: `rotate(${attr.rotate}, ${svgSize.width - prop.size / 2}, ${svgSize.height - prop.size / 2})`,
     },
     bl: {
       d: [
@@ -105,11 +111,12 @@ const cornerStyleMap = computed(() => pipe(
         `L${prop.size} ${svgSize.height}`,
         `L0 ${svgSize.height} Z`,
       ].join(' '),
+      transform: `rotate(${attr.rotate}, ${prop.size / 2}, ${svgSize.height - prop.size / 2})`,
     },
   },
   mapValues((value) => ({
     ...value,
-    fill: color.value,
+    fill: attr.color,
   })),
 ))
 
@@ -122,18 +129,13 @@ const animeMap: AnimeMap = {
 
     const tasks = [
       anime({
-        targets: offset,
-        value: prop.size / 4,
+        targets: attr,
+        offset: prop.size / 4,
+        color: prop.color,
+        rotate: 0,
         duration,
         delay,
         easing: 'easeInOutExpo',
-      }).finished,
-      anime({
-        targets: color,
-        value: prop.color,
-        duration,
-        delay,
-        easing: 'linear',
       }).finished,
       anime({
         targets: svgRef.value,
@@ -154,8 +156,8 @@ const animeMap: AnimeMap = {
 
     const tasks = [
       anime({
-        targets: offset,
-        value: prop.size / 4,
+        targets: attr,
+        offset: prop.size / 4,
         duration,
         delay,
         easing: 'easeOutExpo',
@@ -181,8 +183,8 @@ const animeMap: AnimeMap = {
 
     const tasks = [
       anime({
-        targets: offset,
-        value: prop.size,
+        targets: attr,
+        offset: prop.size,
         duration,
         delay,
         easing: 'easeInExpo',
@@ -206,15 +208,16 @@ const animeMap: AnimeMap = {
 
     const tasks = [
       anime({
-        targets: offset,
-        value: -prop.size / 5,
+        targets: attr,
+        offset: prop.size / 2,
+        rotate: 180,
         duration,
         delay,
         easing: 'easeInOutExpo',
       }).finished,
       anime({
-        targets: color,
-        value: prop.selectedColor,
+        targets: attr,
+        color: prop.selectedColor,
         duration,
         delay,
         easing: 'linear',
@@ -231,8 +234,9 @@ const animeMap: AnimeMap = {
 
     const tasks = [
       anime({
-        targets: offset,
-        value: prop.size / 2,
+        targets: attr,
+        offset: prop.size / 2,
+        rotate: 0,
         duration,
         delay,
         easing: 'easeInOutExpo',
