@@ -166,6 +166,7 @@ const animeMap: AnimeMap = {
       anime({
         targets: attr,
         offset: prop.size / 4,
+        rotate: 0,
         duration,
         delay,
         easing: 'easeOutExpo',
@@ -195,6 +196,7 @@ const animeMap: AnimeMap = {
       anime({
         targets: attr,
         offset: prop.size,
+        color: prop.color,
         duration,
         delay,
         easing: 'easeInExpo',

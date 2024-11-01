@@ -95,10 +95,7 @@ defineSlots<{
 
 const partList: Part[] = ['content', 'bg', 'border', 'corner', 'ornament']
 // 引入所有 part 元件
-const partModules = import.meta.glob(['./card-*.vue', '!./card-futuristic.vue'], {
-  import: 'default',
-  // eager: true,
-})
+const partModules = import.meta.glob(['./card-*.vue', '!./card-futuristic.vue'])
 const partComponentTypeMap = pipe(
   partModules,
   entries(),
