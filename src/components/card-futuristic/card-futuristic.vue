@@ -85,6 +85,7 @@ defineSlots<{
 }>()
 // #endregion Slots
 
+const partList: Part[] = ['content', 'bg', 'border', 'corner', 'ornament']
 // 引入所有 part 元件
 const partModules = import.meta.glob(['./card-*.vue', '!./card-futuristic.vue'], {
   import: 'default',
@@ -99,7 +100,7 @@ const partComponentTypeMap = pipe(
       throw new Error(`Invalid path: ${path}`)
     }
     const [part, type] = text.split('-')
-    if (!part || !type) {
+    if (!part || !type || !partList.includes(part as Part)) {
       throw new Error(`元件命名錯誤: ${path}`)
     }
 
@@ -136,9 +137,8 @@ const borderComponent = computed(() => findPartComponent('border', prop.border.t
 const bgComponent = computed(() => findPartComponent('bg', prop.bg.type))
 const cornerComponent = computed(() => findPartComponent('corner', prop.corner.type))
 
-const partList: Part[] = ['content', 'bg', 'border', 'corner', 'ornament']
+/** 儲存 part 資料 */
 const partMap = new Map<Part, AnimeMap>()
-
 /** 用於子元件綁定動畫 */
 const bindPart: ProvideContent['bindPart'] = ({ name, animeMap }) => {
   partMap.set(name, animeMap)
