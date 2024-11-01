@@ -186,8 +186,12 @@ const contentAnimeMap: AnimeMap = {
 
     await Promise.all(tasks)
   },
-  async selected() { },
-  async hover() { },
+  async selected(param) {
+    this.visible(param)
+  },
+  async hover(param) {
+    this.normal(param)
+  },
 }
 
 bindPart({
