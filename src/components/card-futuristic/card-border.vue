@@ -81,6 +81,45 @@ const lineStyleMap = ref({
 })
 
 const animeMap: AnimeMap = {
+  async normal(param) {
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
+    const tasks = [
+      ...pipe(
+        [
+          lineStyleMap.value.t,
+          lineStyleMap.value.b,
+        ],
+        map((targets) => anime({
+          targets,
+          x1: 0,
+          x2: cardSize.value.width,
+          duration,
+          delay,
+          easing: 'easeOutExpo',
+        }).finished),
+      ),
+      ...pipe(
+        [
+          lineStyleMap.value.l,
+          lineStyleMap.value.r,
+        ],
+        map((targets) => anime({
+          targets,
+          y1: 0,
+          y2: cardSize.value.height,
+          duration,
+          delay: 200 + delay,
+          easing: 'easeOutExpo',
+        }).finished),
+      ),
+    ]
+
+    await Promise.all(tasks)
+  },
   async visible(param) {
     const {
       duration = 400,
@@ -160,6 +199,7 @@ const animeMap: AnimeMap = {
 
     await Promise.all(tasks)
   },
+  async selected() { },
 }
 
 onMounted(() => {

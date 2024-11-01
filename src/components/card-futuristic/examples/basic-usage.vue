@@ -8,8 +8,11 @@
 
     <div class="flex justify-center">
       <card-futuristic
+        v-on-click-outside="() => toggleSelect(false)"
         :visible
+        :selected
         class="font-orbitron"
+        @click="toggleSelect(true)"
       >
         <div class="flex flex-col gap-4">
           <div class="text-xl font-bold">
@@ -26,11 +29,15 @@
 </template>
 
 <script setup lang="ts">
+import { vOnClickOutside } from '@vueuse/components'
+import { useToggle } from '@vueuse/core'
 import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import CardFuturistic from '../card-futuristic.vue'
 
 const visible = ref(true)
+
+const [selected, toggleSelect] = useToggle(false)
 </script>
 
 <style lang="sass">

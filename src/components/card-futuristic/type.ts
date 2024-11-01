@@ -1,10 +1,12 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 
 export type State =
+  'normal' | // 預設狀態
   'visible' |
-  'hidden'
+  'hidden' |
+  'selected'
 
-// select hover active
+// hover active
 
 export type Part =
   'border' |

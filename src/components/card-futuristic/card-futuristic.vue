@@ -19,7 +19,7 @@ import type { AnimeMap, Part, ProvideContent, State } from './type'
 import { until, useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { defaultsDeep } from 'lodash-es'
-import { clone, entries, map, pipe } from 'remeda'
+import { clone, map, pipe } from 'remeda'
 import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
 import CardBg from './card-bg.vue'
 import CardBorder from './card-border.vue'
@@ -39,6 +39,10 @@ interface Props {
   animeSequence?: Partial<AnimeSequence>;
 
   visible?: boolean;
+  selected?: boolean;
+  /** 為空則自動處理，有提供則以參數數值為主 */
+  hover?: boolean;
+
   contentClass?: string;
 }
 // #endregion Props
@@ -46,6 +50,9 @@ const prop = withDefaults(defineProps<Props>(), {
   animeSequence: undefined,
 
   visible: true,
+  selected: false,
+  hover: undefined,
+
   contentClass: 'p-4',
 })
 
@@ -66,8 +73,10 @@ const contentSize = reactive(useElementSize(contentRef, undefined, {
   box: 'border-box',
 }))
 
+const partList: Part[] = ['content', 'bg', 'border', 'corner', 'ornament']
 const partMap = new Map<Part, AnimeMap>()
 
+/** 用於子元件綁定動畫 */
 const bindPart: ProvideContent['bindPart'] = ({ name, animeMap }) => {
   partMap.set(name, animeMap)
 }
@@ -82,6 +91,12 @@ provide(PROVIDE_KEY, {
 })
 
 const defaultAnimeSequence: AnimeSequence = {
+  normal: {
+    content: {},
+    bg: {},
+    border: {},
+    corner: {},
+  },
   visible: {
     corner: {},
     bg: {},
@@ -94,6 +109,12 @@ const defaultAnimeSequence: AnimeSequence = {
     border: { delay: 100 },
     corner: { delay: 200 },
   },
+  selected: {
+    content: {},
+    bg: {},
+    border: {},
+    corner: {},
+  },
 }
 
 const animeSequence = computed<AnimeSequence>(() => defaultsDeep(
@@ -103,6 +124,24 @@ const animeSequence = computed<AnimeSequence>(() => defaultsDeep(
 
 /** slot 容器動畫 */
 const contentAnimeMap: AnimeMap = {
+  async normal(param) {
+    const {
+      duration = 300,
+      delay = 0,
+    } = param ?? {}
+
+    const tasks = [
+      anime({
+        targets: contentRef.value,
+        opacity: 1,
+        duration,
+        delay,
+        easing: 'linear',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
+  },
   async visible(param) {
     const {
       duration = 300,
@@ -151,6 +190,7 @@ const contentAnimeMap: AnimeMap = {
 
     await Promise.all(tasks)
   },
+  async selected() { },
 }
 
 bindPart({
@@ -158,26 +198,32 @@ bindPart({
   animeMap: contentAnimeMap,
 })
 
+function playPartsAnime(state: State) {
+  pipe(
+    partList,
+    map((key) => {
+      const animeParam = animeSequence.value[state][key]
+      const part = partMap.get(key)
+      return part?.[state](animeParam)
+    }),
+  )
+}
+
 watch(() => prop.visible, (value) => {
   if (value) {
-    pipe(
-      animeSequence.value.visible,
-      entries(),
-      map(([key, animeParam]) => {
-        const target = partMap.get(key)
-        return target?.visible(animeParam)
-      }),
-    )
+    playPartsAnime('visible')
   }
   else {
-    pipe(
-      animeSequence.value.hidden,
-      entries(),
-      map(([key, animeParam]) => {
-        const target = partMap.get(key)
-        return target?.hidden(animeParam)
-      }),
-    )
+    playPartsAnime('hidden')
+  }
+})
+
+watch(() => prop.selected, (value) => {
+  if (value) {
+    playPartsAnime('selected')
+  }
+  else {
+    playPartsAnime('normal')
   }
 })
 
@@ -189,24 +235,10 @@ onMounted(async () => {
 
   const { visible } = prop
   if (visible) {
-    pipe(
-      animeSequence.value.visible,
-      entries(),
-      map(([key]) => {
-        const target = partMap.get(key)
-        return target?.visible({ duration: 0 })
-      }),
-    )
+    playPartsAnime('visible')
   }
   else {
-    pipe(
-      animeSequence.value.hidden,
-      entries(),
-      map(([key]) => {
-        const target = partMap.get(key)
-        return target?.hidden({ duration: 0 })
-      }),
-    )
+    playPartsAnime('hidden')
   }
 })
 </script>

@@ -10,22 +10,22 @@
     <g>
       <path
         v-bind="cornerStyleMap.lt"
-        stroke="white"
+        :stroke="prop.stroke"
         stroke-width="1.6"
       />
       <path
         v-bind="cornerStyleMap.rt"
-        stroke="white"
+        :stroke="prop.stroke"
         stroke-width="1.6"
       />
       <path
         v-bind="cornerStyleMap.br"
-        stroke="white"
+        :stroke="prop.stroke"
         stroke-width="1.6"
       />
       <path
         v-bind="cornerStyleMap.bl"
-        stroke="white"
+        :stroke="prop.stroke"
         stroke-width="1.6"
       />
     </g>
@@ -44,11 +44,13 @@ import { PROVIDE_KEY } from './type'
 interface Props {
   size?: number;
   color?: string;
+  stroke?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   size: 10,
   color: '#777',
+  stroke: 'white',
 })
 
 const svgRef = ref<SVGAElement>()
@@ -64,8 +66,8 @@ const cardSize = computed(() => ({
 
 const offset = ref(prop.size / 4)
 const style = computed(() => ({
-  left: `-${offset.value}px`,
-  top: `-${offset.value}px`,
+  left: `${-offset.value}px`,
+  top: `${-offset.value}px`,
   width: `${cardSize.value.width + offset.value * 2}px`,
   height: `${cardSize.value.height + offset.value * 2}px`,
 }))
@@ -110,6 +112,31 @@ const cornerStyleMap = computed(() => pipe(
 ))
 
 const animeMap: AnimeMap = {
+  async normal(param) {
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
+    const tasks = [
+      anime({
+        targets: offset,
+        value: prop.size / 4,
+        duration,
+        delay,
+        easing: 'easeInOutExpo',
+      }).finished,
+      anime({
+        targets: svgRef.value,
+        opacity: 1,
+        duration,
+        delay,
+        easing: 'linear',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
+  },
   async visible(param) {
     const {
       duration = 400,
@@ -120,7 +147,6 @@ const animeMap: AnimeMap = {
       anime({
         targets: offset,
         value: prop.size / 4,
-        opacity: 1,
         duration,
         delay,
         easing: 'easeOutExpo',
@@ -158,6 +184,24 @@ const animeMap: AnimeMap = {
         duration: svgDuration,
         delay: svgDuration * 3 + delay,
         easing: 'linear',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
+  },
+  async selected(param) {
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
+    const tasks = [
+      anime({
+        targets: offset,
+        value: -prop.size / 4,
+        duration,
+        delay,
+        easing: 'easeInOutExpo',
       }).finished,
     ]
 
