@@ -14,7 +14,7 @@ import { computed, inject, onMounted, ref } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 // #region Props
-interface Props {
+export interface Props {
   /** @default 45deg */
   angle?: string;
   size?: string;

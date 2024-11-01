@@ -41,7 +41,7 @@ import { computed, inject, onMounted, reactive, ref } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 // #region Props
-interface Props {
+export interface Props {
   size?: number;
   color?: string;
   selectedColor?: string;

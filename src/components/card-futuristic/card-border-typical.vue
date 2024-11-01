@@ -48,7 +48,7 @@ import { computed, inject, onMounted, ref } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 // #region Props
-interface Props {
+export interface Props {
   color?: string;
 }
 // #endregion Props

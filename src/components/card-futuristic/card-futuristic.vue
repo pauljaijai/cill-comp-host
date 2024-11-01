@@ -59,6 +59,7 @@ interface Props {
   bg?: BgParam;
   corner?: CornerParam;
   content?: ContentParam;
+  ornament?: undefined;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
