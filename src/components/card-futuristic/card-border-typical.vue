@@ -80,8 +80,14 @@ const lineStyleMap = ref({
   r: { y1: 0, y2: 0 },
 })
 
+function removeAnime() {
+  anime.remove(Object.values(lineStyleMap.value))
+}
+
 const animeMap: AnimeMap = {
   async normal(param) {
+    removeAnime()
+
     const {
       duration = 400,
       delay = 0,
@@ -121,6 +127,8 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async visible(param) {
+    removeAnime()
+
     const {
       duration = 400,
       delay = 0,
@@ -160,6 +168,8 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async hidden(param) {
+    removeAnime()
+
     const {
       duration = 400,
       delay = 0,
@@ -203,6 +213,8 @@ const animeMap: AnimeMap = {
     this.hover(param)
   },
   async hover(param) {
+    removeAnime()
+
     const {
       duration = 400,
       delay = 0,

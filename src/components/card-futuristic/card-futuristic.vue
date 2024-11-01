@@ -3,29 +3,37 @@
     ref="cardRef"
     class="relative"
   >
-    <component
-      :is="bgComponent"
-      v-bind="prop.bg"
-      class="pointer-events-none absolute z-[-1]"
-    />
-    <component
-      :is="borderComponent"
-      v-bind="prop.border"
-      class="pointer-events-none absolute z-[-1]"
-    />
-    <component
-      :is="cornerComponent"
-      v-bind="prop.corner"
-      class="pointer-events-none absolute z-[-1]"
-    />
+    <suspense>
+      <component
+        :is="bgComponent"
+        v-bind="prop.bg"
+        class="pointer-events-none absolute z-[-1]"
+      />
+    </suspense>
+    <suspense>
+      <component
+        :is="borderComponent"
+        v-bind="prop.border"
+        class="pointer-events-none absolute z-[-1]"
+      />
+    </suspense>
+    <suspense>
+      <component
+        :is="cornerComponent"
+        v-bind="prop.corner"
+        class="pointer-events-none absolute z-[-1]"
+      />
+    </suspense>
 
-    <component
-      :is="contentComponent"
-      ref="contentRef"
-      v-bind="prop.content"
-    >
-      <slot />
-    </component>
+    <suspense>
+      <component
+        :is="contentComponent"
+        ref="contentRef"
+        v-bind="prop.content"
+      >
+        <slot />
+      </component>
+    </suspense>
   </div>
 </template>
 
@@ -35,7 +43,7 @@ import type { AnimeMap, Part, ProvideContent, State } from './type'
 import { until, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
 import { defaultsDeep } from 'lodash-es'
 import { clone, entries, find, map, pipe } from 'remeda'
-import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, onMounted, provide, reactive, ref, watch } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 type AnimeSequence = Record<
@@ -89,7 +97,7 @@ const partList: Part[] = ['content', 'bg', 'border', 'corner', 'ornament']
 // 引入所有 part 元件
 const partModules = import.meta.glob(['./card-*.vue', '!./card-futuristic.vue'], {
   import: 'default',
-  eager: true,
+  // eager: true,
 })
 const partComponentTypeMap = pipe(
   partModules,
@@ -107,7 +115,7 @@ const partComponentTypeMap = pipe(
     return {
       part,
       type,
-      component,
+      component: defineAsyncComponent(component as Parameters<typeof defineAsyncComponent>[0]),
     }
   }),
 )
@@ -154,21 +162,21 @@ provide(PROVIDE_KEY, {
 })
 
 const defaultAnimeSequence: AnimeSequence = {
-  normal: {},
+  normal: {
+    border: { delay: 400 },
+  },
   visible: {
-    corner: {},
-    bg: {},
     border: { delay: 200 },
     content: { delay: 400 },
   },
   hidden: {
-    content: {},
-    bg: {},
     border: { delay: 100 },
     corner: { delay: 200 },
   },
   selected: {},
-  hover: {},
+  hover: {
+    border: { delay: 100 },
+  },
 }
 const animeSequence = computed<AnimeSequence>(() => defaultsDeep(
   clone(prop.animeSequence),

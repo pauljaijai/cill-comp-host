@@ -120,8 +120,14 @@ const cornerStyleMap = computed(() => pipe(
   })),
 ))
 
+function removeAnime() {
+  anime.remove([attr, svgRef.value])
+}
+
 const animeMap: AnimeMap = {
   async normal(param) {
+    removeAnime()
+
     const {
       duration = 400,
       delay = 0,
@@ -149,6 +155,8 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async visible(param) {
+    removeAnime()
+
     const {
       duration = 400,
       delay = 0,
@@ -174,6 +182,8 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async hidden(param) {
+    removeAnime()
+
     const {
       duration = 400,
       delay = 0,
@@ -201,8 +211,10 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async selected(param) {
+    removeAnime()
+
     const {
-      duration = 400,
+      duration = 300,
       delay = 0,
     } = param ?? {}
 
@@ -213,7 +225,7 @@ const animeMap: AnimeMap = {
         rotate: 180,
         duration,
         delay,
-        easing: 'easeInOutExpo',
+        easing: 'easeInOutCirc',
       }).finished,
       anime({
         targets: attr,
@@ -227,8 +239,10 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async hover(param) {
+    removeAnime()
+
     const {
-      duration = 400,
+      duration = 300,
       delay = 0,
     } = param ?? {}
 
@@ -237,9 +251,10 @@ const animeMap: AnimeMap = {
         targets: attr,
         offset: prop.size / 2,
         rotate: 0,
+        color: prop.color,
         duration,
         delay,
-        easing: 'easeInOutExpo',
+        easing: 'easeInOutCirc',
       }).finished,
     ]
 
