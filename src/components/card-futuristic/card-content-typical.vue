@@ -60,7 +60,7 @@ const animeMap: AnimeMap = {
         ],
         duration,
         delay,
-        easing: 'linear',
+        easing: 'steps(1)',
       }).finished,
     ]
 
@@ -84,7 +84,7 @@ const animeMap: AnimeMap = {
         ],
         duration,
         delay,
-        easing: 'linear',
+        easing: 'steps(1)',
       }).finished,
     ]
 

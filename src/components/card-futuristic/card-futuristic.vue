@@ -3,29 +3,39 @@
     ref="cardRef"
     class="relative"
   >
-    <card-bg class="pointer-events-none absolute z-[-1]" />
-    <card-border class="pointer-events-none absolute z-[-1]" />
-    <card-corner class="pointer-events-none absolute z-[-1]" />
+    <component
+      :is="bgComponent"
+      v-bind="prop.bg"
+      class="pointer-events-none absolute z-[-1]"
+    />
+    <component
+      :is="borderComponent"
+      v-bind="prop.border"
+      class="pointer-events-none absolute z-[-1]"
+    />
+    <component
+      :is="cornerComponent"
+      v-bind="prop.corner"
+      class="pointer-events-none absolute z-[-1]"
+    />
 
-    <card-content-typical
+    <component
+      :is="contentComponent"
       ref="contentRef"
-      :class="prop.contentClass"
+      v-bind="prop.content"
     >
       <slot />
-    </card-content-typical>
+    </component>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { BgParam, BorderParam, ContentParam, CornerParam } from './param'
 import type { AnimeMap, Part, ProvideContent, State } from './type'
 import { until, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
 import { defaultsDeep } from 'lodash-es'
-import { clone, map, pipe } from 'remeda'
+import { clone, entries, find, map, pipe } from 'remeda'
 import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
-import CardBg from './card-bg.vue'
-import CardBorder from './card-border.vue'
-import CardContentTypical from './card-content-typical.vue'
-import CardCorner from './card-corner.vue'
 import { PROVIDE_KEY } from './type'
 
 type AnimeSequence = Record<
@@ -45,7 +55,10 @@ interface Props {
   /** 為空則自動處理，有提供則以參數數值為主 */
   hover?: boolean;
 
-  contentClass?: string;
+  border?: BorderParam;
+  bg?: BgParam;
+  corner?: CornerParam;
+  content?: ContentParam;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
@@ -55,14 +68,15 @@ const prop = withDefaults(defineProps<Props>(), {
   selected: false,
   hover: undefined,
 
-  contentClass: 'p-4',
+  border: () => ({ type: 'typical' }),
+  bg: () => ({ type: 'typical' }),
+  corner: () => ({ type: 'typical' }),
+  content: () => ({
+    type: 'typical',
+    class: 'p-4',
+  }),
+  ornament: undefined,
 })
-
-// #region Emits
-const emit = defineEmits<{
-  'update:modelValue': [];
-}>()
-// #endregion Emits
 
 // #region Slots
 defineSlots<{
@@ -70,12 +84,56 @@ defineSlots<{
 }>()
 // #endregion Slots
 
+// 引入所有 part 元件
+const partModules = import.meta.glob(['./card-*.vue', '!./card-futuristic.vue'], {
+  import: 'default',
+  eager: true,
+})
+const partComponentTypeMap = pipe(
+  partModules,
+  entries(),
+  map(([path, component]) => {
+    const text = path.match(/\.\/card-(.+)\.vue$/)?.[1]
+    if (!text) {
+      throw new Error(`Invalid path: ${path}`)
+    }
+    const [part, type] = text.split('-')
+    if (!part || !type) {
+      throw new Error(`元件命名錯誤: ${path}`)
+    }
+
+    return {
+      part,
+      type,
+      component,
+    }
+  }),
+)
+function findPartComponent(part: Part, type: string) {
+  return pipe(
+    partComponentTypeMap,
+    find(({ part: p, type: t }) => p === part && t === type),
+    (target) => {
+      if (!target) {
+        throw new Error(`找不到對應的 ${part} 元件: ${type}`)
+      }
+
+      return target.component
+    },
+  )
+}
+
 const cardRef = ref<HTMLDivElement>()
 
 const contentRef = ref<HTMLDivElement>()
 const contentSize = reactive(useElementSize(contentRef, undefined, {
   box: 'border-box',
 }))
+const contentComponent = computed(() => findPartComponent('content', prop.content.type))
+
+const borderComponent = computed(() => findPartComponent('border', prop.border.type))
+const bgComponent = computed(() => findPartComponent('bg', prop.bg.type))
+const cornerComponent = computed(() => findPartComponent('corner', prop.corner.type))
 
 const partList: Part[] = ['content', 'bg', 'border', 'corner', 'ornament']
 const partMap = new Map<Part, AnimeMap>()
@@ -111,12 +169,10 @@ const defaultAnimeSequence: AnimeSequence = {
   selected: {},
   hover: {},
 }
-
 const animeSequence = computed<AnimeSequence>(() => defaultsDeep(
   clone(prop.animeSequence),
   clone(defaultAnimeSequence),
 ))
-
 async function playPartsAnime(
   state: State,
   param?: {

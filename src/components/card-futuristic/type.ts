@@ -7,8 +7,6 @@ export type State =
   'selected' |
   'hover'
 
-// hover active
-
 export type Part =
   'border' |
   'bg' |
