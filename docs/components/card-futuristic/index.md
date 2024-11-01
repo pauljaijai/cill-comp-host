@@ -25,6 +25,8 @@ import BasicUsage from '../../../src/components/card-futuristic/examples/basic-u
 
 這次終於做出我心目中的樣子了！✧⁑｡٩(ˊᗜˋ*)و✧⁕｡
 
+此元件主要由 border、bg、corner、content 與 ornament 子元件組成，由 card 父元件負責調度動畫。
+
 子元件可以任意組合，藉此產生 N 種有趣的樣式設計。
 
 ## 使用範例

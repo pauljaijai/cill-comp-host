@@ -7,25 +7,24 @@
     <card-border class="pointer-events-none absolute z-[-1]" />
     <card-corner class="pointer-events-none absolute z-[-1]" />
 
-    <div
+    <card-content-typical
       ref="contentRef"
-      class="z-0"
       :class="prop.contentClass"
     >
       <slot />
-    </div>
+    </card-content-typical>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { AnimeMap, Part, ProvideContent, State } from './type'
 import { until, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
-import anime from 'animejs'
 import { defaultsDeep } from 'lodash-es'
 import { clone, map, pipe } from 'remeda'
 import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
 import CardBg from './card-bg.vue'
 import CardBorder from './card-border.vue'
+import CardContentTypical from './card-content-typical.vue'
 import CardCorner from './card-corner.vue'
 import { PROVIDE_KEY } from './type'
 
@@ -117,87 +116,6 @@ const animeSequence = computed<AnimeSequence>(() => defaultsDeep(
   clone(prop.animeSequence),
   clone(defaultAnimeSequence),
 ))
-
-/** slot 容器動畫 */
-const contentAnimeMap: AnimeMap = {
-  async normal(param) {
-    const {
-      duration = 300,
-      delay = 0,
-    } = param ?? {}
-
-    const tasks = [
-      anime({
-        targets: contentRef.value,
-        opacity: 1,
-        duration,
-        delay,
-        easing: 'linear',
-      }).finished,
-    ]
-
-    await Promise.all(tasks)
-  },
-  async visible(param) {
-    const {
-      duration = 300,
-      delay = 0,
-    } = param ?? {}
-
-    const tasks = [
-      anime({
-        targets: contentRef.value,
-        opacity: [
-          0,
-          0.1,
-          0.8,
-          0.3,
-          1,
-        ],
-        duration,
-        delay,
-        easing: 'linear',
-      }).finished,
-    ]
-
-    await Promise.all(tasks)
-  },
-  async hidden(param) {
-    const {
-      duration = 300,
-      delay = 0,
-    } = param ?? {}
-
-    const tasks = [
-      anime({
-        targets: contentRef.value,
-        opacity: [
-          1,
-          0.6,
-          0.1,
-          0.3,
-          0,
-        ],
-        duration,
-        delay,
-        easing: 'linear',
-      }).finished,
-    ]
-
-    await Promise.all(tasks)
-  },
-  async selected(param) {
-    this.visible(param)
-  },
-  async hover(param) {
-    this.normal(param)
-  },
-}
-
-bindPart({
-  name: 'content',
-  animeMap: contentAnimeMap,
-})
 
 async function playPartsAnime(
   state: State,
