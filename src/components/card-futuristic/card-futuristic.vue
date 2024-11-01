@@ -1,5 +1,8 @@
 <template>
-  <div class="relative">
+  <div
+    ref="cardRef"
+    class="relative"
+  >
     <card-bg class="pointer-events-none absolute z-[-1]" />
     <card-border class="pointer-events-none absolute z-[-1]" />
     <card-corner class="pointer-events-none absolute z-[-1]" />
@@ -16,7 +19,7 @@
 
 <script setup lang="ts">
 import type { AnimeMap, Part, ProvideContent, State } from './type'
-import { until, useElementSize } from '@vueuse/core'
+import { until, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
 import anime from 'animejs'
 import { defaultsDeep } from 'lodash-es'
 import { clone, map, pipe } from 'remeda'
@@ -68,6 +71,8 @@ defineSlots<{
 }>()
 // #endregion Slots
 
+const cardRef = ref<HTMLDivElement>()
+
 const contentRef = ref<HTMLDivElement>()
 const contentSize = reactive(useElementSize(contentRef, undefined, {
   box: 'border-box',
@@ -91,12 +96,7 @@ provide(PROVIDE_KEY, {
 })
 
 const defaultAnimeSequence: AnimeSequence = {
-  normal: {
-    content: {},
-    bg: {},
-    border: {},
-    corner: {},
-  },
+  normal: {},
   visible: {
     corner: {},
     bg: {},
@@ -109,12 +109,8 @@ const defaultAnimeSequence: AnimeSequence = {
     border: { delay: 100 },
     corner: { delay: 200 },
   },
-  selected: {
-    content: {},
-    bg: {},
-    border: {},
-    corner: {},
-  },
+  selected: {},
+  hover: {},
 }
 
 const animeSequence = computed<AnimeSequence>(() => defaultsDeep(
@@ -191,6 +187,7 @@ const contentAnimeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async selected() { },
+  async hover() { },
 }
 
 bindPart({
@@ -198,32 +195,88 @@ bindPart({
   animeMap: contentAnimeMap,
 })
 
-function playPartsAnime(state: State) {
-  pipe(
+async function playPartsAnime(
+  state: State,
+  param?: {
+    duration?: number;
+    delay?: number;
+  },
+) {
+  const tasks = pipe(
     partList,
     map((key) => {
-      const animeParam = animeSequence.value[state][key]
+      const animeParam = param ?? animeSequence.value[state][key]
       const part = partMap.get(key)
       return part?.[state](animeParam)
     }),
   )
+
+  await Promise.all(tasks)
 }
 
-watch(() => prop.visible, (value) => {
-  if (value) {
-    playPartsAnime('visible')
+const isHovered = useElementHover(cardRef)
+const hover = computed(() => {
+  if (prop.hover !== undefined) {
+    return prop.hover
   }
-  else {
-    playPartsAnime('hidden')
-  }
+
+  return isHovered.value
 })
 
-watch(() => prop.selected, (value) => {
-  if (value) {
-    playPartsAnime('selected')
-  }
-  else {
-    playPartsAnime('normal')
+interface StateObject {
+  visible: boolean;
+  selected: boolean;
+  hover: boolean;
+}
+/** 彙整所有狀態 */
+const stateObject = computed<StateObject>(() => ({
+  visible: prop.visible,
+  selected: prop.selected,
+  hover: hover.value,
+}))
+/** 方便比對狀態變化 */
+const { history: stateHistory } = useRefHistory(stateObject, {
+  capacity: 2,
+})
+
+/** 狀態策略，越前面越優先 */
+const stateStrategies: Array<(
+  state: StateObject,
+  pState: StateObject,
+) => undefined | Promise<void>
+> = [
+  ({ visible }, { visible: pVisible }) => {
+    if (visible === pVisible)
+      return
+
+    return playPartsAnime(visible ? 'visible' : 'hidden')
+  },
+  ({ selected }, { selected: pSelected }) => {
+    if (selected === pSelected)
+      return
+
+    return playPartsAnime(selected ? 'selected' : 'normal')
+  },
+  ({ hover, selected }, { hover: pHover }) => {
+    if (hover === pHover || selected)
+      return
+
+    return playPartsAnime(hover ? 'hover' : 'normal')
+  },
+]
+
+watch(stateObject, async () => {
+  const [current, prev] = stateHistory.value
+  if (!current || !prev)
+    return
+
+  for (const strategy of stateStrategies) {
+    const task = strategy(current.snapshot, prev.snapshot)
+    if (task !== undefined) {
+      await task
+
+      break
+    }
   }
 })
 
@@ -234,12 +287,7 @@ onMounted(async () => {
   await until(() => contentSize.height).toBeTruthy()
 
   const { visible } = prop
-  if (visible) {
-    playPartsAnime('visible')
-  }
-  else {
-    playPartsAnime('hidden')
-  }
+  return playPartsAnime(visible ? 'visible' : 'hidden', { duration: 0 })
 })
 </script>
 

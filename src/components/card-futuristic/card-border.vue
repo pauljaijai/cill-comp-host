@@ -112,7 +112,7 @@ const animeMap: AnimeMap = {
           y1: 0,
           y2: cardSize.value.height,
           duration,
-          delay: 200 + delay,
+          delay,
           easing: 'easeOutExpo',
         }).finished),
       ),
@@ -199,7 +199,50 @@ const animeMap: AnimeMap = {
 
     await Promise.all(tasks)
   },
-  async selected() { },
+  async selected(param) {
+    this.normal(param)
+  },
+  async hover(param) {
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
+    const offset = 10
+
+    const tasks = [
+      ...pipe(
+        [
+          lineStyleMap.value.t,
+          lineStyleMap.value.b,
+        ],
+        map((targets) => anime({
+          targets,
+          x1: offset,
+          x2: cardSize.value.width - offset,
+          duration,
+          delay,
+          easing: 'easeOutExpo',
+        }).finished),
+      ),
+      ...pipe(
+        [
+          lineStyleMap.value.l,
+          lineStyleMap.value.r,
+        ],
+        map((targets) => anime({
+          targets,
+          y1: offset,
+          y2: cardSize.value.height - offset,
+          duration,
+          delay,
+          easing: 'easeOutExpo',
+        }).finished),
+      ),
+    ]
+
+    await Promise.all(tasks)
+  },
 }
 
 onMounted(() => {

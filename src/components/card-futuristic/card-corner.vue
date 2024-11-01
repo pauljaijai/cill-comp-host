@@ -44,12 +44,14 @@ import { PROVIDE_KEY } from './type'
 interface Props {
   size?: number;
   color?: string;
+  selectedColor?: string;
   stroke?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   size: 10,
   color: '#777',
+  selectedColor: '#ff8d0a',
   stroke: 'white',
 })
 
@@ -65,6 +67,8 @@ const cardSize = computed(() => ({
 }))
 
 const offset = ref(prop.size / 4)
+const color = ref(prop.color)
+
 const style = computed(() => ({
   left: `${-offset.value}px`,
   top: `${-offset.value}px`,
@@ -107,7 +111,7 @@ const cornerStyleMap = computed(() => pipe(
   },
   mapValues((value) => ({
     ...value,
-    fill: prop.color,
+    fill: color.value,
   })),
 ))
 
@@ -125,6 +129,13 @@ const animeMap: AnimeMap = {
         duration,
         delay,
         easing: 'easeInOutExpo',
+      }).finished,
+      anime({
+        targets: color,
+        value: prop.color,
+        duration,
+        delay,
+        easing: 'linear',
       }).finished,
       anime({
         targets: svgRef.value,
@@ -198,7 +209,32 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: offset,
-        value: -prop.size / 4,
+        value: -prop.size / 5,
+        duration,
+        delay,
+        easing: 'easeInOutExpo',
+      }).finished,
+      anime({
+        targets: color,
+        value: prop.selectedColor,
+        duration,
+        delay,
+        easing: 'linear',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
+  },
+  async hover(param) {
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
+    const tasks = [
+      anime({
+        targets: offset,
+        value: prop.size / 2,
         duration,
         delay,
         easing: 'easeInOutExpo',

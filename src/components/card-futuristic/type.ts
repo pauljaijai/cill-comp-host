@@ -4,7 +4,8 @@ export type State =
   'normal' | // 預設狀態
   'visible' |
   'hidden' |
-  'selected'
+  'selected' |
+  'hover'
 
 // hover active
 

@@ -112,7 +112,12 @@ const animeMap: AnimeMap = {
 
     await Promise.all(tasks)
   },
-  async selected() { },
+  async selected(param) {
+    return this.normal(param)
+  },
+  async hover(param) {
+    return this.normal(param)
+  },
 }
 
 onMounted(() => {
