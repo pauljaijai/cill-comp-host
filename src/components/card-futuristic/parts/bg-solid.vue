@@ -15,12 +15,15 @@ import { PROVIDE_KEY } from '../type'
 
 // #region Props
 export interface Props {
+  /** @default 45deg */
+  angle?: string;
   size?: string;
   dotSize?: string;
   color?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
+  angle: '-45deg',
   size: '4px',
   dotSize: '2px',
   color: '#FAFAFA',
