@@ -7,32 +7,16 @@
     class="card-corner"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path
-      v-bind="cornerStyleMap.tl"
-      :stroke="prop.stroke"
-      stroke-width="1.6"
-    />
-    <path
-      v-bind="cornerStyleMap.tr"
-      :stroke="prop.stroke"
-      stroke-width="1.6"
-    />
-    <path
-      v-bind="cornerStyleMap.br"
-      :stroke="prop.stroke"
-      stroke-width="1.6"
-    />
-    <path
-      v-bind="cornerStyleMap.bl"
-      :stroke="prop.stroke"
-      stroke-width="1.6"
-    />
+    <path v-bind="cornerStyleMap.tl" />
+    <path v-bind="cornerStyleMap.br" />
+    <path v-bind="cornerStyleMap.tr" />
+    <path v-bind="cornerStyleMap.bl" />
   </svg>
 </template>
 
 <script setup lang="ts">
 import type { AnimeMap } from '../type'
-import { useElementSize } from '@vueuse/core'
+import { reactiveComputed, useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { mapValues, pipe } from 'remeda'
 import { computed, inject, onMounted, reactive, ref } from 'vue'
@@ -41,16 +25,16 @@ import { PROVIDE_KEY } from '../type'
 // #region Props
 export interface Props {
   size?: number;
+  strokeWidth?: number;
   color?: string;
   selectedColor?: string;
-  stroke?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   size: 10,
-  color: '#222',
-  selectedColor: '#ff8d0a',
-  stroke: 'white',
+  strokeWidth: 6,
+  color: '#444',
+  selectedColor: '#444',
 })
 
 const svgRef = ref<SVGAElement>()
@@ -59,7 +43,7 @@ const svgSize = reactive(useElementSize(svgRef, undefined, {
 }))
 
 const card = inject(PROVIDE_KEY)
-const cardSize = computed(() => ({
+const cardSize = reactiveComputed(() => ({
   width: card?.contentSize.value.width ?? 0,
   height: card?.contentSize.value.height ?? 0,
 }))
@@ -68,13 +52,14 @@ const attr = reactive({
   rotate: 0,
   offset: prop.size / 4,
   color: prop.color,
+  strokeWidth: prop.strokeWidth,
 })
 
 const style = computed(() => ({
   left: `${-attr.offset}px`,
   top: `${-attr.offset}px`,
-  width: `${cardSize.value.width + attr.offset * 2}px`,
-  height: `${cardSize.value.height + attr.offset * 2}px`,
+  width: `${cardSize.width + attr.offset * 2}px`,
+  height: `${cardSize.height + attr.offset * 2}px`,
 }))
 
 const viewBox = computed(
@@ -84,39 +69,31 @@ const viewBox = computed(
 const cornerStyleMap = computed(() => pipe(
   {
     tl: {
-      d: `M0 0 H${prop.size} L0 ${prop.size}V0 Z`,
-      transform: `rotate(${attr.rotate}, ${prop.size / 2}, ${prop.size / 2})`,
+      d: `M0 ${prop.size}V0H${prop.size}`,
     },
     tr: {
       d: [
-        `M${svgSize.width} 0`,
-        `L${svgSize.width} ${prop.size}`,
-        `L${svgSize.width - prop.size} 0Z`,
-      ].join(' '),
-      transform: `rotate(${attr.rotate}, ${svgSize.width - prop.size / 2}, ${prop.size / 2})`,
+        `M${svgSize.width - prop.size} 0`,
+        `H${svgSize.width}V${prop.size}`,
+      ].join(''),
     },
     br: {
       d: [
-        `M${svgSize.width} ${svgSize.height}`,
-        `L${svgSize.width - prop.size} ${svgSize.height}`,
-        `L${svgSize.width} ${svgSize.height - prop.size}`,
-        `L${svgSize.width} ${svgSize.height} Z`,
-      ].join(' '),
-      transform: `rotate(${attr.rotate}, ${svgSize.width - prop.size / 2}, ${svgSize.height - prop.size / 2})`,
+        `M${svgSize.width} ${svgSize.height - prop.size}`,
+        `V${svgSize.height}H${svgSize.width - prop.size}`,
+      ].join(''),
     },
     bl: {
       d: [
-        `M0 ${svgSize.height}`,
-        `L0 ${svgSize.height - prop.size}`,
-        `L${prop.size} ${svgSize.height}`,
-        `L0 ${svgSize.height} Z`,
-      ].join(' '),
-      transform: `rotate(${attr.rotate}, ${prop.size / 2}, ${svgSize.height - prop.size / 2})`,
+        `M${prop.size} ${svgSize.height}`,
+        `H0V${svgSize.height - prop.size}`,
+      ].join(''),
     },
   },
   mapValues((value) => ({
     ...value,
-    fill: attr.color,
+    'stroke': attr.color,
+    'stroke-width': attr.strokeWidth,
   })),
 ))
 
@@ -195,7 +172,7 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size,
+        offset: -prop.size * 3,
         color: prop.color,
         duration,
         delay,

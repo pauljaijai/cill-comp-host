@@ -1,5 +1,6 @@
 import type { Props as BgTypicalProps } from './parts/bg-typical.vue'
 import type { Props as BorderTypicalProps } from './parts/border-typical.vue'
+import type { Props as CornerQuoteProps } from './parts/corner-quote.vue'
 import type { Props as CornerTypicalProps } from './parts/corner-typical.vue'
 
 interface BaseParam {
@@ -7,7 +8,6 @@ interface BaseParam {
 }
 
 // border
-
 export enum BorderType {
   TYPICAL = 'typical',
 }
@@ -28,11 +28,17 @@ export type BgParam = BgParamTypical & BaseParam
 // corner
 export enum CornerType {
   TYPICAL = 'typical',
+  QUOTE = 'quote',
 }
 interface CornerParamTypical extends CornerTypicalProps {
   type: `${CornerType.TYPICAL}`;
 }
-export type CornerParam = CornerParamTypical & BaseParam
+interface CornerParamQuote extends CornerQuoteProps {
+  type: `${CornerType.QUOTE}`;
+}
+export type CornerParam = (
+  CornerParamTypical | CornerParamQuote
+) & BaseParam
 
 // content
 export enum ContentType {

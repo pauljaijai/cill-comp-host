@@ -6,23 +6,25 @@
       class="border rounded p-4"
     />
 
-    <div class="flex justify-center">
+    <div class="flex justify-center gap-16">
       <card-futuristic
         v-for="item, i in list"
         :key="i"
         v-on-click-outside="() => item.selected = false"
-        :visible
-        :selected="item.selected"
+        v-bind="item"
         class="font-orbitron"
         @click="item.selected = true"
       >
         <div class="flex flex-col gap-4">
-          <div class="text-xl font-bold">
-            鱈魚 Codfish
+          <div
+            v-if="item.title"
+            class="text-xl font-bold"
+          >
+            {{ item.title }}
           </div>
 
           <div>
-            最擅長的球類是地瓜球
+            {{ item.text }}
           </div>
         </div>
       </card-futuristic>
@@ -34,19 +36,44 @@
 import type { Writable } from 'type-fest'
 import type { ExtractComponentProps } from '../../../types'
 import { vOnClickOutside } from '@vueuse/components'
-import { ref } from 'vue'
+import { promiseTimeout } from '@vueuse/core'
+import { map, pipe } from 'remeda'
+import { ref, watch } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import CardFuturistic from '../card-futuristic.vue'
 
-const visible = ref(true)
+type CardProp = Writable<ExtractComponentProps<typeof CardFuturistic>> & {
+  title?: string;
+  text?: string;
+}
 
-const list = ref<
-  Writable<ExtractComponentProps<typeof CardFuturistic>>[]
->([
-  {
+const list = ref(pipe(
+  [
+    {
+      title: '鱈魚 Codfish',
+      text: '最擅長的球類是地瓜球',
+    },
+    {
+      title: '鱈魚 Codfish',
+      text: '最擅長的球類是地瓜球',
+      corner: { type: 'quote' },
+      border: null,
+    },
+  ] satisfies CardProp[],
+  map((data) => ({
+    ...data,
+    visible: false,
     selected: false,
-  },
-])
+  })),
+))
+
+const visible = ref(false)
+watch(visible, async (value) => {
+  for (const data of list.value) {
+    data.visible = value
+    await promiseTimeout(200)
+  }
+})
 </script>
 
 <style lang="sass">

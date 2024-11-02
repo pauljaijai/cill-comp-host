@@ -63,11 +63,11 @@ interface Props {
   /** 為空則自動處理，有提供則以參數數值為主 */
   hover?: boolean;
 
-  border?: BorderParam;
-  bg?: BgParam;
-  corner?: CornerParam;
-  content?: ContentParam;
-  ornament?: undefined;
+  border?: BorderParam | null;
+  bg?: BgParam | null;
+  corner?: CornerParam | null;
+  content?: ContentParam | null;
+  ornament?: undefined | null;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
@@ -84,7 +84,7 @@ const prop = withDefaults(defineProps<Props>(), {
     type: 'typical',
     class: 'p-4',
   }),
-  ornament: undefined,
+  ornament: null,
 })
 
 // #region Slots
@@ -116,7 +116,10 @@ const partComponentTypeMap = pipe(
     }
   }),
 )
-function findPartComponent(part: `${Part}`, type: string) {
+function findPartComponent(part: `${Part}`, type?: string) {
+  if (!type)
+    return
+
   return pipe(
     partComponentTypeMap,
     find(({ part: p, type: t }) => p === part && t === type),
@@ -136,11 +139,11 @@ const contentRef = ref<HTMLDivElement>()
 const contentSize = reactive(useElementSize(contentRef, undefined, {
   box: 'border-box',
 }))
-const contentComponent = computed(() => findPartComponent('content', prop.content.type))
+const contentComponent = computed(() => findPartComponent('content', prop.content?.type))
 
-const borderComponent = computed(() => findPartComponent('border', prop.border.type))
-const bgComponent = computed(() => findPartComponent('bg', prop.bg.type))
-const cornerComponent = computed(() => findPartComponent('corner', prop.corner.type))
+const borderComponent = computed(() => findPartComponent('border', prop.border?.type))
+const bgComponent = computed(() => findPartComponent('bg', prop.bg?.type))
+const cornerComponent = computed(() => findPartComponent('corner', prop.corner?.type))
 
 /** 儲存 part 資料 */
 const partMap = new Map<`${Part}`, AnimeMap>()
