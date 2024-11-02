@@ -90,9 +90,14 @@ const list = ref(pipe(
       },
       content: {
         type: 'typical',
-        class: 'p-3 pl-6 pb-4',
+        class: 'p-4 pl-6',
       },
-      border: null,
+      border: { type: 'side' },
+      animeSequence: {
+        visible: {
+          border: { delay: 400 },
+        },
+      },
     },
   ] as CardProp[],
   map((data) => ({

@@ -7,36 +7,34 @@
     class="card-border"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g>
-      <line
-        v-bind="lineAttrMap.t"
-        y1="0"
-        y2="0"
-        :stroke="prop.color"
-        stroke-width="1"
-      />
-      <line
-        v-bind="lineAttrMap.l"
-        x1="0"
-        x2="0"
-        :stroke="prop.color"
-        stroke-width="1"
-      />
-      <line
-        v-bind="lineAttrMap.b"
-        :y1="cardSize.height"
-        :y2="cardSize.height"
-        :stroke="prop.color"
-        stroke-width="1"
-      />
-      <line
-        v-bind="lineAttrMap.r"
-        :x1="cardSize.width"
-        :x2="cardSize.width"
-        :stroke="prop.color"
-        stroke-width="1"
-      />
-    </g>
+    <line
+      v-bind="lineAttrMap.t"
+      y1="0"
+      y2="0"
+      :stroke="prop.color"
+      stroke-width="1"
+    />
+    <line
+      v-bind="lineAttrMap.l"
+      x1="0"
+      x2="0"
+      :stroke="prop.color"
+      stroke-width="1"
+    />
+    <line
+      v-bind="lineAttrMap.b"
+      :y1="cardSize.height"
+      :y2="cardSize.height"
+      :stroke="prop.color"
+      stroke-width="1"
+    />
+    <line
+      v-bind="lineAttrMap.r"
+      :x1="cardSize.width"
+      :x2="cardSize.width"
+      :stroke="prop.color"
+      stroke-width="1"
+    />
   </svg>
 </template>
 

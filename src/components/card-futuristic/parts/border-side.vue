@@ -7,36 +7,38 @@
     class="card-border"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g>
-      <line
-        v-bind="lineStyleMap.t"
-        y1="0"
-        y2="0"
-        :stroke="prop.color"
-        stroke-width="1"
-      />
-      <line
-        v-bind="lineStyleMap.l"
-        x1="0"
-        x2="0"
-        :stroke="prop.color"
-        stroke-width="1"
-      />
-      <line
-        v-bind="lineStyleMap.b"
-        :y1="cardSize.height"
-        :y2="cardSize.height"
-        :stroke="prop.color"
-        stroke-width="1"
-      />
-      <line
-        v-bind="lineStyleMap.r"
-        :x1="cardSize.width"
-        :x2="cardSize.width"
-        :stroke="prop.color"
-        stroke-width="1"
-      />
-    </g>
+    <line
+      v-if="prop.side.t"
+      v-bind="sideStyleMap.t"
+      x1="0"
+      y1="0"
+      :x2="cardSize.width"
+      y2="0"
+    />
+    <line
+      v-if="prop.side.l"
+      v-bind="sideStyleMap.l"
+      x1="0"
+      y1="0"
+      x2="0"
+      :y2="cardSize.height"
+    />
+    <line
+      v-if="prop.side.b"
+      v-bind="sideStyleMap.b"
+      x1="0"
+      :y1="cardSize.height"
+      :x2="cardSize.width"
+      :y2="cardSize.height"
+    />
+    <line
+      v-if="prop.side.r"
+      v-bind="sideStyleMap.r"
+      :x1="cardSize.width"
+      y1="0"
+      :x2="cardSize.width"
+      :y2="cardSize.height"
+    />
   </svg>
 </template>
 
@@ -44,7 +46,7 @@
 import type { AnimeMap } from '../type'
 import { reactiveComputed } from '@vueuse/core'
 import anime from 'animejs'
-import { map, pipe } from 'remeda'
+import { fromKeys, map, multiply, pipe } from 'remeda'
 import { computed, inject, onMounted, ref } from 'vue'
 import { PROVIDE_KEY } from '../type'
 
@@ -52,19 +54,26 @@ import { PROVIDE_KEY } from '../type'
 export interface Props {
   color?: string;
   selectedColor?: string;
-  side?: Record<
-    't' | 'l' | 'b' | 'r',
-    {
-      color?: string;
-      selectedColor?: string;
-      strokeWidth?: number;
-    }
+  strokeWidth?: number;
+  side?: Partial<
+    Record<
+      't' | 'l' | 'b' | 'r',
+      {
+        color?: string;
+        selectedColor?: string;
+        strokeWidth?: number;
+      }
+    >
   >;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
-  color: '#777',
+  color: '#AAA',
   selectedColor: '#ff8d0a',
+  strokeWidth: 4,
+  side: () => ({
+    t: {},
+  }),
 })
 
 const svgRef = ref<SVGAElement>()
@@ -84,15 +93,38 @@ const viewBox = computed(
   () => `0 0 ${cardSize.width} ${cardSize.height}`,
 )
 
-const lineStyleMap = ref({
-  t: { x1: 0, x2: 0 },
-  l: { y1: 0, y2: 0 },
-  b: { x1: 0, x2: 0 },
-  r: { y1: 0, y2: 0 },
-})
+const sideData = ref(pipe(
+  ['t', 'l', 'b', 'r'] as const,
+  fromKeys((key) => ({
+    dashoffset: 0,
+    width: prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+    stroke: prop.side?.[key]?.color ?? prop.color,
+  })),
+))
+
+const sideStyleMap = computed(() => ({
+  ...pipe(
+    ['t', 'b'] as const,
+    fromKeys((key) => ({
+      'stroke-dasharray': `${cardSize.width} ${cardSize.width}`,
+      'stroke-dashoffset': sideData.value[key].dashoffset,
+      'stroke': sideData.value[key].stroke,
+      'stroke-width': sideData.value[key].width,
+    })),
+  ),
+  ...pipe(
+    ['l', 'r'] as const,
+    fromKeys((key) => ({
+      'stroke-dasharray': `${cardSize.height} ${cardSize.height}`,
+      'stroke-dashoffset': sideData.value[key].dashoffset,
+      'stroke': sideData.value[key].stroke,
+      'stroke-width': sideData.value[key].width,
+    })),
+  ),
+}))
 
 function removeAnime() {
-  anime.remove(Object.values(lineStyleMap.value))
+  anime.remove(Object.values(sideData.value))
 }
 
 const animeMap: AnimeMap = {
@@ -106,31 +138,27 @@ const animeMap: AnimeMap = {
 
     const tasks = [
       ...pipe(
-        [
-          lineStyleMap.value.t,
-          lineStyleMap.value.b,
-        ],
-        map((targets) => anime({
-          targets,
-          x1: 0,
-          x2: cardSize.width,
+        ['t', 'b'] as const,
+        map((key) => anime({
+          targets: sideData.value[key],
+          width: prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+          dashoffset: 0,
+          stroke: prop.side?.[key]?.color ?? prop.color,
           duration,
           delay,
-          easing: 'easeOutExpo',
+          easing: 'easeInOutCirc',
         }).finished),
       ),
       ...pipe(
-        [
-          lineStyleMap.value.l,
-          lineStyleMap.value.r,
-        ],
-        map((targets) => anime({
-          targets,
-          y1: 0,
-          y2: cardSize.height,
+        ['r', 'l'] as const,
+        map((key) => anime({
+          targets: sideData.value[key],
+          width: prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+          dashoffset: 0,
+          stroke: prop.side?.[key]?.color ?? prop.color,
           duration,
           delay,
-          easing: 'easeOutExpo',
+          easing: 'easeInOutCirc',
         }).finished),
       ),
     ]
@@ -148,30 +176,28 @@ const animeMap: AnimeMap = {
     const tasks = [
       ...pipe(
         [
-          lineStyleMap.value.t,
-          lineStyleMap.value.b,
+          sideData.value.t,
+          sideData.value.b,
         ],
         map((targets) => anime({
           targets,
-          x1: 0,
-          x2: cardSize.width,
+          dashoffset: 0,
           duration,
           delay,
-          easing: 'easeOutExpo',
+          easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         }).finished),
       ),
       ...pipe(
         [
-          lineStyleMap.value.l,
-          lineStyleMap.value.r,
+          sideData.value.l,
+          sideData.value.r,
         ],
         map((targets) => anime({
           targets,
-          y1: 0,
-          y2: cardSize.height,
+          dashoffset: 0,
           duration,
           delay: 200 + delay,
-          easing: 'easeOutExpo',
+          easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         }).finished),
       ),
     ]
@@ -189,31 +215,28 @@ const animeMap: AnimeMap = {
     const tasks = [
       ...pipe(
         [
-          lineStyleMap.value.t,
-          lineStyleMap.value.b,
+          sideData.value.t,
+          sideData.value.b,
         ],
         map((targets) => anime({
           targets,
-          x1: cardSize.width / 2,
-          x2: cardSize.width / 2,
+          dashoffset: cardSize.width,
           duration,
           delay,
-          easing: 'easeInOutCirc',
+          easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         }).finished),
       ),
-
       ...pipe(
         [
-          lineStyleMap.value.l,
-          lineStyleMap.value.r,
+          sideData.value.l,
+          sideData.value.r,
         ],
         map((targets) => anime({
           targets,
-          y1: cardSize.height / 2,
-          y2: cardSize.height / 2,
+          dashoffset: cardSize.height,
           duration,
-          delay: 200 + delay,
-          easing: 'easeInOutCirc',
+          delay,
+          easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         }).finished),
       ),
     ]
@@ -221,7 +244,31 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async selected(param) {
-    this.hover(param)
+    removeAnime()
+
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+
+    const tasks = [
+      ...pipe(
+        ['t', 'r', 'l', 'b'] as const,
+        map((key) => anime({
+          targets: sideData.value[key],
+          width: pipe(
+            prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+            multiply(2),
+          ),
+          stroke: prop.side?.[key]?.selectedColor ?? prop?.selectedColor,
+          duration,
+          delay,
+          easing: 'easeInOutCirc',
+        }).finished),
+      ),
+    ]
+
+    await Promise.all(tasks)
   },
   async hover(param) {
     removeAnime()
@@ -231,35 +278,18 @@ const animeMap: AnimeMap = {
       delay = 0,
     } = param ?? {}
 
-    const offset = 10
-
     const tasks = [
       ...pipe(
-        [
-          lineStyleMap.value.t,
-          lineStyleMap.value.b,
-        ],
-        map((targets) => anime({
-          targets,
-          x1: offset,
-          x2: cardSize.width - offset,
+        ['t', 'r', 'l', 'b'] as const,
+        map((key) => anime({
+          targets: sideData.value[key],
+          width: pipe(
+            prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+            multiply(2),
+          ),
           duration,
           delay,
-          easing: 'easeOutExpo',
-        }).finished),
-      ),
-      ...pipe(
-        [
-          lineStyleMap.value.l,
-          lineStyleMap.value.r,
-        ],
-        map((targets) => anime({
-          targets,
-          y1: offset,
-          y2: cardSize.height - offset,
-          duration,
-          delay,
-          easing: 'easeOutExpo',
+          easing: 'easeInOutCirc',
         }).finished),
       ),
     ]
