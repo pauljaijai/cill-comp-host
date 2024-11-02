@@ -21,6 +21,7 @@ import { PROVIDE_KEY } from '../type'
 // #region Props
 export interface Props {
   color?: string;
+  selectedColor?: string;
   chamfer?: {
     lt?: number;
     rt?: number;
@@ -31,6 +32,7 @@ export interface Props {
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   color: '#444',
+  selectedColor: '#ff8d0a',
   chamfer: () => ({ lb: 10 }),
 })
 
@@ -64,6 +66,8 @@ const pointAttrMap = ref({
     p2: { x: 0, y: 0 },
   },
 })
+const color = ref(prop.color)
+
 /** 取得所有座標 Normal 狀態數值 */
 function getPointAttrMapNormal() {
   return {
@@ -124,7 +128,7 @@ const pathAttr = computed(() => {
       `L${lb.p1.x} ${lb.p1.y}`,
       `L${lb.p2.x} ${lb.p2.y}Z`,
     ].join(' '),
-    fill: prop.color,
+    fill: color.value,
   }
 })
 
@@ -149,6 +153,23 @@ const animeMap: AnimeMap = {
       duration = 400,
       delay = 0,
     } = param ?? {}
+
+    await Promise.all([
+      anime({
+        targets: svgRef.value,
+        opacity: 1,
+        duration,
+        delay,
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
+      }).finished,
+      anime({
+        targets: color,
+        value: prop.color,
+        duration,
+        delay,
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
+      }).finished,
+    ])
   },
   async visible(param) {
     removeAnime()
@@ -266,15 +287,25 @@ const animeMap: AnimeMap = {
     ])
   },
   async selected(param) {
-    this.hover(param)
-  },
-  async hover(param) {
     removeAnime()
 
     const {
       duration = 400,
       delay = 0,
     } = param ?? {}
+
+    await Promise.all([
+      anime({
+        targets: color,
+        value: prop.selectedColor,
+        duration,
+        delay,
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
+      }).finished,
+    ])
+  },
+  async hover(param) {
+    return this.normal(param)
   },
 }
 

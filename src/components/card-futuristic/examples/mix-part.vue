@@ -83,7 +83,10 @@ const list = ref(pipe(
       text: 'FUTURISTIC CARD',
       textClass: 'text-white',
       corner: null,
-      bg: { type: 'solid' },
+      bg: {
+        type: 'solid',
+        selectedColor: '#444',
+      },
       content: {
         type: 'typical',
         class: 'p-3 pl-6 pb-4',
