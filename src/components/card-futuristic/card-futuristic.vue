@@ -93,7 +93,7 @@ defineSlots<{
 }>()
 // #endregion Slots
 
-const partList: Part[] = ['content', 'bg', 'border', 'corner', 'ornament']
+const partList: `${Part}`[] = ['content', 'bg', 'border', 'corner', 'ornament']
 // 引入所有 part 元件
 const partModules = import.meta.glob(['./parts/*.vue'])
 const partComponentTypeMap = pipe(
@@ -116,7 +116,7 @@ const partComponentTypeMap = pipe(
     }
   }),
 )
-function findPartComponent(part: Part, type: string) {
+function findPartComponent(part: `${Part}`, type: string) {
   return pipe(
     partComponentTypeMap,
     find(({ part: p, type: t }) => p === part && t === type),
@@ -143,7 +143,7 @@ const bgComponent = computed(() => findPartComponent('bg', prop.bg.type))
 const cornerComponent = computed(() => findPartComponent('corner', prop.corner.type))
 
 /** 儲存 part 資料 */
-const partMap = new Map<Part, AnimeMap>()
+const partMap = new Map<`${Part}`, AnimeMap>()
 /** 用於子元件綁定動畫 */
 const bindPart: ProvideContent['bindPart'] = ({ name, animeMap }) => {
   partMap.set(name, animeMap)
@@ -180,7 +180,7 @@ const animeSequence = computed<AnimeSequence>(() => defaultsDeep(
   clone(defaultAnimeSequence),
 ))
 async function playPartsAnime(
-  state: State,
+  state: `${State}`,
   param?: {
     duration?: number;
     delay?: number;

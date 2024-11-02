@@ -1,21 +1,24 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 
-export type State =
-  'normal' | // 預設狀態
-  'visible' |
-  'hidden' |
-  'selected' |
-  'hover'
+export enum State {
+  /** 穩定狀態 */
+  NORMAL = 'normal',
+  VISIBLE = 'visible',
+  HIDDEN = 'hidden',
+  SELECTED = 'selected',
+  HOVER = 'hover',
+}
 
-export type Part =
-  'border' |
-  'bg' |
-  'corner' |
-  'content' |
-  'ornament'
+export enum Part {
+  BORDER = 'border',
+  BG = 'bg',
+  CORNER = 'corner',
+  CONTENT = 'content',
+  ORNAMENT = 'ornament',
+}
 
 export type AnimeMap = Record<
-  State,
+  `${State}`,
   (param?: {
     duration?: number;
     delay?: number;
@@ -30,7 +33,7 @@ export interface ProvideContent {
   }>;
   /** 綁定裝飾，由 card 統一調度 */
   bindPart: (param: {
-    name: Part;
+    name: `${Part}`;
     animeMap: AnimeMap;
   }) => void;
 }
