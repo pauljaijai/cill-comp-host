@@ -7,10 +7,10 @@
     class="card-corner"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path v-bind="cornerStyleMap.tl" />
-    <path v-bind="cornerStyleMap.br" />
-    <path v-bind="cornerStyleMap.tr" />
-    <path v-bind="cornerStyleMap.bl" />
+    <path v-bind="cornerStyleMap.lt" />
+    <path v-bind="cornerStyleMap.rb" />
+    <path v-bind="cornerStyleMap.rt" />
+    <path v-bind="cornerStyleMap.lb" />
   </svg>
 </template>
 
@@ -67,22 +67,22 @@ const viewBox = computed(
 
 const cornerStyleMap = computed(() => pipe(
   {
-    tl: {
+    lt: {
       d: `M0 ${prop.size}V0H${prop.size}`,
     },
-    tr: {
+    rt: {
       d: [
         `M${svgSize.width - prop.size} 0`,
         `H${svgSize.width}V${prop.size}`,
       ].join(''),
     },
-    br: {
+    rb: {
       d: [
         `M${svgSize.width} ${svgSize.height - prop.size}`,
         `V${svgSize.height}H${svgSize.width - prop.size}`,
       ].join(''),
     },
-    bl: {
+    lb: {
       d: [
         `M${prop.size} ${svgSize.height}`,
         `H0V${svgSize.height - prop.size}`,

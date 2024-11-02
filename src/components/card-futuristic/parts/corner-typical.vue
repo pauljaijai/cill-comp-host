@@ -8,22 +8,22 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      v-bind="cornerStyleMap.tl"
+      v-bind="cornerStyleMap.lt"
       :stroke="prop.stroke"
       stroke-width="1.6"
     />
     <path
-      v-bind="cornerStyleMap.tr"
+      v-bind="cornerStyleMap.rt"
       :stroke="prop.stroke"
       stroke-width="1.6"
     />
     <path
-      v-bind="cornerStyleMap.br"
+      v-bind="cornerStyleMap.rb"
       :stroke="prop.stroke"
       stroke-width="1.6"
     />
     <path
-      v-bind="cornerStyleMap.bl"
+      v-bind="cornerStyleMap.lb"
       :stroke="prop.stroke"
       stroke-width="1.6"
     />
@@ -83,11 +83,11 @@ const viewBox = computed(
 
 const cornerStyleMap = computed(() => pipe(
   {
-    tl: {
+    lt: {
       d: `M0 0 H${prop.size} L0 ${prop.size}V0 Z`,
       transform: `rotate(${attr.rotate}, ${prop.size / 2}, ${prop.size / 2})`,
     },
-    tr: {
+    rt: {
       d: [
         `M${svgSize.width} 0`,
         `L${svgSize.width} ${prop.size}`,
@@ -95,7 +95,7 @@ const cornerStyleMap = computed(() => pipe(
       ].join(' '),
       transform: `rotate(${attr.rotate}, ${svgSize.width - prop.size / 2}, ${prop.size / 2})`,
     },
-    br: {
+    rb: {
       d: [
         `M${svgSize.width} ${svgSize.height}`,
         `L${svgSize.width - prop.size} ${svgSize.height}`,
@@ -104,7 +104,7 @@ const cornerStyleMap = computed(() => pipe(
       ].join(' '),
       transform: `rotate(${attr.rotate}, ${svgSize.width - prop.size / 2}, ${svgSize.height - prop.size / 2})`,
     },
-    bl: {
+    lb: {
       d: [
         `M0 ${svgSize.height}`,
         `L0 ${svgSize.height - prop.size}`,
