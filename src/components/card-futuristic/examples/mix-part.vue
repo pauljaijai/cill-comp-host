@@ -55,14 +55,15 @@ type CardProp = Writable<ExtractComponentProps<typeof CardFuturistic>> & {
 const list = ref(pipe(
   [
     {
-      title: '鱈魚 Codfish',
+      title: 'COD-00',
       titleClass: 'text-xl font-bold',
-      text: '最擅長的球類是地瓜球',
+      text: 'FUTURISTIC CARD',
+      bg: { type: 'halftone' },
     },
     {
-      title: '鱈魚 Codfish',
+      title: 'CARD-01',
       titleClass: 'text-xl font-bold',
-      text: '最擅長的球類是地瓜球',
+      text: 'QUOTE CORNER',
       corner: { type: 'quote' },
       content: {
         type: 'scale',
@@ -78,9 +79,9 @@ const list = ref(pipe(
       },
     },
     {
-      title: 'COD-01',
+      title: 'CARD-02',
       titleClass: 'text-xl font-bold text-white',
-      text: 'FUTURISTIC CARD',
+      text: 'SOLID BACKGROUND',
       textClass: 'text-white',
       corner: null,
       bg: {

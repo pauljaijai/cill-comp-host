@@ -9,28 +9,28 @@
   >
     <g>
       <line
-        v-bind="lineStyleMap.t"
+        v-bind="lineAttrMap.t"
         y1="0"
         y2="0"
         :stroke="prop.color"
         stroke-width="1"
       />
       <line
-        v-bind="lineStyleMap.l"
+        v-bind="lineAttrMap.l"
         x1="0"
         x2="0"
         :stroke="prop.color"
         stroke-width="1"
       />
       <line
-        v-bind="lineStyleMap.b"
+        v-bind="lineAttrMap.b"
         :y1="cardSize.height"
         :y2="cardSize.height"
         :stroke="prop.color"
         stroke-width="1"
       />
       <line
-        v-bind="lineStyleMap.r"
+        v-bind="lineAttrMap.r"
         :x1="cardSize.width"
         :x2="cardSize.width"
         :stroke="prop.color"
@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import type { AnimeMap } from '../type'
+import { reactiveComputed } from '@vueuse/core'
 import anime from 'animejs'
 import { map, pipe } from 'remeda'
 import { computed, inject, onMounted, ref } from 'vue'
@@ -59,21 +60,21 @@ const prop = withDefaults(defineProps<Props>(), {
 const svgRef = ref<SVGAElement>()
 
 const card = inject(PROVIDE_KEY)
-const cardSize = computed(() => ({
+const cardSize = reactiveComputed(() => ({
   width: card?.contentSize.value.width ?? 0,
   height: card?.contentSize.value.height ?? 0,
 }))
 
 const style = computed(() => ({
-  width: `${cardSize.value.width}px`,
-  height: `${cardSize.value.height}px`,
+  width: `${cardSize.width}px`,
+  height: `${cardSize.height}px`,
 }))
 
 const viewBox = computed(
-  () => `0 0 ${cardSize.value.width} ${cardSize.value.height}`,
+  () => `0 0 ${cardSize.width} ${cardSize.height}`,
 )
 
-const lineStyleMap = ref({
+const lineAttrMap = ref({
   t: { x1: 0, x2: 0 },
   l: { y1: 0, y2: 0 },
   b: { x1: 0, x2: 0 },
@@ -81,7 +82,7 @@ const lineStyleMap = ref({
 })
 
 function removeAnime() {
-  anime.remove(Object.values(lineStyleMap.value))
+  anime.remove(Object.values(lineAttrMap.value))
 }
 
 const animeMap: AnimeMap = {
@@ -96,13 +97,13 @@ const animeMap: AnimeMap = {
     const tasks = [
       ...pipe(
         [
-          lineStyleMap.value.t,
-          lineStyleMap.value.b,
+          lineAttrMap.value.t,
+          lineAttrMap.value.b,
         ],
         map((targets) => anime({
           targets,
           x1: 0,
-          x2: cardSize.value.width,
+          x2: cardSize.width,
           duration,
           delay,
           easing: 'easeOutExpo',
@@ -110,13 +111,13 @@ const animeMap: AnimeMap = {
       ),
       ...pipe(
         [
-          lineStyleMap.value.l,
-          lineStyleMap.value.r,
+          lineAttrMap.value.l,
+          lineAttrMap.value.r,
         ],
         map((targets) => anime({
           targets,
           y1: 0,
-          y2: cardSize.value.height,
+          y2: cardSize.height,
           duration,
           delay,
           easing: 'easeOutExpo',
@@ -137,13 +138,13 @@ const animeMap: AnimeMap = {
     const tasks = [
       ...pipe(
         [
-          lineStyleMap.value.t,
-          lineStyleMap.value.b,
+          lineAttrMap.value.t,
+          lineAttrMap.value.b,
         ],
         map((targets) => anime({
           targets,
           x1: 0,
-          x2: cardSize.value.width,
+          x2: cardSize.width,
           duration,
           delay,
           easing: 'easeOutExpo',
@@ -151,13 +152,13 @@ const animeMap: AnimeMap = {
       ),
       ...pipe(
         [
-          lineStyleMap.value.l,
-          lineStyleMap.value.r,
+          lineAttrMap.value.l,
+          lineAttrMap.value.r,
         ],
         map((targets) => anime({
           targets,
           y1: 0,
-          y2: cardSize.value.height,
+          y2: cardSize.height,
           duration,
           delay: 200 + delay,
           easing: 'easeOutExpo',
@@ -178,13 +179,13 @@ const animeMap: AnimeMap = {
     const tasks = [
       ...pipe(
         [
-          lineStyleMap.value.t,
-          lineStyleMap.value.b,
+          lineAttrMap.value.t,
+          lineAttrMap.value.b,
         ],
         map((targets) => anime({
           targets,
-          x1: cardSize.value.width / 2,
-          x2: cardSize.value.width / 2,
+          x1: cardSize.width / 2,
+          x2: cardSize.width / 2,
           duration,
           delay,
           easing: 'easeInOutCirc',
@@ -193,13 +194,13 @@ const animeMap: AnimeMap = {
 
       ...pipe(
         [
-          lineStyleMap.value.l,
-          lineStyleMap.value.r,
+          lineAttrMap.value.l,
+          lineAttrMap.value.r,
         ],
         map((targets) => anime({
           targets,
-          y1: cardSize.value.height / 2,
-          y2: cardSize.value.height / 2,
+          y1: cardSize.height / 2,
+          y2: cardSize.height / 2,
           duration,
           delay: 200 + delay,
           easing: 'easeInOutCirc',
@@ -225,13 +226,13 @@ const animeMap: AnimeMap = {
     const tasks = [
       ...pipe(
         [
-          lineStyleMap.value.t,
-          lineStyleMap.value.b,
+          lineAttrMap.value.t,
+          lineAttrMap.value.b,
         ],
         map((targets) => anime({
           targets,
           x1: offset,
-          x2: cardSize.value.width - offset,
+          x2: cardSize.width - offset,
           duration,
           delay,
           easing: 'easeOutExpo',
@@ -239,13 +240,13 @@ const animeMap: AnimeMap = {
       ),
       ...pipe(
         [
-          lineStyleMap.value.l,
-          lineStyleMap.value.r,
+          lineAttrMap.value.l,
+          lineAttrMap.value.r,
         ],
         map((targets) => anime({
           targets,
           y1: offset,
-          y2: cardSize.value.height - offset,
+          y2: cardSize.height - offset,
           duration,
           delay,
           easing: 'easeOutExpo',

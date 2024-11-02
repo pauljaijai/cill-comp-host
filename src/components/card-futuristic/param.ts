@@ -2,6 +2,7 @@ import type { Props as PropsBgHalftone } from './parts/bg-halftone.vue'
 import type { Props as PropsBgSolid } from './parts/bg-solid.vue'
 import type { Props as PropsBgTypical } from './parts/bg-typical.vue'
 
+import type { Props as PropsBorderSide } from './parts/border-side.vue'
 import type { Props as PropsBorderTypical } from './parts/border-typical.vue'
 
 import type { Props as PropsContentScale } from './parts/content-scale.vue'
@@ -16,11 +17,17 @@ interface BaseParam {
 // border
 export enum BorderType {
   TYPICAL = 'typical',
+  SIDE = 'side',
 }
 interface BorderParamTypical extends PropsBorderTypical {
   type: `${BorderType.TYPICAL}`;
 }
-export type BorderParam = BorderParamTypical & BaseParam
+interface BorderParamSide extends PropsBorderSide {
+  type: `${BorderType.SIDE}`;
+}
+export type BorderParam = (
+  BorderParamTypical | BorderParamSide
+) & BaseParam
 
 // bg
 export enum BgType {
