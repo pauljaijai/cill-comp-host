@@ -32,7 +32,7 @@ export interface Props {
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   size: 10,
-  strokeWidth: 6,
+  strokeWidth: 4,
   color: '#444',
   selectedColor: '#ff8d0a',
 })
@@ -117,7 +117,7 @@ const animeMap: AnimeMap = {
         strokeWidth: prop.strokeWidth,
         duration,
         delay,
-        easing: 'cubicBezier(1, 0, 0, 1)',
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
       }).finished,
       anime({
         targets: svgRef.value,
@@ -144,7 +144,7 @@ const animeMap: AnimeMap = {
         offset: prop.size / 4,
         duration,
         delay,
-        easing: 'cubicBezier(1, 0, 0, 1)',
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
       }).finished,
       anime({
         targets: svgRef.value,
@@ -174,7 +174,7 @@ const animeMap: AnimeMap = {
         color: prop.color,
         duration,
         delay,
-        easing: 'cubicBezier(1, 0, 0, 1)',
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
       }).finished,
       anime({
         targets: svgRef.value,
@@ -200,10 +200,10 @@ const animeMap: AnimeMap = {
         targets: attr,
         offset: -prop.size / 4,
         color: prop.selectedColor,
-        strokeWidth: prop.strokeWidth,
+        strokeWidth: prop.strokeWidth * 1.6,
         duration,
         delay,
-        easing: 'easeInOutCirc',
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
       }).finished,
       anime({
         targets: svgRef.value,
@@ -229,10 +229,10 @@ const animeMap: AnimeMap = {
         targets: attr,
         offset: prop.size / 2,
         color: prop.color,
-        strokeWidth: prop.strokeWidth * 1.4,
+        strokeWidth: prop.strokeWidth,
         duration,
         delay,
-        easing: 'easeInOutCirc',
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
       }).finished,
       anime({
         targets: svgRef.value,

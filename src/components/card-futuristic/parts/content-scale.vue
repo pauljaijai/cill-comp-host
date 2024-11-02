@@ -37,7 +37,7 @@ const animeMap: AnimeMap = {
         scale: 1,
         duration,
         delay,
-        easing: 'cubicBezier(1, 0, 0, 1)',
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
       }).finished,
     ]
 
@@ -60,7 +60,7 @@ const animeMap: AnimeMap = {
         scale: 1,
         duration,
         delay,
-        easing: 'cubicBezier(1, 0, 0, 1)',
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
       }).finished,
     ]
 
@@ -84,7 +84,7 @@ const animeMap: AnimeMap = {
         scale: 0,
         duration,
         delay,
-        easing: 'cubicBezier(1, 0, 0, 1)',
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
       }).finished,
     ]
 

@@ -18,15 +18,15 @@ export interface Props {
   /** @default 45deg */
   angle?: string;
   size?: string;
+  dotSize?: string;
   color?: string;
-  margin?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   angle: '-45deg',
   size: '4px',
-  color: '#FAFAFA',
-  margin: '8px',
+  dotSize: '2px',
+  color: '#F7F7F7',
 })
 
 const card = inject(PROVIDE_KEY)
@@ -36,14 +36,9 @@ const card = inject(PROVIDE_KEY)
 const bodyRef = ref<HTMLDivElement>()
 
 const style = computed<CSSProperties>(() => ({
-  inset: prop.margin,
-  backgroundImage: [
-    'repeating-linear-gradient(',
-    `${prop.angle}, transparent,`,
-    `transparent ${prop.size},`,
-    `${prop.color} ${prop.size},`,
-    `${prop.color} calc(${prop.size} * 2))`,
-  ].join(''),
+  inset: `0px`,
+  backgroundImage: `radial-gradient(${prop.color} ${prop.dotSize}, transparent ${prop.dotSize})`,
+  backgroundSize: `${prop.size} ${prop.size}`,
 }))
 
 const animeMap: AnimeMap = {
