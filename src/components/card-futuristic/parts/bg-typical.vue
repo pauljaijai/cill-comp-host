@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="bodyRef"
+    ref="bgRef"
     :style
     class="bg"
   />
@@ -31,9 +31,7 @@ const prop = withDefaults(defineProps<Props>(), {
 
 const card = inject(PROVIDE_KEY)
 
-// const card = computedInject(PROVIDE_KEY, (source) => source)
-
-const bodyRef = ref<HTMLDivElement>()
+const bgRef = ref<HTMLDivElement>()
 
 const style = computed<CSSProperties>(() => ({
   inset: prop.margin,
@@ -55,7 +53,7 @@ const animeMap: AnimeMap = {
 
     const tasks = [
       anime({
-        targets: bodyRef.value,
+        targets: bgRef.value,
         opacity: 1,
         duration,
         delay,
@@ -73,7 +71,7 @@ const animeMap: AnimeMap = {
 
     const tasks = [
       anime({
-        targets: bodyRef.value,
+        targets: bgRef.value,
         opacity: [
           0,
           0.1,
@@ -97,7 +95,7 @@ const animeMap: AnimeMap = {
 
     const tasks = [
       anime({
-        targets: bodyRef.value,
+        targets: bgRef.value,
         opacity: [
           1,
           0.6,

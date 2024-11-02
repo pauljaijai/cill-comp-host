@@ -6,7 +6,7 @@
       class="border rounded p-4"
     />
 
-    <div class="flex justify-center gap-16">
+    <div class="flex flex-wrap justify-center gap-16">
       <card-futuristic
         v-for="item, i in list"
         :key="i"
@@ -61,6 +61,18 @@ const list = ref(pipe(
         type: 'scale',
         class: 'p-4',
       },
+      bg: { type: 'halftone' },
+      border: null,
+      animeSequence: {
+        visible: {
+          content: { delay: 200 },
+          bg: { delay: 400 },
+        },
+      },
+    },
+    {
+      title: '鱈魚 Codfish',
+      corner: null,
       bg: { type: 'halftone' },
       border: null,
       animeSequence: {
