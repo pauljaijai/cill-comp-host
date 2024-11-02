@@ -49,16 +49,17 @@ const cardSize = reactiveComputed(() => ({
 }))
 
 const attr = reactive({
-  offset: prop.size / 4,
+  offsetX: prop.size / 4,
+  offsetY: prop.size / 4,
   color: prop.color,
   strokeWidth: prop.strokeWidth,
 })
 
 const style = computed(() => ({
-  left: `${-attr.offset}px`,
-  top: `${-attr.offset}px`,
-  width: `${cardSize.width + attr.offset * 2}px`,
-  height: `${cardSize.height + attr.offset * 2}px`,
+  left: `${-attr.offsetX}px`,
+  top: `${-attr.offsetY}px`,
+  width: `${cardSize.width + attr.offsetX * 2}px`,
+  height: `${cardSize.height + attr.offsetY * 2}px`,
 }))
 
 const viewBox = computed(
@@ -112,7 +113,8 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size / 4,
+        offsetX: prop.size / 4,
+        offsetY: prop.size / 4,
         color: prop.color,
         strokeWidth: prop.strokeWidth,
         duration,
@@ -141,7 +143,14 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size / 4,
+        offsetX: prop.size / 4,
+        duration: duration / 3 * 2,
+        delay,
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
+      }).finished,
+      anime({
+        targets: attr,
+        offsetY: prop.size / 4,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -170,7 +179,15 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: -prop.size * 3,
+        offsetX: -prop.size * 4,
+        color: prop.color,
+        duration,
+        delay: delay + 100,
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
+      }).finished,
+      anime({
+        targets: attr,
+        offsetY: -prop.size * 3,
         color: prop.color,
         duration,
         delay,
@@ -179,7 +196,7 @@ const animeMap: AnimeMap = {
       anime({
         targets: svgRef.value,
         opacity: 0,
-        duration: svgDuration,
+        duration: svgDuration * 2,
         delay: svgDuration * 2 + delay,
         easing: 'linear',
       }).finished,
@@ -198,7 +215,8 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: -prop.size / 4,
+        offsetX: -prop.size / 4,
+        offsetY: -prop.size / 4,
         color: prop.selectedColor,
         strokeWidth: prop.strokeWidth * 1.6,
         duration,
@@ -227,7 +245,8 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size / 2,
+        offsetX: prop.size / 2,
+        offsetY: prop.size / 2,
         color: prop.color,
         strokeWidth: prop.strokeWidth,
         duration,
