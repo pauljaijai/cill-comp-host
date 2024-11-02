@@ -59,6 +59,22 @@ const list = ref(pipe(
       titleClass: 'text-xl font-bold',
       text: 'FUTURISTIC CARD',
       bg: { type: 'halftone' },
+      border: {
+        type: 'specific',
+        selectedColor: '#FFF',
+        strokeWidth: 1,
+        side: {
+          t: {},
+          l: {},
+          b: {},
+          r: {},
+        },
+      },
+      animeSequence: {
+        visible: {
+          border: { duration: 400 },
+        },
+      },
     },
     {
       title: 'CARD-01',

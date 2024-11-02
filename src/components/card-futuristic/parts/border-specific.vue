@@ -173,34 +173,18 @@ const animeMap: AnimeMap = {
       delay = 0,
     } = param ?? {}
 
-    const tasks = [
-      ...pipe(
-        [
-          sideData.value.t,
-          sideData.value.b,
-        ],
-        map((targets) => anime({
-          targets,
-          dashoffset: 0,
-          duration,
-          delay,
-          easing: 'cubicBezier(1, 0.1, 0, 0.9)',
-        }).finished),
-      ),
-      ...pipe(
-        [
-          sideData.value.l,
-          sideData.value.r,
-        ],
-        map((targets) => anime({
-          targets,
-          dashoffset: 0,
-          duration,
-          delay: 200 + delay,
-          easing: 'cubicBezier(1, 0.1, 0, 0.9)',
-        }).finished),
-      ),
-    ]
+    const tasks = pipe(
+      ['t', 'r', 'b', 'l'] as const,
+      map((key) => anime({
+        targets: sideData.value[key],
+        dashoffset: 0,
+        width: prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+        stroke: prop.side?.[key]?.color ?? prop.color,
+        duration,
+        delay,
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
+      }).finished),
+    )
 
     await Promise.all(tasks)
   },
@@ -212,34 +196,32 @@ const animeMap: AnimeMap = {
       delay = 0,
     } = param ?? {}
 
-    const tasks = [
-      ...pipe(
-        [
-          sideData.value.t,
-          sideData.value.b,
-        ],
-        map((targets) => anime({
-          targets,
+    const tasks = pipe(
+      [
+        {
+          targets: sideData.value.t,
           dashoffset: cardSize.width,
-          duration,
-          delay,
-          easing: 'cubicBezier(1, 0.1, 0, 0.9)',
-        }).finished),
-      ),
-      ...pipe(
-        [
-          sideData.value.l,
-          sideData.value.r,
-        ],
-        map((targets) => anime({
-          targets,
+        },
+        {
+          targets: sideData.value.r,
           dashoffset: cardSize.height,
-          duration,
-          delay,
-          easing: 'cubicBezier(1, 0.1, 0, 0.9)',
-        }).finished),
-      ),
-    ]
+        },
+        {
+          targets: sideData.value.l,
+          dashoffset: -cardSize.height,
+        },
+        {
+          targets: sideData.value.b,
+          dashoffset: -cardSize.width,
+        },
+      ],
+      map((data) => anime({
+        ...data,
+        duration,
+        delay,
+        easing: 'cubicBezier(1, 0.1, 0, 0.9)',
+      }).finished),
+    )
 
     await Promise.all(tasks)
   },
