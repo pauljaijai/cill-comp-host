@@ -45,7 +45,7 @@ import type { AnimeMap, Part, ProvideContent, State } from './type'
 import { until, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
 import { defaultsDeep } from 'lodash-es'
 import { clone, entries, find, map, pipe } from 'remeda'
-import { computed, defineAsyncComponent, onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onMounted, provide, reactive, ref, watch } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 type AnimeSequence = Record<
@@ -195,6 +195,7 @@ async function playPartsAnime(
     partList,
     map((key) => {
       const animeParam = param ?? animeSequence.value[state][key]
+
       const part = partMap.get(key)
       return part?.[state](animeParam)
     }),
@@ -275,8 +276,17 @@ onMounted(async () => {
   await until(() => contentSize.width).toBeTruthy()
   await until(() => contentSize.height).toBeTruthy()
 
+  await nextTick()
+
   const { visible } = prop
-  return playPartsAnime(visible ? 'visible' : 'hidden', { duration: 0 })
+
+  return playPartsAnime(
+    visible ? 'visible' : 'hidden',
+    {
+      duration: 0,
+      delay: 0,
+    },
+  )
 })
 </script>
 

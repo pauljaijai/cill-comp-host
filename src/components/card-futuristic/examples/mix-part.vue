@@ -15,7 +15,7 @@
         class="font-orbitron"
         @click="item.selected = true"
       >
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col">
           <div
             v-if="item.title"
             :class="item.titleClass"
@@ -78,16 +78,17 @@ const list = ref(pipe(
       },
     },
     {
-      title: '鱈魚 Codfish',
+      title: 'COD-01',
+      titleClass: 'text-xl font-bold text-white',
+      text: 'FUTURISTIC CARD',
+      textClass: 'text-white',
       corner: null,
-      bg: { type: 'halftone' },
-      border: null,
-      animeSequence: {
-        visible: {
-          content: { delay: 200 },
-          bg: { delay: 400 },
-        },
+      bg: { type: 'solid' },
+      content: {
+        type: 'typical',
+        class: 'p-3 pl-6 pb-4',
       },
+      border: null,
     },
   ] as CardProp[],
   map((data) => ({

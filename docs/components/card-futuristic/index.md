@@ -34,7 +34,7 @@ import MixPart from '../../../src/components/card-futuristic/examples/mix-part.v
 
 ### 基本用法
 
-<basic-usage class="h-[60vh]"/>
+<!-- <basic-usage class="h-[60vh]"/> -->
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/card-futuristic/examples/basic-usage.vue
