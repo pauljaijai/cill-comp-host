@@ -3,6 +3,7 @@ import type { Props as PropsBgSolid } from './parts/bg-solid.vue'
 import type { Props as PropsBgTypical } from './parts/bg-typical.vue'
 
 import type { Props as PropsBorderSide } from './parts/border-side.vue'
+import type { Props as PropsBorderSpecific } from './parts/border-specific.vue'
 import type { Props as PropsBorderTypical } from './parts/border-typical.vue'
 
 import type { Props as PropsContentScale } from './parts/content-scale.vue'
@@ -18,6 +19,7 @@ interface BaseParam {
 export enum BorderType {
   TYPICAL = 'typical',
   SIDE = 'side',
+  SPECIFIC = 'specific',
 }
 interface BorderParamTypical extends PropsBorderTypical {
   type: `${BorderType.TYPICAL}`;
@@ -25,8 +27,11 @@ interface BorderParamTypical extends PropsBorderTypical {
 interface BorderParamSide extends PropsBorderSide {
   type: `${BorderType.SIDE}`;
 }
+interface BorderParamSpecific extends PropsBorderSpecific {
+  type: `${BorderType.SPECIFIC}`;
+}
 export type BorderParam = (
-  BorderParamTypical | BorderParamSide
+  BorderParamTypical | BorderParamSide | BorderParamSpecific
 ) & BaseParam
 
 // bg

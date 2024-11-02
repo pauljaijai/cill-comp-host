@@ -92,7 +92,7 @@ const list = ref(pipe(
         type: 'typical',
         class: 'p-4 pl-6',
       },
-      border: { type: 'side' },
+      border: { type: 'specific' },
       animeSequence: {
         visible: {
           border: { delay: 400 },
