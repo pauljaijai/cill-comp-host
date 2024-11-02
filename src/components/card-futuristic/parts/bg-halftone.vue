@@ -26,7 +26,7 @@ const prop = withDefaults(defineProps<Props>(), {
   angle: '-45deg',
   size: '4px',
   dotSize: '2px',
-  color: '#F7F7F7',
+  color: '#FAFAFA',
 })
 
 const card = inject(PROVIDE_KEY)
