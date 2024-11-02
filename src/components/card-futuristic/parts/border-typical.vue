@@ -41,11 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import type { AnimeMap } from './type'
+import type { AnimeMap } from '../type'
 import anime from 'animejs'
 import { map, pipe } from 'remeda'
 import { computed, inject, onMounted, ref } from 'vue'
-import { PROVIDE_KEY } from './type'
+import { PROVIDE_KEY } from '../type'
 
 // #region Props
 export interface Props {

@@ -95,23 +95,23 @@ defineSlots<{
 
 const partList: Part[] = ['content', 'bg', 'border', 'corner', 'ornament']
 // 引入所有 part 元件
-const partModules = import.meta.glob(['./card-*.vue', '!./card-futuristic.vue'])
+const partModules = import.meta.glob(['./parts/*.vue'])
 const partComponentTypeMap = pipe(
   partModules,
   entries(),
   map(([path, component]) => {
-    const text = path.match(/\.\/card-(.+)\.vue$/)?.[1]
+    const text = path.match(/\.\/parts\/(.+)\.vue/)?.[1]
     if (!text) {
       throw new Error(`Invalid path: ${path}`)
     }
-    const [part, type] = text.split('-')
-    if (!part || !type || !partList.includes(part as Part)) {
+    const [part, ...type] = text.split('-')
+    if (!part || type.length === 0 || !partList.includes(part as Part)) {
       throw new Error(`元件命名錯誤: ${path}`)
     }
 
     return {
       part,
-      type,
+      type: type.join('-'),
       component: defineAsyncComponent(component as Parameters<typeof defineAsyncComponent>[0]),
     }
   }),

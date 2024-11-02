@@ -1,6 +1,6 @@
-import type { Props as BgTypicalProps } from './card-bg-typical.vue'
-import type { Props as BorderTypicalProps } from './card-border-typical.vue'
-import type { Props as CornerTypicalProps } from './card-corner-typical.vue'
+import type { Props as BgTypicalProps } from './parts/bg-typical.vue'
+import type { Props as BorderTypicalProps } from './parts/border-typical.vue'
+import type { Props as CornerTypicalProps } from './parts/corner-typical.vue'
 
 interface BaseParam {
   class?: string;

@@ -1,59 +1,38 @@
 <template>
-  <div
-    ref="bodyRef"
-    :style
-    class="bg"
-  />
+  <div ref="contentRef">
+    <slot />
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { CSSProperties } from 'vue'
-import type { AnimeMap } from './type'
+import type { AnimeMap } from '../type'
 import anime from 'animejs'
-import { computed, inject, onMounted, ref } from 'vue'
-import { PROVIDE_KEY } from './type'
+import { inject, onMounted, ref } from 'vue'
+import { PROVIDE_KEY } from '../type'
 
 // #region Props
-export interface Props {
-  /** @default 45deg */
-  angle?: string;
-  size?: string;
-  color?: string;
-}
+interface Props { }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
-  angle: '-45deg',
-  size: '4px',
-  color: '#FAFAFA',
-})
+const prop = withDefaults(defineProps<Props>(), {})
+
+defineSlots<{
+  default?: () => unknown;
+}>()
 
 const card = inject(PROVIDE_KEY)
 
-// const card = computedInject(PROVIDE_KEY, (source) => source)
-
-const bodyRef = ref<HTMLDivElement>()
-
-const style = computed<CSSProperties>(() => ({
-  inset: `8px`,
-  backgroundImage: [
-    'repeating-linear-gradient(',
-    `${prop.angle}, transparent,`,
-    `transparent ${prop.size},`,
-    `${prop.color} ${prop.size},`,
-    `${prop.color} calc(${prop.size} * 2))`,
-  ].join(''),
-}))
+const contentRef = ref<HTMLDivElement>()
 
 const animeMap: AnimeMap = {
   async normal(param) {
     const {
-      duration = 200,
+      duration = 300,
       delay = 0,
     } = param ?? {}
 
     const tasks = [
       anime({
-        targets: bodyRef.value,
+        targets: contentRef.value,
         opacity: 1,
         duration,
         delay,
@@ -65,13 +44,13 @@ const animeMap: AnimeMap = {
   },
   async visible(param) {
     const {
-      duration = 200,
+      duration = 300,
       delay = 0,
     } = param ?? {}
 
     const tasks = [
       anime({
-        targets: bodyRef.value,
+        targets: contentRef.value,
         opacity: [
           0,
           0.1,
@@ -81,7 +60,7 @@ const animeMap: AnimeMap = {
         ],
         duration,
         delay,
-        easing: 'linear',
+        easing: 'steps(1)',
       }).finished,
     ]
 
@@ -89,21 +68,41 @@ const animeMap: AnimeMap = {
   },
   async hidden(param) {
     const {
-      duration = 200,
+      duration = 300,
       delay = 0,
     } = param ?? {}
 
     const tasks = [
       anime({
-        targets: bodyRef.value,
+        targets: contentRef.value,
         opacity: [
           1,
           0.6,
           0.1,
-          0.8,
           0.3,
           0,
         ],
+        duration,
+        delay,
+        easing: 'steps(1)',
+      }).finished,
+    ]
+
+    await Promise.all(tasks)
+  },
+  async selected(param) {
+    this.visible(param)
+  },
+  async hover(param) {
+    const {
+      duration = 300,
+      delay = 0,
+    } = param ?? {}
+
+    const tasks = [
+      anime({
+        targets: contentRef.value,
+        opacity: 0.6,
         duration,
         delay,
         easing: 'linear',
@@ -111,12 +110,6 @@ const animeMap: AnimeMap = {
     ]
 
     await Promise.all(tasks)
-  },
-  async selected(param) {
-    return this.normal(param)
-  },
-  async hover(param) {
-    return this.normal(param)
   },
 }
 
@@ -127,7 +120,7 @@ onMounted(() => {
   }
 
   card.bindPart({
-    name: 'bg',
+    name: 'content',
     animeMap,
   })
 })
