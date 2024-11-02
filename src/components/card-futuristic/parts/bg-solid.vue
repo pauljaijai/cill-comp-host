@@ -1,131 +1,86 @@
 <template>
-  <div
-    ref="bgRef"
+  <svg
+    ref="svgRef"
+    :view-box
     :style
-    class="bg"
-  />
+    fill="none"
+    class="card-border"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+
+    <path
+      id="Rectangle 4"
+      d="M0 20L20 0H140L160 20V160L140 180H20L0 160V20Z"
+      fill="#D9D9D9"
+    />
+  </svg>
 </template>
 
 <script setup lang="ts">
-import type { CSSProperties } from 'vue'
-import type { AnimeMap } from '../type'
-import anime from 'animejs'
-import { computed, inject, onMounted, ref } from 'vue'
-import { PROVIDE_KEY } from '../type'
+import { computed, ref } from 'vue'
+import { useCardPart } from '../use-card-part'
 
 // #region Props
 export interface Props {
-  /** @default 45deg */
-  angle?: string;
-  size?: string;
-  dotSize?: string;
   color?: string;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
-  angle: '-45deg',
-  size: '4px',
-  dotSize: '2px',
   color: '#FAFAFA',
 })
 
-const card = inject(PROVIDE_KEY)
+const svgRef = ref<SVGAElement>()
 
-const bgRef = ref<HTMLDivElement>()
-
-const style = computed<CSSProperties>(() => ({
-  inset: `0px`,
-  backgroundImage: `radial-gradient(${prop.color} ${prop.dotSize}, transparent ${prop.dotSize})`,
-  backgroundSize: `${prop.size} ${prop.size}`,
-}))
-
-const animeMap: AnimeMap = {
-  async normal(param) {
-    const {
-      duration = 200,
-      delay = 0,
-    } = param ?? {}
-
-    const tasks = [
-      anime({
-        targets: bgRef.value,
-        opacity: 1,
-        duration,
-        delay,
-        easing: 'linear',
-      }).finished,
-    ]
-
-    await Promise.all(tasks)
-  },
-  async visible(param) {
-    const {
-      duration = 200,
-      delay = 0,
-    } = param ?? {}
-
-    const tasks = [
-      anime({
-        targets: bgRef.value,
-        opacity: [
-          0,
-          0.1,
-          0.8,
-          0.3,
-          1,
-        ],
-        duration,
-        delay,
-        easing: 'linear',
-      }).finished,
-    ]
-
-    await Promise.all(tasks)
-  },
-  async hidden(param) {
-    const {
-      duration = 200,
-      delay = 0,
-    } = param ?? {}
-
-    const tasks = [
-      anime({
-        targets: bgRef.value,
-        opacity: [
-          1,
-          0.6,
-          0.1,
-          0.8,
-          0.3,
-          0,
-        ],
-        duration,
-        delay,
-        easing: 'linear',
-      }).finished,
-    ]
-
-    await Promise.all(tasks)
-  },
-  async selected(param) {
-    return this.normal(param)
-  },
-  async hover(param) {
-    return this.normal(param)
-  },
+function removeAnime() {
+  // anime.remove(Object.values(lineStyleMap.value))
 }
 
-onMounted(() => {
-  if (!card) {
-    console.warn('此元件必須包在 CardFuturistic 元件中')
-    return
-  }
+const { cardSize } = useCardPart('bg', {
+  async normal(param) {
+    removeAnime()
 
-  card.bindPart({
-    name: 'bg',
-    animeMap,
-  })
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+  },
+  async visible(param) {
+    removeAnime()
+
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+  },
+  async hidden(param) {
+    removeAnime()
+
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+  },
+  async selected(param) {
+    this.hover(param)
+  },
+  async hover(param) {
+    removeAnime()
+
+    const {
+      duration = 400,
+      delay = 0,
+    } = param ?? {}
+  },
 })
+
+const style = computed(() => ({
+  width: `${cardSize.width}px`,
+  height: `${cardSize.height}px`,
+}))
+
+const viewBox = computed(
+  () => `0 0 ${cardSize.width} ${cardSize.height}`,
+)
 </script>
 
 <style scoped lang="sass">

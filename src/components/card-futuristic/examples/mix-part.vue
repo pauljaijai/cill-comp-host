@@ -18,12 +18,15 @@
         <div class="flex flex-col gap-4">
           <div
             v-if="item.title"
-            class="text-xl font-bold"
+            :class="item.titleClass"
           >
             {{ item.title }}
           </div>
 
-          <div>
+          <div
+            v-if="item.text"
+            :class="item.textClass"
+          >
             {{ item.text }}
           </div>
         </div>
@@ -44,17 +47,21 @@ import CardFuturistic from '../card-futuristic.vue'
 
 type CardProp = Writable<ExtractComponentProps<typeof CardFuturistic>> & {
   title?: string;
+  titleClass?: string;
   text?: string;
+  textClass?: string;
 }
 
 const list = ref(pipe(
   [
     {
       title: '鱈魚 Codfish',
+      titleClass: 'text-xl font-bold',
       text: '最擅長的球類是地瓜球',
     },
     {
       title: '鱈魚 Codfish',
+      titleClass: 'text-xl font-bold',
       text: '最擅長的球類是地瓜球',
       corner: { type: 'quote' },
       content: {
@@ -82,7 +89,7 @@ const list = ref(pipe(
         },
       },
     },
-  ] satisfies CardProp[],
+  ] as CardProp[],
   map((data) => ({
     ...data,
     visible: false,

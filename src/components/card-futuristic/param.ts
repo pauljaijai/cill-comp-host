@@ -1,4 +1,5 @@
 import type { Props as PropsBgHalftone } from './parts/bg-halftone.vue'
+import type { Props as PropsBgSolid } from './parts/bg-solid.vue'
 import type { Props as PropsBgTypical } from './parts/bg-typical.vue'
 
 import type { Props as PropsBorderTypical } from './parts/border-typical.vue'
@@ -25,6 +26,7 @@ export type BorderParam = BorderParamTypical & BaseParam
 export enum BgType {
   TYPICAL = 'typical',
   HALFTONE = 'halftone',
+  SOLID = 'solid',
 }
 interface BgParamTypical extends PropsBgTypical {
   type: `${BgType.TYPICAL}`;
@@ -32,8 +34,11 @@ interface BgParamTypical extends PropsBgTypical {
 interface BgParamBgHalftone extends PropsBgHalftone {
   type: `${BgType.HALFTONE}`;
 }
+interface BgParamBgSolid extends PropsBgSolid {
+  type: `${BgType.SOLID}`;
+}
 export type BgParam = (
-  BgParamTypical | BgParamBgHalftone
+  BgParamTypical | BgParamBgHalftone | BgParamBgSolid
 ) & BaseParam
 
 // corner
