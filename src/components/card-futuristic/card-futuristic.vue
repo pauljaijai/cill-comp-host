@@ -255,18 +255,55 @@ const stateStrategies: Array<(
   },
 ]
 
+/** 是否有動畫正在播放 */
+let isPlaying = false
+/** 是否有新狀態變更正在等待 */
+let isWaiting = false
+async function startStrategy() {
+  const [current, prev] = stateHistory.value
+  if (!current || !prev)
+    return
+
+  const state = current.snapshot
+  const pState = prev.snapshot
+
+  for (const strategy of stateStrategies) {
+    const task = strategy(state, pState)
+    if (task !== undefined) {
+      isPlaying = true
+      await task
+      isPlaying = false
+
+      break
+    }
+  }
+}
+
+// FIX: 連續多次切換時，最後一個狀態動畫不會播放
 watch(stateObject, async () => {
   const [current, prev] = stateHistory.value
   if (!current || !prev)
     return
 
-  for (const strategy of stateStrategies) {
-    const task = strategy(current.snapshot, prev.snapshot)
-    if (task !== undefined) {
-      await task
+  /** 阻擋動畫，避免動畫重疊 */
+  if (isPlaying) {
+    isWaiting = true
+    return
+  }
 
-      break
-    }
+  if (isWaiting) {
+    return
+  }
+
+  await startStrategy()
+
+  /** 如果有新狀態變更正在等待，則再執行一次。
+   *
+   * 確保最終狀態動畫能夠正確執行。
+   */
+  if (isWaiting) {
+    await startStrategy()
+    isWaiting = false
   }
 })
 
