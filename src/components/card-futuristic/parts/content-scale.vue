@@ -91,25 +91,10 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async selected(param) {
-    this.visible(param)
+    return this.visible(param)
   },
   async hover(param) {
-    const {
-      duration = 300,
-      delay = 0,
-    } = param ?? {}
-
-    const tasks = [
-      anime({
-        targets: contentRef.value,
-        opacity: 0.6,
-        duration,
-        delay,
-        easing: 'linear',
-      }).finished,
-    ]
-
-    await Promise.all(tasks)
+    return this.visible(param)
   },
 }
 

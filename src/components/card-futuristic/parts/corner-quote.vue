@@ -34,7 +34,7 @@ const prop = withDefaults(defineProps<Props>(), {
   size: 10,
   strokeWidth: 6,
   color: '#444',
-  selectedColor: '#444',
+  selectedColor: '#ff8d0a',
 })
 
 const svgRef = ref<SVGAElement>()
@@ -49,7 +49,6 @@ const cardSize = reactiveComputed(() => ({
 }))
 
 const attr = reactive({
-  rotate: 0,
   offset: prop.size / 4,
   color: prop.color,
   strokeWidth: prop.strokeWidth,
@@ -115,7 +114,7 @@ const animeMap: AnimeMap = {
         targets: attr,
         offset: prop.size / 4,
         color: prop.color,
-        rotate: 0,
+        strokeWidth: prop.strokeWidth,
         duration,
         delay,
         easing: 'cubicBezier(1, 0, 0, 1)',
@@ -143,7 +142,6 @@ const animeMap: AnimeMap = {
       anime({
         targets: attr,
         offset: prop.size / 4,
-        rotate: 0,
         duration,
         delay,
         easing: 'cubicBezier(1, 0, 0, 1)',
@@ -200,15 +198,16 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size / 2,
-        rotate: 180,
+        offset: -prop.size / 4,
+        color: prop.selectedColor,
+        strokeWidth: prop.strokeWidth,
         duration,
         delay,
         easing: 'easeInOutCirc',
       }).finished,
       anime({
-        targets: attr,
-        color: prop.selectedColor,
+        targets: svgRef.value,
+        opacity: 1,
         duration,
         delay,
         easing: 'linear',
@@ -229,11 +228,18 @@ const animeMap: AnimeMap = {
       anime({
         targets: attr,
         offset: prop.size / 2,
-        rotate: 0,
         color: prop.color,
+        strokeWidth: prop.strokeWidth * 1.4,
         duration,
         delay,
         easing: 'easeInOutCirc',
+      }).finished,
+      anime({
+        targets: svgRef.value,
+        opacity: 0.6,
+        duration,
+        delay,
+        easing: 'linear',
       }).finished,
     ]
 
