@@ -1,23 +1,25 @@
 <template>
   <div
     ref="cardRef"
-    class="relative"
+    class="card-futuristic relative"
   >
-    <suspense>
+    <suspense v-if="bgComponent">
       <component
         :is="bgComponent"
         v-bind="prop.bg"
         class="pointer-events-none absolute z-[-1]"
       />
     </suspense>
-    <suspense>
+
+    <suspense v-if="borderComponent">
       <component
         :is="borderComponent"
         v-bind="prop.border"
         class="pointer-events-none absolute z-[-1]"
       />
     </suspense>
-    <suspense>
+
+    <suspense v-if="cornerComponent">
       <component
         :is="cornerComponent"
         v-bind="prop.corner"
@@ -25,7 +27,7 @@
       />
     </suspense>
 
-    <suspense>
+    <suspense v-if="contentComponent">
       <component
         :is="contentComponent"
         ref="contentRef"

@@ -1,7 +1,11 @@
-import type { Props as BgTypicalProps } from './parts/bg-typical.vue'
-import type { Props as BorderTypicalProps } from './parts/border-typical.vue'
-import type { Props as CornerQuoteProps } from './parts/corner-quote.vue'
-import type { Props as CornerTypicalProps } from './parts/corner-typical.vue'
+import type { Props as PropsBgTypical } from './parts/bg-typical.vue'
+
+import type { Props as PropsBorderTypical } from './parts/border-typical.vue'
+
+import type { Props as PropsContentScale } from './parts/content-scale.vue'
+import type { Props as PropsCornerQuote } from './parts/corner-quote.vue'
+
+import type { Props as PropsCornerTypical } from './parts/corner-typical.vue'
 
 interface BaseParam {
   class?: string;
@@ -11,7 +15,7 @@ interface BaseParam {
 export enum BorderType {
   TYPICAL = 'typical',
 }
-interface BorderParamTypical extends BorderTypicalProps {
+interface BorderParamTypical extends PropsBorderTypical {
   type: `${BorderType.TYPICAL}`;
 }
 export type BorderParam = BorderParamTypical & BaseParam
@@ -20,20 +24,22 @@ export type BorderParam = BorderParamTypical & BaseParam
 export enum BgType {
   TYPICAL = 'typical',
 }
-interface BgParamTypical extends BgTypicalProps {
+interface BgParamTypical extends PropsBgTypical {
   type: `${BgType.TYPICAL}`;
 }
-export type BgParam = BgParamTypical & BaseParam
+export type BgParam = (
+  BgParamTypical
+) & BaseParam
 
 // corner
 export enum CornerType {
   TYPICAL = 'typical',
   QUOTE = 'quote',
 }
-interface CornerParamTypical extends CornerTypicalProps {
+interface CornerParamTypical extends PropsCornerTypical {
   type: `${CornerType.TYPICAL}`;
 }
-interface CornerParamQuote extends CornerQuoteProps {
+interface CornerParamQuote extends PropsCornerQuote {
   type: `${CornerType.QUOTE}`;
 }
 export type CornerParam = (
@@ -43,11 +49,17 @@ export type CornerParam = (
 // content
 export enum ContentType {
   TYPICAL = 'typical',
+  SCALE = 'scale',
 }
 interface ContentParamTypical {
   type: `${ContentType.TYPICAL}`;
 }
-export type ContentParam = ContentParamTypical & BaseParam
+interface ContentParamScale extends PropsContentScale {
+  type: `${ContentType.SCALE}`;
+}
+export type ContentParam = (
+  ContentParamTypical | ContentParamScale
+) & BaseParam
 
 // ornament
 // interface OrnamentParamTypical extends BaseParam {

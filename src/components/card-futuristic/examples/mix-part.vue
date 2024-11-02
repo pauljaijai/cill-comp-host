@@ -57,7 +57,13 @@ const list = ref(pipe(
       title: '鱈魚 Codfish',
       text: '最擅長的球類是地瓜球',
       corner: { type: 'quote' },
+      content: { type: 'scale', class: 'p-4' },
       border: null,
+      animeSequence: {
+        visible: {
+          content: { delay: 200 },
+        },
+      },
     },
   ] satisfies CardProp[],
   map((data) => ({

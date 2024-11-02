@@ -118,7 +118,7 @@ const animeMap: AnimeMap = {
         rotate: 0,
         duration,
         delay,
-        easing: 'easeInOutExpo',
+        easing: 'cubicBezier(1, 0, 0, 1)',
       }).finished,
       anime({
         targets: svgRef.value,
@@ -146,7 +146,7 @@ const animeMap: AnimeMap = {
         rotate: 0,
         duration,
         delay,
-        easing: 'easeOutExpo',
+        easing: 'cubicBezier(1, 0, 0, 1)',
       }).finished,
       anime({
         targets: svgRef.value,
@@ -163,7 +163,7 @@ const animeMap: AnimeMap = {
     removeAnime()
 
     const {
-      duration = 400,
+      duration = 300,
       delay = 0,
     } = param ?? {}
 
@@ -176,13 +176,13 @@ const animeMap: AnimeMap = {
         color: prop.color,
         duration,
         delay,
-        easing: 'easeInExpo',
+        easing: 'cubicBezier(1, 0, 0, 1)',
       }).finished,
       anime({
         targets: svgRef.value,
         opacity: 0,
         duration: svgDuration,
-        delay: svgDuration * 3 + delay,
+        delay: svgDuration * 2 + delay,
         easing: 'linear',
       }).finished,
     ]
@@ -268,4 +268,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="sass">
+.card-corner
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1))
 </style>
