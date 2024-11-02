@@ -235,14 +235,14 @@ const stateStrategies: Array<(
 
     return playPartsAnime(visible ? 'visible' : 'hidden')
   },
-  ({ selected }, { selected: pSelected }) => {
-    if (selected === pSelected)
+  ({ visible, selected }, { selected: pSelected }) => {
+    if (!visible || selected === pSelected)
       return
 
     return playPartsAnime(selected ? 'selected' : 'normal')
   },
-  ({ hover, selected }, { hover: pHover }) => {
-    if (hover === pHover || selected)
+  ({ visible, hover, selected }, { hover: pHover }) => {
+    if (!visible || selected || hover === pHover)
       return
 
     return playPartsAnime(hover ? 'hover' : 'normal')
