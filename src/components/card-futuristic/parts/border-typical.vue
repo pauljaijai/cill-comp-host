@@ -209,7 +209,7 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async selected(param) {
-    this.hover(param)
+    return this.hover(param)
   },
   async hover(param) {
     removeAnime()

@@ -91,7 +91,7 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async selected(param) {
-    this.visible(param)
+    return this.visible(param)
   },
   async hover(param) {
     const {
