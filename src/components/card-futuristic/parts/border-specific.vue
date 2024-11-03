@@ -47,7 +47,7 @@ import type { AnimeMap } from '../type'
 import { reactiveComputed } from '@vueuse/core'
 import anime from 'animejs'
 import { fromKeys, map, multiply, pipe } from 'remeda'
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, ref, watch } from 'vue'
 import { PROVIDE_KEY } from '../type'
 
 // #region Props
@@ -279,6 +279,16 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
 }
+
+/** 初始化所有點位，消除 cardSize 變化帶來的偏移 */
+watch(cardSize, () => {
+  if (card?.visible.value) {
+    animeMap.visible({ delay: 0, duration: 0 })
+  }
+  else {
+    animeMap.hidden({ delay: 0, duration: 0 })
+  }
+})
 
 onMounted(() => {
   if (!card) {
