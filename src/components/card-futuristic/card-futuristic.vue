@@ -50,10 +50,13 @@ import { PROVIDE_KEY } from './type'
 
 type AnimeSequence = Record<
   State,
-  Partial<Record<Part, {
-    duration?: number;
-    delay?: number;
-  }>>
+  Partial<
+    // null 表示停用動畫
+    Record<Part, {
+      duration?: number;
+      delay?: number;
+    } | null>
+  >
 >
 
 // #region Props
@@ -216,6 +219,8 @@ async function playPartsAnime(
     partList,
     map((key) => {
       const animeParam = param ?? animeSequence.value[state][key]
+      if (animeParam === null)
+        return
 
       const part = partMap.get(key)
       // console.log(`🚀 ~ key:`, key)

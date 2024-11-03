@@ -145,14 +145,13 @@ const list = ref(pipe(
     {
       title: 'ERROR',
       titleClass: 'text-2xl font-bold text-[#ba2507] ',
-      text: 'STINKY FISH',
+      text: 'FISH OVERWEIGHT',
       textClass: 'text-[#ba2507]',
       corner: null,
       bg: {
         type: 'typical',
-        margin: '4px',
-        color: 'white',
-        class: 'bg-red-200',
+        margin: '4px 0px',
+        color: '#fecaca',
       },
       content: {
         type: 'typical',
@@ -181,6 +180,13 @@ const list = ref(pipe(
           border: { delay: 300 },
           bg: { delay: 0 },
           content: { delay: 0 },
+        },
+        // null 表示停用動畫
+        selected: {
+          content: null,
+        },
+        hover: {
+          content: null,
         },
       },
     },
