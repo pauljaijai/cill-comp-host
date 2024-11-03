@@ -48,7 +48,7 @@ const svgSize = reactive(useElementSize(svgRef, undefined, {
 }))
 
 /** 倒角由 2 個點組成 */
-const pointAttrMap = ref({
+const pointData = ref({
   lt: {
     p1: { x: 0, y: 0 },
     p2: { x: 0, y: 0 },
@@ -115,7 +115,7 @@ function getPointAttrMapNormal() {
 }
 
 const pathAttr = computed(() => {
-  const { lt, rt, rb, lb } = pointAttrMap.value
+  const { lt, rt, rb, lb } = pointData.value
 
   return {
     d: [
@@ -132,10 +132,6 @@ const pathAttr = computed(() => {
   }
 })
 
-function removeAnime() {
-  anime.remove(Object.values(pointAttrMap.value))
-}
-
 const style = computed(() => ({
   width: `${cardSize.width}px`,
   height: `${cardSize.height}px`,
@@ -144,6 +140,13 @@ const style = computed(() => ({
 const viewBox = computed(
   () => `0 0 ${cardSize.width} ${cardSize.height}`,
 )
+
+function removeAnime() {
+  anime.remove([
+    pointData.value,
+    svgRef.value,
+  ])
+}
 
 const animeMap: AnimeMap = {
   async normal(param) {
@@ -198,28 +201,28 @@ const animeMap: AnimeMap = {
     const pointDuration = duration / 5 * 4
     await Promise.all([
       anime({
-        targets: pointAttrMap.value.rb.p1,
+        targets: pointData.value.rb.p1,
         y: target.rb.p1.y,
         duration: pointDuration,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         delay,
       }).finished,
       anime({
-        targets: pointAttrMap.value.rb.p2,
+        targets: pointData.value.rb.p2,
         y: target.rb.p2.y,
         duration: pointDuration,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         delay,
       }).finished,
       anime({
-        targets: pointAttrMap.value.lb.p1,
+        targets: pointData.value.lb.p1,
         y: target.lb.p1.y,
         duration: pointDuration,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         delay,
       }).finished,
       anime({
-        targets: pointAttrMap.value.lb.p2,
+        targets: pointData.value.lb.p2,
         y: target.lb.p2.y,
         duration: pointDuration,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -243,29 +246,29 @@ const animeMap: AnimeMap = {
     const pointDuration = duration / 5 * 4
     await Promise.all([
       anime({
-        targets: pointAttrMap.value.rb.p1,
-        y: pointAttrMap.value.rb.p1.y - svgSize.height + minHight,
+        targets: pointData.value.rb.p1,
+        y: pointData.value.rb.p1.y - svgSize.height + minHight,
         duration: pointDuration,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         delay,
       }).finished,
       anime({
-        targets: pointAttrMap.value.rb.p2,
-        y: pointAttrMap.value.rb.p2.y - svgSize.height + minHight,
+        targets: pointData.value.rb.p2,
+        y: pointData.value.rb.p2.y - svgSize.height + minHight,
         duration: pointDuration,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         delay,
       }).finished,
       anime({
-        targets: pointAttrMap.value.lb.p1,
-        y: pointAttrMap.value.lb.p1.y - svgSize.height + minHight,
+        targets: pointData.value.lb.p1,
+        y: pointData.value.lb.p1.y - svgSize.height + minHight,
         duration: pointDuration,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         delay,
       }).finished,
       anime({
-        targets: pointAttrMap.value.lb.p2,
-        y: pointAttrMap.value.lb.p2.y - svgSize.height + minHight,
+        targets: pointData.value.lb.p2,
+        y: pointData.value.lb.p2.y - svgSize.height + minHight,
         duration: pointDuration,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
         delay,
@@ -311,7 +314,7 @@ const animeMap: AnimeMap = {
 
 /** 初始化所有點位 */
 watch(svgSize, () => {
-  pointAttrMap.value = getPointAttrMapNormal()
+  pointData.value = getPointAttrMapNormal()
 
   if (card?.visible.value) {
     animeMap.visible({ delay: 0, duration: 0 })

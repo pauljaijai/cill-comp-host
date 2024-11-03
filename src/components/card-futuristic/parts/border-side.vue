@@ -9,7 +9,7 @@
   >
     <line
       v-if="prop.side.t"
-      v-bind="sideStyleMap.t"
+      v-bind="sideAttrMap.t"
       x1="0"
       y1="0"
       :x2="cardSize.width"
@@ -17,7 +17,7 @@
     />
     <line
       v-if="prop.side.l"
-      v-bind="sideStyleMap.l"
+      v-bind="sideAttrMap.l"
       x1="0"
       y1="0"
       x2="0"
@@ -25,7 +25,7 @@
     />
     <line
       v-if="prop.side.b"
-      v-bind="sideStyleMap.b"
+      v-bind="sideAttrMap.b"
       x1="0"
       :y1="cardSize.height"
       :x2="cardSize.width"
@@ -33,7 +33,7 @@
     />
     <line
       v-if="prop.side.r"
-      v-bind="sideStyleMap.r"
+      v-bind="sideAttrMap.r"
       :x1="cardSize.width"
       y1="0"
       :x2="cardSize.width"
@@ -102,7 +102,7 @@ const sideData = ref(pipe(
   })),
 ))
 
-const sideStyleMap = computed(() => ({
+const sideAttrMap = computed(() => ({
   ...pipe(
     ['t', 'b'] as const,
     fromKeys((key) => ({

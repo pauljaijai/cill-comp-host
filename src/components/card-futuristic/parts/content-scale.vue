@@ -25,6 +25,8 @@ const contentRef = ref<HTMLDivElement>()
 
 const animeMap: AnimeMap = {
   async normal(param) {
+    anime.remove([contentRef.value])
+
     const {
       duration = 300,
       delay = 0,
@@ -44,6 +46,8 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async visible(param) {
+    anime.remove([contentRef.value])
+
     const {
       duration = 400,
       delay = 0,
@@ -67,6 +71,8 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async hidden(param) {
+    anime.remove([contentRef.value])
+
     const {
       duration = 400,
       delay = 0,

@@ -230,36 +230,38 @@ const { history: stateHistory } = useRefHistory(stateObject, {
 })
 
 /** 狀態策略，越前面越優先 */
-const stateStrategies: Array<(
-  state: StateObject,
-  pState: StateObject,
-) => undefined | Promise<void>
-> = [
-  ({ visible }, { visible: pVisible }) => {
-    if (visible === pVisible)
-      return
+const stateStrategies: Array<{
+  execute: (state: StateObject, pState: StateObject) => Promise<void> | void;
+}>
+  = [
+    {
+      execute({ visible }, { visible: pVisible }) {
+        if (visible === pVisible)
+          return
 
-    return playPartsAnime(visible ? 'visible' : 'hidden')
-  },
-  ({ visible, selected }, { selected: pSelected }) => {
-    if (!visible || selected === pSelected)
-      return
+        return playPartsAnime(visible ? 'visible' : 'hidden')
+      },
+    },
+    {
+      execute({ visible, selected }, { selected: pSelected }) {
+        if (!visible || selected === pSelected)
+          return
 
-    return playPartsAnime(selected ? 'selected' : 'normal')
-  },
-  ({ visible, hover, selected }, { hover: pHover }) => {
-    if (!visible || selected || hover === pHover)
-      return
+        return playPartsAnime(selected ? 'selected' : 'normal')
+      },
+    },
+    {
+      execute({ visible, hover, selected }, { hover: pHover }) {
+        if (!visible || selected || hover === pHover)
+          return
 
-    return playPartsAnime(hover ? 'hover' : 'normal')
-  },
-]
+        return playPartsAnime(hover ? 'hover' : 'normal')
+      },
+    },
+  ]
 
-/** 是否有動畫正在播放 */
-let isPlaying = false
-/** 是否有新狀態變更正在等待 */
-let isWaiting = false
-async function startStrategy() {
+// FIX: 連續多次切換時，最後一個狀態動畫不會播放
+watch(stateObject, async () => {
   const [current, prev] = stateHistory.value
   if (!current || !prev)
     return
@@ -268,42 +270,12 @@ async function startStrategy() {
   const pState = prev.snapshot
 
   for (const strategy of stateStrategies) {
-    const task = strategy(state, pState)
+    const task = strategy.execute(state, pState)
     if (task !== undefined) {
-      isPlaying = true
       await task
-      isPlaying = false
 
       break
     }
-  }
-}
-
-// FIX: 連續多次切換時，最後一個狀態動畫不會播放
-watch(stateObject, async () => {
-  const [current, prev] = stateHistory.value
-  if (!current || !prev)
-    return
-
-  /** 阻擋動畫，避免動畫重疊 */
-  if (isPlaying) {
-    isWaiting = true
-    return
-  }
-
-  if (isWaiting) {
-    return
-  }
-
-  await startStrategy()
-
-  /** 如果有新狀態變更正在等待，則再執行一次。
-   *
-   * 確保最終狀態動畫能夠正確執行。
-   */
-  if (isWaiting) {
-    await startStrategy()
-    isWaiting = false
   }
 })
 

@@ -46,6 +46,8 @@ const style = computed<CSSProperties>(() => ({
 
 const animeMap: AnimeMap = {
   async normal(param) {
+    anime.remove([bgRef.value])
+
     const {
       duration = 200,
       delay = 0,
@@ -64,6 +66,8 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async visible(param) {
+    anime.remove([bgRef.value])
+
     const {
       duration = 200,
       delay = 0,
@@ -88,6 +92,8 @@ const animeMap: AnimeMap = {
     await Promise.all(tasks)
   },
   async hidden(param) {
+    anime.remove([bgRef.value])
+
     const {
       duration = 200,
       delay = 0,
