@@ -87,7 +87,7 @@ const prop = withDefaults(defineProps<Props>(), {
   corner: () => ({ type: 'typical' }),
   content: () => ({
     type: 'typical',
-    class: 'p-4',
+    class: 'p-4 px-7',
   }),
   ornament: null,
 })
