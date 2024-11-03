@@ -1,7 +1,7 @@
 <template>
   <div
     ref="cardRef"
-    class="card-futuristic relative"
+    class="card-futuristic relative opacity-0"
   >
     <suspense v-if="bgComponent">
       <component
@@ -42,10 +42,10 @@
 <script setup lang="ts">
 import type { BgParam, BorderParam, ContentParam, CornerParam } from './param'
 import type { AnimeMap, Part, ProvideContent, State } from './type'
-import { until, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
-import { defaultsDeep } from 'lodash-es'
+import { useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
+import { debounce, defaultsDeep } from 'lodash-es'
 import { clone, entries, find, map, pipe } from 'remeda'
-import { computed, defineAsyncComponent, nextTick, onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, provide, reactive, ref, watch } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 type AnimeSequence = Record<
@@ -149,9 +149,30 @@ const cornerComponent = computed(() => findPartComponent('corner', prop.corner?.
 
 /** 儲存 part 資料 */
 const partMap = new Map<`${Part}`, AnimeMap>()
-/** 用於子元件綁定動畫 */
+
+/** debounce 後初始化 parts */
+const initPart = debounce(async () => {
+  const { visible } = prop
+
+  // console.log(`🚀 ~ parts init Anime:`)
+  await playPartsAnime(
+    visible ? 'visible' : 'hidden',
+    { duration: 0, delay: 0 },
+  )
+  await nextTick()
+
+  /** FIX: 初始化前使用 opacity-0 強制隱藏 card，避免初始化時的閃爍
+   *
+   * 使用 JS 控制，依樣有閃爍問題，暫時使用 Class 控制
+   */
+  cardRef.value?.classList.remove('opacity-0')
+}, 1)
+
+/** 提供子元件綁定動畫 */
 const bindPart: ProvideContent['bindPart'] = ({ name, animeMap }) => {
+  // console.log(`🚀 ~ [bindPart] name:`, name)
   partMap.set(name, animeMap)
+  initPart()
 }
 
 provide(PROVIDE_KEY, {
@@ -197,6 +218,8 @@ async function playPartsAnime(
       const animeParam = param ?? animeSequence.value[state][key]
 
       const part = partMap.get(key)
+      // console.log(`🚀 ~ key:`, key)
+      // console.log(`🚀 ~ part:`, part)
       return part?.[state](animeParam)
     }),
   )
@@ -277,25 +300,6 @@ watch(stateObject, async () => {
       break
     }
   }
-})
-
-/** 初始化時播放一次 */
-onMounted(async () => {
-  // 確定 contentSize 有值才進行初始化動畫
-  await until(() => contentSize.width).toBeTruthy()
-  await until(() => contentSize.height).toBeTruthy()
-
-  await nextTick()
-
-  const { visible } = prop
-
-  return playPartsAnime(
-    visible ? 'visible' : 'hidden',
-    {
-      duration: 0,
-      delay: 0,
-    },
-  )
 })
 </script>
 
