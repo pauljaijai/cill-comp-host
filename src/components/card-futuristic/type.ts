@@ -31,7 +31,7 @@ export interface ProvideContent {
     width: number;
     height: number;
   }>;
-  /** 綁定裝飾，由 card 統一調度 */
+  /** 綁定零件，由 card 統一調度 */
   bindPart: (param: {
     name: `${Part}`;
     animeMap: AnimeMap;
