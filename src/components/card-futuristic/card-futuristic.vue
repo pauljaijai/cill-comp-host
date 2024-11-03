@@ -42,10 +42,10 @@
 <script setup lang="ts">
 import type { BgParam, BorderParam, ContentParam, CornerParam } from './param'
 import type { AnimeMap, Part, ProvideContent, State } from './type'
-import { useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
+import { promiseTimeout, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
 import { debounce, defaultsDeep } from 'lodash-es'
 import { clone, entries, find, map, pipe } from 'remeda'
-import { computed, defineAsyncComponent, nextTick, provide, reactive, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, provide, reactive, ref, watch } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 type AnimeSequence = Record<
@@ -159,14 +159,14 @@ const initPart = debounce(async () => {
     visible ? 'visible' : 'hidden',
     { duration: 0, delay: 0 },
   )
-  await nextTick()
 
   /** FIX: 初始化前使用 opacity-0 強制隱藏 card，避免初始化時的閃爍
    *
    * 使用 JS 控制，依樣有閃爍問題，暫時使用 Class 控制
    */
+  await promiseTimeout(100)
   cardRef.value?.classList.remove('opacity-0')
-}, 1)
+}, 5)
 
 /** 提供子元件綁定動畫 */
 const bindPart: ProvideContent['bindPart'] = ({ name, animeMap }) => {
