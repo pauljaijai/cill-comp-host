@@ -3,10 +3,6 @@ import { reactiveComputed } from '@vueuse/core'
 import { computed, inject, onMounted } from 'vue'
 import { PROVIDE_KEY } from './type'
 
-/** FIX: 不知道為甚麼 bindPart 會落後於 card onMounted，
- *
- * 導致初始化 animeMap 無法執行
- */
 export function useCardPart(
   name: `${Part}`,
   animeMap: AnimeMap,
