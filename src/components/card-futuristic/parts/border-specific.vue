@@ -260,7 +260,7 @@ watch(cardSize, () => {
   else {
     animeMap.hidden({ delay: 0, duration: 0 })
   }
-})
+}, { deep: true })
 
 const style = computed(() => ({
   width: `${cardSize.width}px`,
