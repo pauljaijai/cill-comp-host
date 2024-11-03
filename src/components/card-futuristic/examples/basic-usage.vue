@@ -1,12 +1,12 @@
 <template>
-  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
+  <div class="w-full flex flex-col gap-10 border border-gray-300 p-6 pb-16">
     <base-checkbox
       v-model="visible"
       label="顯示"
       class="border rounded p-4"
     />
 
-    <div class="flex justify-center">
+    <div class="h-full flex justify-center">
       <card-futuristic
         v-on-click-outside="() => toggleSelect(false)"
         :visible

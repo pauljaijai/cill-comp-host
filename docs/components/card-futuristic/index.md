@@ -30,7 +30,7 @@ import MixPart from '../../../src/components/card-futuristic/examples/mix-part.v
 
 ### 基本用法
 
-<basic-usage class="h-[60vh]"/>
+<basic-usage />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/card-futuristic/examples/basic-usage.vue
@@ -40,7 +40,7 @@ import MixPart from '../../../src/components/card-futuristic/examples/mix-part.v
 
 組合子元件，產生不同的樣式設計。
 
-<mix-part class="h-[60vh]"/>
+<mix-part />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/card-futuristic/examples/mix-part.vue

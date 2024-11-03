@@ -6,9 +6,10 @@ import type { Props as PropsBorderSide } from './parts/border-side.vue'
 import type { Props as PropsBorderSpecific } from './parts/border-specific.vue'
 import type { Props as PropsBorderTypical } from './parts/border-typical.vue'
 
+import type { Props as PropsContentClip } from './parts/content-clip.vue'
 import type { Props as PropsContentScale } from './parts/content-scale.vue'
-import type { Props as PropsCornerQuote } from './parts/corner-quote.vue'
 
+import type { Props as PropsCornerQuote } from './parts/corner-quote.vue'
 import type { Props as PropsCornerTypical } from './parts/corner-typical.vue'
 
 interface BaseParam {
@@ -72,6 +73,7 @@ export type CornerParam = (
 export enum ContentType {
   TYPICAL = 'typical',
   SCALE = 'scale',
+  CLIP = 'clip',
 }
 interface ContentParamTypical {
   type: `${ContentType.TYPICAL}`;
@@ -79,8 +81,12 @@ interface ContentParamTypical {
 interface ContentParamScale extends PropsContentScale {
   type: `${ContentType.SCALE}`;
 }
+interface ContentParamClip extends PropsContentClip {
+  type: `${ContentType.CLIP}`;
+}
+
 export type ContentParam = (
-  ContentParamTypical | ContentParamScale
+  ContentParamTypical | ContentParamScale | ContentParamClip
 ) & BaseParam
 
 // ornament

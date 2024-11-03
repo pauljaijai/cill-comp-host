@@ -1,7 +1,7 @@
 <template>
   <div
     ref="cardRef"
-    class="card-futuristic relative opacity-0"
+    class="card-futuristic relative flex opacity-0"
   >
     <suspense v-if="bgComponent">
       <component

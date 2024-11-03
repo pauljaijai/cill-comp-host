@@ -263,8 +263,9 @@ watch(cardSize, () => {
 }, { deep: true })
 
 const style = computed(() => ({
-  width: `${cardSize.width}px`,
-  height: `${cardSize.height}px`,
+  // +0.2 是為了避免邊框被裁切，感覺是 SVG 的怪癖
+  width: `${cardSize.width + 0.2}px`,
+  height: `${cardSize.height + 0.2}px`,
 }))
 
 const viewBox = computed(

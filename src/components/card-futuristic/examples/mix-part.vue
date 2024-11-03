@@ -3,7 +3,7 @@
     <base-checkbox
       v-model="visible"
       label="顯示"
-      class="border rounded p-4"
+      class="sticky top-20 z-10 border rounded bg-white p-4 md:relative md:top-0"
     />
 
     <div class="flex flex-wrap justify-center gap-20">
@@ -74,6 +74,23 @@ const list = ref(pipe(
         visible: {
           border: { duration: 400 },
         },
+      },
+    },
+    {
+      title: 'COD-01',
+      titleClass: 'text-xl font-bold',
+      text: 'CLIP CONTENT',
+      content: {
+        type: 'clip',
+        class: 'p-4',
+      },
+      corner: null,
+      animeSequence: {
+        visible: {
+          content: { delay: 400 },
+        },
+        selected: { border: null },
+        hover: { border: null },
       },
     },
     {
@@ -151,7 +168,7 @@ const list = ref(pipe(
       bg: {
         type: 'typical',
         margin: '4px 0px',
-        color: '#fecaca',
+        color: '#ffe8e8',
       },
       content: {
         type: 'typical',
@@ -159,8 +176,8 @@ const list = ref(pipe(
       },
       border: {
         type: 'specific',
-        color: '#ff2b00',
-        selectedColor: '#FFF',
+        color: '#ba2507',
+        selectedColor: '#f07860',
         strokeWidth: 2,
         side: {
           t: {},
@@ -182,12 +199,8 @@ const list = ref(pipe(
           content: { delay: 0 },
         },
         // null 表示停用動畫
-        selected: {
-          content: null,
-        },
-        hover: {
-          content: null,
-        },
+        selected: { content: null },
+        hover: { content: null },
       },
     },
   ] as CardProp[],
@@ -202,7 +215,7 @@ const visible = ref(false)
 watch(visible, async (value) => {
   for (const data of list.value) {
     data.visible = value
-    await promiseTimeout(200)
+    await promiseTimeout(100)
   }
 })
 </script>
