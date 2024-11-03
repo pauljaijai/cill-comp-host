@@ -1,6 +1,6 @@
 import type { AnimeMap, Part } from './type'
 import { reactiveComputed } from '@vueuse/core'
-import { inject, onMounted } from 'vue'
+import { computed, inject, onMounted } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 /** FIX: 不知道為甚麼 bindPart 會落後於 card onMounted，
@@ -29,6 +29,7 @@ export function useCardPart(
   })
 
   return {
+    visible: computed(() => !!card?.visible.value),
     cardSize,
   }
 }

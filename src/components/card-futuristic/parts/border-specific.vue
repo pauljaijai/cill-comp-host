@@ -44,11 +44,11 @@
 
 <script setup lang="ts">
 import type { AnimeMap } from '../type'
-import { reactiveComputed } from '@vueuse/core'
+import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { fromKeys, map, multiply, pipe } from 'remeda'
-import { computed, inject, onMounted, ref, watch } from 'vue'
-import { PROVIDE_KEY } from '../type'
+import { computed, reactive, ref, watch } from 'vue'
+import { useCardPart } from '../use-card-part'
 
 // #region Props
 export interface Props {
@@ -77,21 +77,9 @@ const prop = withDefaults(defineProps<Props>(), {
 })
 
 const svgRef = ref<SVGAElement>()
-
-const card = inject(PROVIDE_KEY)
-const cardSize = reactiveComputed(() => ({
-  width: card?.contentSize.value.width ?? 0,
-  height: card?.contentSize.value.height ?? 0,
+const svgSize = reactive(useElementSize(svgRef, undefined, {
+  box: 'border-box',
 }))
-
-const style = computed(() => ({
-  width: `${cardSize.width}px`,
-  height: `${cardSize.height}px`,
-}))
-
-const viewBox = computed(
-  () => `0 0 ${cardSize.width} ${cardSize.height}`,
-)
 
 const sideData = ref(pipe(
   ['t', 'l', 'b', 'r'] as const,
@@ -101,27 +89,6 @@ const sideData = ref(pipe(
     stroke: prop.side?.[key]?.color ?? prop.color,
   })),
 ))
-
-const sideStyleMap = computed(() => ({
-  ...pipe(
-    ['t', 'b'] as const,
-    fromKeys((key) => ({
-      'stroke-dasharray': `${cardSize.width} ${cardSize.width}`,
-      'stroke-dashoffset': sideData.value[key].dashoffset,
-      'stroke': sideData.value[key].stroke,
-      'stroke-width': sideData.value[key].width,
-    })),
-  ),
-  ...pipe(
-    ['l', 'r'] as const,
-    fromKeys((key) => ({
-      'stroke-dasharray': `${cardSize.height} ${cardSize.height}`,
-      'stroke-dashoffset': sideData.value[key].dashoffset,
-      'stroke': sideData.value[key].stroke,
-      'stroke-width': sideData.value[key].width,
-    })),
-  ),
-}))
 
 function removeAnime() {
   anime.remove(Object.values(sideData.value))
@@ -200,19 +167,19 @@ const animeMap: AnimeMap = {
       [
         {
           targets: sideData.value.t,
-          dashoffset: cardSize.width,
+          dashoffset: svgSize.width,
         },
         {
           targets: sideData.value.r,
-          dashoffset: cardSize.height,
+          dashoffset: svgSize.height,
         },
         {
           targets: sideData.value.l,
-          dashoffset: -cardSize.height,
+          dashoffset: -svgSize.height,
         },
         {
           targets: sideData.value.b,
-          dashoffset: -cardSize.width,
+          dashoffset: -svgSize.width,
         },
       ],
       map((data) => anime({
@@ -280,9 +247,14 @@ const animeMap: AnimeMap = {
   },
 }
 
+const {
+  cardSize,
+  visible,
+} = useCardPart('border', animeMap)
+
 /** 初始化所有點位，消除 cardSize 變化帶來的偏移 */
 watch(cardSize, () => {
-  if (card?.visible.value) {
+  if (visible.value) {
     animeMap.visible({ delay: 0, duration: 0 })
   }
   else {
@@ -290,30 +262,35 @@ watch(cardSize, () => {
   }
 })
 
-onMounted(() => {
-  if (!card) {
-    console.warn('此元件必須包在 CardFuturistic 元件中')
-    return
-  }
+const style = computed(() => ({
+  width: `${cardSize.width}px`,
+  height: `${cardSize.height}px`,
+}))
 
-  card.bindPart({
-    name: 'border',
-    animeMap,
-  })
-})
+const viewBox = computed(
+  () => `0 0 ${cardSize.width} ${cardSize.height}`,
+)
 
-// watch(() => card?.visible.value, (visible) => {
-//   console.log(`🚀 ~ visible:`, visible)
-
-//   if (visible) {
-//     animeMap.visible()
-//   }
-//   else {
-//     animeMap.hidden()
-//   }
-// }, {
-//   deep: true,
-// })
+const sideStyleMap = computed(() => ({
+  ...pipe(
+    ['t', 'b'] as const,
+    fromKeys((key) => ({
+      'stroke-dasharray': `${cardSize.width} ${cardSize.width}`,
+      'stroke-dashoffset': sideData.value[key].dashoffset,
+      'stroke': sideData.value[key].stroke,
+      'stroke-width': sideData.value[key].width,
+    })),
+  ),
+  ...pipe(
+    ['l', 'r'] as const,
+    fromKeys((key) => ({
+      'stroke-dasharray': `${cardSize.height} ${cardSize.height}`,
+      'stroke-dashoffset': sideData.value[key].dashoffset,
+      'stroke': sideData.value[key].stroke,
+      'stroke-width': sideData.value[key].width,
+    })),
+  ),
+}))
 </script>
 
 <style scoped lang="sass">
