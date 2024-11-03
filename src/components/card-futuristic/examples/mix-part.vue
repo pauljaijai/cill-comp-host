@@ -115,6 +115,33 @@ const list = ref(pipe(
         },
       },
     },
+    {
+      title: 'CARD-03',
+      titleClass: 'text-xl font-bold ',
+      text: 'BORDER SIDE',
+      textClass: '',
+      corner: null,
+      bg: {
+        type: 'typical',
+        margin: '0',
+      },
+      border: { type: 'side' },
+      animeSequence: {
+        normal: {
+          border: { delay: 0 },
+        },
+        visible: {
+          border: { delay: 0 },
+          bg: { delay: 200 },
+          content: { delay: 300 },
+        },
+        hidden: {
+          border: { delay: 300 },
+          bg: { delay: 0 },
+          content: { delay: 0 },
+        },
+      },
+    },
   ] as CardProp[],
   map((data) => ({
     ...data,

@@ -312,7 +312,7 @@ const animeMap: AnimeMap = {
   },
 }
 
-/** 初始化所有點位，消除 cardSize 變化帶來的偏移 */
+/** 重新初始化，消除 cardSize 變化帶來的偏移 */
 watch(svgSize, () => {
   pointData.value = getPointAttrMapNormal()
 

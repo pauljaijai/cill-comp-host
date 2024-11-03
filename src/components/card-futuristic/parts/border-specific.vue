@@ -252,7 +252,7 @@ const {
   visible,
 } = useCardPart('border', animeMap)
 
-/** 初始化所有點位，消除 cardSize 變化帶來的偏移 */
+/** 重新初始化，消除 cardSize 變化帶來的偏移 */
 watch(cardSize, () => {
   if (visible.value) {
     animeMap.visible({ delay: 0, duration: 0 })
