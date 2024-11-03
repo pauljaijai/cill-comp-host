@@ -6,7 +6,7 @@
       class="border rounded p-4"
     />
 
-    <div class="flex flex-wrap justify-center gap-16">
+    <div class="flex flex-wrap justify-center gap-20">
       <card-futuristic
         v-for="item, i in list"
         :key="i"
@@ -134,6 +134,48 @@ const list = ref(pipe(
           border: { delay: 0 },
           bg: { delay: 200 },
           content: { delay: 300 },
+        },
+        hidden: {
+          border: { delay: 300 },
+          bg: { delay: 0 },
+          content: { delay: 0 },
+        },
+      },
+    },
+    {
+      title: 'ERROR',
+      titleClass: 'text-2xl font-bold text-[#ba2507] ',
+      text: 'STINKY FISH',
+      textClass: 'text-[#ba2507]',
+      corner: null,
+      bg: {
+        type: 'typical',
+        margin: '4px',
+        color: 'white',
+        class: 'bg-red-200',
+      },
+      content: {
+        type: 'typical',
+        class: 'py-4 px-8',
+      },
+      border: {
+        type: 'specific',
+        color: '#ff2b00',
+        selectedColor: '#FFF',
+        strokeWidth: 2,
+        side: {
+          t: {},
+          b: {},
+        },
+      },
+      animeSequence: {
+        normal: {
+          border: { delay: 0 },
+        },
+        visible: {
+          border: { delay: 0 },
+          bg: { delay: 400 },
+          content: { delay: 500 },
         },
         hidden: {
           border: { delay: 300 },
