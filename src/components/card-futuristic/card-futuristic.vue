@@ -288,7 +288,6 @@ const stateStrategies: Array<{
     },
   ]
 
-// FIX: 連續多次切換時，最後一個狀態動畫不會播放
 watch(stateObject, async () => {
   const [current, prev] = stateHistory.value
   if (!current || !prev)
