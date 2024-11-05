@@ -7,6 +7,7 @@ export enum State {
   HIDDEN = 'hidden',
   SELECTED = 'selected',
   HOVER = 'hover',
+  // ACTIVE = 'active',
 }
 
 export enum Part {
