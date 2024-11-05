@@ -44,7 +44,7 @@ import type { BgParam, BorderParam, ContentParam, CornerParam } from './param'
 import type { AnimeMap, Part, ProvideContent, State } from './type'
 import { promiseTimeout, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
 import { debounce, defaultsDeep } from 'lodash-es'
-import { clone, entries, find, map, pipe } from 'remeda'
+import { clone, entries, find, map, pick, pipe } from 'remeda'
 import { computed, defineAsyncComponent, provide, reactive, ref, watch } from 'vue'
 import { PROVIDE_KEY } from './type'
 
@@ -305,6 +305,36 @@ watch(stateObject, async () => {
     }
   }
 })
+
+interface ExecuteParam {
+  part: `${Part}`;
+  state: `${State}`;
+  duration?: number;
+  delay?: number;
+}
+
+// #region Methods
+defineExpose({
+  /** 執行特定 part 狀態動畫 */
+  execute(param: ExecuteParam) {
+    const {
+      part: name,
+      state,
+    } = param
+
+    const animeParam = animeSequence.value[state][name]
+    if (animeParam === null)
+      return
+
+    const part = partMap.get(name)
+
+    return part?.[state]({
+      ...animeParam,
+      ...pick(param, ['duration', 'delay']),
+    })
+  },
+})
+// #endregion Methods
 </script>
 
 <style scoped lang="sass">
