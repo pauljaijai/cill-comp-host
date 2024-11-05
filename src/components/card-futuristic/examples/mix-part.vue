@@ -6,7 +6,7 @@
       class="sticky top-20 z-10 border rounded bg-white p-4 md:relative md:top-0"
     />
 
-    <div class="flex flex-wrap justify-center gap-20">
+    <div class="flex flex-wrap items-center justify-center gap-20">
       <card-futuristic
         v-for="item, i in list"
         :key="i"
@@ -201,6 +201,57 @@ const list = ref(pipe(
         // null 表示停用動畫
         selected: { content: null },
         hover: { content: null },
+      },
+    },
+    {
+      title: 'COD',
+      corner: {
+        type: 'square',
+        size: 2,
+      },
+      bg: null,
+      content: {
+        type: 'typical',
+        class: 'p-1 px-2',
+      },
+      border: null,
+      animeSequence: {
+        visible: {
+          border: { delay: 0 },
+          content: { delay: 500 },
+        },
+        hidden: {
+          border: { delay: 300 },
+          content: { delay: 0 },
+        },
+      },
+    },
+    {
+      title: 'FISH',
+      corner: {
+        type: 'square',
+        size: 2,
+      },
+      bg: null,
+      content: {
+        type: 'typical',
+        class: 'p-1 px-2',
+      },
+      border: {
+        type: 'typical',
+        color: '#BBB',
+      },
+      animeSequence: {
+        visible: {
+          corner: { delay: 0 },
+          border: { delay: 400 },
+          content: { delay: 500 },
+        },
+        hidden: {
+          corner: { delay: 400 },
+          border: { delay: 0 },
+          content: { delay: 0 },
+        },
       },
     },
   ] as CardProp[],

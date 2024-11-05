@@ -52,6 +52,8 @@ import MixPart from '../../../src/components/card-futuristic/examples/mix-part.v
 
 子元件可以任意組合，藉此產生 N 種有趣的樣式設計。
 
+使用 Vue 綁定 SVG 的 Attr 進行繪圖，並使用 anime.js 實現動畫
+
 ## 原始碼
 
 <source-link-list name="card-futuristic"/>

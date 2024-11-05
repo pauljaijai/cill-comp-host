@@ -10,6 +10,7 @@ import type { Props as PropsContentClip } from './parts/content-clip.vue'
 import type { Props as PropsContentScale } from './parts/content-scale.vue'
 
 import type { Props as PropsCornerQuote } from './parts/corner-quote.vue'
+import type { Props as PropsCornerSquare } from './parts/corner-square.vue'
 import type { Props as PropsCornerTypical } from './parts/corner-typical.vue'
 
 interface BaseParam {
@@ -58,6 +59,7 @@ export type BgParam = (
 export enum CornerType {
   TYPICAL = 'typical',
   QUOTE = 'quote',
+  SQUARE = 'square',
 }
 interface CornerParamTypical extends PropsCornerTypical {
   type: `${CornerType.TYPICAL}`;
@@ -65,8 +67,11 @@ interface CornerParamTypical extends PropsCornerTypical {
 interface CornerParamQuote extends PropsCornerQuote {
   type: `${CornerType.QUOTE}`;
 }
+interface CornerParamSquare extends PropsCornerSquare {
+  type: `${CornerType.SQUARE}`;
+}
 export type CornerParam = (
-  CornerParamTypical | CornerParamQuote
+  CornerParamTypical | CornerParamQuote | CornerParamSquare
 ) & BaseParam
 
 // content
