@@ -15,7 +15,7 @@ export enum Part {
   BG = 'bg',
   CORNER = 'corner',
   CONTENT = 'content',
-  ORNAMENT = 'ornament',
+  // ORNAMENT = 'ornament',
 }
 
 export type AnimeMap = Record<
