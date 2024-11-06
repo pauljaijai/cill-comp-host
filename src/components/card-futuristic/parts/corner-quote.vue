@@ -16,11 +16,11 @@
 
 <script setup lang="ts">
 import type { AnimeMap } from '../type'
-import { reactiveComputed, useElementSize } from '@vueuse/core'
+import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { mapValues, pipe } from 'remeda'
-import { computed, inject, onMounted, reactive, ref } from 'vue'
-import { PROVIDE_KEY } from '../type'
+import { computed, reactive, ref } from 'vue'
+import { useCardPart } from '../use-card-part'
 
 // #region Props
 export interface Props {
@@ -42,60 +42,12 @@ const svgSize = reactive(useElementSize(svgRef, undefined, {
   box: 'border-box',
 }))
 
-const card = inject(PROVIDE_KEY)
-const cardSize = reactiveComputed(() => ({
-  width: card?.contentSize.value.width ?? 0,
-  height: card?.contentSize.value.height ?? 0,
-}))
-
 const attr = reactive({
   offsetX: prop.size / 4,
   offsetY: prop.size / 4,
   color: prop.color,
   strokeWidth: prop.strokeWidth,
 })
-
-const style = computed(() => ({
-  left: `${-attr.offsetX}px`,
-  top: `${-attr.offsetY}px`,
-  width: `${cardSize.width + attr.offsetX * 2}px`,
-  height: `${cardSize.height + attr.offsetY * 2}px`,
-}))
-
-const viewBox = computed(
-  () => `0 0 ${svgSize.width} ${svgSize.height}`,
-)
-
-const cornerStyleMap = computed(() => pipe(
-  {
-    lt: {
-      d: `M0 ${prop.size}V0H${prop.size}`,
-    },
-    rt: {
-      d: [
-        `M${svgSize.width - prop.size} 0`,
-        `H${svgSize.width}V${prop.size}`,
-      ].join(''),
-    },
-    rb: {
-      d: [
-        `M${svgSize.width} ${svgSize.height - prop.size}`,
-        `V${svgSize.height}H${svgSize.width - prop.size}`,
-      ].join(''),
-    },
-    lb: {
-      d: [
-        `M${prop.size} ${svgSize.height}`,
-        `H0V${svgSize.height - prop.size}`,
-      ].join(''),
-    },
-  },
-  mapValues((value) => ({
-    ...value,
-    'stroke': attr.color,
-    'stroke-width': attr.strokeWidth,
-  })),
-))
 
 function removeAnime() {
   anime.remove([attr, svgRef.value])
@@ -179,7 +131,7 @@ const animeMap: AnimeMap = {
     const tasks = [
       anime({
         targets: attr,
-        offsetX: -prop.size * 4,
+        offsetX: -svgSize.width / 2,
         color: prop.color,
         duration,
         delay: delay + 100,
@@ -187,7 +139,7 @@ const animeMap: AnimeMap = {
       }).finished,
       anime({
         targets: attr,
-        offsetY: -prop.size * 3,
+        offsetY: -svgSize.height / 5 * 2,
         color: prop.color,
         duration,
         delay,
@@ -266,33 +218,50 @@ const animeMap: AnimeMap = {
   },
 }
 
-onMounted(() => {
-  if (!card) {
-    console.warn('此元件必須包在 CardFuturistic 元件中')
-    return
-  }
+const { cardSize } = useCardPart('corner', animeMap)
 
-  card.bindPart({
-    name: 'corner',
-    animeMap,
-  })
-})
+const style = computed(() => ({
+  left: `${-attr.offsetX}px`,
+  top: `${-attr.offsetY}px`,
+  width: `${cardSize.width + attr.offsetX * 2}px`,
+  height: `${cardSize.height + attr.offsetY * 2}px`,
+}))
 
-// watch(() => card, (data) => {
-//   const { visible } = data ?? {}
+const viewBox = computed(
+  () => `0 0 ${svgSize.width} ${svgSize.height}`,
+)
 
-//   if (visible?.value) {
-//     animeMap.visible()
-//   }
-//   else {
-//     animeMap.hidden()
-//   }
-// }, {
-//   deep: true,
-// })
+const cornerStyleMap = computed(() => pipe(
+  {
+    lt: {
+      d: `M0 ${prop.size}V0H${prop.size}`,
+    },
+    rt: {
+      d: [
+        `M${svgSize.width - prop.size} 0`,
+        `H${svgSize.width}V${prop.size}`,
+      ].join(''),
+    },
+    rb: {
+      d: [
+        `M${svgSize.width} ${svgSize.height - prop.size}`,
+        `V${svgSize.height}H${svgSize.width - prop.size}`,
+      ].join(''),
+    },
+    lb: {
+      d: [
+        `M${prop.size} ${svgSize.height}`,
+        `H0V${svgSize.height - prop.size}`,
+      ].join(''),
+    },
+  },
+  mapValues((value) => ({
+    ...value,
+    'stroke': attr.color,
+    'stroke-width': attr.strokeWidth,
+  })),
+))
 </script>
 
 <style scoped lang="sass">
-.card-corner
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1))
 </style>
