@@ -214,29 +214,6 @@ const list = ref(pipe(
         type: 'typical',
         class: 'p-1 px-2',
       },
-      border: null,
-      animeSequence: {
-        visible: {
-          border: { delay: 0 },
-          content: { delay: 500 },
-        },
-        hidden: {
-          border: { delay: 300 },
-          content: { delay: 0 },
-        },
-      },
-    },
-    {
-      title: 'FISH',
-      corner: {
-        type: 'square',
-        size: 2,
-      },
-      bg: null,
-      content: {
-        type: 'typical',
-        class: 'p-1 px-2',
-      },
       border: {
         type: 'typical',
         color: '#BBB',
