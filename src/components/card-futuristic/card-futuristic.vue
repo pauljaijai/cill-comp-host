@@ -41,11 +41,11 @@
 
 <script setup lang="ts">
 import type { BgParam, BorderParam, ContentParam, CornerParam } from './param'
-import type { AnimeMap, Part, ProvideContent, State } from './type'
 import { promiseTimeout, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
 import { debounce, defaultsDeep } from 'lodash-es'
 import { clone, entries, find, map, pick, pipe } from 'remeda'
 import { computed, defineAsyncComponent, provide, reactive, ref, watch } from 'vue'
+import { type AnimeMap, Part, type ProvideContent, type State } from './type'
 import { PROVIDE_KEY } from './type'
 
 type AnimeSequence = Record<
@@ -98,7 +98,7 @@ defineSlots<{
 }>()
 // #endregion Slots
 
-const partList: `${Part}`[] = ['content', 'bg', 'border', 'corner', 'ornament']
+const partList = Object.values(Part)
 // 引入所有 part 元件
 const partModules = import.meta.glob(['./parts/*.vue'])
 const partComponentTypeMap = pipe(
