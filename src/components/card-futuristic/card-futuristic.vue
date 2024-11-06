@@ -72,7 +72,6 @@ interface Props {
   bg?: BgParam | null;
   corner?: CornerParam | null;
   content?: ContentParam | null;
-  ornament?: undefined | null;
 }
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
@@ -91,6 +90,10 @@ const prop = withDefaults(defineProps<Props>(), {
   }),
   ornament: null,
 })
+
+// #region Emits
+// const emit = defineEmits<{}>()
+// #endregion Emits
 
 // #region Slots
 defineSlots<{
@@ -313,26 +316,28 @@ interface ExecuteParam {
   delay?: number;
 }
 
+function execute(param: ExecuteParam) {
+  const {
+    part: name,
+    state,
+  } = param
+
+  const animeParam = animeSequence.value[state][name]
+  if (animeParam === null)
+    return
+
+  const part = partMap.get(name)
+
+  return part?.[state]({
+    ...animeParam,
+    ...pick(param, ['duration', 'delay']),
+  })
+}
+
 // #region Methods
 defineExpose({
   /** 執行特定 part 狀態動畫 */
-  execute(param: ExecuteParam) {
-    const {
-      part: name,
-      state,
-    } = param
-
-    const animeParam = animeSequence.value[state][name]
-    if (animeParam === null)
-      return
-
-    const part = partMap.get(name)
-
-    return part?.[state]({
-      ...animeParam,
-      ...pick(param, ['duration', 'delay']),
-    })
-  },
+  execute,
 })
 // #endregion Methods
 </script>

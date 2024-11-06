@@ -37,6 +37,14 @@ export interface ProvideContent {
     name: `${Part}`;
     animeMap: AnimeMap;
   }) => void;
+
+  /** 綁定 text，由 card 統一調度 */
+  bindText: (param: {
+    id: string;
+    index: number;
+    enter: () => Promise<void>;
+    leave: () => Promise<void>;
+  }) => void;
 }
 
 export const PROVIDE_KEY = Symbol('card-futuristic') as InjectionKey<ProvideContent>

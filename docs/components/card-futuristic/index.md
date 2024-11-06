@@ -7,6 +7,7 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/card-futuristic/examples/basic-usage.vue'
 import MixPart from '../../../src/components/card-futuristic/examples/mix-part.vue'
+import CardText from '../../../src/components/card-futuristic/examples/card-text.vue'
 </script>
 
 # 科幻卡片 <Badge type="info" text="card" />
@@ -44,6 +45,16 @@ import MixPart from '../../../src/components/card-futuristic/examples/mix-part.v
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/card-futuristic/examples/mix-part.vue
+:::
+
+### 卡片文字
+
+打字效果
+
+<card-text />
+
+::: details 查看範例原始碼
+<<< ../../../src/components/card-futuristic/examples/card-text.vue
 :::
 
 ## 原理
