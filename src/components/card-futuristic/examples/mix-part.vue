@@ -6,7 +6,7 @@
       class="sticky top-20 z-10 border rounded bg-white p-4 md:relative md:top-0"
     />
 
-    <div class="flex flex-wrap items-center justify-center gap-20">
+    <div class="flex flex-wrap items-center justify-center gap-10">
       <card-futuristic
         v-for="item, i in list"
         :key="i"
@@ -77,23 +77,6 @@ const list = ref(pipe(
       },
     },
     {
-      title: 'COD-01',
-      titleClass: 'text-xl font-bold',
-      text: 'CLIP CONTENT',
-      content: {
-        type: 'clip',
-        class: 'p-4',
-      },
-      corner: null,
-      animeSequence: {
-        visible: {
-          content: { delay: 400 },
-        },
-        selected: { border: null },
-        hover: { border: null },
-      },
-    },
-    {
       title: 'CARD-01',
       titleClass: 'text-xl font-bold',
       text: 'QUOTE CORNER',
@@ -138,6 +121,10 @@ const list = ref(pipe(
       text: 'BORDER SIDE',
       textClass: '',
       corner: null,
+      content: {
+        type: 'clip',
+        class: 'p-4',
+      },
       bg: {
         type: 'typical',
         margin: '0',
@@ -150,12 +137,12 @@ const list = ref(pipe(
         visible: {
           border: { delay: 0 },
           bg: { delay: 200 },
-          content: { delay: 300 },
+          content: { delay: 400 },
         },
         hidden: {
           border: { delay: 300 },
           bg: { delay: 0 },
-          content: { delay: 0 },
+          content: { delay: 200 },
         },
       },
     },

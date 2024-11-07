@@ -75,15 +75,8 @@ const list = ref(pipe(
         size: 3,
       },
       border: {
-        type: 'specific',
-        selectedColor: '#FFF',
-        strokeWidth: 1,
-        side: {
-          t: {},
-          l: {},
-          b: {},
-          r: {},
-        },
+        type: 'typical',
+        color: '#777',
       },
       animeSequence: {
         visible: {
