@@ -19,6 +19,8 @@ import WrapperMinecraftBlock from '../../src/components/wrapper-minecraft-block/
 
 import CursorSidekick from '../../src/components/cursor-sidekick/examples/basic-usage.vue';
 
+import CardFuturistic from '../../src/components/card-futuristic/examples/mix-part.vue';
+
 import CarouselSpaceFloating from '../../src/components/carousel-space-floating/examples/custom-posture.vue';
 import CarouselAnamorphosisText from '../../src/components/carousel-anamorphosis-text/examples/basic-usage.vue';
 
@@ -172,6 +174,23 @@ const currentSection = ref('btn');
 跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
 
 <cursor-sidekick  />
+
+</expansion-section>
+
+## 卡片
+
+實用、酷炫的資料容器。
+
+<expansion-section
+  v-model="currentSection"
+  header-class="border p-2 rounded-lg"
+>
+
+### [科幻卡片](./card-futuristic/) <Badge type="info" text="card" />
+
+簡潔、實用的科幻風格資訊容器。(≖‿ゝ≖)✧
+
+<card-futuristic  />
 
 </expansion-section>
 
