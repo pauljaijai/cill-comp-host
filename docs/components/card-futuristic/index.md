@@ -3,11 +3,24 @@ description: 簡潔、實用的科幻風格資訊容器
 ---
 
 <script setup>
+import { onBeforeUnmount } from 'vue'
+import { useData } from 'vitepress'
+
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/card-futuristic/examples/basic-usage.vue'
 import MixPart from '../../../src/components/card-futuristic/examples/mix-part.vue'
 import TextAnime from '../../../src/components/card-futuristic/examples/text-anime.vue'
+
+const { isDark } = useData()
+
+// 強制取消暗黑模式
+const oriDarKValue = isDark.value
+isDark.value = false
+
+onBeforeUnmount(() => {
+  isDark.value = oriDarKValue
+})
 </script>
 
 # 科幻卡片 <Badge type="info" text="card" />
