@@ -7,7 +7,7 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/card-futuristic/examples/basic-usage.vue'
 import MixPart from '../../../src/components/card-futuristic/examples/mix-part.vue'
-import CardText from '../../../src/components/card-futuristic/examples/card-text.vue'
+import TextAnime from '../../../src/components/card-futuristic/examples/text-anime.vue'
 </script>
 
 # 科幻卡片 <Badge type="info" text="card" />
@@ -47,14 +47,14 @@ import CardText from '../../../src/components/card-futuristic/examples/card-text
 <<< ../../../src/components/card-futuristic/examples/mix-part.vue
 :::
 
-### 卡片文字
+### 文字動畫
 
-使用特定元件就可以實現打字效果。
+使用文件元件就可以產生科幻文字特效。
 
-<card-text />
+<text-anime />
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/card-futuristic/examples/card-text.vue
+<<< ../../../src/components/card-futuristic/examples/text-anime.vue
 :::
 
 ## 原理
