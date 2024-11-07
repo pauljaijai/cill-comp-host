@@ -96,27 +96,6 @@ const list = ref(pipe(
     },
     {
       title: 'CARD-02',
-      titleClass: 'text-xl font-bold text-white',
-      text: 'SOLID BACKGROUND',
-      textClass: 'text-white',
-      corner: null,
-      bg: {
-        type: 'solid',
-        selectedColor: '#444',
-      },
-      content: {
-        type: 'typical',
-        class: 'p-4 pl-6',
-      },
-      border: { type: 'specific' },
-      animeSequence: {
-        visible: {
-          border: { delay: 400 },
-        },
-      },
-    },
-    {
-      title: 'CARD-03',
       titleClass: 'text-xl font-bold ',
       text: 'SIDE BORDER CLIP',
       textClass: '',
@@ -143,6 +122,27 @@ const list = ref(pipe(
           border: { delay: 300 },
           bg: { delay: 0 },
           content: { delay: 0 },
+        },
+      },
+    },
+    {
+      title: 'CARD-03',
+      titleClass: 'text-xl font-bold text-white',
+      text: 'SOLID BACKGROUND',
+      textClass: 'text-white',
+      corner: null,
+      bg: {
+        type: 'solid',
+        selectedColor: '#444',
+      },
+      content: {
+        type: 'typical',
+        class: 'p-4 pl-6',
+      },
+      border: { type: 'specific' },
+      animeSequence: {
+        visible: {
+          border: { delay: 400 },
         },
       },
     },
