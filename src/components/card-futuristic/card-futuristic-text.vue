@@ -51,13 +51,22 @@ interface AnimeParam {
 
 const targets = `.${id} .char`
 
+function removeAnime() {
+  anime.remove(targets)
+}
+
 function enter(param?: AnimeParam) {
   const {
     duration = prop.duration,
   } = param ?? {}
   const delay = prop.duration / chars.value.length
 
-  anime.remove(targets)
+  // 解決 anime.js SSR 出現 NodeList not defined 的錯誤
+  if (import.meta.env.SSR) {
+    return Promise.resolve()
+  }
+
+  removeAnime()
 
   return anime({
     targets,
@@ -72,7 +81,12 @@ function leave(param?: AnimeParam) {
   } = param ?? {}
   const delay = prop.duration / chars.value.length
 
-  anime.remove(targets)
+  // 解決 anime.js SSR 出現 NodeList not defined 的錯誤
+  if (import.meta.env.SSR) {
+    return Promise.resolve()
+  }
+
+  removeAnime()
 
   return anime({
     targets,
