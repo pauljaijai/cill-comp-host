@@ -9,7 +9,7 @@
       v-for="char, i in chars"
       :key="i"
       aria-hidden
-      class="char inline-block opacity-0"
+      class="char inline-block whitespace-pre"
     >
       {{ char }}
     </span>
@@ -31,8 +31,8 @@ interface Props {
 // #endregion Props
 const prop = withDefaults(defineProps<Props>(), {
   tag: 'p',
-  duration: 200,
-  delay: (index: number) => index * 100,
+  duration: 100,
+  delay: () => (index: number) => index * 80,
 })
 
 const card = inject(PROVIDE_KEY)
@@ -45,25 +45,40 @@ const contentRef = ref<HTMLDivElement>()
 
 const chars = computed(() => prop.text.split(/.*?/u))
 
-function enter() {
+interface AnimeParam {
+  duration?: number;
+}
+
+const targets = `.${id} .char`
+
+function enter(param?: AnimeParam) {
+  const {
+    duration = prop.duration,
+  } = param ?? {}
   const delay = prop.duration / chars.value.length
 
+  anime.remove(targets)
+
   return anime({
-    targets: `.${id} .char`,
-    opacity: [0, 1],
-    duration: 200,
+    targets,
+    opacity: [0.9, 0.4, 1],
+    duration,
     delay: anime.stagger(delay),
   }).finished
 }
-function leave() {
+function leave(param?: AnimeParam) {
+  const {
+    duration = prop.duration,
+  } = param ?? {}
   const delay = prop.duration / chars.value.length
 
+  anime.remove(targets)
+
   return anime({
-    targets: `.${id} .char`,
-    opacity: [0, 1],
-    duration: 200,
+    targets,
+    opacity: [0.4, 0.9, 0],
+    duration,
     delay: anime.stagger(delay),
-    easing: 'steps(1)',
   }).finished
 }
 
@@ -74,8 +89,11 @@ else {
   card.bindText({
     id,
     index,
-    enter,
-    leave,
+    delay: prop.delay,
+    animeMap: {
+      enter,
+      leave,
+    },
   })
 }
 </script>

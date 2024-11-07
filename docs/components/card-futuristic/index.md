@@ -49,7 +49,7 @@ import CardText from '../../../src/components/card-futuristic/examples/card-text
 
 ### 卡片文字
 
-打字效果
+使用特定元件就可以實現打字效果。
 
 <card-text />
 

@@ -15,7 +15,7 @@
         class="font-orbitron"
         @click="item.selected = true"
       >
-        <div class="flex flex-col">
+        <div class="flex flex-col gap-2">
           <card-futuristic-text
             v-if="item.title"
             :text="item.title"
@@ -24,8 +24,9 @@
           />
 
           <card-futuristic-text
-            v-if="item.text"
-            :text="item.text"
+            v-for="line, j in item.text"
+            :key="j"
+            :text="line"
             :class="item.textClass"
             class="!m-0"
           />
@@ -49,16 +50,20 @@ import CardFuturisticText from '../card-futuristic-text.vue'
 type CardProp = Writable<ExtractComponentProps<typeof CardFuturistic>> & {
   title?: string;
   titleClass?: string;
-  text?: string;
+  text?: string[];
   textClass?: string;
 }
 
 const list = ref(pipe(
   [
     {
-      title: 'COD-00',
+      title: 'Futuristic Card',
       titleClass: 'text-xl font-bold',
-      text: 'FUTURISTIC CARD',
+      text: [
+        `此元件主要由 border、bg、corner、content 與 ornament 子元件組成，由 card 父元件負責調度動畫。`,
+        `子元件可以任意組合，藉此產生 N 種有趣的樣式設計。`,
+        `使用 Vue 綁定 SVG 的 Attr 進行繪圖，並使用 anime.js 實現動畫`,
+      ],
       bg: {
         type: 'halftone',
         color: '#0001',
@@ -88,10 +93,10 @@ const list = ref(pipe(
           content: { delay: 500 },
         },
         hidden: {
-          corner: { delay: 300 },
-          bg: { delay: 100 },
-          border: { delay: 0 },
-          content: { delay: 0 },
+          corner: { delay: 400 },
+          bg: { delay: 200 },
+          border: { delay: 100 },
+          content: { delay: 100 },
         },
         hover: {
           corner: null,
@@ -108,12 +113,12 @@ const list = ref(pipe(
   ] as CardProp[],
   map((data) => ({
     ...data,
-    visible: true,
+    visible: false,
     selected: false,
   })),
 ))
 
-const visible = ref(true)
+const visible = ref(false)
 watch(visible, async (value) => {
   for (const data of list.value) {
     data.visible = value

@@ -41,12 +41,12 @@
 
 <script setup lang="ts">
 import type { BgParam, BorderParam, ContentParam, CornerParam } from './param'
+import type { PartAnimeFcnMap, ProvideContent, State, TextAnimeFcnMap } from './type'
 import { promiseTimeout, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
 import { debounce, defaultsDeep } from 'lodash-es'
-import { clone, entries, find, map, pick, pipe } from 'remeda'
+import { clone, entries, find, firstBy, map, pick, pipe, prop as rprop } from 'remeda'
 import { computed, defineAsyncComponent, provide, reactive, ref, watch } from 'vue'
-import { type AnimeMap, Part, type ProvideContent, type State } from './type'
-import { PROVIDE_KEY } from './type'
+import { Part, PROVIDE_KEY } from './type'
 
 type AnimeSequence = Record<
   State,
@@ -154,7 +154,7 @@ const bgComponent = computed(() => findPartComponent('bg', prop.bg?.type))
 const cornerComponent = computed(() => findPartComponent('corner', prop.corner?.type))
 
 /** 儲存 part 資料 */
-const partMap = new Map<`${Part}`, AnimeMap>()
+const partMap = new Map<`${Part}`, PartAnimeFcnMap>()
 
 /** debounce 後初始化 parts */
 const initPart = debounce(async () => {
@@ -168,7 +168,7 @@ const initPart = debounce(async () => {
 
   /** FIX: 初始化前使用 opacity-0 強制隱藏 card，避免初始化時的閃爍
    *
-   * 使用 JS 控制，依樣有閃爍問題，暫時使用 Class 控制
+   * 使用 JS 控制，一樣有閃爍問題，暫時使用 Class 控制
    */
   await promiseTimeout(100)
   cardRef.value?.classList.remove('opacity-0')
@@ -181,6 +181,31 @@ const bindPart: ProvideContent['bindPart'] = ({ name, animeMap }) => {
   initPart()
 }
 
+/** 儲存 text 資料 */
+const textMap = new Map<string, {
+  index: number;
+  delay: number | ((index: number) => number);
+  animeMap: TextAnimeFcnMap;
+}>()
+
+/** debounce 後初始化 text */
+const initText = debounce(async () => {
+  const { visible } = prop
+
+  textMap.forEach(async ({ animeMap }) => {
+    visible
+      ? animeMap.enter({ duration: 0 })
+      : animeMap.leave({ duration: 0 })
+  })
+}, 5)
+
+/** 提供 text 綁定動畫 */
+const bindText: ProvideContent['bindText'] = (data) => {
+  // console.log(`🚀 ~ [bindPart] name:`, name)
+  textMap.set(data.id, data)
+  initText()
+}
+
 provide(PROVIDE_KEY, {
   visible: computed(() => prop.visible),
   contentSize: computed(() => ({
@@ -188,6 +213,7 @@ provide(PROVIDE_KEY, {
     height: contentSize.height,
   })),
   bindPart,
+  bindText,
 })
 
 const defaultAnimeSequence: AnimeSequence = {
@@ -220,7 +246,7 @@ async function playPartsAnime(
 ) {
   const tasks = pipe(
     partList,
-    map((key) => {
+    map(async (key) => {
       const animeParam = param ?? animeSequence.value[state][key]
       if (animeParam === null)
         return
@@ -228,7 +254,61 @@ async function playPartsAnime(
       const part = partMap.get(key)
       // console.log(`🚀 ~ key:`, key)
       // console.log(`🚀 ~ part:`, part)
-      return part?.[state](animeParam)
+
+      if (key !== 'content') {
+        return part?.[state](animeParam)
+      }
+
+      const minIndex = pipe(
+        [...textMap.values()],
+        map(rprop('index')),
+        firstBy((value) => value),
+      ) ?? 0
+
+      // content 需要特別處理
+      if (state === 'visible') {
+        await part?.[state](animeParam)
+        textMap.forEach((data) => {
+          const index = data.index - minIndex
+
+          const delay = pipe(
+            data.delay,
+            (value) => {
+              if (typeof value === 'number') {
+                return value
+              }
+
+              return value(index)
+            },
+          )
+
+          setTimeout(() => {
+            data.animeMap.enter()
+          }, delay)
+        })
+      }
+
+      if (state === 'hidden') {
+        textMap.forEach((data) => {
+          const index = data.index - minIndex
+
+          const delay = pipe(
+            data.delay,
+            (value) => {
+              if (typeof value === 'number') {
+                return value
+              }
+
+              return value(index)
+            },
+          )
+
+          setTimeout(() => {
+            data.animeMap.leave()
+          }, delay)
+        })
+        return part?.[state](animeParam)
+      }
     }),
   )
 
