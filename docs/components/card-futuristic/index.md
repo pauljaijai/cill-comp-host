@@ -37,9 +37,9 @@ import CardText from '../../../src/components/card-futuristic/examples/card-text
 <<< ../../../src/components/card-futuristic/examples/basic-usage.vue
 :::
 
-### 組合元件
+### 組合零件
 
-組合子元件，產生不同的樣式設計。
+組合不同零件，產生多種的樣式。
 
 <mix-part />
 
