@@ -61,6 +61,7 @@ type AnimeSequence = Record<
 
 // #region Props
 interface Props {
+  /** 動畫序列，可自定義動畫參數 */
   animeSequence?: Partial<AnimeSequence>;
 
   visible?: boolean;
@@ -68,6 +69,7 @@ interface Props {
   /** 為空則自動處理，有提供則以參數數值為主 */
   hover?: boolean;
 
+  /** null 表示不使用此元件 */
   border?: BorderParam | null;
   bg?: BgParam | null;
   corner?: CornerParam | null;

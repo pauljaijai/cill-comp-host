@@ -27,9 +27,9 @@ onBeforeUnmount(() => {
 
 簡潔、實用的科幻風格資訊容器。
 
-我終於做出我夢想中的元件了！ლ（´∀`ლ）
+終於做出我夢想中的元件了！ლ（´∀`ლ）
 
-在學所學是機電與自動控制，一直對於科幻風格的元件情有獨鍾。
+在學階段的專業是機電與自動控制，一直對於科幻風格的元件情有獨鍾。
 
 過去最接近的作品為：
 
@@ -72,11 +72,11 @@ onBeforeUnmount(() => {
 
 ## 原理
 
-此元件主要由 border、bg、corner、content 與 ornament 子元件組成，由 card 父元件負責調度動畫。
+動態由 border、bg、corner、content 之子元件構成，由 card 父元件負責調度動畫。
 
 子元件可以任意組合，藉此產生 N 種有趣的樣式設計。
 
-使用 Vue 綁定 SVG 的 Attr 進行繪圖，並使用 anime.js 實現動畫
+子元件具體實作使用 Vue 綁定 SVG 的 Attr 進行繪圖，並使用 anime.js 實現動畫
 
 ## 原始碼
 
@@ -88,9 +88,9 @@ onBeforeUnmount(() => {
 
 <<< ../../../src/components/card-futuristic/card-futuristic.vue/#Props
 
-### Emits
+<!-- ### Emits
 
-<<< ../../../src/components/card-futuristic/card-futuristic.vue/#Emits
+<<< ../../../src/components/card-futuristic/card-futuristic.vue/#Emits -->
 
 ### Methods
 
