@@ -147,8 +147,8 @@ const contentRef = ref<HTMLDivElement>()
 const contentSize = reactive(useElementSize(contentRef, undefined, {
   box: 'border-box',
 }))
-const contentComponent = computed(() => findPartComponent('content', prop.content?.type))
 
+const contentComponent = computed(() => findPartComponent('content', prop.content?.type))
 const borderComponent = computed(() => findPartComponent('border', prop.border?.type))
 const bgComponent = computed(() => findPartComponent('bg', prop.bg?.type))
 const cornerComponent = computed(() => findPartComponent('corner', prop.corner?.type))
@@ -177,6 +177,10 @@ const initPart = debounce(async () => {
 /** 提供子元件綁定動畫 */
 const bindPart: ProvideContent['bindPart'] = ({ name, animeMap }) => {
   // console.log(`🚀 ~ [bindPart] name:`, name)
+  if (partMap.has(name)) {
+    console.error(`[bindPart] name: ${name} 已經存在`)
+  }
+
   partMap.set(name, animeMap)
   initPart()
 }
@@ -252,10 +256,13 @@ async function playPartsAnime(
         return
 
       const part = partMap.get(key)
-      // console.log(`🚀 ~ key:`, key)
-      // console.log(`🚀 ~ part:`, part)
 
       if (key !== 'content') {
+        return part?.[state](animeParam)
+      }
+
+      // 檢查是否有註冊 text 元件
+      if (textMap.size === 0) {
         return part?.[state](animeParam)
       }
 
