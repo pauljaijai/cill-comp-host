@@ -35,7 +35,7 @@ const animeMap: PartAnimeFcnMap = {
 
     await anime({
       'targets': contentRef.value,
-      'clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
+      'clip-path': 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
       duration,
       delay,
       'easing': 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -51,7 +51,7 @@ const animeMap: PartAnimeFcnMap = {
 
     await anime({
       'targets': contentRef.value,
-      'clip-path': 'polygon(50% 0, 50% 0, 50% 100%, 50% 100%)',
+      'clip-path': 'polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)',
       duration,
       delay,
       'easing': 'cubicBezier(1, 0.1, 0, 0.9)',
