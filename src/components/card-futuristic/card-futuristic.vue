@@ -206,6 +206,10 @@ const initText = debounce(async () => {
 /** 提供 text 綁定動畫 */
 const bindText: ProvideContent['bindText'] = (data) => {
   // console.log(`🚀 ~ [bindPart] name:`, name)
+  if (textMap.has(data.id)) {
+    console.error(`[bindText] id: ${data.id} 已經存在`)
+  }
+
   textMap.set(data.id, data)
   initText()
 }
