@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnimeMap } from '../type'
+import type { PartAnimeFcnMap } from '../type'
 import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { fromKeys, map, multiply, pipe } from 'remeda'
@@ -94,7 +94,7 @@ function removeAnime() {
   anime.remove(Object.values(sideData.value))
 }
 
-const animeMap: AnimeMap = {
+const animeMap: PartAnimeFcnMap = {
   async normal(param) {
     removeAnime()
 

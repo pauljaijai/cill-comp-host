@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import type { AnimeMap } from '../type'
+import type { PartAnimeFcnMap } from '../type'
 import anime from 'animejs'
 import { computed, inject, onMounted, ref } from 'vue'
 import { PROVIDE_KEY } from '../type'
@@ -44,7 +44,7 @@ const style = computed<CSSProperties>(() => ({
   ].join(''),
 }))
 
-const animeMap: AnimeMap = {
+const animeMap: PartAnimeFcnMap = {
   async normal(param) {
     anime.remove([bgRef.value])
 

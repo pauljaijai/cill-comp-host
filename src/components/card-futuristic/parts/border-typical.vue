@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnimeMap } from '../type'
+import type { PartAnimeFcnMap } from '../type'
 import { reactiveComputed } from '@vueuse/core'
 import anime from 'animejs'
 import { map, pipe } from 'remeda'
@@ -84,7 +84,7 @@ function removeAnime() {
   anime.remove(Object.values(lineAttrMap.value))
 }
 
-const animeMap: AnimeMap = {
+const animeMap: PartAnimeFcnMap = {
   async normal(param) {
     removeAnime()
 

@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnimeMap } from '../type'
+import type { PartAnimeFcnMap } from '../type'
 import anime from 'animejs'
 import { inject, onMounted, ref } from 'vue'
 import { PROVIDE_KEY } from '../type'
@@ -23,7 +23,7 @@ const card = inject(PROVIDE_KEY)
 
 const contentRef = ref<HTMLDivElement>()
 
-const animeMap: AnimeMap = {
+const animeMap: PartAnimeFcnMap = {
   async normal(param) {
     anime.remove([contentRef.value])
 

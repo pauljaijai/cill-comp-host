@@ -1,11 +1,11 @@
-import type { AnimeMap, Part } from './type'
+import type { PartAnimeFcnMap, Part } from './type'
 import { reactiveComputed } from '@vueuse/core'
 import { computed, inject, onMounted } from 'vue'
 import { PROVIDE_KEY } from './type'
 
 export function useCardPart(
   name: `${Part}`,
-  animeMap: AnimeMap,
+  animeMap: PartAnimeFcnMap,
 ) {
   const card = inject(PROVIDE_KEY)
   const cardSize = reactiveComputed(() => ({

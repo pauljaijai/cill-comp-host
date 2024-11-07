@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnimeMap } from '../type'
+import type { PartAnimeFcnMap } from '../type'
 import { reactiveComputed, useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { computed, inject, onMounted, reactive, ref, watch } from 'vue'
@@ -148,7 +148,7 @@ function removeAnime() {
   ])
 }
 
-const animeMap: AnimeMap = {
+const animeMap: PartAnimeFcnMap = {
   async normal(param) {
     removeAnime()
 

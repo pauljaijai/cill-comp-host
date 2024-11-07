@@ -18,11 +18,18 @@ export enum Part {
   // ORNAMENT = 'ornament',
 }
 
-export type AnimeMap = Record<
+export type PartAnimeFcnMap = Record<
   `${State}`,
   (param?: {
     duration?: number;
     delay?: number;
+  }) => Promise<void>
+>
+
+export type TextAnimeFcnMap = Record<
+  'enter' | 'leave',
+  (param?: {
+    duration?: number;
   }) => Promise<void>
 >
 
@@ -35,15 +42,15 @@ export interface ProvideContent {
   /** 綁定零件，由 card 統一調度 */
   bindPart: (param: {
     name: `${Part}`;
-    animeMap: AnimeMap;
+    animeMap: PartAnimeFcnMap;
   }) => void;
 
   /** 綁定 text，由 card 統一調度 */
   bindText: (param: {
     id: string;
     index: number;
-    enter: () => Promise<void>;
-    leave: () => Promise<void>;
+    delay: number | ((index: number) => number);
+    animeMap: TextAnimeFcnMap;
   }) => void;
 }
 

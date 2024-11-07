@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnimeMap } from '../type'
+import type { PartAnimeFcnMap } from '../type'
 import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { mapValues, pipe } from 'remeda'
@@ -51,7 +51,7 @@ function removeAnime() {
   anime.remove([attr, svgRef.value])
 }
 
-const animeMap: AnimeMap = {
+const animeMap: PartAnimeFcnMap = {
   async normal(param) {
     removeAnime()
 

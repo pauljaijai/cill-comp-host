@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnimeMap } from '../type'
+import type { PartAnimeFcnMap } from '../type'
 import anime from 'animejs'
 import { ref } from 'vue'
 import { useCardPart } from '../use-card-part'
@@ -21,7 +21,7 @@ defineSlots<{
 
 const contentRef = ref<HTMLDivElement>()
 
-const animeMap: AnimeMap = {
+const animeMap: PartAnimeFcnMap = {
   async normal(param) {
     return this.visible(param)
   },
