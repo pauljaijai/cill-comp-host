@@ -1,5 +1,5 @@
 ---
-description: 簡潔、實用的科幻風格（Sci-Fi、Futuristic）資訊容器
+description: 簡潔、實用的科幻風格資訊容器
 ---
 
 <script setup>
@@ -12,7 +12,7 @@ import TextAnime from '../../../src/components/card-futuristic/examples/text-ani
 
 # 科幻卡片 <Badge type="info" text="card" />
 
-簡潔、實用的科幻風格（Sci-Fi、Futuristic）資訊容器。
+簡潔、實用的科幻風格資訊容器。
 
 我終於做出我夢想中的元件了！ლ（´∀`ლ）
 

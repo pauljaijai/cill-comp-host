@@ -188,7 +188,7 @@ const currentSection = ref('btn');
 
 ### [科幻卡片](./card-futuristic/) <Badge type="info" text="card" />
 
-簡潔、實用的科幻風格（Sci-Fi、Futuristic）資訊容器。(≖‿ゝ≖)✧
+簡潔、實用的科幻風格資訊容器。(≖‿ゝ≖)✧
 
 <card-futuristic  />
 
