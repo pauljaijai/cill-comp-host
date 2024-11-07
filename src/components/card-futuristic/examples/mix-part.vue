@@ -118,7 +118,7 @@ const list = ref(pipe(
     {
       title: 'CARD-03',
       titleClass: 'text-xl font-bold ',
-      text: 'BORDER SIDE',
+      text: 'SIDE BORDER CLIP',
       textClass: '',
       corner: null,
       content: {
@@ -137,12 +137,12 @@ const list = ref(pipe(
         visible: {
           border: { delay: 0 },
           bg: { delay: 200 },
-          content: { delay: 400 },
+          content: { delay: 300 },
         },
         hidden: {
           border: { delay: 300 },
           bg: { delay: 0 },
-          content: { delay: 200 },
+          content: { delay: 0 },
         },
       },
     },

@@ -71,8 +71,8 @@ const list = ref(pipe(
         size: '10px',
       },
       corner: {
-        type: 'square',
-        size: 3,
+        type: 'quote',
+        strokeWidth: 8,
       },
       border: {
         type: 'typical',
@@ -86,7 +86,7 @@ const list = ref(pipe(
           content: { delay: 500 },
         },
         hidden: {
-          corner: { delay: 400 },
+          corner: { delay: 700 },
           bg: { delay: 200 },
           border: { delay: 100 },
           content: { delay: 100 },
