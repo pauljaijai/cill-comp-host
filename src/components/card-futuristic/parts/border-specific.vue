@@ -44,10 +44,9 @@
 
 <script setup lang="ts">
 import type { PartAnimeFcnMap } from '../type'
-import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { fromKeys, map, multiply, pipe } from 'remeda'
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useCardPart } from '../use-card-part'
 
 // #region Props
@@ -77,9 +76,10 @@ const prop = withDefaults(defineProps<Props>(), {
 })
 
 const svgRef = ref<SVGAElement>()
-const svgSize = reactive(useElementSize(svgRef, undefined, {
-  box: 'border-box',
-}))
+// 更新時機不可靠，明明有值但是取不到
+// const svgSize = reactive(useElementSize(svgRef, undefined, {
+//   box: 'border-box',
+// }))
 
 const sideData = ref(pipe(
   ['t', 'l', 'b', 'r'] as const,
@@ -162,6 +162,11 @@ const animeMap: PartAnimeFcnMap = {
       duration = 400,
       delay = 0,
     } = param ?? {}
+
+    const svgSize = {
+      width: svgRef.value?.clientWidth ?? 0,
+      height: svgRef.value?.clientHeight ?? 0,
+    }
 
     const tasks = pipe(
       [

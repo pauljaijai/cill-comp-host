@@ -14,10 +14,9 @@
 
 <script setup lang="ts">
 import type { PartAnimeFcnMap } from '../type'
-import { useElementSize } from '@vueuse/core'
 import anime from 'animejs'
 import { map, pipe } from 'remeda'
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useCardPart } from '../use-card-part'
 
 // #region Props
@@ -34,9 +33,6 @@ const prop = withDefaults(defineProps<Props>(), {
 })
 
 const svgRef = ref<SVGAElement>()
-const svgSize = reactive(useElementSize(svgRef, undefined, {
-  box: 'border-box',
-}))
 
 const paddingX = ref(0)
 const lineAttrMap = ref({
@@ -73,6 +69,11 @@ const animeMap: PartAnimeFcnMap = {
       duration = 400,
       delay = 0,
     } = param ?? {}
+
+    const svgSize = {
+      width: svgRef.value?.clientWidth ?? 0,
+      height: svgRef.value?.clientHeight ?? 0,
+    }
 
     // 要先扣掉，因為現在的 svgSize.width 是包含 padding 的
     const width = svgSize.width - paddingX.value * 2
@@ -123,6 +124,11 @@ const animeMap: PartAnimeFcnMap = {
       duration = 400,
       delay = 0,
     } = param ?? {}
+
+    const svgSize = {
+      width: svgRef.value?.clientWidth ?? 0,
+      height: svgRef.value?.clientHeight ?? 0,
+    }
 
     await Promise.all(pipe(
       [
@@ -175,6 +181,11 @@ const animeMap: PartAnimeFcnMap = {
       duration = 400,
       delay = 0,
     } = param ?? {}
+
+    const svgSize = {
+      width: svgRef.value?.clientWidth ?? 0,
+      height: svgRef.value?.clientHeight ?? 0,
+    }
 
     await Promise.all(pipe(
       [
@@ -237,6 +248,11 @@ const animeMap: PartAnimeFcnMap = {
       delay = 0,
     } = param ?? {}
 
+    const svgSize = {
+      width: svgRef.value?.clientWidth ?? 0,
+      height: svgRef.value?.clientHeight ?? 0,
+    }
+
     const width = svgSize.width - paddingX.value * 2
 
     const tasks = [
@@ -276,6 +292,11 @@ const animeMap: PartAnimeFcnMap = {
       duration = 400,
       delay = 0,
     } = param ?? {}
+
+    const svgSize = {
+      width: svgRef.value?.clientWidth ?? 0,
+      height: svgRef.value?.clientHeight ?? 0,
+    }
 
     const padding = prop.strokeWidth * 2
     const tasks = [

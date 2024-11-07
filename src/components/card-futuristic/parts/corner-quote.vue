@@ -128,10 +128,15 @@ const animeMap: PartAnimeFcnMap = {
 
     const svgDuration = duration / 4
 
+    const [width, height] = [
+      svgRef.value?.clientWidth ?? 0,
+      svgRef.value?.clientHeight ?? 0,
+    ]
+
     const tasks = [
       anime({
         targets: attr,
-        offsetX: -svgSize.width / 2,
+        offsetX: -width / 2,
         color: prop.color,
         duration,
         delay: delay + 100,
@@ -139,7 +144,7 @@ const animeMap: PartAnimeFcnMap = {
       }).finished,
       anime({
         targets: attr,
-        offsetY: -svgSize.height / 5 * 2,
+        offsetY: -height / 5 * 2,
         color: prop.color,
         duration,
         delay,

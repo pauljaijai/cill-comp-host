@@ -77,7 +77,6 @@ const animeMap: PartAnimeFcnMap = {
       anime({
         targets: bgRef.value,
         opacity: [
-          0,
           0.1,
           0.8,
           0.3,
@@ -103,7 +102,6 @@ const animeMap: PartAnimeFcnMap = {
       anime({
         targets: bgRef.value,
         opacity: [
-          1,
           0.6,
           0.1,
           0.8,

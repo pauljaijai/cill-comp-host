@@ -65,7 +65,7 @@ const animeMap: PartAnimeFcnMap = {
   },
 }
 
-useCardPart('bg', animeMap)
+useCardPart('content', animeMap)
 </script>
 
 <style scoped lang="sass">
