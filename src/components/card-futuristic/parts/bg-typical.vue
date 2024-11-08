@@ -2,7 +2,7 @@
   <div
     ref="bgRef"
     :style
-    class="card-bg"
+    class="bg-typical"
   />
 </template>
 

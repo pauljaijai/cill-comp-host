@@ -1,5 +1,5 @@
 <template>
-  <div ref="contentRef">
+  <div ref="contentRef" class="content-scale">
     <slot />
   </div>
 </template>
