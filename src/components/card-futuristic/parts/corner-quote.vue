@@ -4,7 +4,7 @@
     :view-box
     :style
     fill="none"
-    class="card-corner"
+    class="corner-quote"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path v-bind="cornerStyleMap.lt" />
@@ -228,8 +228,8 @@ const { cardSize } = useCardPart('corner', animeMap)
 const style = computed(() => ({
   left: `${-attr.offsetX}px`,
   top: `${-attr.offsetY}px`,
-  width: `${cardSize.width + attr.offsetX * 2}px`,
-  height: `${cardSize.height + attr.offsetY * 2}px`,
+  width: `${Math.max(cardSize.width + attr.offsetX * 2, 0)}px`,
+  height: `${Math.max(cardSize.height + attr.offsetY * 2, 0)}px`,
 }))
 
 const viewBox = computed(

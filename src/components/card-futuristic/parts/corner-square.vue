@@ -4,7 +4,7 @@
     :view-box
     :style
     fill="none"
-    class="card-corner"
+    class="corner-square"
     xmlns="http://www.w3.org/2000/svg"
   >
     <rect v-bind="cornerStyleMap.lt" />
@@ -244,6 +244,4 @@ const cornerStyleMap = computed(() => pipe(
 </script>
 
 <style scoped lang="sass">
-.card-corner
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1))
 </style>

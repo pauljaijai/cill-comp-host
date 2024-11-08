@@ -4,7 +4,7 @@
     :view-box
     :style
     fill="none"
-    class="card-bg"
+    class="bg-solid"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path v-bind="pathAttr" />

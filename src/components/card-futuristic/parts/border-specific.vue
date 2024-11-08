@@ -4,7 +4,7 @@
     :view-box
     :style
     fill="none"
-    class="card-border"
+    class="border-specific"
     xmlns="http://www.w3.org/2000/svg"
   >
     <line

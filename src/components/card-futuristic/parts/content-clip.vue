@@ -1,5 +1,5 @@
 <template>
-  <div ref="contentRef">
+  <div ref="contentRef" class="content-clip">
     <slot />
   </div>
 </template>
