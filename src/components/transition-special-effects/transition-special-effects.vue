@@ -1,7 +1,19 @@
 <template>
+  <div :style>
+    <slot />
+  </div>
+
+  <effect-filter
+    class="hidden"
+    :filter-id="id"
+  />
 </template>
 
 <script setup lang="ts">
+import type { CSSProperties } from 'vue'
+import { computed, useId } from 'vue'
+import EffectFilter from './effect-filter.vue'
+
 // #region Props
 interface Props {
   modelValue?: string;
@@ -17,13 +29,15 @@ const emit = defineEmits<{
 
 // #region Slots
 defineSlots<{
-  default?: (props: { isRunning: boolean }) => unknown;
+  default?: () => unknown;
 }>()
 // #endregion Slots
 
-// #region Methods
-defineExpose({})
-// #endregion Methods
+const id = useId()
+
+const style = computed<CSSProperties>(() => ({
+  filter: `url(#${id})`,
+}))
 </script>
 
 <style scoped lang="sass">

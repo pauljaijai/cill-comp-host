@@ -8,7 +8,22 @@
     </div>
 
     <div class="flex justify-center">
-      <transition-special-effects />
+      <transition-special-effects>
+        <div class="flex flex-col items-center gap-4">
+          <img
+            src="/profile.webp"
+            class="mb-4 h-60 w-60 overflow-hidden border-4 border-white rounded-full shadow-xl"
+          >
+
+          <div class="text-xl font-bold">
+            鱈魚 Codfish
+          </div>
+
+          <div>
+            魚魚魚魚魚魚魚魚魚魚魚魚魚魚魚魚
+          </div>
+        </div>
+      </transition-special-effects>
     </div>
   </div>
 </template>
