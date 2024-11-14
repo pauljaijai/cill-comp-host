@@ -8,14 +8,16 @@
       width="200%"
       height="200%"
     >
+      <!-- 產生雜訊 -->
       <feTurbulence
         type="turbulence"
-        :baseFrequency="computedWave.baseFrequency"
+        baseFrequency="0.05"
         numOctaves="2"
         seed="1"
         stitchTiles="noStitch"
         result="turbulence"
       />
+      <!-- 依照雜訊內容偏移 -->
       <feDisplacementMap
         in="SourceGraphic"
         in2="turbulence"
@@ -24,6 +26,7 @@
         yChannelSelector="A"
         result="displacementMap"
       />
+      <!-- 透明度 -->
       <feComponentTransfer
         in="displacementMap"
         result="alphaAdjust"
@@ -31,7 +34,6 @@
         <feFuncA
           type="linear"
           :slope="computedWave.opacity"
-          intercept="0"
         />
       </feComponentTransfer>
     </filter>
@@ -51,46 +53,30 @@ const prop = withDefaults(defineProps<Props>(), {})
 // #endregion Slots
 
 const attrWave = ref({
-  baseFrequency: {
-    x: 0.01,
-    y: 0.05,
-  },
   scale: 0,
   opacity: 1,
 })
 
 const computedWave = computed(() => {
   const {
-    baseFrequency,
     scale,
     opacity,
   } = attrWave.value
 
   return {
-    baseFrequency: `${baseFrequency.x} ${baseFrequency.y}`,
     scale,
     opacity,
   }
 })
 
 onMounted(() => {
-  setTimeout(() => {
-    anime({
-      targets: attrWave.value,
-      scale: 500,
-      opacity: 0,
-      duration: 2000,
-      easing: 'easeInOutExpo',
-    })
-
-    // anime({
-    //   targets: attrWave.value.baseFrequency,
-    //   x: 0.001,
-    //   y: 0.005,
-    //   duration: 3000,
-    //   easing: 'easeInExpo',
-    // })
-  }, 2000)
+  anime({
+    targets: attrWave.value,
+    scale: 100,
+    opacity: 0,
+    duration: 2000,
+    easing: 'easeInOutExpo',
+  })
 })
 </script>
 
