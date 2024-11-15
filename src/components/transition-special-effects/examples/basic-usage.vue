@@ -8,7 +8,7 @@
       />
     </div>
 
-    <div class="flex justify-center">
+    <div class="h-[50vh] flex items-center justify-center">
       <transition-special-effects>
         <div
           v-if="visible"

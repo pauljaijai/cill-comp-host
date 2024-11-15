@@ -2,7 +2,7 @@
   <svg class="hidden">
     <!-- wave 效果 -->
     <filter
-      v-if="attrs?.type === 'wave'"
+      v-if="attrs?.name === 'wave'"
       :id="props.filterId"
       color-interpolation-filters="linearRGB"
       filterUnits="objectBoundingBox"
@@ -15,7 +15,7 @@
       <!-- 產生雜訊 -->
       <feTurbulence
         type="turbulence"
-        baseFrequency="0.05"
+        :baseFrequency="attrs.baseFrequency"
         numOctaves="2"
         seed="1"
         stitchTiles="noStitch"
@@ -50,20 +50,17 @@ import { reactiveComputed } from '@vueuse/core'
 import { useProjection } from '@vueuse/math'
 import anime from 'animejs'
 import { ref } from 'vue'
+import { TransitionName } from './type'
 
 // #region Props
 interface Props {
   filterId: string;
-  type?: `${TransitionType}`;
+  name?: `${TransitionName}`;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  type: 'wave',
+  name: 'wave',
 })
-
-enum TransitionType {
-  WAVE = 'wave',
-}
 
 /** 播放進度。0~100 對應 enter~leave */
 const progress = ref(0)
@@ -71,8 +68,9 @@ const progressRange = [0, 100] as const
 
 /** 數值映射。[enter, leave] */
 const valueMap = {
-  [TransitionType.WAVE]: {
-    scale: [0, 200],
+  [TransitionName.WAVE]: {
+    baseFrequency: [0, 0.008],
+    scale: [0, -50],
   },
 } as const
 
@@ -83,11 +81,17 @@ function createProjection(range: readonly [number, number]) {
 const slope = createProjection([1, 0])
 
 const attrs = reactiveComputed(() => {
-  if (props.type === TransitionType.WAVE) {
-    const scale = createProjection(valueMap[TransitionType.WAVE].scale)
+  if (props.name === TransitionName.WAVE) {
+    const baseFrequency = createProjection(
+      valueMap[TransitionName.WAVE].baseFrequency,
+    )
+    const scale = createProjection(
+      valueMap[TransitionName.WAVE].scale,
+    )
 
     return {
-      type: TransitionType.WAVE,
+      name: TransitionName.WAVE,
+      baseFrequency,
       scale,
     }
   }
