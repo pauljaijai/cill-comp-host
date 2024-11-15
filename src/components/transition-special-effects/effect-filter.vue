@@ -109,7 +109,7 @@ function enter(params?: AnimeParams) {
 
   const {
     duration = 2000,
-    easing = 'easeInOutExpo',
+    easing = 'easeInOutQuint',
   } = params ?? {}
 
   return anime({
@@ -125,7 +125,7 @@ function leave(params?: AnimeParams) {
 
   const {
     duration = 2000,
-    easing = 'easeInOutExpo',
+    easing = 'easeInOutQuint',
   } = params ?? {}
 
   return anime({
