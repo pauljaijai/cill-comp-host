@@ -7,7 +7,7 @@ interface Props {
   modelValue?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {})
 
 // #region Emits
 const emit = defineEmits<{
