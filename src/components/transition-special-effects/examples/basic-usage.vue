@@ -1,15 +1,19 @@
 <template>
   <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border rounded p-4">
+    <div class="flex flex-col gap-4 border rounded">
       <base-checkbox
-        v-model="disabled"
-        label="停用按鈕"
+        v-model="visible"
+        label="顯示"
+        class="p-4"
       />
     </div>
 
     <div class="flex justify-center">
       <transition-special-effects>
-        <div class="flex flex-col items-center gap-4">
+        <div
+          v-if="visible"
+          class="flex flex-col items-center gap-4"
+        >
           <img
             src="/profile.webp"
             class="mb-4 h-60 w-60 overflow-hidden border-4 border-white rounded-full shadow-xl"
@@ -33,6 +37,5 @@ import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import TransitionSpecialEffects from '../transition-special-effects.vue'
 
-const text = ref('')
-const disabled = ref(true)
+const visible = ref(true)
 </script>

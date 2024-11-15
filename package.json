@@ -37,6 +37,7 @@
     "@vue/test-utils": "^2.4.6",
     "@vueuse/components": "^11.2.0",
     "@vueuse/core": "^11.1.0",
+    "@vueuse/math": "^11.2.0",
     "animejs": "^3.2.2",
     "autoprefixer": "^10.4.20",
     "await-to-js": "^3.0.0",

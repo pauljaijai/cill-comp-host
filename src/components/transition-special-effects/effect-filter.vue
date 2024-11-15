@@ -1,10 +1,14 @@
 <template>
   <svg class="hidden">
+    <!-- wave 效果 -->
     <filter
-      :id="prop.filterId"
+      v-if="attrs?.type === 'wave'"
+      :id="props.filterId"
       color-interpolation-filters="linearRGB"
       filterUnits="objectBoundingBox"
       primitiveUnits="userSpaceOnUse"
+      x="-50%"
+      y="-50%"
       width="200%"
       height="200%"
     >
@@ -21,7 +25,7 @@
       <feDisplacementMap
         in="SourceGraphic"
         in2="turbulence"
-        :scale="computedWave.scale"
+        :scale="attrs.scale"
         xChannelSelector="G"
         yChannelSelector="A"
         result="displacementMap"
@@ -33,7 +37,7 @@
       >
         <feFuncA
           type="linear"
-          :slope="computedWave.opacity"
+          :slope
         />
       </feComponentTransfer>
     </filter>
@@ -41,43 +45,99 @@
 </template>
 
 <script setup lang="ts">
+import type { AnimeAnimParams } from 'animejs'
+import { reactiveComputed } from '@vueuse/core'
+import { useProjection } from '@vueuse/math'
 import anime from 'animejs'
-import { computed, onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 // #region Props
 interface Props {
   filterId: string;
+  type?: `${TransitionType}`;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {})
-// #endregion Slots
-
-const attrWave = ref({
-  scale: 0,
-  opacity: 1,
+const props = withDefaults(defineProps<Props>(), {
+  type: 'wave',
 })
 
-const computedWave = computed(() => {
-  const {
-    scale,
-    opacity,
-  } = attrWave.value
+enum TransitionType {
+  WAVE = 'wave',
+}
 
-  return {
-    scale,
-    opacity,
+/** 播放進度。0~100 對應 enter~leave */
+const progress = ref(0)
+const progressRange = [0, 100] as const
+
+/** 數值映射。[enter, leave] */
+const valueMap = {
+  [TransitionType.WAVE]: {
+    scale: [0, 200],
+  },
+} as const
+
+function createProjection(range: readonly [number, number]) {
+  return useProjection(progress, progressRange, range)
+}
+/** 不透明度 */
+const slope = createProjection([1, 0])
+
+const attrs = reactiveComputed(() => {
+  if (props.type === TransitionType.WAVE) {
+    const scale = createProjection(valueMap[TransitionType.WAVE].scale)
+
+    return {
+      type: TransitionType.WAVE,
+      scale,
+    }
   }
+
+  return {}
 })
 
-onMounted(() => {
-  anime({
-    targets: attrWave.value,
-    scale: 100,
-    opacity: 0,
-    duration: 2000,
-    easing: 'easeInOutExpo',
-  })
+interface AnimeParams {
+  duration?: number;
+  easing?: AnimeAnimParams['easing'];
+}
+
+function enter(params?: AnimeParams) {
+  anime.remove(progress)
+
+  const {
+    duration = 2000,
+    easing = 'easeInOutExpo',
+  } = params ?? {}
+
+  return anime({
+    targets: progress,
+    value: progressRange[0],
+    duration,
+    easing,
+  }).finished
+}
+
+function leave(params?: AnimeParams) {
+  anime.remove(progress)
+
+  const {
+    duration = 2000,
+    easing = 'easeInOutExpo',
+  } = params ?? {}
+
+  return anime({
+    targets: progress,
+    value: progressRange[1],
+    duration,
+    easing,
+  }).finished
+}
+
+// #region Methods
+defineExpose({
+  enter,
+  leave,
 })
+// #endregion Methods
 </script>
 
 <style scoped lang="sass">
