@@ -20,8 +20,8 @@
     :width="currentBounding?.width.value"
     :height="currentBounding?.height.value"
     @init="() => emit('init')"
-    @before-transition="() => emit('before-transition')"
-    @after-transition="() => emit('after-transition')"
+    @before-transition="() => emit('beforeTransition')"
+    @after-transition="() => emit('afterTransition')"
   />
 </template>
 
@@ -65,8 +65,8 @@ const props = withDefaults(defineProps<Props>(), {
 // #region Emits
 const emit = defineEmits<{
   (e: 'init'): void;
-  (e: 'before-transition'): void;
-  (e: 'after-transition'): void;
+  (e: 'beforeTransition'): void;
+  (e: 'afterTransition'): void;
 }>()
 
 // #endregion Emits
@@ -159,7 +159,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   if (isFirst && !props.appear) {
     isFirst = false
     el.style.opacity = '1'
-    emit('after-transition')
+    emit('afterTransition')
     return done()
   }
 
