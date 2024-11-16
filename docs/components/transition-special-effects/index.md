@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/transition-special-effects/examp
 
 ### 基本用法
 
-用法與 Vue 內建的 Transition 元件相同。
+用法與 Vue 內建的 Transition 元件相同，可以分別指定 enter 與 leave 特效。
 
 <basic-usage/>
 

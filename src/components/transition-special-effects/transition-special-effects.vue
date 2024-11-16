@@ -16,12 +16,14 @@
     ref="enterFilterRef"
     class="hidden"
     :filter-id="enterId"
+    name="color-fringing"
   />
 
   <effect-filter
     ref="leaveFilterRef"
     class="hidden"
     :filter-id="leaveId"
+    name="color-fringing"
   />
 </template>
 
