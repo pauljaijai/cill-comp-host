@@ -1,5 +1,5 @@
 ---
-description:
+description: 特殊效果的 Transition 元件
 ---
 
 <script setup>
@@ -8,15 +8,15 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 import BasicUsage from '../../../src/components/transition-special-effects/examples/basic-usage.vue'
 </script>
 
-# 標題 <Badge type="info" text="" />
+# 特效轉場 <Badge type="info" text="transition" />
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+各種特殊效果的轉場元件！◝( •ω• )◟
 
 ## 使用範例
 
 ### 基本用法
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+用法與 Vue 內建的 Transition 元件相同，不過目前連續切換會壞掉，請先手下留情。
 
 <basic-usage/>
 

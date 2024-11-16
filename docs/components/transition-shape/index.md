@@ -18,7 +18,7 @@ import { ref } from 'vue';
 const currentTransition = ref();
 </script>
 
-# 多邊形轉場
+# 多邊形轉場 <Badge type="info" text="transition" />
 
 Motion Graphic 風格的 Transition 元件。
 

@@ -24,7 +24,7 @@
           </div>
 
           <div>
-            魚魚魚魚魚魚魚魚魚魚魚魚魚魚魚魚
+            熱愛開發一些奇怪的東東
           </div>
         </div>
       </transition-special-effects>
