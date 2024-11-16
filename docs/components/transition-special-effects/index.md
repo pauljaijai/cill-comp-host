@@ -34,6 +34,11 @@ import BasicUsage from '../../../src/components/transition-special-effects/examp
 
 剛好趁這個機會好好研究 SVG Filter，相當複雜，但是真的很有趣。(*´∀`)~♥
 
+實作概念為：
+
+1. 將 SVG Filter 內容獨立為 Vue 元件，使用 `v-bind` 綁定參數，以便產生動畫。
+1. 產生唯一 ID，綁定至目標元素 `style`，產生濾鏡效果。
+
 ## 原始碼
 
 <source-link-list name="transition-special-effects"/>
