@@ -1,220 +1,72 @@
 <template>
   <svg class="hidden">
-    <defs v-if="attrs.name">
-      <!-- wave -->
-      <filter
-        v-if="attrs.name === 'wave'"
-        :id="props.filterId"
-        color-interpolation-filters="linearRGB"
-        filterUnits="objectBoundingBox"
-        primitiveUnits="userSpaceOnUse"
-        x="-50%"
-        y="-50%"
-        width="200%"
-        height="200%"
-      >
-        <!-- 產生雜訊 -->
-        <feTurbulence
-          type="turbulence"
-          :baseFrequency="attrs.baseFrequency"
-          numOctaves="2"
-          seed="1"
-          stitchTiles="noStitch"
-          result="turbulence"
+    <defs>
+      <suspense v-if="filterComponent">
+        <component
+          :is="filterComponent"
+          :id="props.filterId"
+          ref="filterRef"
         />
-        <!-- 依照雜訊內容偏移 -->
-        <feDisplacementMap
-          in="SourceGraphic"
-          in2="turbulence"
-          :scale="attrs.scale"
-          xChannelSelector="G"
-          yChannelSelector="A"
-          result="displacementMap"
-        />
-        <!-- 透明度 -->
-        <feComponentTransfer
-          in="displacementMap"
-          result="alphaAdjust"
-        >
-          <feFuncA
-            type="linear"
-            :slope
-          />
-        </feComponentTransfer>
-      </filter>
+      </suspense>
 
-      <!-- color-fringing -->
-      <filter
-        v-if="attrs.name === 'color-fringing'"
-        :id="props.filterId"
-        x="-50%"
-        y="-50%"
-        width="200%"
-        height="200%"
-      >
-        <!-- red -->
-        <feOffset
-          in="SourceGraphic"
-          dx="10"
-          dy="10"
-          result="redOffset"
-        />
-        <feColorMatrix
-          in="redOffset"
-          type="matrix"
-          values="1 0 0 0 0
-                  0 0 0 0 0
-                  0 0 0 0 0
-                  0 0 0 1 0"
-          result="redChannel"
-        />
-
-        <!-- blue -->
-        <feOffset
-          in="SourceGraphic"
-          dx="-10"
-          dy="-10"
-          result="blueOffset"
-        />
-        <feColorMatrix
-          in="blueOffset"
-          type="matrix"
-          values="0 0 0 0 0
-                  0 0 0 0 0
-                  0 0 1 0 0
-                  0 0 0 1 0"
-          result="blueChannel"
-        />
-
-        <!-- green -->
-        <feOffset
-          in="SourceGraphic"
-          dx="10"
-          dy="-10"
-          result="greenOffset"
-        />
-        <feColorMatrix
-          in="greenOffset"
-          type="matrix"
-          values="0 0 0 0 0
-                  0 1 0 0 0
-                  0 0 0 0 0
-                  0 0 0 1 0"
-          result="greenChannel"
-        />
-
-        <!-- Source -->
-        <feOffset
-          in="SourceGraphic"
-          dx="0"
-          dy="0"
-          result="sourceOffset"
-        />
-
-        <feMerge>
-          <feMergeNode in="redChannel" />
-          <feMergeNode in="blueChannel" />
-          <feMergeNode in="greenChannel" />
-          <feMergeNode in="sourceOffset" />
-        </feMerge>
-      </filter>
     </defs>
   </svg>
 </template>
 
 <script setup lang="ts">
-import type { AnimeAnimParams } from 'animejs'
-import type { TransitionName } from './type'
-import { reactiveComputed } from '@vueuse/core'
-import { useProjection } from '@vueuse/math'
-import anime from 'animejs'
-import { ref } from 'vue'
+import type { FilterExpose } from './type'
+import { entries, find, map, pipe } from 'remeda'
+import { computed, defineAsyncComponent, ref } from 'vue'
+import { TransitionName } from './type'
 
-// #region Props
 interface Props {
   filterId: string;
   name?: `${TransitionName}`;
 }
-// #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   name: 'wave',
 })
 
-/** 播放進度。0~100 對應 enter~leave */
-const progress = ref(0)
-const progressRange = [0, 100] as const
+const filterList = Object.values(TransitionName)
+// 引入所有 filter 元件
+const filterModules = import.meta.glob(['./filters/*.vue'])
+const filterComponentList = pipe(
+  filterModules,
+  entries(),
+  map(([path, component]) => {
+    const text = path.match(/\.\/filters\/(.+)\.vue/)?.[1]
+    if (!text) {
+      throw new Error(`Invalid path: ${path}`)
+    }
+    const name = text.replace('filter-', '')
+    if (!filterList.includes(name as TransitionName)) {
+      throw new Error(`元件命名錯誤: ${path}`)
+    }
 
-function createProjection(range: readonly [number, number]) {
-  return useProjection(progress, progressRange, range)
-}
-/** 不透明度 */
-const slope = createProjection([1, 0])
+    return {
+      name,
+      component: defineAsyncComponent(component as Parameters<typeof defineAsyncComponent>[0]),
+    }
+  }),
+)
+const filterComponent = computed(() => pipe(
+  filterComponentList,
+  find(({ name }) => name === props.name),
+  (target) => {
+    if (!target) {
+      throw new Error(`找不到 ${props.name} filter 元件`)
+    }
 
-const transitionAttrsMap = {
-  'wave': {
-    name: 'wave',
-    baseFrequency: createProjection([0, 0.008]),
-    scale: createProjection([0, -50]),
+    return target.component
   },
-  'color-fringing': {
-    name: 'color-fringing',
-  },
-  'glitch': {
-    name: 'glitch',
-  },
-} satisfies Record<
-  TransitionName,
-  {
-    name: `${TransitionName}`;
-    [key: string]: any;
-  }
->
+))
 
-const attrs = reactiveComputed(() => transitionAttrsMap[props.name])
+const filterRef = ref<FilterExpose>()
 
-interface AnimeParams {
-  duration?: number;
-  easing?: AnimeAnimParams['easing'];
-}
-
-function enter(params?: AnimeParams) {
-  anime.remove(progress)
-
-  const {
-    duration = 2000,
-    easing = 'easeInOutQuint',
-  } = params ?? {}
-
-  return anime({
-    targets: progress,
-    value: progressRange[0],
-    duration,
-    easing,
-  }).finished
-}
-
-function leave(params?: AnimeParams) {
-  anime.remove(progress)
-
-  const {
-    duration = 2000,
-    easing = 'easeInOutQuint',
-  } = params ?? {}
-
-  return anime({
-    targets: progress,
-    value: progressRange[1],
-    duration,
-    easing,
-  }).finished
-}
-
-// #region Methods
-defineExpose({
-  enter,
-  leave,
+defineExpose<FilterExpose>({
+  enter: async (params) => filterRef.value?.enter(params),
+  leave: async (params) => filterRef.value?.leave(params),
 })
-// #endregion Methods
 </script>
 
 <style scoped lang="sass">
