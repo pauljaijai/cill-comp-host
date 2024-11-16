@@ -86,6 +86,23 @@
           result="blueChannel"
         />
 
+        <!-- green -->
+        <feOffset
+          in="SourceGraphic"
+          dx="10"
+          dy="-10"
+          result="greenOffset"
+        />
+        <feColorMatrix
+          in="greenOffset"
+          type="matrix"
+          values="0 0 0 0 0
+                  0 1 0 0 0
+                  0 0 0 0 0
+                  0 0 0 1 0"
+          result="greenChannel"
+        />
+
         <!-- Source -->
         <feOffset
           in="SourceGraphic"
@@ -97,6 +114,7 @@
         <feMerge>
           <feMergeNode in="redChannel" />
           <feMergeNode in="blueChannel" />
+          <feMergeNode in="greenChannel" />
           <feMergeNode in="sourceOffset" />
         </feMerge>
       </filter>
