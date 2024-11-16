@@ -26,13 +26,13 @@ import BasicUsage from '../../../src/components/transition-special-effects/examp
 
 ## 原理
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+這類特殊效果已經完全超出 CSS 範疇。
 
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
+一開始從 HTML to Canvas 的方向研究，但是 HTML 轉換成 Canvas 會有很多誤差，成果實在不忍直視。(́⊙◞౪◟⊙‵)
 
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
-:::
+最後發現 SVG Filter 最適合，因為 SVG Filter 可以直接對 HTML 元素套用濾鏡效果。
+
+剛好趁這個機會好好研究 SVG Filter，相當複雜，但是真的很有趣。(*´∀`)~♥
 
 ## 原始碼
 
