@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/transition-special-effects/examp
 
 ### 基本用法
 
-用法與 Vue 內建的 Transition 元件相同，不過目前連續切換會壞掉，請先手下留情。
+用法與 Vue 內建的 Transition 元件相同。
 
 <basic-usage/>
 

@@ -24,7 +24,7 @@
           </div>
 
           <div>
-            熱愛開發一些奇怪的東東
+            買不到 IP69K 等級的防水電腦而困擾著 ( ´•̥̥̥ ω •̥̥̥` )
           </div>
         </div>
       </transition-special-effects>
