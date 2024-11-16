@@ -8,7 +8,6 @@
           ref="filterRef"
         />
       </suspense>
-
     </defs>
   </svg>
 </template>

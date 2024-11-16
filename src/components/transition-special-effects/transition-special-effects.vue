@@ -15,30 +15,34 @@
   <effect-filter
     ref="enterFilterRef"
     class="hidden"
-    :filter-id="enterId"
-    name="color-fringing"
+    v-bind="enterFilterParams"
   />
 
   <effect-filter
     ref="leaveFilterRef"
     class="hidden"
-    :filter-id="leaveId"
-    name="color-fringing"
+    v-bind="leaveFilterParams"
   />
 </template>
 
 <script setup lang="ts">
 import type { TransitionProps } from 'vue'
-import { ref, useId } from 'vue'
+import type { EnterParams, LeaveParams } from './type'
+import { pipe } from 'remeda'
+import { computed, ref, useId } from 'vue'
 import EffectFilter from './effect-filter.vue'
 
 // #region Props
 interface Props {
   appear?: boolean;
+  enter?: EnterParams;
+  leave?: LeaveParams;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   appear: false,
+  enter: 'color-fringing',
+  leave: 'color-fringing',
 })
 
 // #region Emits
@@ -55,14 +59,42 @@ defineSlots<{
 }>()
 // #endregion Slots
 
-const enterId = `${useId()}-enter`
-const leaveId = `${useId()}-leave`
-
 /** 如果 appear 為 false，則需快速結束第一次動畫 */
 let isFirst = true
 
+const enterId = `${useId()}-enter`
 const enterFilterRef = ref<InstanceType<typeof EffectFilter>>()
+const enterFilterParams = computed(() => pipe(
+  props.enter,
+  (data) => {
+    if (typeof data === 'string') {
+      return { name: data }
+    }
+
+    return data
+  },
+  (data) => ({
+    ...data,
+    filterId: enterId,
+  }),
+))
+
+const leaveId = `${useId()}-leave`
 const leaveFilterRef = ref<InstanceType<typeof EffectFilter>>()
+const leaveFilterParams = computed(() => pipe(
+  props.leave,
+  (data) => {
+    if (typeof data === 'string') {
+      return { name: data }
+    }
+
+    return data
+  },
+  (data) => ({
+    ...data,
+    filterId: leaveId,
+  }),
+))
 
 // 進入事件
 const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
@@ -83,7 +115,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
     return done()
   }
 
-  await enterFilterRef.value?.enter()
+  await enterFilterRef.value?.enter(enterFilterParams.value)
 
   done()
 }
@@ -105,7 +137,7 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
     return done()
   }
 
-  await leaveFilterRef.value?.leave()
+  await leaveFilterRef.value?.leave(leaveFilterParams.value)
 
   done()
 }
