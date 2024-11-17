@@ -8,59 +8,46 @@
     <!-- red -->
     <feOffset
       in="SourceGraphic"
-      dx="10"
-      dy="10"
+      v-bind="feAttrs.r"
       result="redOffset"
     />
     <feColorMatrix
       in="redOffset"
       type="matrix"
-      values="1 0 0 0 0
-              0 0 0 0 0
-              0 0 0 0 0
-              0 0 0 1 0"
+      v-bind="feAttrs.r"
       result="redChannel"
     />
 
     <!-- blue -->
     <feOffset
       in="SourceGraphic"
-      dx="-10"
-      dy="-10"
+      v-bind="feAttrs.b"
       result="blueOffset"
     />
     <feColorMatrix
       in="blueOffset"
       type="matrix"
-      values="0 0 0 0 0
-              0 0 0 0 0
-              0 0 1 0 0
-              0 0 0 1 0"
+      v-bind="feAttrs.b"
       result="blueChannel"
     />
 
     <!-- green -->
     <feOffset
       in="SourceGraphic"
-      dx="10"
-      dy="-10"
+      v-bind="feAttrs.g"
       result="greenOffset"
     />
     <feColorMatrix
       in="greenOffset"
       type="matrix"
-      values="0 0 0 0 0
-              0 1 0 0 0
-              0 0 0 0 0
-              0 0 0 1 0"
+      v-bind="feAttrs.g"
       result="greenChannel"
     />
 
     <!-- Source -->
     <feOffset
       in="SourceGraphic"
-      dx="0"
-      dy="0"
+      v-bind="feAttrs.source"
       result="sourceOffset"
     />
 
@@ -76,51 +63,147 @@
 <script setup lang="ts">
 import type { AnimeParams, FilterExpose } from '../type'
 import anime from 'animejs'
-import { ref } from 'vue'
+import { constant, map, pipe, randomInteger, times } from 'remeda'
+import { computed, reactive } from 'vue'
 
-interface Props { }
-const props = withDefaults(defineProps<Props>(), {})
-
-const attrs = ref({
-  baseFrequency: 0,
-  scale: 0,
-  slope: 1,
+interface Props {
+  maxOffset?: number;
+  times?: number;
+}
+const props = withDefaults(defineProps<Props>(), {
+  maxOffset: 50,
+  times: 5,
 })
+
+const attrs = reactive({
+  r: { dx: 0, dy: 0, opacity: 0.5 },
+  g: { dx: 0, dy: 0, opacity: 0.5 },
+  b: { dx: 0, dy: 0, opacity: 0.5 },
+  source: { dx: 0, dy: 0, opacity: 0.5 },
+})
+
+const feAttrs = computed(() => ({
+  r: {
+    dx: attrs.r.dx,
+    dy: attrs.r.dy,
+    values: [
+      '1 0 0 0 0',
+      '0 0 0 0 0',
+      '0 0 0 0 0',
+      `0 0 0 ${attrs.r.opacity} 0`,
+    ].join(' '),
+  },
+  g: {
+    dx: attrs.g.dx,
+    dy: attrs.g.dy,
+    values: [
+      '0 0 0 0 0',
+      '0 1 0 0 0',
+      '0 0 0 0 0',
+      `0 0 0 ${attrs.g.opacity} 0`,
+    ].join(' '),
+  },
+  b: {
+    dx: attrs.b.dx,
+    dy: attrs.b.dy,
+    values: [
+      '0 0 0 0 0',
+      '0 0 0 0 0',
+      '0 0 1 0 0',
+      `0 0 0 ${attrs.b.opacity} 0`,
+    ].join(' '),
+  },
+  source: attrs.source,
+}))
+
+function removeAnime() {
+  anime.remove([
+    attrs.r,
+  ])
+}
 
 defineExpose<FilterExpose>({
   async enter(params?: AnimeParams) {
-    anime.remove(attrs.value)
+    removeAnime()
 
     const {
-      duration = 2000,
+      maxOffset,
+      times: _times,
+    } = props
+
+    const {
+      duration = 300,
     } = params ?? {}
 
     await Promise.all([
+      ...pipe(
+        ['r', 'g', 'b'] as const,
+        map((key) => anime({
+          targets: attrs[key],
+          dx: times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          dy: times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          opacity: [
+            ...times(_times - 1, constant(0.1)),
+            0,
+          ],
+          duration,
+          easing: 'steps(1)',
+        }).finished),
+      ),
       anime({
-        targets: attrs.value,
-        baseFrequency: 0,
-        scale: 0,
-        slope: 1,
+        targets: attrs.source,
+        dx: [
+          ...times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          0,
+        ],
+        dy: [
+          ...times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          0,
+        ],
         duration,
-        easing: 'easeInOutQuint',
+        easing: 'steps(1)',
       }).finished,
     ])
   },
   async leave(params?: AnimeParams) {
-    anime.remove(attrs.value)
+    removeAnime()
 
     const {
-      duration = 2000,
+      maxOffset,
+      times: _times,
+    } = props
+
+    const {
+      duration = 300,
     } = params ?? {}
 
     await Promise.all([
+      ...pipe(
+        ['r', 'g', 'b'] as const,
+        map((key) => anime({
+          targets: attrs[key],
+          dx: times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          dy: times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          opacity: [
+            ...times(_times - 1, constant(0.1)),
+            0,
+          ],
+          duration,
+          easing: 'steps(1)',
+        }).finished),
+      ),
       anime({
-        targets: attrs.value,
-        baseFrequency: 0.008,
-        scale: -50,
-        slope: 0,
+        targets: attrs.source,
+        dx: [
+          ...times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          0,
+        ],
+        dy: [
+          ...times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          0,
+        ],
         duration,
-        easing: 'easeInOutQuint',
+        easing: 'steps(1)',
       }).finished,
     ])
   },
