@@ -24,7 +24,7 @@
           </div>
 
           <div>
-            買不到 IP69K 等級的防水電腦而困擾著 ( ´•̥̥̥ ω •̥̥̥` )
+            困擾買不到 IP69K 等級的防水電腦 ( ´•̥̥̥ ω •̥̥̥` )
           </div>
         </div>
       </transition-special-effects>
