@@ -119,6 +119,9 @@ const feAttrs = computed(() => ({
 function removeAnime() {
   anime.remove([
     attrs.r,
+    attrs.g,
+    attrs.b,
+    attrs.source,
   ])
 }
 
