@@ -21,11 +21,9 @@ import { TransitionName } from './type'
 
 interface Props {
   filterId: string;
-  name?: `${TransitionName}`;
+  name: `${TransitionName}`;
 }
-const props = withDefaults(defineProps<Props>(), {
-  name: 'wave',
-})
+const props = withDefaults(defineProps<Props>(), {})
 
 const filterList = Object.values(TransitionName)
 // 引入所有 filter 元件

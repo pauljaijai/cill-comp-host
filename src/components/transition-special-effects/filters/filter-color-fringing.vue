@@ -212,13 +212,6 @@ defineExpose<FilterExpose>({
       duration = 500,
     } = params ?? {}
 
-    console.log(
-      times(
-        _times - 1,
-        (i) => 1 / (_times - 1) * i + 0.1,
-      ),
-    )
-
     await Promise.all([
       ...pipe(
         ['r', 'g', 'b'] as const,

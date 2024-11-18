@@ -2,6 +2,7 @@ export enum TransitionName {
   WAVE = 'wave',
   GLITCH = 'glitch',
   COLOR_FRINGING = 'color-fringing',
+  MELT = 'melt',
 }
 
 export interface TransitionAnime {

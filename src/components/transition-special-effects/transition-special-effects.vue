@@ -41,8 +41,8 @@ interface Props {
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   appear: false,
-  enter: 'color-fringing',
-  leave: 'color-fringing',
+  enter: 'melt',
+  leave: 'melt',
 })
 
 // #region Emits
