@@ -3,6 +3,7 @@ export enum TransitionName {
   GLITCH = 'glitch',
   COLOR_FRINGING = 'color-fringing',
   MELT = 'melt',
+  DECIMATION = 'decimation',
 }
 
 export interface TransitionAnime {
@@ -22,6 +23,4 @@ export type EnterParams = `${TransitionName}` | (AnimeParams & {
   name: `${TransitionName}`;
 })
 
-export type LeaveParams = `${TransitionName}` | (AnimeParams & {
-  name: `${TransitionName}`;
-})
+export type LeaveParams = EnterParams
