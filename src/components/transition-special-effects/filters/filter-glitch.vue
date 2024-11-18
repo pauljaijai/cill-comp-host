@@ -29,7 +29,6 @@
 <script setup lang="ts">
 import type { AnimeParams, FilterExpose } from '../type'
 import anime from 'animejs'
-import { times } from 'remeda'
 import { computed, reactive } from 'vue'
 
 interface Props { }
@@ -41,24 +40,10 @@ const attrs = reactive({
   slope: 1,
 })
 
-/** 參考：https://www.youtube.com/watch?v=JK7tXtFhfTU */
 const feAttrs = computed(() => ({
   ...attrs,
   baseFrequency: `0 ${attrs.baseFrequency}`,
 }))
-
-/** 取得遞增或遞減的隨機數值 */
-function getRandomList(
-  length: number,
-  maxValue: number,
-  inc = true,
-) {
-  return times(length, (i) => {
-    const value = Math.max(inc ? i : length - i, 1)
-    const offset = maxValue / length * value
-    return Math.random() * offset
-  })
-}
 
 function removeAnime() {
   anime.remove([

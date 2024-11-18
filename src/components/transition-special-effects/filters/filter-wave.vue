@@ -12,8 +12,6 @@
     <feTurbulence
       type="turbulence"
       :baseFrequency="attrs.baseFrequency"
-      numOctaves="2"
-      seed="1"
       stitchTiles="noStitch"
       result="turbulence"
     />
@@ -21,9 +19,7 @@
     <feDisplacementMap
       in="SourceGraphic"
       in2="turbulence"
-      :scale="attrs.scale"
-      xChannelSelector="G"
-      yChannelSelector="A"
+      scale="10"
       result="displacementMap"
     />
     <!-- 透明度 -->
@@ -49,7 +45,6 @@ const props = withDefaults(defineProps<Props>(), {})
 
 const attrs = ref({
   baseFrequency: 0,
-  scale: 0,
   slope: 1,
 })
 
@@ -58,17 +53,16 @@ defineExpose<FilterExpose>({
     anime.remove(attrs.value)
 
     const {
-      duration = 2000,
+      duration = 1600,
     } = params ?? {}
 
     await Promise.all([
       anime({
         targets: attrs.value,
         baseFrequency: 0,
-        scale: 0,
         slope: 1,
         duration,
-        easing: 'easeInOutQuint',
+        easing: 'easeInOutQuad',
       }).finished,
     ])
   },
@@ -76,17 +70,16 @@ defineExpose<FilterExpose>({
     anime.remove(attrs.value)
 
     const {
-      duration = 2000,
+      duration = 1600,
     } = params ?? {}
 
     await Promise.all([
       anime({
         targets: attrs.value,
-        baseFrequency: 0.008,
-        scale: -50,
+        baseFrequency: 0.03,
         slope: 0,
         duration,
-        easing: 'easeInOutQuint',
+        easing: 'easeInOutQuad',
       }).finished,
     ])
   },

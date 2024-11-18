@@ -8,11 +8,11 @@
       />
     </div>
 
-    <div class="flex flex-col items-center justify-center gap-6">
+    <div class="flex flex-col items-center justify-center gap-2">
       <div
         v-for="item in list"
         :key="item.name"
-        class="min-h-[10vh]"
+        class="min-h-[4rem]"
       >
         <transition-special-effects
           :enter="item.name"
@@ -20,7 +20,7 @@
         >
           <div
             v-if="visible"
-            class="flex flex-col items-center gap-4 rounded-xl p-4"
+            class="px-8 py-2"
             :class="item.class"
           >
             {{ item.name.toUpperCase() }}
@@ -44,7 +44,7 @@ const list: Array<{
   class: string;
 }> = [{
   name: 'wave',
-  class: 'bg-blue-200 text-blue-900 text-2xl font-bold',
+  class: 'bg-blue-200 text-blue-900 text-2xl font-bold  rounded-full',
 }, {
   name: 'color-fringing',
   class: 'bg-gray-200 text-gray-900 text-2xl font-bold',
@@ -53,6 +53,9 @@ const list: Array<{
   class: 'text-red-800 border-dashed border border-red-800 text-2xl font-bold',
 }, {
   name: 'melt',
-  class: 'text-gray-400 border-2 border-gray-200 text-4xl',
+  class: 'text-gray-400 border-2 border-gray-200 text-3xl rounded-xl font-bold',
+}, {
+  name: 'decimation',
+  class: 'text-gray-400 border-2 border-gray-200 text-3xl rounded-xl font-bold',
 }]
 </script>
