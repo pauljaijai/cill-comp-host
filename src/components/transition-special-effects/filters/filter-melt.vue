@@ -77,17 +77,17 @@ defineExpose<FilterExpose>({
     removeAnime()
 
     const {
-      duration = 3000,
+      duration = 2000,
     } = params ?? {}
 
     await Promise.all([
       anime({
         targets: attrs,
-        expansion: 50,
+        expansion: 40,
         reduce: {
-          value: 50,
-          delay: duration / 3,
-          duration: duration / 3 * 2,
+          value: 40,
+          delay: duration / 4,
+          duration,
         },
         duration,
         easing: 'easeInOutCubic',
