@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     redirect: {
-      name: RouteName.HOME,
+      enterName: RouteName.HOME,
     },
   },
 

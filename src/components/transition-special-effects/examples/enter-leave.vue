@@ -3,12 +3,33 @@
     <div class="flex flex-col gap-4 border rounded py-4">
       <div class="flex items-center gap-1 px-4">
         <div class="w-20">
-          特效名稱
+          進入特效
         </div>
 
         <div class="flex-1 border rounded">
           <select
-            v-model="name"
+            v-model="enterName"
+            class="w-full p-2"
+          >
+            <option
+              v-for="option in options"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1 px-4">
+        <div class="w-20">
+          離開特效
+        </div>
+
+        <div class="flex-1 border rounded">
+          <select
+            v-model="leaveName"
             class="w-full p-2"
           >
             <option
@@ -31,8 +52,8 @@
 
     <div class="h-[50vh] flex items-center justify-center">
       <transition-special-effects
-        :enter="name"
-        :leave="name"
+        :enter="enterName"
+        :leave="leaveName"
       >
         <div
           v-if="visible"
@@ -64,6 +85,7 @@ import { TransitionName } from '../type'
 
 const visible = ref(true)
 const enterName = ref<`${TransitionName}`>('wave')
+const leaveName = ref<`${TransitionName}`>('wave')
 
 const options = Object.values(TransitionName)
 </script>

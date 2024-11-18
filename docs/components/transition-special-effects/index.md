@@ -6,6 +6,7 @@ description: 各種酷炫特效、風格強烈的 Transition 元件！◝( •ω
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/transition-special-effects/examples/basic-usage.vue'
+import EnterLeave from '../../../src/components/transition-special-effects/examples/enter-leave.vue'
 </script>
 
 # 特效轉場 <Badge type="info" text="transition" />
@@ -20,12 +21,22 @@ import BasicUsage from '../../../src/components/transition-special-effects/examp
 
 ### 基本用法
 
-用法與 Vue 內建的 Transition 元件相同，可以分別指定 enter 與 leave 特效。
+用法與 Vue 內建的 Transition 元件相同。
 
 <basic-usage/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/transition-special-effects/examples/basic-usage.vue
+:::
+
+### 進入與離開
+
+可以分別指定 enter 與 leave 特效。
+
+<enter-leave/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/transition-special-effects/examples/enter-leave.vue
 :::
 
 ## 原理
