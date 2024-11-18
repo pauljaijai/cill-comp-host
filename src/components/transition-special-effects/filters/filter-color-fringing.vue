@@ -78,7 +78,7 @@
 <script setup lang="ts">
 import type { AnimeParams, FilterExpose } from '../type'
 import anime from 'animejs'
-import { map, pipe, randomInteger, times } from 'remeda'
+import { map, pipe, times } from 'remeda'
 import { computed, reactive } from 'vue'
 
 interface Props {
@@ -151,7 +151,7 @@ function getRandomList(
   return times(length, (i) => {
     const value = Math.max(inc ? i : length - i, 1)
     const offset = maxValue / length * value
-    return randomInteger(-offset, offset)
+    return Math.random() * offset * 2 - offset
   })
 }
 
@@ -177,7 +177,11 @@ defineExpose<FilterExpose>({
           dx: getRandomList(_times, maxOffset, false),
           dy: getRandomList(_times, maxOffset, false),
           opacity: [
-            ...times(_times - 1, () => 1),
+            // 0.1~1
+            ...times(
+              _times - 1,
+              (i) => 1 / (_times - 1) * i + 0.1,
+            ),
             0,
           ],
           duration,
@@ -208,6 +212,13 @@ defineExpose<FilterExpose>({
       duration = 500,
     } = params ?? {}
 
+    console.log(
+      times(
+        _times - 1,
+        (i) => 1 / (_times - 1) * i + 0.1,
+      ),
+    )
+
     await Promise.all([
       ...pipe(
         ['r', 'g', 'b'] as const,
@@ -216,7 +227,11 @@ defineExpose<FilterExpose>({
           dx: getRandomList(_times, maxOffset),
           dy: getRandomList(_times, maxOffset),
           opacity: [
-            ...times(_times - 1, () => 1),
+            // 1~0.1
+            ...times(
+              _times - 1,
+              (i) => 1 - (1 / (_times - 1) * i + 0.1),
+            ),
             0,
           ],
           duration,
