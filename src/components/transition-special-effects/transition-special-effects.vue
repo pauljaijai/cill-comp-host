@@ -1,6 +1,6 @@
 <template>
   <transition
-    appear
+    :appear="props.appear"
     :css="false"
     @before-enter="handleBeforeEnter"
     @enter="handleEnter"
@@ -48,8 +48,10 @@ const props = withDefaults(defineProps<Props>(), {
 // #region Emits
 const emit = defineEmits<{
   (e: 'init'): void;
-  (e: 'beforeTransition'): void;
-  (e: 'afterTransition'): void;
+  (e: 'beforeEnter'): void;
+  (e: 'afterEnter'): void;
+  (e: 'beforeLeave'): void;
+  (e: 'afterLeave'): void;
 }>()
 // #endregion Emits
 
@@ -58,9 +60,6 @@ defineSlots<{
   default?: () => unknown;
 }>()
 // #endregion Slots
-
-/** 如果 appear 為 false，則需快速結束第一次動畫 */
-let isFirst = true
 
 const enterId = `${useId()}-enter`
 const enterFilterRef = ref<InstanceType<typeof EffectFilter>>()
@@ -108,19 +107,10 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
     return done()
   }
 
+  emit('beforeEnter')
   await enterFilterRef.value?.leave({ duration: 0 })
-
-  if (isFirst && !props.appear) {
-    isFirst = false
-    await enterFilterRef.value?.enter({
-      ...enterFilterParams.value,
-      duration: 0,
-    })
-    emit('afterTransition')
-    return done()
-  }
-
   await enterFilterRef.value?.enter(enterFilterParams.value)
+  emit('afterEnter')
 
   done()
 }
@@ -140,8 +130,10 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
     return done()
   }
 
+  emit('beforeLeave')
   await leaveFilterRef.value?.enter({ duration: 0 })
   await leaveFilterRef.value?.leave(leaveFilterParams.value)
+  emit('afterLeave')
 
   done()
 }

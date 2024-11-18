@@ -18,6 +18,10 @@ import BasicUsage from '../../../src/components/transition-special-effects/examp
 
 用法與 Vue 內建的 Transition 元件相同，可以分別指定 enter 與 leave 特效。
 
+::: warning 注意！
+此元件會占用 `style` 之 `filter` 屬性，請確保沒有使用 `filter`，否則會導致原本的 `filter` 效果消失。ლ(╹◡╹ლ)
+:::
+
 <basic-usage/>
 
 ::: details 查看範例原始碼
