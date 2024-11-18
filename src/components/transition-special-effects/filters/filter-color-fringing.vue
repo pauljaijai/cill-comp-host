@@ -87,7 +87,7 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), {
   maxOffset: 60,
-  times: 8,
+  times: 5,
 })
 
 const attrs = reactive({
@@ -166,7 +166,7 @@ defineExpose<FilterExpose>({
     } = props
 
     const {
-      duration = 500,
+      duration = 300,
     } = params ?? {}
 
     await Promise.all([
@@ -209,7 +209,7 @@ defineExpose<FilterExpose>({
     } = props
 
     const {
-      duration = 500,
+      duration = 300,
     } = params ?? {}
 
     await Promise.all([
