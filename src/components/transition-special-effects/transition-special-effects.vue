@@ -104,7 +104,6 @@ const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
   el.style.filter = `url(#${enterId})`
 }
 const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
-  console.log('🚀 ~ [handleEnter]:', enterFilterRef)
   if (!(el instanceof HTMLElement)) {
     return done()
   }
