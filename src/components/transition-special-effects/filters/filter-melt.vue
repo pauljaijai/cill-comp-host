@@ -16,10 +16,6 @@
       :values="feAttrs.values"
       result="matrix"
     />
-
-    <feMerge>
-      <feMergeNode in="matrix" />
-    </feMerge>
   </filter>
 </template>
 
