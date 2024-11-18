@@ -91,9 +91,9 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const attrs = reactive({
-  r: { dx: 0, dy: 0, opacity: 1 },
-  g: { dx: 0, dy: 0, opacity: 1 },
-  b: { dx: 0, dy: 0, opacity: 1 },
+  r: { dx: 0, dy: 0, opacity: 0 },
+  g: { dx: 0, dy: 0, opacity: 0 },
+  b: { dx: 0, dy: 0, opacity: 0 },
   source: { opacity: 1 },
 })
 

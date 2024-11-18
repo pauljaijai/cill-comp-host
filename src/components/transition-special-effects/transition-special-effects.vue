@@ -41,8 +41,8 @@ interface Props {
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   appear: false,
-  enter: 'melt',
-  leave: 'melt',
+  enter: 'wave',
+  leave: 'wave',
 })
 
 // #region Emits

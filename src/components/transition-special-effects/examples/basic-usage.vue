@@ -1,15 +1,39 @@
 <template>
   <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border rounded">
+    <div class="flex flex-col gap-4 border rounded py-4">
+      <div class="flex items-center gap-1 px-4">
+        <div class="w-20">
+          特效名稱
+        </div>
+
+        <div class="flex-1 border rounded">
+          <select
+            v-model="name"
+            class="w-full p-2"
+          >
+            <option
+              v-for="option in options"
+              :key="option"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </div>
+      </div>
+
       <base-checkbox
         v-model="visible"
         label="顯示"
-        class="p-4"
+        class="px-4"
       />
     </div>
 
     <div class="h-[50vh] flex items-center justify-center">
-      <transition-special-effects>
+      <transition-special-effects
+        :enter="name"
+        :leave="name"
+      >
         <div
           v-if="visible"
           class="flex flex-col items-center gap-4"
@@ -36,6 +60,10 @@
 import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import TransitionSpecialEffects from '../transition-special-effects.vue'
+import { TransitionName } from '../type'
 
 const visible = ref(true)
+const name = ref<`${TransitionName}`>('wave')
+
+const options = Object.values(TransitionName)
 </script>
