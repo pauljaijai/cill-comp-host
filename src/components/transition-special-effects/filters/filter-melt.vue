@@ -90,8 +90,8 @@ defineExpose<FilterExpose>({
         expansion: 50,
         reduce: {
           value: 50,
-          delay: duration / 2,
-          duration: duration / 2,
+          delay: duration / 3,
+          duration: duration / 3 * 2,
         },
         duration,
         easing: 'easeInOutCubic',
