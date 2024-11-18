@@ -1,5 +1,5 @@
 ---
-description: 特殊效果的 Transition 元件
+description: 各種酷炫特效、風格強烈的 Transition 元件！◝( •ω• )◟
 ---
 
 <script setup>
@@ -10,17 +10,17 @@ import BasicUsage from '../../../src/components/transition-special-effects/examp
 
 # 特效轉場 <Badge type="info" text="transition" />
 
-各種特殊效果的轉場元件！◝( •ω• )◟
+各種酷炫特效、風格強烈的 Transition 元件！◝( •ω• )◟
+
+::: warning 注意！
+此元件會占用 `style` 之 `filter` 屬性，請確保沒有使用 `filter`，否則會導致原本的 `filter` 效果消失。ლ(╹◡╹ლ)
+:::
 
 ## 使用範例
 
 ### 基本用法
 
 用法與 Vue 內建的 Transition 元件相同，可以分別指定 enter 與 leave 特效。
-
-::: warning 注意！
-此元件會占用 `style` 之 `filter` 屬性，請確保沒有使用 `filter`，否則會導致原本的 `filter` 效果消失。ლ(╹◡╹ლ)
-:::
 
 <basic-usage/>
 
@@ -32,7 +32,7 @@ import BasicUsage from '../../../src/components/transition-special-effects/examp
 
 這類特殊效果已經完全超出 CSS 範疇。
 
-一開始從 HTML to Canvas 的方向研究，但是 HTML 轉換成 Canvas 會有很多誤差，成果實在不忍直視。(́⊙◞౪◟⊙‵)
+一開始往 HTML to Canvas 方向研究，但是 HTML 轉換成 Canvas 會有很多誤差，成果實在不忍直視。(́⊙◞౪◟⊙‵)
 
 最後發現 SVG Filter 最適合，因為 SVG Filter 可以直接對 HTML 元素套用濾鏡效果。
 
@@ -40,7 +40,7 @@ import BasicUsage from '../../../src/components/transition-special-effects/examp
 
 實作概念為：
 
-1. 將 SVG Filter 內容獨立為 Vue 元件，使用 `v-bind` 綁定參數，以便產生動畫。
+1. 將 SVG Filter 內容獨立為 Vue 元件，使用 `v-bind` 綁定參數，配合 `animejs` 產生動畫。
 1. 產生唯一 ID，綁定至目標元素 `style`，產生濾鏡效果。
 
 ## 原始碼
