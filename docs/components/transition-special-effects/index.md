@@ -1,5 +1,5 @@
 ---
-description: 各種酷炫特效、風格強烈的 Transition 元件！◝( •ω• )◟
+description: 酷炫、風格強烈的特效 Transition 元件！◝( •ω• )◟
 ---
 
 <script setup>
@@ -11,7 +11,7 @@ import EnterLeave from '../../../src/components/transition-special-effects/examp
 
 # 特效轉場 <Badge type="info" text="transition" />
 
-各種酷炫特效、風格強烈的 Transition 元件！◝( •ω• )◟
+酷炫、風格強烈的特效 Transition 元件！◝( •ω• )◟
 
 ::: warning 注意！
 此元件會占用 `style` 之 `filter` 屬性，請確保沒有使用 `filter`，否則會導致原本的 `filter` 效果消失。ლ(╹◡╹ლ)
@@ -67,10 +67,6 @@ import EnterLeave from '../../../src/components/transition-special-effects/examp
 ### Emits
 
 <<< ../../../src/components/transition-special-effects/transition-special-effects.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/transition-special-effects/transition-special-effects.vue/#Methods
 
 ### Slots
 

@@ -25,6 +25,7 @@ import CarouselSpaceFloating from '../../src/components/carousel-space-floating/
 import CarouselAnamorphosisText from '../../src/components/carousel-anamorphosis-text/examples/basic-usage.vue';
 
 import TransitionShape from '../../src/components/transition-shape/examples/basic-usage.vue';
+import TransitionSpecialEffects from '../../src/components/transition-special-effects/examples/basic-usage.vue';
 
 import BgFirefly from '../../src/components/bg-firefly/examples/full-background.vue';
 import BgSakuraFubuki from '../../src/components/bg-sakura-fubuki/examples/full-background.vue';
@@ -258,6 +259,12 @@ const currentSection = ref('btn');
 Motion Graphic 風格的 Transition 元件
 
 <transition-shape  />
+
+### [多邊形轉場](./transition-special-effects/) <Badge type="info" text="transition" />
+
+酷炫、風格強烈的特效 Transition 元件！◝( •ω• )◟
+
+<transition-special-effects  />
 
 </expansion-section>
 

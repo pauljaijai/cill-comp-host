@@ -1,69 +1,58 @@
 <template>
   <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border rounded py-4">
-      <div class="flex items-center gap-1 px-4">
-        <div class="w-20">
-          特效名稱
-        </div>
-
-        <div class="flex-1 border rounded">
-          <select
-            v-model="name"
-            class="w-full p-2"
-          >
-            <option
-              v-for="option in options"
-              :key="option"
-              :value="option"
-            >
-              {{ option }}
-            </option>
-          </select>
-        </div>
-      </div>
-
+    <div class="flex flex-col gap-4 border rounded">
       <base-checkbox
         v-model="visible"
         label="顯示"
-        class="px-4"
+        class="p-4"
       />
     </div>
 
-    <div class="h-[50vh] flex items-center justify-center">
-      <transition-special-effects
-        :enter="name"
-        :leave="name"
+    <div class="flex flex-col items-center justify-center gap-6">
+      <div
+        v-for="item in list"
+        :key="item.name"
+        class="min-h-[10vh]"
       >
-        <div
-          v-if="visible"
-          class="flex flex-col items-center gap-4"
+        <transition-special-effects
+          :enter="item.name"
+          :leave="item.name"
         >
-          <img
-            src="/profile.webp"
-            class="mb-4 h-60 w-60 overflow-hidden border-4 border-white rounded-full shadow-xl"
+          <div
+            v-if="visible"
+            class="flex flex-col items-center gap-4 rounded-xl p-4"
+            :class="item.class"
           >
-
-          <div class="text-xl font-bold">
-            鱈魚 Codfish
+            {{ item.name.toUpperCase() }}
           </div>
-
-          <div>
-            困擾買不到 IP69K 等級的防水電腦 ( ´•̥̥̥ ω •̥̥̥` )
-          </div>
-        </div>
-      </transition-special-effects>
+        </transition-special-effects>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { TransitionName } from '../type'
 import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import TransitionSpecialEffects from '../transition-special-effects.vue'
-import { TransitionName } from '../type'
 
 const visible = ref(true)
-const enterName = ref<`${TransitionName}`>('wave')
 
-const options = Object.values(TransitionName)
+const list: Array<{
+  name: `${TransitionName}`;
+  class: string;
+}> = [{
+  name: 'wave',
+  class: 'bg-blue-200 text-blue-900 text-2xl font-bold',
+}, {
+  name: 'color-fringing',
+  class: 'bg-gray-200 text-gray-900 text-2xl font-bold',
+}, {
+  name: 'glitch',
+  class: 'text-red-800 border-dashed border border-red-800 text-2xl font-bold',
+}, {
+  name: 'melt',
+  class: 'text-gray-400 border-2 border-gray-200 text-4xl',
+}]
 </script>
