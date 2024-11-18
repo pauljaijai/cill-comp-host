@@ -6,13 +6,14 @@
     height="200%"
   >
     <feTurbulence
+      type="fractalNoise"
       :baseFrequency="feAttrs.baseFrequency"
       result="noise"
     />
     <feDisplacementMap
       in="SourceGraphic"
       in2="noise"
-      scale="10"
+      scale="100"
       result="displacementMap"
     />
     <feComponentTransfer in="displacementMap">

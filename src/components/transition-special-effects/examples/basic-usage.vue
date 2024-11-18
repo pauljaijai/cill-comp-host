@@ -49,11 +49,11 @@ const list: Array<{
   name: 'color-fringing',
   class: 'bg-gray-200 text-gray-900 text-2xl font-bold',
 }, {
-  name: 'glitch',
-  class: 'text-red-800 border-dashed border border-red-800 text-2xl font-bold',
-}, {
   name: 'melt',
   class: 'text-gray-400 border-2 border-gray-200 text-3xl rounded-xl font-bold',
+}, {
+  name: 'glitch',
+  class: 'text-red-800 border-dashed border border-red-800 text-2xl font-bold',
 }, {
   name: 'decimation',
   class: 'text-gray-400 border-2 border-gray-200 text-3xl rounded-xl font-bold',
