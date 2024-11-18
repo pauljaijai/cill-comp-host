@@ -96,21 +96,27 @@ const leaveFilterParams = computed(() => pipe(
   }),
 ))
 
-// 進入事件
+// --- enter hook ---
 const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
   if (!(el instanceof HTMLElement))
     return
 
   el.style.filter = `url(#${enterId})`
-  enterFilterRef.value?.leave({ duration: 0 })
 }
 const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
+  console.log('🚀 ~ [handleEnter]:', enterFilterRef)
   if (!(el instanceof HTMLElement)) {
     return done()
   }
 
+  await enterFilterRef.value?.leave({ duration: 0 })
+
   if (isFirst && !props.appear) {
     isFirst = false
+    await enterFilterRef.value?.enter({
+      ...enterFilterParams.value,
+      duration: 0,
+    })
     emit('afterTransition')
     return done()
   }
@@ -123,20 +129,19 @@ const handleAfterEnter: TransitionProps['onAfterEnter'] = (el) => {
   //
 }
 
-// 離開事件
+// --- leave hook ---
 const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
   if (!(el instanceof HTMLElement))
     return
 
   el.style.filter = `url(#${leaveId})`
-
-  leaveFilterRef.value?.enter({ duration: 0 })
 }
 const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   if (!(el instanceof HTMLElement)) {
     return done()
   }
 
+  await leaveFilterRef.value?.enter({ duration: 0 })
   await leaveFilterRef.value?.leave(leaveFilterParams.value)
 
   done()

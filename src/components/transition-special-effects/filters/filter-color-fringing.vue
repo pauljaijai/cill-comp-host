@@ -45,13 +45,8 @@
     />
 
     <!-- Source -->
-    <feOffset
-      in="SourceGraphic"
-      v-bind="feAttrs.source"
-      result="sourceOffset"
-    />
     <feComponentTransfer
-      in="sourceOffset"
+      in="SourceGraphic"
       result="sourceChannel"
     >
       <feFuncA
@@ -74,8 +69,8 @@
     />
 
     <feMerge>
-      <feMergeNode in="sourceChannel" />
       <feMergeNode in="rgbChannel" />
+      <feMergeNode in="sourceChannel" />
     </feMerge>
   </filter>
 </template>
@@ -83,7 +78,7 @@
 <script setup lang="ts">
 import type { AnimeParams, FilterExpose } from '../type'
 import anime from 'animejs'
-import { constant, map, pipe, randomInteger, times } from 'remeda'
+import { map, pipe, randomInteger, times } from 'remeda'
 import { computed, reactive } from 'vue'
 
 interface Props {
@@ -91,15 +86,15 @@ interface Props {
   times?: number;
 }
 const props = withDefaults(defineProps<Props>(), {
-  maxOffset: 20,
-  times: 5,
+  maxOffset: 60,
+  times: 8,
 })
 
 const attrs = reactive({
-  r: { dx: 0, dy: 0, opacity: 0.5 },
-  g: { dx: 0, dy: 0, opacity: 0.5 },
-  b: { dx: 0, dy: 0, opacity: 0.5 },
-  source: { dx: 0, dy: 0, opacity: 0.5 },
+  r: { dx: 0, dy: 0, opacity: 1 },
+  g: { dx: 0, dy: 0, opacity: 1 },
+  b: { dx: 0, dy: 0, opacity: 1 },
+  source: { opacity: 1 },
 })
 
 const feAttrs = computed(() => ({
@@ -134,8 +129,6 @@ const feAttrs = computed(() => ({
     ].join(' '),
   },
   source: {
-    dx: attrs.source.dx,
-    dy: attrs.source.dy,
     slope: attrs.source.opacity,
   },
 }))
@@ -149,8 +142,22 @@ function removeAnime() {
   ])
 }
 
+/** 取得遞增或遞減的隨機數值 */
+function getRandomList(
+  length: number,
+  maxValue: number,
+  inc = true,
+) {
+  return times(length, (i) => {
+    const value = Math.max(inc ? i : length - i, 1)
+    const offset = maxValue / length * value
+    return randomInteger(-offset, offset)
+  })
+}
+
 defineExpose<FilterExpose>({
   async enter(params?: AnimeParams) {
+    // console.log('🚀 ~ [enter] params:', params)
     removeAnime()
 
     const {
@@ -159,7 +166,7 @@ defineExpose<FilterExpose>({
     } = props
 
     const {
-      duration = 300,
+      duration = 500,
     } = params ?? {}
 
     await Promise.all([
@@ -167,10 +174,10 @@ defineExpose<FilterExpose>({
         ['r', 'g', 'b'] as const,
         map((key) => anime({
           targets: attrs[key],
-          dx: times(_times, () => randomInteger(-maxOffset, maxOffset)),
-          dy: times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          dx: getRandomList(_times, maxOffset, false),
+          dy: getRandomList(_times, maxOffset, false),
           opacity: [
-            ...times(_times - 1, constant(1)),
+            ...times(_times - 1, () => 1),
             0,
           ],
           duration,
@@ -179,16 +186,8 @@ defineExpose<FilterExpose>({
       ),
       anime({
         targets: attrs.source,
-        dx: [
-          ...times(_times - 1, () => randomInteger(-maxOffset, maxOffset)),
-          0,
-        ],
-        dy: [
-          ...times(_times - 1, () => randomInteger(-maxOffset, maxOffset)),
-          0,
-        ],
         opacity: [
-          ...times(_times - 1, constant(0)),
+          ...times(_times - 1, () => 0),
           1,
         ],
         duration,
@@ -197,6 +196,7 @@ defineExpose<FilterExpose>({
     ])
   },
   async leave(params?: AnimeParams) {
+    // console.log('🚀 ~ [leave] params:', params)
     removeAnime()
 
     const {
@@ -205,7 +205,7 @@ defineExpose<FilterExpose>({
     } = props
 
     const {
-      duration = 300,
+      duration = 500,
     } = params ?? {}
 
     await Promise.all([
@@ -213,10 +213,10 @@ defineExpose<FilterExpose>({
         ['r', 'g', 'b'] as const,
         map((key) => anime({
           targets: attrs[key],
-          dx: times(_times, () => randomInteger(-maxOffset, maxOffset)),
-          dy: times(_times, () => randomInteger(-maxOffset, maxOffset)),
+          dx: getRandomList(_times, maxOffset),
+          dy: getRandomList(_times, maxOffset),
           opacity: [
-            ...times(_times - 1, constant(1)),
+            ...times(_times - 1, () => 1),
             0,
           ],
           duration,
@@ -225,15 +225,7 @@ defineExpose<FilterExpose>({
       ),
       anime({
         targets: attrs.source,
-        dx: [
-          ...times(_times - 1, () => randomInteger(-maxOffset, maxOffset)),
-          0,
-        ],
-        dy: [
-          ...times(_times - 1, () => randomInteger(-maxOffset, maxOffset)),
-          0,
-        ],
-        opacity: [0, 0],
+        opacity: [0],
         duration,
         easing: 'steps(1)',
       }).finished,

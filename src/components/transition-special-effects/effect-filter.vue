@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import type { FilterExpose } from './type'
+import { until } from '@vueuse/core'
 import { entries, find, map, pipe } from 'remeda'
 import { computed, defineAsyncComponent, ref } from 'vue'
 import { TransitionName } from './type'
@@ -63,8 +64,14 @@ const filterComponent = computed(() => pipe(
 const filterRef = ref<FilterExpose>()
 
 defineExpose<FilterExpose>({
-  enter: async (params) => filterRef.value?.enter(params),
-  leave: async (params) => filterRef.value?.leave(params),
+  enter: async (params) => {
+    await until(filterRef).toBeTruthy()
+    return filterRef.value?.enter(params)
+  },
+  leave: async (params) => {
+    await until(filterRef).toBeTruthy()
+    return filterRef.value?.leave(params)
+  },
 })
 </script>
 
