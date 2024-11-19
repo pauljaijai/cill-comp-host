@@ -39,7 +39,7 @@ const list = ref<Array<{
   class: 'bg-blue-200 text-blue-900 text-2xl font-bold  rounded-full',
 }, {
   visible: true,
-  name: 'color-fringing',
+  name: 'cyberpsychosis',
   class: 'bg-gray-200 text-gray-900 text-2xl font-bold',
 }, {
   visible: true,
