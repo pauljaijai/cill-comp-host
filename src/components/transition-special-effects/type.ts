@@ -1,7 +1,7 @@
 export enum TransitionName {
   WAVE = 'wave',
   GLITCH = 'glitch',
-  COLOR_FRINGING = 'color-fringing',
+  CYBERPSYCHOSIS = 'cyberpsychosis',
   MELT = 'melt',
   // DECIMATION = 'decimation',
   ERODE = 'erode',
