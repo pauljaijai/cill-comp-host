@@ -23,6 +23,8 @@ import EnterLeave from '../../../src/components/transition-special-effects/examp
 
 用法與 Vue 內建的 Transition 元件相同。
 
+（點擊後開始轉場）
+
 <basic-usage/>
 
 ::: details 查看範例原始碼
