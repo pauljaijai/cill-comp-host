@@ -54,6 +54,10 @@ const list = ref<Array<{
   visible: true,
   name: 'decimation',
   class: 'text-gray-400 border-2 border-gray-200 text-3xl rounded-xl font-bold',
+}, {
+  visible: true,
+  name: 'erode',
+  class: 'bg-[#222] text-white text-2xl font-black tracking-widest',
 }])
 </script>
 

@@ -4,6 +4,7 @@ export enum TransitionName {
   COLOR_FRINGING = 'color-fringing',
   MELT = 'melt',
   DECIMATION = 'decimation',
+  ERODE = 'erode',
 }
 
 export interface TransitionAnime {
