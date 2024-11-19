@@ -106,7 +106,7 @@ defineSlots<{
 const partList = Object.values(Part)
 // 引入所有 part 元件
 const partModules = import.meta.glob(['./parts/*.vue'])
-const partComponentTypeMap = pipe(
+const partComponentList = pipe(
   partModules,
   entries(),
   map(([path, component]) => {
@@ -131,7 +131,7 @@ function findPartComponent(part: `${Part}`, type?: string) {
     return
 
   return pipe(
-    partComponentTypeMap,
+    partComponentList,
     find(({ part: p, type: t }) => p === part && t === type),
     (target) => {
       if (!target) {

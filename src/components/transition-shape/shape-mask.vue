@@ -41,8 +41,8 @@ const props = withDefaults(defineProps<Props>(), {
 // #region Emits
 const emit = defineEmits<{
   (e: 'init'): void;
-  (e: 'before-transition'): void;
-  (e: 'after-transition'): void;
+  (e: 'beforeTransition'): void;
+  (e: 'afterTransition'): void;
 }>()
 // #endregion Emits
 
@@ -263,7 +263,7 @@ async function init(rect: DOMRect) {
 
 const isEntering = ref(false)
 async function enter(rect: DOMRect) {
-  emit('before-transition')
+  emit('beforeTransition')
 
   if (isEntering.value) {
     return until(isEntering).toBe(false)
@@ -317,7 +317,7 @@ async function leave(rect: DOMRect) {
 
   isLeaving.value = false
 
-  emit('after-transition')
+  emit('afterTransition')
 }
 
 const isTransition = computed(

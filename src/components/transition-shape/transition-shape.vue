@@ -20,8 +20,8 @@
     :width="currentBounding?.width.value"
     :height="currentBounding?.height.value"
     @init="() => emit('init')"
-    @before-transition="() => emit('before-transition')"
-    @after-transition="() => emit('after-transition')"
+    @before-transition="() => emit('beforeTransition')"
+    @after-transition="() => emit('afterTransition')"
   />
 </template>
 
@@ -41,6 +41,11 @@ import {
 } from 'vue'
 import ShapeMask from './shape-mask.vue'
 
+// #region Props
+interface Props {
+  appear?: boolean;
+  type?: TransitionType;
+}
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   appear: false,
@@ -65,22 +70,15 @@ const props = withDefaults(defineProps<Props>(), {
 // #region Emits
 const emit = defineEmits<{
   (e: 'init'): void;
-  (e: 'before-transition'): void;
-  (e: 'after-transition'): void;
+  (e: 'beforeTransition'): void;
+  (e: 'afterTransition'): void;
 }>()
-
 // #endregion Emits
 
 // #region Slots
 const slots = defineSlots<{
   default?: () => unknown;
 }>()
-
-// #region Props
-interface Props {
-  appear?: boolean;
-  type?: TransitionType;
-}
 // #endregion Slots
 
 /** 當新舊元素尺寸不同時，會導致 mask 尺寸變化。
@@ -98,11 +96,11 @@ const maskCssTransitionValue = computed(() => {
 /** 如果 appear 為 false，則需快速結束第一次動畫 */
 let isFirst = true
 
-const enterElRef = ref<HTMLElement>()
-const enterElBounding = useElementBounding(enterElRef)
+const enterEl = ref<HTMLElement>()
+const enterElBounding = useElementBounding(enterEl)
 
-const leaveElRef = ref<HTMLElement>()
-const leaveElBounding = useElementBounding(leaveElRef)
+const leaveEl = ref<HTMLElement>()
+const leaveElBounding = useElementBounding(leaveEl)
 
 const currentBounding = computed(() => pipe(
   [enterElBounding, leaveElBounding],
@@ -110,7 +108,7 @@ const currentBounding = computed(() => pipe(
 ))
 
 const maskRef = ref<InstanceType<typeof ShapeMask>>()
-const maskVisible = computed(() => !!enterElRef.value || !!leaveElRef.value)
+const maskVisible = computed(() => !!enterEl.value || !!leaveEl.value)
 
 const maskStyle = computed<CSSProperties>(() => pipe(
   currentBounding.value,
@@ -139,7 +137,7 @@ const handleBeforeEnter: TransitionProps['onBeforeEnter'] = (el) => {
   el.style.opacity = '0'
   el.classList.add('anchor')
 
-  enterElRef.value = el
+  enterEl.value = el
 }
 const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   // nextTick 才能同時取得 enterElRef 和 leaveElRef
@@ -151,7 +149,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   }
 
   const enterElBounding = el.getBoundingClientRect()
-  const leaveElBounding = leaveElRef.value?.getBoundingClientRect()
+  const leaveElBounding = leaveEl.value?.getBoundingClientRect()
 
   // 初始化 mask
   await maskRef.value?.init(enterElBounding)
@@ -159,12 +157,12 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   if (isFirst && !props.appear) {
     isFirst = false
     el.style.opacity = '1'
-    emit('after-transition')
+    emit('afterTransition')
     return done()
   }
 
   // 如果有 leaveElRef，表示為切換動畫
-  if (leaveElRef.value) {
+  if (leaveEl.value) {
     // 將 enterEl 先脫離佔位
     el.style.display = 'none'
   }
@@ -172,10 +170,10 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   await maskRef.value?.enter(enterElBounding)
 
   // 如果有 leaveElRef，表示為切換動畫
-  if (leaveElRef.value) {
+  if (leaveEl.value) {
     el.style.display = ''
     // 提早移除 leaveEl 以免影響定位
-    leaveElRef.value = undefined
+    leaveEl.value = undefined
 
     if (isSizeChanged(leaveElBounding, enterElBounding)) {
       // 等待 canvas 尺寸變化，同 .shape-mask 定義的 transition-duration
@@ -189,7 +187,7 @@ const handleEnter: TransitionProps['onEnter'] = async (el, done) => {
   done()
 }
 const handleAfterEnter: TransitionProps['onAfterEnter'] = (el) => {
-  enterElRef.value = undefined
+  enterEl.value = undefined
 }
 
 // 離開事件
@@ -198,7 +196,7 @@ const handleBeforeLeave: TransitionProps['onBeforeLeave'] = (el) => {
     return
   el.classList.add('anchor')
 
-  leaveElRef.value = el
+  leaveEl.value = el
 }
 const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   // nextTick 才能同時取得 enterElRef 和 leaveElRef
@@ -209,14 +207,14 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
     return done()
   }
 
-  const enterElBounding = enterElRef.value?.getBoundingClientRect()
+  const enterElBounding = enterEl.value?.getBoundingClientRect()
   const leaveElBounding = el.getBoundingClientRect()
 
   await maskRef.value?.enter(leaveElBounding)
 
   el.style.opacity = '0'
   // 如果有 enterElRef，表示為切換動畫
-  if (enterElRef.value) {
+  if (enterEl.value) {
     // 將 leaveEl 脫離佔位
     el.style.display = 'none'
 
@@ -230,7 +228,7 @@ const handleLeave: TransitionProps['onLeave'] = async (el, done) => {
   done()
 }
 const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
-  leaveElRef.value = undefined
+  leaveEl.value = undefined
 }
 
 const anchorName = ref(`--${nanoid()}`)
