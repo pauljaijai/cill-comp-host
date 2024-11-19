@@ -8,21 +8,18 @@
     width="200%"
     height="200%"
   >
-    <!-- 產生雜訊 -->
     <feTurbulence
       type="turbulence"
       :baseFrequency="attrs.baseFrequency"
       stitchTiles="noStitch"
       result="turbulence"
     />
-    <!-- 依照雜訊內容偏移 -->
     <feDisplacementMap
       in="SourceGraphic"
       in2="turbulence"
-      scale="10"
+      :scale="attrs.scale"
       result="displacementMap"
     />
-    <!-- 透明度 -->
     <feComponentTransfer
       in="displacementMap"
       result="alphaAdjust"
@@ -45,6 +42,7 @@ const props = withDefaults(defineProps<Props>(), {})
 
 const attrs = ref({
   baseFrequency: 0,
+  scale: 0,
   slope: 1,
 })
 
@@ -60,6 +58,7 @@ defineExpose<FilterExpose>({
       anime({
         targets: attrs.value,
         baseFrequency: 0,
+        scale: 0,
         slope: 1,
         duration,
         easing: 'easeInOutQuad',
@@ -77,6 +76,7 @@ defineExpose<FilterExpose>({
       anime({
         targets: attrs.value,
         baseFrequency: 0.03,
+        scale: 10,
         slope: 0,
         duration,
         easing: 'easeInOutQuad',
