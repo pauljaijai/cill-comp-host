@@ -5,7 +5,6 @@
         v-for="item in list"
         :key="item.name"
         class="item h-[5rem] w-full flex items-center justify-center"
-        :class="{ clickable: !item.visible }"
         @click="item.visible = !item.visible"
       >
         <transition-special-effects
@@ -52,10 +51,6 @@ const list = ref<Array<{
   class: 'text-red-800 border-dashed border border-red-800 text-2xl font-bold',
 }, {
   visible: true,
-  name: 'decimation',
-  class: 'text-gray-400 border-2 border-gray-200 text-3xl rounded-xl font-bold',
-}, {
-  visible: true,
   name: 'erode',
   class: 'bg-[#222] text-white text-2xl font-black tracking-widest',
 }])
@@ -65,7 +60,4 @@ const list = ref<Array<{
 .item
   cursor: pointer
   transition-duration: 0.5s
-  border: 1px dashed transparent
-  &.clickable
-    border: 1px dashed rgba(#000, 0.1)
 </style>
