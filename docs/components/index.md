@@ -262,7 +262,7 @@ Motion Graphic 風格的 Transition 元件
 
 ### [特效轉場](./transition-special-effects/) <Badge type="info" text="transition" />
 
-酷炫、風格強烈的特效 Transition 元件！◝( •ω• )◟
+效果酷炫、風格強烈的 Transition 元件！◝( •ω• )◟
 
 <transition-special-effects  />
 
