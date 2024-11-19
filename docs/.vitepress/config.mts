@@ -132,6 +132,7 @@ export default defineConfig({
             text: '轉場',
             items: [
               { text: '多邊形轉場', link: '/components/transition-shape/' },
+              { text: '特效轉場', link: '/components/transition-special-effects/' },
             ],
           },
           {
