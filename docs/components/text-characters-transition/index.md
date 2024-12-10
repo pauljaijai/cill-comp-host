@@ -51,7 +51,7 @@ import CustomTransition from '../../../src/components/text-characters-transition
 
 ### 自定義轉場
 
-參數皆可自定義，寫法詳見 [anime.js 文檔](https://animejs.com/documentation/#cssProperties)
+參數皆可自定義，寫法詳見 [anime.js 文件](https://animejs.com/documentation/#cssProperties)
 
 來打造各種獨特的轉場效果！(≖‿ゝ≖)✧
 
