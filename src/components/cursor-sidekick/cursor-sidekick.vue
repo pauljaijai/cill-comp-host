@@ -294,9 +294,9 @@ const sidekickProp = computed(() => {
     }),
     selectionState: selectionState.rects.value[0]
       ? {
-        text: selectionState.text.value,
-        rect: selectionState.rects.value[0],
-      }
+          text: selectionState.text.value,
+          rect: selectionState.rects.value[0],
+        }
       : undefined,
   }
 
@@ -364,9 +364,9 @@ const tooltipProp = computed(() => {
     }),
     selectionState: selectionState.rects.value[0]
       ? {
-        text: selectionState.text.value,
-        rect: selectionState.rects.value[0],
-      }
+          text: selectionState.text.value,
+          rect: selectionState.rects.value[0],
+        }
       : undefined,
 
     activeProviders: props.activeProviders,
