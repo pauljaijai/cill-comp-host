@@ -1,16 +1,12 @@
 <template>
-  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border rounded">
-      <base-checkbox
-        v-model="disabled"
-        label="停用按鈕"
-        class="p-4"
-      />
-    </div>
+  <div class="w-full flex flex-col gap-4 border border-gray-300 rounded">
+    <base-checkbox
+      v-model="disabled"
+      label="停用按鈕"
+      class="p-4"
+    />
 
-    <div class="flex justify-center">
-      <bg-snow />
-    </div>
+    <bg-snow class="fixed left-0 top-0 z-[100] h-full w-full" />
   </div>
 </template>
 
