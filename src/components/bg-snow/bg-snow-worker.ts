@@ -2,6 +2,7 @@ import type { Camera } from '@babylonjs/core'
 import { ArcRotateCamera, Color4, Engine, ParticleSystem, Scene, Texture, Vector3 } from '@babylonjs/core'
 import * as Comlink from 'comlink'
 
+let canvas: OffscreenCanvas | undefined
 let scene: Scene | undefined
 let engine: Engine | undefined
 let camera: Camera | undefined
@@ -134,18 +135,20 @@ async function initParticleSystem(
   particleSystem.start()
 }
 
-async function init(canvas: OffscreenCanvas) {
+async function init(offscreenCanvas: OffscreenCanvas) {
+  canvas = offscreenCanvas
+
   engine = createEngine({
-    canvas,
+    canvas: offscreenCanvas,
   })
   const newScene = createScene({
-    canvas,
+    canvas: offscreenCanvas,
     engine,
   })
   scene = newScene
 
   camera = createCamera({
-    canvas,
+    canvas: offscreenCanvas,
     engine,
     scene,
   })
@@ -155,7 +158,7 @@ async function init(canvas: OffscreenCanvas) {
   })
 
   await initParticleSystem({
-    canvas,
+    canvas: offscreenCanvas,
     engine,
     scene: newScene,
   })
@@ -173,6 +176,14 @@ const api = {
   init,
   getFps() {
     return engine?.getFps().toFixed() ?? '0'
+  },
+  resize(size: { width: number; height: number }) {
+    if (canvas) {
+      canvas.width = size.width
+      canvas.height = size.height
+    }
+
+    engine?.resize()
   },
 }
 

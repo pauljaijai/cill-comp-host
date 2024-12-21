@@ -7,8 +7,9 @@
 
 <script setup lang="ts">
 import type { WorkerApi } from './bg-snow-worker'
+import { useEventListener } from '@vueuse/core'
 import * as Comlink from 'comlink'
-import { onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import SceneWorker from './bg-snow-worker?worker'
 
 // #region Props
@@ -18,6 +19,7 @@ const props = withDefaults(defineProps<Props>(), {})
 
 let worker: Worker | undefined
 let remoteWorker: Comlink.Remote<WorkerApi> | undefined
+
 const canvasRef = ref<HTMLCanvasElement>()
 
 onMounted(() => {
@@ -26,13 +28,13 @@ onMounted(() => {
     throw new Error('無法取得 canvas DOM')
   }
 
-  const rect = canvas.getBoundingClientRect()
-
   if (!canvas.transferControlToOffscreen) {
     throw new Error('此瀏覽器不支援 canvas.transferControlToOffscreen')
   }
 
   const offscreen = canvas.transferControlToOffscreen()
+
+  const rect = canvas.getBoundingClientRect()
   offscreen.width = rect.width
   offscreen.height = rect.height
 
@@ -40,6 +42,15 @@ onMounted(() => {
   remoteWorker = Comlink.wrap<WorkerApi>(worker)
 
   remoteWorker.init(Comlink.transfer(offscreen, [offscreen]))
+
+  useEventListener('resize', () => {
+    const rect = canvas.getBoundingClientRect()
+    remoteWorker?.resize(rect)
+  })
+})
+
+onBeforeUnmount(() => {
+  worker?.terminate()
 })
 
 // #region Methods
