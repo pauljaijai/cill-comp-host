@@ -2,6 +2,7 @@
   <div class="w-full flex flex-col gap-4 border border-gray-300 rounded">
     <base-checkbox
       v-model="disabled"
+      v-bg-static
       label="停用按鈕"
       class="p-4"
     />
@@ -14,6 +15,7 @@
 import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import BgSnow from '../bg-snow.vue'
+import { vBgStatic } from '../v-bg-static'
 
 const text = ref('')
 const disabled = ref(true)
