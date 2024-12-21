@@ -64,7 +64,7 @@ async function initParticleSystem(
 
   const particleSystem = new ParticleSystem(
     'snow',
-    2000,
+    5000,
     scene,
   )
 
@@ -111,6 +111,8 @@ async function initParticleSystem(
         // 壽命終結
         if (particle.age >= particle.lifeTime) {
           particles.splice(index, 1)
+          set(particle, STATIC_ID_NAME, undefined)
+
           // @ts-expect-error 依照文件寫法
           this._stockParticles.push(particle)
           index--
@@ -120,11 +122,11 @@ async function initParticleSystem(
         // @ts-expect-error 依照文件寫法
         particle.age += this._scaledUpdateSpeed
 
-        // 是否有 staticId
+        // 是否黏附
         const targetId = get(particle, STATIC_ID_NAME) as string | undefined
         if (targetId === id) {
-          // 粒子在 staticMap 上
           particle.position.y = bounding.top * -1
+          particle.direction = new Vector3(0, 0, 0)
           continue
         }
 
@@ -139,28 +141,29 @@ async function initParticleSystem(
           && particle.position.x < bounding.left + bounding.width
         ) {
           particle.position.y = bounding.top * -1
+          particle.direction = new Vector3(0, 0, 0)
 
           // 黏附在 staticMap 上
           set(particle, STATIC_ID_NAME, id)
+          continue
         }
+
         // 更新粒子狀態
-        else {
-          // @ts-expect-error 依照文件寫法
-          particle.colorStep.scaleToRef(this._scaledUpdateSpeed, this._scaledColorStep)
-          // @ts-expect-error 依照文件寫法
-          particle.color.addInPlace(this._scaledColorStep)
+        // @ts-expect-error 依照文件寫法
+        particle.colorStep.scaleToRef(this._scaledUpdateSpeed, this._scaledColorStep)
+        // @ts-expect-error 依照文件寫法
+        particle.color.addInPlace(this._scaledColorStep)
 
-          if (particle.color.a < 0)
-            particle.color.a = 0
+        if (particle.color.a < 0)
+          particle.color.a = 0
 
-          // @ts-expect-error 依照文件寫法
-          particle.direction.scaleToRef(this._scaledUpdateSpeed, this._scaledDirection)
-          // @ts-expect-error 依照文件寫法
-          particle.position.addInPlace(this._scaledDirection)
+        // @ts-expect-error 依照文件寫法
+        particle.direction.scaleToRef(this._scaledUpdateSpeed, this._scaledDirection)
+        // @ts-expect-error 依照文件寫法
+        particle.position.addInPlace(this._scaledDirection)
 
-          // @ts-expect-error 依照文件寫法
-          particle.direction.addInPlace(this._scaledGravity)
-        }
+        // @ts-expect-error 依照文件寫法
+        particle.direction.addInPlace(this._scaledGravity)
       }
     }
   }
