@@ -60,7 +60,7 @@ async function initParticleSystem(
 
   const particleSystem = new ParticleSystem(
     'snow',
-    20000,
+    2000,
     scene,
   )
 
@@ -69,20 +69,69 @@ async function initParticleSystem(
 
   particleSystem.particleTexture = new Texture('/textures/dot.png')
 
-  particleSystem.emitter = new Vector3(0, 200, 0)
+  particleSystem.emitter = new Vector3(0, height / 2, 0)
   particleSystem.emitRate = 100
 
-  particleSystem.minLifeTime = 30
+  const maxSpeed = height / 8
+  const maxXSpeed = maxSpeed / 4
+  const x = width / 2
+  particleSystem.createBoxEmitter(
+    new Vector3(maxXSpeed, -maxSpeed, maxXSpeed),
+    new Vector3(-maxXSpeed, -maxSpeed / 2, -maxXSpeed),
+    new Vector3(x, 0, 0),
+    new Vector3(-x, 0, 0),
+  )
 
-  particleSystem.minSize = 10
+  particleSystem.minLifeTime = maxSpeed / 2
+  particleSystem.maxSize = 8
+  particleSystem.minSize = 4
 
-  particleSystem.direction1 = new Vector3(-width / 5, -height / 4, 0)
-  particleSystem.direction2 = new Vector3(width / 5, -height / 4, 0)
-
-  particleSystem.color1 = new Color4(0.8, 0.8, 0.8, 1)
+  particleSystem.color1 = new Color4(1, 1, 1, 1)
+  particleSystem.color2 = new Color4(0.9, 0.9, 0.9, 1)
   particleSystem.colorDead = new Color4(1, 1, 1, 0)
-
   particleSystem.blendMode = ParticleSystem.BLENDMODE_STANDARD
+
+  particleSystem.updateFunction = function (particles) {
+    for (let index = 0; index < particles.length; index++) {
+      const particle = particles[index]
+      if (!particle)
+        continue
+
+      /** 依照文件作法
+       *
+       * https://doc.babylonjs.com/features/featuresDeepDive/particles/particle_system/customizingParticles/
+       */
+
+      // @ts-expect-error 依照文件寫法
+      particle.age += this._scaledUpdateSpeed
+
+      // 刪除粒子
+      if (particle.age >= particle.lifeTime) {
+        particles.splice(index, 1)
+        // @ts-expect-error 依照文件寫法
+        this._stockParticles.push(particle)
+        index--
+        continue
+      }
+      else {
+        // @ts-expect-error 依照文件寫法
+        particle.colorStep.scaleToRef(this._scaledUpdateSpeed, this._scaledColorStep)
+        // @ts-expect-error 依照文件寫法
+        particle.color.addInPlace(this._scaledColorStep)
+
+        if (particle.color.a < 0)
+          particle.color.a = 0
+
+        // @ts-expect-error 依照文件寫法
+        particle.direction.scaleToRef(this._scaledUpdateSpeed, this._scaledDirection)
+        // @ts-expect-error 依照文件寫法
+        particle.position.addInPlace(this._scaledDirection)
+
+        // @ts-expect-error 依照文件寫法
+        particle.direction.addInPlace(this._scaledGravity)
+      }
+    }
+  }
 
   particleSystem.start()
 }
