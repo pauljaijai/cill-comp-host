@@ -35,7 +35,7 @@ function createCamera(
     scene: Scene;
   },
 ) {
-  const { canvas, scene } = params
+  const { scene } = params
 
   const camera = new ArcRotateCamera(
     'ArcRotateCamera',
@@ -56,7 +56,7 @@ async function initParticleSystem(
     scene: Scene;
   },
 ) {
-  const { scene } = params
+  const { canvas, scene } = params
 
   const particleSystem = new ParticleSystem(
     'snow',
@@ -64,10 +64,8 @@ async function initParticleSystem(
     scene,
   )
 
-  const width = 1920
-  const height = 1080
-
-  particleSystem.particleTexture = new Texture('/textures/dot.png')
+  const { width, height } = canvas
+  particleSystem.particleTexture = new Texture('/textures/snow.png')
 
   particleSystem.emitter = new Vector3(0, height / 2, 0)
   particleSystem.emitRate = 100
@@ -83,13 +81,13 @@ async function initParticleSystem(
   )
 
   particleSystem.minLifeTime = maxSpeed / 2
-  particleSystem.maxSize = 8
-  particleSystem.minSize = 4
+  particleSystem.maxSize = 6
+  particleSystem.minSize = 2
 
   particleSystem.color1 = new Color4(1, 1, 1, 1)
   particleSystem.color2 = new Color4(0.9, 0.9, 0.9, 1)
   particleSystem.colorDead = new Color4(1, 1, 1, 0)
-  particleSystem.blendMode = ParticleSystem.BLENDMODE_STANDARD
+  particleSystem.blendMode = ParticleSystem.BLENDMODE_MULTIPLYADD
 
   particleSystem.updateFunction = function (particles) {
     for (let index = 0; index < particles.length; index++) {

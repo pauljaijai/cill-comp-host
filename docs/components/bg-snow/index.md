@@ -32,10 +32,6 @@ import BasicUsage from '../../../src/components/bg-snow/examples/basic-usage.vue
 
 ## API
 
-### Props
-
-<<< ../../../src/components/bg-snow/bg-snow.vue/#Props
-
 ### Methods
 
 <<< ../../../src/components/bg-snow/bg-snow.vue/#Methods
