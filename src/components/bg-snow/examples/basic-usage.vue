@@ -15,10 +15,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useData } from 'vitepress'
+import { onUnmounted, ref, watchEffect } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import BgSnow from '../bg-snow.vue'
 import { vBgStatic } from '../v-bg-static'
 
-const enable = ref(true)
+const enable = ref(false)
+
+const { isDark } = useData()
+
+const oriValue = isDark.value
+
+watchEffect(() => {
+  isDark.value = enable.value
+})
+
+onUnmounted(() => {
+  isDark.value = oriValue
+})
 </script>

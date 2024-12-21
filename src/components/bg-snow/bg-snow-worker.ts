@@ -84,8 +84,8 @@ async function initParticleSystem(
   )
 
   particleSystem.minLifeTime = maxSpeed / 2
-  particleSystem.maxSize = 6
-  particleSystem.minSize = 2
+  particleSystem.maxSize = 4
+  particleSystem.minSize = 1
 
   particleSystem.color1 = new Color4(1, 1, 1, 1)
   particleSystem.color2 = new Color4(0.9, 0.9, 0.9, 1)
@@ -123,7 +123,7 @@ async function initParticleSystem(
         particle.age += this._scaledUpdateSpeed
 
         // 是否黏附
-        const targetId = get(particle, STATIC_ID_NAME) as string | undefined
+        const targetId = get(particle, STATIC_ID_NAME)
         if (targetId === id) {
           particle.position.y = bounding.top * -1
           particle.direction = new Vector3(0, 0, 0)
@@ -143,7 +143,7 @@ async function initParticleSystem(
           particle.position.y = bounding.top * -1
           particle.direction = new Vector3(0, 0, 0)
 
-          // 黏附在 staticMap 上
+          // 黏附在 static 上
           set(particle, STATIC_ID_NAME, id)
           continue
         }
