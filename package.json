@@ -41,6 +41,7 @@
     "animejs": "^3.2.2",
     "autoprefixer": "^10.4.20",
     "await-to-js": "^3.0.0",
+    "comlink": "^4.4.2",
     "eslint": "^9.16.0",
     "eslint-plugin-unicorn": "^56.0.1",
     "eslint-plugin-vue": "^9.32.0",
