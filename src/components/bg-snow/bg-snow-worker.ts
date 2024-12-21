@@ -7,6 +7,7 @@ let canvas: OffscreenCanvas | undefined
 let scene: Scene | undefined
 let engine: Engine | undefined
 let camera: Camera | undefined
+let particleSystem: ParticleSystem | undefined
 
 let staticMap: Record<string, ElementBounding> = {}
 const STATIC_ID_NAME = 'staticId'
@@ -53,7 +54,7 @@ function createCamera(
   return camera
 }
 
-async function initParticleSystem(
+async function createParticleSystem(
   params: {
     canvas: OffscreenCanvas;
     engine: Engine;
@@ -169,6 +170,8 @@ async function initParticleSystem(
   }
 
   particleSystem.start()
+
+  return particleSystem
 }
 
 async function init(offscreenCanvas: OffscreenCanvas) {
@@ -193,7 +196,7 @@ async function init(offscreenCanvas: OffscreenCanvas) {
     newScene.render()
   })
 
-  await initParticleSystem({
+  particleSystem = await createParticleSystem({
     canvas: offscreenCanvas,
     engine,
     scene: newScene,
@@ -223,6 +226,27 @@ const api = {
   },
   setStaticMap(data: typeof staticMap) {
     staticMap = data
+  },
+  /** 清除積雪 */
+  sweep() {
+    if (!particleSystem)
+      return
+
+    for (let index = 0; index < particleSystem.particles.length; index++) {
+      const particle = particleSystem.particles[index]
+      if (!particle)
+        continue
+
+      const targetId = get(particle, STATIC_ID_NAME)
+      if (targetId) {
+        particleSystem.particles.splice(index, 1)
+        set(particle, STATIC_ID_NAME, undefined)
+
+        // @ts-expect-error 依照文件寫法
+        particleSystem._stockParticles.push(particle)
+        index--
+      }
+    }
   },
 }
 

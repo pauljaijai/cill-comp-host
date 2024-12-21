@@ -62,8 +62,15 @@ watch(() => store.staticMap, (data) => {
   deep: true,
 })
 
+function sweep() {
+  remoteWorker?.sweep()
+}
+
 // #region Methods
-defineExpose({})
+defineExpose({
+  /** 清除積雪 */
+  sweep,
+})
 // #endregion Methods
 </script>
 
