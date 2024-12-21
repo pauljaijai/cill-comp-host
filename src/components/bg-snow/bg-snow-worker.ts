@@ -1,11 +1,15 @@
-import type { Camera } from '@babylonjs/core'
-import { ArcRotateCamera, Color4, Engine, ParticleSystem, Scene, Texture, Vector3 } from '@babylonjs/core'
+import type { ElementBounding } from './bg-snow-store'
+import { Camera, Color4, Engine, FreeCamera, ParticleSystem, Scene, Texture, Vector3 } from '@babylonjs/core'
 import * as Comlink from 'comlink'
+import { get, set } from 'lodash-es'
 
 let canvas: OffscreenCanvas | undefined
 let scene: Scene | undefined
 let engine: Engine | undefined
 let camera: Camera | undefined
+
+let staticMap: Record<string, ElementBounding> = {}
+const STATIC_ID_NAME = 'staticId'
 
 function createEngine(
   params: {
@@ -36,16 +40,15 @@ function createCamera(
     scene: Scene;
   },
 ) {
-  const { scene } = params
+  const { scene, canvas } = params
+  const { width, height } = canvas
 
-  const camera = new ArcRotateCamera(
-    'ArcRotateCamera',
-    Math.PI / 2,
-    Math.PI / 2,
-    1080,
-    new Vector3(0, 0, 0),
+  const camera = new FreeCamera(
+    'camera',
+    new Vector3(width / 2, -height / 2, -height),
     scene,
   )
+  camera.mode = Camera.ORTHOGRAPHIC_CAMERA
 
   return camera
 }
@@ -68,17 +71,16 @@ async function initParticleSystem(
   const { width, height } = canvas
   particleSystem.particleTexture = new Texture('/textures/snow.png')
 
-  particleSystem.emitter = new Vector3(0, height / 2, 0)
+  particleSystem.emitter = new Vector3(0, 0, 0)
   particleSystem.emitRate = 100
 
   const maxSpeed = height / 8
   const maxXSpeed = maxSpeed / 4
-  const x = width / 2
   particleSystem.createBoxEmitter(
     new Vector3(maxXSpeed, -maxSpeed, maxXSpeed),
     new Vector3(-maxXSpeed, -maxSpeed / 2, -maxXSpeed),
-    new Vector3(x, 0, 0),
-    new Vector3(-x, 0, 0),
+    new Vector3(0, 0, 0),
+    new Vector3(width, 0, 0),
   )
 
   particleSystem.minLifeTime = maxSpeed / 2
@@ -91,43 +93,74 @@ async function initParticleSystem(
   particleSystem.blendMode = ParticleSystem.BLENDMODE_MULTIPLYADD
 
   particleSystem.updateFunction = function (particles) {
-    for (let index = 0; index < particles.length; index++) {
-      const particle = particles[index]
-      if (!particle)
+    // 計算 staticMap 與粒子是否有碰撞
+    for (const id in staticMap) {
+      const bounding = staticMap[id]
+      if (!bounding)
         continue
 
-      /** 依照文件作法
+      /** 依照文件作法更新粒子
        *
        * https://doc.babylonjs.com/features/featuresDeepDive/particles/particle_system/customizingParticles/
        */
+      for (let index = 0; index < particles.length; index++) {
+        const particle = particles[index]
+        if (!particle)
+          continue
 
-      // @ts-expect-error 依照文件寫法
-      particle.age += this._scaledUpdateSpeed
-
-      // 刪除粒子
-      if (particle.age >= particle.lifeTime) {
-        particles.splice(index, 1)
-        // @ts-expect-error 依照文件寫法
-        this._stockParticles.push(particle)
-        index--
-        continue
-      }
-      else {
-        // @ts-expect-error 依照文件寫法
-        particle.colorStep.scaleToRef(this._scaledUpdateSpeed, this._scaledColorStep)
-        // @ts-expect-error 依照文件寫法
-        particle.color.addInPlace(this._scaledColorStep)
-
-        if (particle.color.a < 0)
-          particle.color.a = 0
+        // 壽命終結
+        if (particle.age >= particle.lifeTime) {
+          particles.splice(index, 1)
+          // @ts-expect-error 依照文件寫法
+          this._stockParticles.push(particle)
+          index--
+          continue
+        }
 
         // @ts-expect-error 依照文件寫法
-        particle.direction.scaleToRef(this._scaledUpdateSpeed, this._scaledDirection)
-        // @ts-expect-error 依照文件寫法
-        particle.position.addInPlace(this._scaledDirection)
+        particle.age += this._scaledUpdateSpeed
 
-        // @ts-expect-error 依照文件寫法
-        particle.direction.addInPlace(this._scaledGravity)
+        // 是否有 staticId
+        const targetId = get(particle, STATIC_ID_NAME) as string | undefined
+        if (targetId === id) {
+          // 粒子在 staticMap 上
+          particle.position.y = bounding.top * -1
+          continue
+        }
+
+        // 目前網頁 y 軸與 babylon y 軸相反
+        const y = particle.position.y * -1
+
+        // 碰到上邊界 +- 2
+        if (
+          y > bounding.top - 2
+          && y < bounding.top + 2
+          && particle.position.x > bounding.left
+          && particle.position.x < bounding.left + bounding.width
+        ) {
+          particle.position.y = bounding.top * -1
+
+          // 黏附在 staticMap 上
+          set(particle, STATIC_ID_NAME, id)
+        }
+        // 更新粒子狀態
+        else {
+          // @ts-expect-error 依照文件寫法
+          particle.colorStep.scaleToRef(this._scaledUpdateSpeed, this._scaledColorStep)
+          // @ts-expect-error 依照文件寫法
+          particle.color.addInPlace(this._scaledColorStep)
+
+          if (particle.color.a < 0)
+            particle.color.a = 0
+
+          // @ts-expect-error 依照文件寫法
+          particle.direction.scaleToRef(this._scaledUpdateSpeed, this._scaledDirection)
+          // @ts-expect-error 依照文件寫法
+          particle.position.addInPlace(this._scaledDirection)
+
+          // @ts-expect-error 依照文件寫法
+          particle.direction.addInPlace(this._scaledGravity)
+        }
       }
     }
   }
@@ -184,6 +217,9 @@ const api = {
     }
 
     engine?.resize()
+  },
+  setStaticMap(data: typeof staticMap) {
+    staticMap = data
   },
 }
 

@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/bg-snow/examples/basic-usage.vue
 
 ### 基本用法
 
-下雪了！੭ ˙ᗜ˙ )੭
+使用 `v-bg-static` 指令可以讓指定物體積雪。
 
 <basic-usage/>
 

@@ -9,7 +9,9 @@
 import type { WorkerApi } from './bg-snow-worker'
 import { useEventListener } from '@vueuse/core'
 import * as Comlink from 'comlink'
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { clone } from 'remeda'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { bgSnowStore as store } from './bg-snow-store'
 import SceneWorker from './bg-snow-worker?worker'
 
 // #region Props
@@ -51,6 +53,13 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   worker?.terminate()
+})
+
+watch(() => store.staticMap, (data) => {
+  remoteWorker?.setStaticMap(clone(data))
+}, {
+  immediate: true,
+  deep: true,
 })
 
 // #region Methods

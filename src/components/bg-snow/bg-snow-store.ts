@@ -1,6 +1,7 @@
+import { pick } from 'remeda'
 import { reactive } from 'vue'
 
-interface ElementBounding {
+export interface ElementBounding {
   top: number;
   left: number;
   width: number;
@@ -8,11 +9,12 @@ interface ElementBounding {
 }
 
 export const bgSnowStore = reactive({
-  staticMap: new Map<string, ElementBounding>(),
+  // 使用 Map 會導致 Worker 出現 #<Map> could not be cloned.
+  staticMap: {} as Record<string, ElementBounding>,
   put(id: string, bounding: ElementBounding) {
-    this.staticMap.set(id, bounding)
+    this.staticMap[id] = pick(bounding, ['top', 'left', 'width', 'height'])
   },
   remove(id: string) {
-    this.staticMap.delete(id)
+    delete this.staticMap[id]
   },
 })
