@@ -75,7 +75,7 @@ async function createParticleSystem(
   particleSystem.emitter = new Vector3(0, 0, 0)
   particleSystem.emitRate = 100
 
-  const maxSpeed = height / 8
+  const maxSpeed = height / 10
   const maxXSpeed = maxSpeed / 4
   particleSystem.createBoxEmitter(
     new Vector3(maxXSpeed, -maxSpeed, maxXSpeed),
