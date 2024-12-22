@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex justify-center">
+  <div class="w-full flex items-center justify-center">
     <div class="flex gap-10">
       <base-checkbox
         v-model="enable"
@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { useData } from 'vitepress'
-import { onUnmounted, ref, watchEffect } from 'vue'
+import { onUnmounted, ref, watch } from 'vue'
 import BaseBtn from '../../base-btn.vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import BgSnow from '../bg-snow.vue'
@@ -43,8 +43,8 @@ const { isDark } = useData()
 
 const oriValue = isDark.value
 
-watchEffect(() => {
-  isDark.value = enable.value
+watch(enable, (value) => {
+  isDark.value = value
 })
 
 onUnmounted(() => {
