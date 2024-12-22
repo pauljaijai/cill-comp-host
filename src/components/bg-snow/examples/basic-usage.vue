@@ -18,7 +18,7 @@
 
     <bg-snow
       ref="bgRef"
-      class="fixed left-0 top-0 z-[100] h-full w-full duration-500"
+      class="fixed left-0 top-0 z-[100] h-full w-full"
       :class="{ 'opacity-0': !enable }"
     />
   </div>
