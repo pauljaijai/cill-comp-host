@@ -1,13 +1,25 @@
+import type { BoxParticleEmitter } from '@babylonjs/core'
 import type { ElementBounding } from './bg-snow-store'
-import { Camera, Color4, Engine, FreeCamera, ParticleSystem, Scene, Texture, Vector3 } from '@babylonjs/core'
+import {
+  Camera,
+  Color4,
+  Engine,
+  FreeCamera,
+  ParticleSystem,
+  Scene,
+  Texture,
+  Vector3,
+} from '@babylonjs/core'
 import * as Comlink from 'comlink'
 import { get, set } from 'lodash-es'
 
 let canvas: OffscreenCanvas | undefined
 let scene: Scene | undefined
 let engine: Engine | undefined
-let camera: Camera | undefined
+let camera: FreeCamera | undefined
+
 let particleSystem: ParticleSystem | undefined
+let boxEmitter: BoxParticleEmitter | undefined
 
 let staticMap: Record<string, ElementBounding> = {}
 const STATIC_ID_NAME = 'staticId'
@@ -77,7 +89,7 @@ async function createParticleSystem(
 
   const maxSpeed = height / 10
   const maxXSpeed = maxSpeed / 4
-  particleSystem.createBoxEmitter(
+  boxEmitter = particleSystem.createBoxEmitter(
     new Vector3(maxXSpeed, -maxSpeed, maxXSpeed),
     new Vector3(-maxXSpeed, -maxSpeed / 2, -maxXSpeed),
     new Vector3(0, 0, 0),
@@ -217,9 +229,19 @@ const api = {
     return engine?.getFps().toFixed() ?? '0'
   },
   resize(size: { width: number; height: number }) {
+    const { width, height } = size
+
     if (canvas) {
-      canvas.width = size.width
-      canvas.height = size.height
+      canvas.width = width
+      canvas.height = height
+    }
+
+    if (boxEmitter) {
+      boxEmitter.maxEmitBox = new Vector3(width, 0, 0)
+    }
+
+    if (camera) {
+      camera.position = new Vector3(width / 2, -height / 2, -height)
     }
 
     engine?.resize()
