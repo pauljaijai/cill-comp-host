@@ -181,6 +181,9 @@ export default defineConfig({
   },
   rewrites: {},
   vite: {
+    worker: {
+      format: 'es',
+    },
     css: {
       preprocessorOptions: {
         sass: {
