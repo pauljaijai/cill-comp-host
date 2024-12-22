@@ -1,4 +1,3 @@
-import type { BoxParticleEmitter } from '@babylonjs/core'
 import type { ElementBounding } from './bg-snow-store'
 import {
   Camera,
@@ -19,7 +18,6 @@ let engine: Engine | undefined
 let camera: FreeCamera | undefined
 
 let particleSystem: ParticleSystem | undefined
-let boxEmitter: BoxParticleEmitter | undefined
 
 let staticMap: Record<string, ElementBounding> = {}
 const STATIC_ID_NAME = 'staticId'
@@ -89,7 +87,7 @@ async function createParticleSystem(
 
   const maxSpeed = height / 10
   const maxXSpeed = maxSpeed / 4
-  boxEmitter = particleSystem.createBoxEmitter(
+  particleSystem.createBoxEmitter(
     new Vector3(maxXSpeed, -maxSpeed, maxXSpeed),
     new Vector3(-maxXSpeed, -maxSpeed / 2, -maxXSpeed),
     new Vector3(0, 0, 0),
@@ -122,7 +120,7 @@ async function createParticleSystem(
           continue
 
         // 壽命終結
-        if (particle.age >= particle.lifeTime) {
+        if (particle.age >= particle.lifeTime || particle.color.a < 0) {
           particles.splice(index, 1)
           set(particle, STATIC_ID_NAME, undefined)
 
@@ -166,9 +164,6 @@ async function createParticleSystem(
         particle.colorStep.scaleToRef(this._scaledUpdateSpeed, this._scaledColorStep)
         // @ts-expect-error 依照文件寫法
         particle.color.addInPlace(this._scaledColorStep)
-
-        if (particle.color.a < 0)
-          particle.color.a = 0
 
         // @ts-expect-error 依照文件寫法
         particle.direction.scaleToRef(this._scaledUpdateSpeed, this._scaledDirection)
@@ -215,6 +210,27 @@ async function init(offscreenCanvas: OffscreenCanvas) {
   })
 }
 
+function sweep() {
+  if (!particleSystem)
+    return
+
+  for (let index = 0; index < particleSystem.particles.length; index++) {
+    const particle = particleSystem.particles[index]
+    if (!particle)
+      continue
+
+    const targetId = get(particle, STATIC_ID_NAME)
+    if (targetId) {
+      particleSystem.particles.splice(index, 1)
+      set(particle, STATIC_ID_NAME, undefined)
+
+      // @ts-expect-error 依照文件寫法
+      particleSystem._stockParticles.push(particle)
+      index--
+    }
+  }
+}
+
 const api = {
   /** 一定要使用 Comlink.transfer 傳遞資料
    *
@@ -229,6 +245,8 @@ const api = {
     return engine?.getFps().toFixed() ?? '0'
   },
   resize(size: { width: number; height: number }) {
+    sweep()
+
     const { width, height } = size
 
     if (canvas) {
@@ -236,8 +254,15 @@ const api = {
       canvas.height = height
     }
 
-    if (boxEmitter) {
-      boxEmitter.maxEmitBox = new Vector3(width, 0, 0)
+    if (particleSystem) {
+      const maxSpeed = height / 10
+      const maxXSpeed = maxSpeed / 4
+
+      particleSystem.direction1 = new Vector3(maxXSpeed, -maxSpeed, maxXSpeed)
+      particleSystem.direction2 = new Vector3(-maxXSpeed, -maxSpeed / 2, -maxXSpeed)
+      particleSystem.maxEmitBox = new Vector3(width, 0, 0)
+
+      particleSystem.minLifeTime = maxSpeed / 2
     }
 
     if (camera) {
@@ -250,26 +275,7 @@ const api = {
     staticMap = data
   },
   /** 清除積雪 */
-  sweep() {
-    if (!particleSystem)
-      return
-
-    for (let index = 0; index < particleSystem.particles.length; index++) {
-      const particle = particleSystem.particles[index]
-      if (!particle)
-        continue
-
-      const targetId = get(particle, STATIC_ID_NAME)
-      if (targetId) {
-        particleSystem.particles.splice(index, 1)
-        set(particle, STATIC_ID_NAME, undefined)
-
-        // @ts-expect-error 依照文件寫法
-        particleSystem._stockParticles.push(particle)
-        index--
-      }
-    }
-  },
+  sweep,
 }
 
 Comlink.expose(api)
