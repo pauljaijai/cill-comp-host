@@ -44,6 +44,18 @@
                 @click="btn.onClick"
               />
             </div>
+
+            <div
+              v-if="tooltipContent.preview"
+              class="flex flex-col gap-2"
+              data-sidekick-ignore
+            >
+              <iframe
+                v-bind="tooltipContent.preview"
+                data-sidekick-ignore
+                style="zoom: 0.6;"
+              />
+            </div>
           </div>
         </transition>
       </div>

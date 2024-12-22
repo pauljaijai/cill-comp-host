@@ -21,7 +21,7 @@ interface TargetParam {
 // #region ContentProvider
 interface BtnOption {
   label: string;
-  onClick: (event: Event) => void;
+  onClick: (event?: Event) => void;
 }
 
 interface Content {
@@ -30,6 +30,11 @@ interface Content {
   text?: string;
   /** 按鈕清單 */
   btnList?: BtnOption[];
+  /** 預覽連結內容 */
+  preview?: {
+    src: string;
+    class: string;
+  };
 }
 
 export interface ContentProvider {
@@ -331,6 +336,10 @@ export function useContentProvider(param?: {
           return {
             text: decodeURIComponent(target.href),
             btnList,
+            preview: {
+              src: target.href,
+              class: 'w-[500px] h-[600px]',
+            },
           }
         },
       },
@@ -395,9 +404,3 @@ export function useContentProvider(param?: {
     selectContentProviders,
   }
 }
-
-/**
- *  - 連結
- * - 內有 radio 的 label
- * - 內有 select 的 label
- */

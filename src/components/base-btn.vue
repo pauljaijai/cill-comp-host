@@ -55,13 +55,13 @@ function handleClick() {
 <style scoped lang="sass">
 .base-btn
   padding: 0.5rem 1.5rem
-  border: 1px solid #777
+  border: 1px solid light-dark(#777, #AAA)
   border-radius: 0.25rem
-  background-color: #FEFEFE
+  background-color: light-dark(#FEFEFE, #333)
   transition: background-color 0.1s, scale 0.4s
   scale: 1
   &:active
-    background-color: #F0F0F0
+    background-color: light-dark(#F0F0F0, #444)
     transition: scale 0.01s
     scale: 0.995
 </style>
