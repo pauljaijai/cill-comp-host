@@ -29,6 +29,7 @@ import TransitionSpecialEffects from '../../src/components/transition-special-ef
 
 import BgFirefly from '../../src/components/bg-firefly/examples/full-background.vue';
 import BgSakuraFubuki from '../../src/components/bg-sakura-fubuki/examples/full-background.vue';
+import BgSnow from '../../src/components/bg-snow/examples/basic-usage.vue';
 
 import TextCharactersTransition from '../../src/components/text-characters-transition/examples/custom-transition.vue';
 
@@ -242,6 +243,12 @@ const currentSection = ref('btn');
 櫻花漫天，紛飛如夢
 
 <bg-sakura-fubuki class="h-[70vh]" />
+
+### [落雪](./bg-snow/) <Badge type="info" text="bg" />
+
+讓網頁飄雪吧，還會積雪喔。( ´ ▽ ` )ﾉ
+
+<bg-snow class="h-[70vh]" />
 
 </expansion-section>
 
