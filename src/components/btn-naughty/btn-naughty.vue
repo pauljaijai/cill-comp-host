@@ -239,8 +239,8 @@ defineExpose({
   border: 1px dashed rgba(black, 0.2)
 
 .btn
-  border: 1px solid #444
-  background: #FEFEFE
+  border: 1px solid light-dark(#777, #AAA)
+  background-color: light-dark(#FEFEFE, #333)
   transition-duration: 0.2s
   &:active
     transition-duration: 0.1s
