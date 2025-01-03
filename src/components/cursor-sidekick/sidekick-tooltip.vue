@@ -1,83 +1,83 @@
 <template>
+  <div
+    ref="anchorRef"
+    class="tooltip-anchor pointer-events-none fixed select-none"
+    :style="anchorStyle"
+  />
+
   <transition name="tooltip-opacity">
     <div
-      v-if="tooltipVisible"
-      class="tooltip-container pointer-events-none select-none"
+      v-if="tooltipVisible && tooltipContent"
+      ref="tooltipRef"
+      class="tooltip pointer-events-auto p-2"
       data-sidekick-ignore
+      :style="tooltipStyle"
     >
-      <div
-        v-if="tooltipContent"
-        ref="tooltipRef"
-        class="tooltip pointer-events-auto p-2"
-        data-sidekick-ignore
-        :style="tooltipStyle"
+      <transition
+        name="tooltip"
+        mode="out-in"
       >
-        <transition
-          name="tooltip"
-          mode="out-in"
+        <div
+          ref="tooltipContentRef"
+          :key="key"
+          class="tooltip-content max-w-[90vw] min-w-[10rem] flex flex-col gap-2 border rounded p-2"
+          :class="tooltipContent.class"
+          data-sidekick-ignore
         >
           <div
-            ref="tooltipContentRef"
-            :key="key"
-            class="tooltip-content max-w-[90vw] min-w-[10rem] flex flex-col gap-2 border rounded p-2"
-            :class="tooltipContent.class"
+            v-if="tooltipContent.text"
+            class="text-center text-base"
+            data-sidekick-ignore
+            v-html="tooltipContent.text"
+          />
+
+          <div
+            v-if="tooltipContent.btnList"
+            class="flex flex-col gap-2"
             data-sidekick-ignore
           >
-            <div
-              v-if="tooltipContent.text"
-              class="text-center text-base"
+            <base-btn
+              v-for="btn in tooltipContent.btnList"
+              :key="btn.label"
+              :label="btn.label"
               data-sidekick-ignore
-              v-html="tooltipContent.text"
+              class="text-nowrap text-sm"
+              @click="btn.onClick"
             />
-
-            <div
-              v-if="tooltipContent.btnList"
-              class="flex flex-col gap-2"
-              data-sidekick-ignore
-            >
-              <base-btn
-                v-for="btn in tooltipContent.btnList"
-                :key="btn.label"
-                :label="btn.label"
-                data-sidekick-ignore
-                class="text-nowrap text-sm"
-                @click="btn.onClick"
-              />
-            </div>
-
-            <div
-              v-if="tooltipContent.preview"
-              class="flex flex-col gap-2"
-              data-sidekick-ignore
-            >
-              <iframe
-                v-bind="tooltipContent.preview"
-                data-sidekick-ignore
-                style="zoom: 0.6;"
-              />
-            </div>
           </div>
-        </transition>
-      </div>
+
+          <div
+            v-if="tooltipContent.preview"
+            class="flex flex-col gap-2"
+            data-sidekick-ignore
+          >
+            <iframe
+              v-bind="tooltipContent.preview"
+              data-sidekick-ignore
+              style="zoom: 0.6;"
+            />
+          </div>
+        </div>
+      </transition>
     </div>
   </transition>
 </template>
 
 <script setup lang="ts">
+import type {
+  useElementBounding,
+} from '@vueuse/core'
 import type { CSSProperties } from 'vue'
 import type { ContentProvider } from './use-content-provider'
+import { useFloating } from '@floating-ui/vue'
 import {
-  useCycleList,
-  useElementBounding,
   useElementHover,
-  useIntersectionObserver,
+  useEventListener,
   useMousePressed,
 } from '@vueuse/core'
 import { nanoid } from 'nanoid'
-
 import { filter, isTruthy, join, pipe } from 'remeda'
-
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import BaseBtn from '../base-btn.vue'
 import { useContentProvider } from './use-content-provider'
 
@@ -130,95 +130,73 @@ const props = withDefaults(defineProps<Props>(), {
   selectProviders: () => [],
 })
 
-const {
-  state: currentPosition,
-  next: nextPosition,
-  go: setPositionByIndex,
-} = useCycleList<Position>([
-  'right',
-  'left',
-  'top',
-  'bottom',
-])
-
 const targetElementBounding = computed(() => props.targetElement?.bounding)
 
 const tooltipRef = ref<HTMLDivElement>()
-const tooltipBounding = useElementBounding(tooltipRef, {
-  reset: false,
-})
-/** 偵測 tooltip 內容可見性 */
 const tooltipContentRef = ref<HTMLDivElement>()
-useIntersectionObserver(
-  tooltipContentRef,
-  (data) => {
-    if (!data[0])
-      return
-
-    const { isIntersecting } = data[0]
-    // console.log(`🚀 ~ useIntersectionObserver:`, isIntersecting);
-
-    if (!isIntersecting) {
-      nextPosition?.()
-    }
-  },
-  { threshold: 0.98 },
-)
 
 const { pressed: mousePressed } = useMousePressed()
 const isContentHovered = useElementHover(tooltipContentRef)
 
-const positionProviderMap: Record<
-  Position,
-  (size: Record<'width' | 'height', number>) => [number, number]
-> = {
-  top: ({ height }) => [
-    0,
-    -(height / 2 + tooltipBounding.height.value / 2),
-  ],
-  bottom: ({ height }) => [
-    0,
-    height / 2 + tooltipBounding.height.value / 2,
-  ],
-  left: ({ width }) => [
-    -(width / 2 + tooltipBounding.width.value / 2),
-    0,
-  ],
-  right: ({ width }) => [
-    width / 2 + tooltipBounding.width.value / 2,
-    0,
-  ],
-}
-
-const tooltipStyle = computed<CSSProperties>(() => {
-  const [x, y] = pipe(null, () => {
-    if (targetElementBounding.value) {
-      return {
-        width: targetElementBounding.value.width.value,
-        height: targetElementBounding.value.height.value,
+const anchorRef = ref<HTMLDivElement>()
+const anchorStyle = computed<CSSProperties>(() => {
+  const {
+    width,
+    height,
+    x,
+    y,
+  } = pipe(
+    undefined,
+    () => {
+      if (targetElementBounding.value) {
+        return {
+          width: targetElementBounding.value.width.value,
+          height: targetElementBounding.value.height.value,
+          x: targetElementBounding.value.x.value,
+          y: targetElementBounding.value.y.value,
+        }
       }
-    }
 
-    if (props.selectionState?.text && props.selectionState.rect) {
-      return {
-        width: props.selectionState.rect.width,
-        height: props.selectionState.rect.height,
+      if (props.selectionState?.text && props.selectionState.rect) {
+        return {
+          width: props.selectionState.rect.width,
+          height: props.selectionState.rect.height,
+          x: props.selectionState.rect.x,
+          y: props.selectionState.rect.y,
+        }
       }
-    }
 
-    return {
-      width: 0,
-      height: 0,
-    }
-  }, positionProviderMap[currentPosition.value])
+      return {
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+      }
+    },
+  )
 
   return {
+    width: `${width}px`,
+    height: `${height}px`,
     transform: [
       `translateX(${x}px)`,
       `translateY(${y}px)`,
     ].join(' '),
   }
 })
+
+const {
+  floatingStyles: tooltipStyle,
+  update: updateTooltipPosition,
+} = useFloating(anchorRef, tooltipRef)
+
+useEventListener('scroll', () => {
+  updateTooltipPosition()
+})
+
+watch(anchorStyle, () => {
+  updateTooltipPosition()
+}, { deep: true })
 
 const tooltipVisible = computed(() => {
   if (isContentHovered.value) {
@@ -260,10 +238,6 @@ const key = computed(() => {
 
   return nanoid()
 })
-/** 目標發生變化時，將 position 重設 */
-// watch(key, () => {
-//   setPositionByIndex(0);
-// })
 
 const {
   activeContentProviders,
@@ -313,11 +287,8 @@ const tooltipContent = computed(() => {
 </script>
 
 <style scoped lang="sass">
-.tooltip-container
-  position: absolute
-  transition: transform 0s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
 .tooltip
-  transition: transform 0s cubic-bezier(0.96, 0, 0.2, 1.15)
+  transition: transform 0s cubic-bezier(0.96, 0, 0.2, 1.15), opacity 0.4s
 .tooltip-content
   background: rgba(#EEE, 0.8)
   backdrop-filter: blur(1px)
