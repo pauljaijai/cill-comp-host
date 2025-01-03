@@ -69,10 +69,9 @@ import type {
 } from '@vueuse/core'
 import type { CSSProperties } from 'vue'
 import type { ContentProvider } from './use-content-provider'
-import { useFloating } from '@floating-ui/vue'
+import { autoPlacement, autoUpdate, useFloating } from '@floating-ui/vue'
 import {
   useElementHover,
-  useEventListener,
   useMousePressed,
 } from '@vueuse/core'
 import { nanoid } from 'nanoid'
@@ -80,8 +79,6 @@ import { filter, isTruthy, join, pipe } from 'remeda'
 import { computed, ref, watch } from 'vue'
 import BaseBtn from '../base-btn.vue'
 import { useContentProvider } from './use-content-provider'
-
-type Position = 'top' | 'bottom' | 'left' | 'right'
 
 // #region Props
 interface Props {
@@ -188,10 +185,10 @@ const anchorStyle = computed<CSSProperties>(() => {
 const {
   floatingStyles: tooltipStyle,
   update: updateTooltipPosition,
-} = useFloating(anchorRef, tooltipRef)
-
-useEventListener('scroll', () => {
-  updateTooltipPosition()
+} = useFloating(anchorRef, tooltipRef, {
+  placement: 'right',
+  whileElementsMounted: autoUpdate,
+  middleware: [autoPlacement()],
 })
 
 watch(anchorStyle, () => {
