@@ -5,10 +5,7 @@
       :style="sidekickStyle"
     />
 
-    <sidekick-tooltip
-      v-bind="tooltipProp"
-      :style="tooltipStyle"
-    />
+    <sidekick-tooltip v-bind="tooltipProp" />
   </div>
 </template>
 
@@ -301,36 +298,6 @@ const sidekickProp = computed(() => {
   }
 
   return result
-})
-
-const tooltipStyle = computed<CSSProperties>(() => {
-  const [x, y] = pipe(null, () => {
-    if (targetElement.value) {
-      return [
-        targetElementBounding.x.value + targetElementBounding.width.value / 2,
-        targetElementBounding.y.value + targetElementBounding.height.value / 2,
-      ]
-    }
-
-    const rect = selectionState.rects.value[0]
-    if (selectionState.text.value && rect) {
-      return [
-        rect.x + rect.width / 2,
-        rect.y + rect.height / 2,
-      ]
-    }
-
-    return [0, 0]
-  })
-
-  return {
-    transform: [
-      `translateX(${x}px)`,
-      `translateX(-50%)`,
-      `translateY(${y}px)`,
-      `translateY(-50%)`,
-    ].join(' '),
-  }
 })
 
 const tooltipProp = computed(() => {
