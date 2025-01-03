@@ -5,7 +5,7 @@
     <base-checkbox
       v-model="enable"
       label="啟用小跟班"
-      class="border rounded bg-gray-100 p-4"
+      class="border rounded p-4"
     />
 
     <div class="flex flex-col gap-2">
