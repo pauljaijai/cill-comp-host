@@ -55,10 +55,9 @@ import CustomProvider from '../../../src/components/cursor-sidekick/examples/cus
 - [Element: getBoundingClientRect() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect)
 ：取得目標元素尺寸與位置。
 
-- [Web API: IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-：判斷 tooltip 是否被遮擋。
-
 小跟班的變形動畫是靠老朋友 anime.js 實現。
+
+tooltip 定位使用 [Floating UI](https://floating-ui.com/) 實現，功能超強大，極度推薦。
 
 ## 原始碼
 
