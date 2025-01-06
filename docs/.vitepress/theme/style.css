@@ -135,10 +135,6 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
-.VPNavBarAppearance {
-  display: none !important;
-}
-
 #scene-explorer-host,
 #inspector-host {
   position: fixed !important;
