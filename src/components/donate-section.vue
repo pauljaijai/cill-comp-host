@@ -40,6 +40,10 @@ function getSrc() {
   return `https://button.like.co/in/embed/codlin/button?referrer=${referrer}`
 }
 
+watch(() => route.path, () => {
+  src.value = getSrc()
+})
+
 /** 防止 SSR 階段出現 window 不存在
  *
  * https://github.com/vuejs/vitepress/issues/1689
