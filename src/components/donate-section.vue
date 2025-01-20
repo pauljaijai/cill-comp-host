@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { pipe } from 'remeda'
 import { useRoute } from 'vitepress'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const route = useRoute()
 
