@@ -7,9 +7,9 @@
     :rotate
     :index
     class="pointer-events-none"
-    :src="prop.src"
-    :animation-duration="prop.animationDuration"
-    :animation-delay="prop.animationDelay"
+    :src="props.src"
+    :animation-duration="props.animationDuration"
+    :animation-delay="props.animationDelay"
   />
 </template>
 
@@ -29,10 +29,10 @@ interface Props {
   animationDelay: number;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {})
 
 const texts = computed(() => {
-  const text = prop.text
+  const text = props.text
   if (Array.isArray(text)) {
     return text.map((item) => {
       if (typeof item === 'string') {
@@ -54,7 +54,7 @@ const texts = computed(() => {
 
 /** 旋轉角度 */
 const rotate = ref(getRotate())
-watch(() => prop.src, () => {
+watch(() => props.src, () => {
   rotate.value = getRotate()
 })
 

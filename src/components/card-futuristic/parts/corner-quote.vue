@@ -30,7 +30,7 @@ export interface Props {
   selectedColor?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   size: 10,
   strokeWidth: 4,
   color: '#444',
@@ -43,10 +43,10 @@ const svgSize = reactive(useElementSize(svgRef, undefined, {
 }))
 
 const attr = reactive({
-  offsetX: prop.size / 4,
-  offsetY: prop.size / 4,
-  color: prop.color,
-  strokeWidth: prop.strokeWidth,
+  offsetX: props.size / 4,
+  offsetY: props.size / 4,
+  color: props.color,
+  strokeWidth: props.strokeWidth,
 })
 
 function removeAnime() {
@@ -65,10 +65,10 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offsetX: prop.size / 4,
-        offsetY: prop.size / 4,
-        color: prop.color,
-        strokeWidth: prop.strokeWidth,
+        offsetX: props.size / 4,
+        offsetY: props.size / 4,
+        color: props.color,
+        strokeWidth: props.strokeWidth,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -95,14 +95,14 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offsetX: prop.size / 4,
+        offsetX: props.size / 4,
         duration: duration / 3 * 2,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
       }).finished,
       anime({
         targets: attr,
-        offsetY: prop.size / 4,
+        offsetY: props.size / 4,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -137,7 +137,7 @@ const animeMap: PartAnimeFcnMap = {
       anime({
         targets: attr,
         offsetX: -width / 2,
-        color: prop.color,
+        color: props.color,
         duration,
         delay: delay + 100,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -145,7 +145,7 @@ const animeMap: PartAnimeFcnMap = {
       anime({
         targets: attr,
         offsetY: -height / 5 * 2,
-        color: prop.color,
+        color: props.color,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -172,10 +172,10 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offsetX: -prop.size / 4,
-        offsetY: -prop.size / 4,
-        color: prop.selectedColor,
-        strokeWidth: prop.strokeWidth * 1.6,
+        offsetX: -props.size / 4,
+        offsetY: -props.size / 4,
+        color: props.selectedColor,
+        strokeWidth: props.strokeWidth * 1.6,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -202,10 +202,10 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offsetX: prop.size / 2,
-        offsetY: prop.size / 2,
-        color: prop.color,
-        strokeWidth: prop.strokeWidth,
+        offsetX: props.size / 2,
+        offsetY: props.size / 2,
+        color: props.color,
+        strokeWidth: props.strokeWidth,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -239,24 +239,24 @@ const viewBox = computed(
 const cornerStyleMap = computed(() => pipe(
   {
     lt: {
-      d: `M0 ${prop.size}V0H${prop.size}`,
+      d: `M0 ${props.size}V0H${props.size}`,
     },
     rt: {
       d: [
-        `M${svgSize.width - prop.size} 0`,
-        `H${svgSize.width}V${prop.size}`,
+        `M${svgSize.width - props.size} 0`,
+        `H${svgSize.width}V${props.size}`,
       ].join(''),
     },
     rb: {
       d: [
-        `M${svgSize.width} ${svgSize.height - prop.size}`,
-        `V${svgSize.height}H${svgSize.width - prop.size}`,
+        `M${svgSize.width} ${svgSize.height - props.size}`,
+        `V${svgSize.height}H${svgSize.width - props.size}`,
       ].join(''),
     },
     lb: {
       d: [
-        `M${prop.size} ${svgSize.height}`,
-        `H0V${svgSize.height - prop.size}`,
+        `M${props.size} ${svgSize.height}`,
+        `H0V${svgSize.height - props.size}`,
       ].join(''),
     },
   },

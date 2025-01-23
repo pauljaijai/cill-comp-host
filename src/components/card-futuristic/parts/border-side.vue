@@ -26,7 +26,7 @@ export interface Props {
   strokeWidth?: number;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   color: '#777',
   selectedColor: '#ff8d0a',
   strokeWidth: 3,
@@ -41,16 +41,16 @@ const lineAttrMap = ref({
     'y1': 0,
     'x2': 0,
     'y2': 0,
-    'stroke': prop.color,
-    'stroke-width': prop.strokeWidth,
+    'stroke': props.color,
+    'stroke-width': props.strokeWidth,
   },
   r: {
     'x1': 0,
     'y1': 0,
     'x2': 0,
     'y2': 0,
-    'stroke': prop.color,
-    'stroke-width': prop.strokeWidth,
+    'stroke': props.color,
+    'stroke-width': props.strokeWidth,
   },
 })
 
@@ -86,8 +86,8 @@ const animeMap: PartAnimeFcnMap = {
             'y1': 0,
             'x2': 0,
             'y2': svgSize.height,
-            'stroke': prop.color,
-            'stroke-width': prop.strokeWidth,
+            'stroke': props.color,
+            'stroke-width': props.strokeWidth,
           },
           {
             'targets': lineAttrMap.value.r,
@@ -95,8 +95,8 @@ const animeMap: PartAnimeFcnMap = {
             'y1': 0,
             'x2': width,
             'y2': svgSize.height,
-            'stroke': prop.color,
-            'stroke-width': prop.strokeWidth,
+            'stroke': props.color,
+            'stroke-width': props.strokeWidth,
           },
         ],
         map((data) => anime({
@@ -157,13 +157,13 @@ const animeMap: PartAnimeFcnMap = {
           'targets': lineAttrMap.value.l,
           'x1': 0,
           'x2': 0,
-          'stroke-width': prop.strokeWidth,
+          'stroke-width': props.strokeWidth,
         },
         {
           'targets': lineAttrMap.value.r,
           'x1': svgSize.width,
           'x2': svgSize.width,
-          'stroke-width': prop.strokeWidth,
+          'stroke-width': props.strokeWidth,
         },
       ],
       map((data) => anime({
@@ -258,16 +258,16 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         'targets': lineAttrMap.value.l,
-        'stroke': prop.selectedColor,
-        'stroke-width': prop.strokeWidth * 2,
+        'stroke': props.selectedColor,
+        'stroke-width': props.strokeWidth * 2,
         duration,
         delay,
         'easing': 'easeOutExpo',
       }).finished,
       anime({
         'targets': lineAttrMap.value.r,
-        'stroke': prop.selectedColor,
-        'stroke-width': prop.strokeWidth * 2,
+        'stroke': props.selectedColor,
+        'stroke-width': props.strokeWidth * 2,
         'x1': width,
         'x2': width,
         duration,
@@ -298,18 +298,18 @@ const animeMap: PartAnimeFcnMap = {
       height: svgRef.value?.clientHeight ?? 0,
     }
 
-    const padding = prop.strokeWidth * 2
+    const padding = props.strokeWidth * 2
     const tasks = [
       anime({
         'targets': lineAttrMap.value.l,
-        'stroke-width': prop.strokeWidth * 2,
+        'stroke-width': props.strokeWidth * 2,
         duration,
         delay,
         'easing': 'easeOutExpo',
       }).finished,
       anime({
         'targets': lineAttrMap.value.r,
-        'stroke-width': prop.strokeWidth * 2,
+        'stroke-width': props.strokeWidth * 2,
         'x1': svgSize.width + padding * 2,
         'x2': svgSize.width + padding * 2,
         duration,

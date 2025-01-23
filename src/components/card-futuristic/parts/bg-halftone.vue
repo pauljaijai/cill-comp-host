@@ -20,7 +20,7 @@ export interface Props {
   color?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   size: '4px',
   dotSize: '2px',
   color: '#FAFAFA',
@@ -32,8 +32,8 @@ const bgRef = ref<HTMLDivElement>()
 
 const style = computed<CSSProperties>(() => ({
   inset: `0px`,
-  backgroundImage: `radial-gradient(${prop.color} ${prop.dotSize}, transparent ${prop.dotSize})`,
-  backgroundSize: `${prop.size} ${prop.size}`,
+  backgroundImage: `radial-gradient(${props.color} ${props.dotSize}, transparent ${props.dotSize})`,
+  backgroundSize: `${props.size} ${props.size}`,
 }))
 
 const animeMap: PartAnimeFcnMap = {
