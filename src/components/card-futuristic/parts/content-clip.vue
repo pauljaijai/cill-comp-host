@@ -13,7 +13,7 @@ import { useCardPart } from '../use-card-part'
 // #region Props
 export interface Props { }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {})
 
 defineSlots<{
   default?: () => unknown;

@@ -1,8 +1,8 @@
 <template>
   <component
-    :is="prop.tag"
+    :is="props.tag"
     ref="contentRef"
-    :aria-label="prop.text"
+    :aria-label="props.text"
     :class="id"
   >
     <span
@@ -29,7 +29,7 @@ interface Props {
   delay?: number | ((index: number) => number);
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   tag: 'p',
   duration: 100,
   delay: () => (index: number) => index * 80,
@@ -43,7 +43,7 @@ const index = Number(id.split('-').at(-1))
 
 const contentRef = ref<HTMLDivElement>()
 
-const chars = computed(() => prop.text.split(/.*?/u))
+const chars = computed(() => props.text.split(/.*?/u))
 
 interface AnimeParam {
   duration?: number;
@@ -57,9 +57,9 @@ function removeAnime() {
 
 function enter(param?: AnimeParam) {
   const {
-    duration = prop.duration,
+    duration = props.duration,
   } = param ?? {}
-  const delay = prop.duration / chars.value.length
+  const delay = props.duration / chars.value.length
 
   // 解決 anime.js SSR 出現 NodeList not defined 的錯誤
   if (import.meta.env.SSR) {
@@ -77,9 +77,9 @@ function enter(param?: AnimeParam) {
 }
 function leave(param?: AnimeParam) {
   const {
-    duration = prop.duration,
+    duration = props.duration,
   } = param ?? {}
-  const delay = prop.duration / chars.value.length
+  const delay = props.duration / chars.value.length
 
   // 解決 anime.js SSR 出現 NodeList not defined 的錯誤
   if (import.meta.env.SSR) {
@@ -103,7 +103,7 @@ else {
   card.bindText({
     id,
     index,
-    delay: prop.delay,
+    delay: props.delay,
     animeMap: {
       enter,
       leave,

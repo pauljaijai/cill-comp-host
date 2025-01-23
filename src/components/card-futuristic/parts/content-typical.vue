@@ -13,7 +13,7 @@ import { PROVIDE_KEY } from '../type'
 // #region Props
 interface Props { }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {})
 
 defineSlots<{
   default?: () => unknown;

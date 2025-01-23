@@ -11,28 +11,28 @@
       v-bind="lineAttrMap.t"
       y1="0"
       y2="0"
-      :stroke="prop.color"
+      :stroke="props.color"
       stroke-width="1"
     />
     <line
       v-bind="lineAttrMap.l"
       x1="0"
       x2="0"
-      :stroke="prop.color"
+      :stroke="props.color"
       stroke-width="1"
     />
     <line
       v-bind="lineAttrMap.b"
       :y1="cardSize.height"
       :y2="cardSize.height"
-      :stroke="prop.color"
+      :stroke="props.color"
       stroke-width="1"
     />
     <line
       v-bind="lineAttrMap.r"
       :x1="cardSize.width"
       :x2="cardSize.width"
-      :stroke="prop.color"
+      :stroke="props.color"
       stroke-width="1"
     />
   </svg>
@@ -51,7 +51,7 @@ export interface Props {
   color?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   color: '#777',
 })
 

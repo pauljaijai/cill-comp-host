@@ -8,7 +8,7 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <line
-      v-if="prop.side.t"
+      v-if="props.side.t"
       v-bind="sideStyleMap.t"
       x1="0"
       y1="0"
@@ -16,7 +16,7 @@
       y2="0"
     />
     <line
-      v-if="prop.side.l"
+      v-if="props.side.l"
       v-bind="sideStyleMap.l"
       x1="0"
       y1="0"
@@ -24,7 +24,7 @@
       :y2="cardSize.height"
     />
     <line
-      v-if="prop.side.b"
+      v-if="props.side.b"
       v-bind="sideStyleMap.b"
       x1="0"
       :y1="cardSize.height"
@@ -32,7 +32,7 @@
       :y2="cardSize.height"
     />
     <line
-      v-if="prop.side.r"
+      v-if="props.side.r"
       v-bind="sideStyleMap.r"
       :x1="cardSize.width"
       y1="0"
@@ -66,7 +66,7 @@ export interface Props {
   >;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   color: '#AAA',
   selectedColor: '#ff8d0a',
   strokeWidth: 4,
@@ -85,8 +85,8 @@ const sideData = ref(pipe(
   ['t', 'l', 'b', 'r'] as const,
   fromKeys((key) => ({
     dashoffset: 0,
-    width: prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
-    stroke: prop.side?.[key]?.color ?? prop.color,
+    width: props.side?.[key]?.strokeWidth ?? props.strokeWidth,
+    stroke: props.side?.[key]?.color ?? props.color,
   })),
 ))
 
@@ -108,9 +108,9 @@ const animeMap: PartAnimeFcnMap = {
         ['t', 'b'] as const,
         map((key) => anime({
           targets: sideData.value[key],
-          width: prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+          width: props.side?.[key]?.strokeWidth ?? props.strokeWidth,
           dashoffset: 0,
-          stroke: prop.side?.[key]?.color ?? prop.color,
+          stroke: props.side?.[key]?.color ?? props.color,
           duration,
           delay,
           easing: 'easeInOutCirc',
@@ -120,9 +120,9 @@ const animeMap: PartAnimeFcnMap = {
         ['r', 'l'] as const,
         map((key) => anime({
           targets: sideData.value[key],
-          width: prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+          width: props.side?.[key]?.strokeWidth ?? props.strokeWidth,
           dashoffset: 0,
-          stroke: prop.side?.[key]?.color ?? prop.color,
+          stroke: props.side?.[key]?.color ?? props.color,
           duration,
           delay,
           easing: 'easeInOutCirc',
@@ -145,8 +145,8 @@ const animeMap: PartAnimeFcnMap = {
       map((key) => anime({
         targets: sideData.value[key],
         dashoffset: 0,
-        width: prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
-        stroke: prop.side?.[key]?.color ?? prop.color,
+        width: props.side?.[key]?.strokeWidth ?? props.strokeWidth,
+        stroke: props.side?.[key]?.color ?? props.color,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -211,10 +211,10 @@ const animeMap: PartAnimeFcnMap = {
         map((key) => anime({
           targets: sideData.value[key],
           width: pipe(
-            prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+            props.side?.[key]?.strokeWidth ?? props.strokeWidth,
             multiply(2),
           ),
-          stroke: prop.side?.[key]?.selectedColor ?? prop?.selectedColor,
+          stroke: props.side?.[key]?.selectedColor ?? props?.selectedColor,
           duration,
           delay,
           easing: 'easeInOutCirc',
@@ -238,7 +238,7 @@ const animeMap: PartAnimeFcnMap = {
         map((key) => anime({
           targets: sideData.value[key],
           width: pipe(
-            prop.side?.[key]?.strokeWidth ?? prop.strokeWidth,
+            props.side?.[key]?.strokeWidth ?? props.strokeWidth,
             multiply(2),
           ),
           duration,

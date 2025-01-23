@@ -9,22 +9,22 @@
   >
     <path
       v-bind="cornerStyleMap.lt"
-      :stroke="prop.stroke"
+      :stroke="props.stroke"
       stroke-width="1.6"
     />
     <path
       v-bind="cornerStyleMap.rt"
-      :stroke="prop.stroke"
+      :stroke="props.stroke"
       stroke-width="1.6"
     />
     <path
       v-bind="cornerStyleMap.rb"
-      :stroke="prop.stroke"
+      :stroke="props.stroke"
       stroke-width="1.6"
     />
     <path
       v-bind="cornerStyleMap.lb"
-      :stroke="prop.stroke"
+      :stroke="props.stroke"
       stroke-width="1.6"
     />
   </svg>
@@ -46,7 +46,7 @@ export interface Props {
   stroke?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   size: 10,
   color: '#222',
   selectedColor: '#ff8d0a',
@@ -66,8 +66,8 @@ const cardSize = computed(() => ({
 
 const attr = reactive({
   rotate: 0,
-  offset: prop.size / 4,
-  color: prop.color,
+  offset: props.size / 4,
+  color: props.color,
 })
 
 const style = computed(() => ({
@@ -84,34 +84,34 @@ const viewBox = computed(
 const cornerStyleMap = computed(() => pipe(
   {
     lt: {
-      d: `M0 0 H${prop.size} L0 ${prop.size}V0 Z`,
-      transform: `rotate(${attr.rotate}, ${prop.size / 2}, ${prop.size / 2})`,
+      d: `M0 0 H${props.size} L0 ${props.size}V0 Z`,
+      transform: `rotate(${attr.rotate}, ${props.size / 2}, ${props.size / 2})`,
     },
     rt: {
       d: [
         `M${svgSize.width} 0`,
-        `L${svgSize.width} ${prop.size}`,
-        `L${svgSize.width - prop.size} 0Z`,
+        `L${svgSize.width} ${props.size}`,
+        `L${svgSize.width - props.size} 0Z`,
       ].join(' '),
-      transform: `rotate(${attr.rotate}, ${svgSize.width - prop.size / 2}, ${prop.size / 2})`,
+      transform: `rotate(${attr.rotate}, ${svgSize.width - props.size / 2}, ${props.size / 2})`,
     },
     rb: {
       d: [
         `M${svgSize.width} ${svgSize.height}`,
-        `L${svgSize.width - prop.size} ${svgSize.height}`,
-        `L${svgSize.width} ${svgSize.height - prop.size}`,
+        `L${svgSize.width - props.size} ${svgSize.height}`,
+        `L${svgSize.width} ${svgSize.height - props.size}`,
         `L${svgSize.width} ${svgSize.height} Z`,
       ].join(' '),
-      transform: `rotate(${attr.rotate}, ${svgSize.width - prop.size / 2}, ${svgSize.height - prop.size / 2})`,
+      transform: `rotate(${attr.rotate}, ${svgSize.width - props.size / 2}, ${svgSize.height - props.size / 2})`,
     },
     lb: {
       d: [
         `M0 ${svgSize.height}`,
-        `L0 ${svgSize.height - prop.size}`,
-        `L${prop.size} ${svgSize.height}`,
+        `L0 ${svgSize.height - props.size}`,
+        `L${props.size} ${svgSize.height}`,
         `L0 ${svgSize.height} Z`,
       ].join(' '),
-      transform: `rotate(${attr.rotate}, ${prop.size / 2}, ${svgSize.height - prop.size / 2})`,
+      transform: `rotate(${attr.rotate}, ${props.size / 2}, ${svgSize.height - props.size / 2})`,
     },
   },
   mapValues((value) => ({
@@ -136,8 +136,8 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size / 4,
-        color: prop.color,
+        offset: props.size / 4,
+        color: props.color,
         rotate: 0,
         duration,
         delay,
@@ -165,7 +165,7 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size / 4,
+        offset: props.size / 4,
         rotate: 0,
         duration,
         delay,
@@ -195,8 +195,8 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size,
-        color: prop.color,
+        offset: props.size,
+        color: props.color,
         duration,
         delay,
         easing: 'easeInExpo',
@@ -223,7 +223,7 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size / 2,
+        offset: props.size / 2,
         rotate: 180,
         duration,
         delay,
@@ -231,7 +231,7 @@ const animeMap: PartAnimeFcnMap = {
       }).finished,
       anime({
         targets: attr,
-        color: prop.selectedColor,
+        color: props.selectedColor,
         duration,
         delay,
         easing: 'linear',
@@ -251,9 +251,9 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offset: prop.size / 2,
+        offset: props.size / 2,
         rotate: 0,
-        color: prop.color,
+        color: props.color,
         duration,
         delay,
         easing: 'easeInOutCirc',

@@ -30,7 +30,7 @@ export interface Props {
   };
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   color: '#444',
   selectedColor: '#ff8d0a',
   chamfer: () => ({ lb: 10 }),
@@ -66,7 +66,7 @@ const pointData = ref({
     p2: { x: 0, y: 0 },
   },
 })
-const color = ref(prop.color)
+const color = ref(props.color)
 
 /** 取得所有座標 Normal 狀態數值 */
 function getPointAttrMapNormal() {
@@ -74,41 +74,41 @@ function getPointAttrMapNormal() {
     lt: {
       p1: {
         x: 0,
-        y: prop.chamfer.lt ?? 0,
+        y: props.chamfer.lt ?? 0,
       },
       p2: {
-        x: prop.chamfer.lt ?? 0,
+        x: props.chamfer.lt ?? 0,
         y: 0,
       },
     },
     rt: {
       p1: {
-        x: svgSize.width - (prop.chamfer.rt ?? 0),
+        x: svgSize.width - (props.chamfer.rt ?? 0),
         y: 0,
       },
       p2: {
         x: svgSize.width,
-        y: prop.chamfer.rt ?? 0,
+        y: props.chamfer.rt ?? 0,
       },
     },
     rb: {
       p1: {
         x: svgSize.width,
-        y: svgSize.height - (prop.chamfer.rb ?? 0),
+        y: svgSize.height - (props.chamfer.rb ?? 0),
       },
       p2: {
-        x: svgSize.width - (prop.chamfer.rb ?? 0),
+        x: svgSize.width - (props.chamfer.rb ?? 0),
         y: svgSize.height,
       },
     },
     lb: {
       p1: {
-        x: prop.chamfer.lb ?? 0,
+        x: props.chamfer.lb ?? 0,
         y: svgSize.height,
       },
       p2: {
         x: 0,
-        y: svgSize.height - (prop.chamfer.lb ?? 0),
+        y: svgSize.height - (props.chamfer.lb ?? 0),
       },
     },
   }
@@ -167,7 +167,7 @@ const animeMap: PartAnimeFcnMap = {
       }).finished,
       anime({
         targets: color,
-        value: prop.color,
+        value: props.color,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -239,8 +239,8 @@ const animeMap: PartAnimeFcnMap = {
     } = param ?? {}
 
     const minHight = Math.max(
-      prop.chamfer.lb ?? 0,
-      prop.chamfer.rb ?? 0,
+      props.chamfer.lb ?? 0,
+      props.chamfer.rb ?? 0,
     )
 
     const pointDuration = duration / 5 * 4
@@ -300,7 +300,7 @@ const animeMap: PartAnimeFcnMap = {
     await Promise.all([
       anime({
         targets: color,
-        value: prop.selectedColor,
+        value: props.selectedColor,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',

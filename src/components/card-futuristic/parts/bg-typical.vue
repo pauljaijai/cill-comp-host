@@ -22,7 +22,7 @@ export interface Props {
   margin?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   angle: '-45deg',
   size: '4px',
   color: '#FAFAFA',
@@ -34,13 +34,13 @@ const card = inject(PROVIDE_KEY)
 const bgRef = ref<HTMLDivElement>()
 
 const style = computed<CSSProperties>(() => ({
-  inset: prop.margin,
+  inset: props.margin,
   backgroundImage: [
     'repeating-linear-gradient(',
-    `${prop.angle}, transparent,`,
-    `transparent ${prop.size},`,
-    `${prop.color} ${prop.size},`,
-    `${prop.color} calc(${prop.size} * 2))`,
+    `${props.angle}, transparent,`,
+    `transparent ${props.size},`,
+    `${props.color} ${props.size},`,
+    `${props.color} calc(${props.size} * 2))`,
   ].join(''),
 }))
 

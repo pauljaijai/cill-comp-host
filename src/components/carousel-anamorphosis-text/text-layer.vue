@@ -26,7 +26,7 @@ interface Props {
   animationDelay: number;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {})
 
 const textLayerRef = ref<HTMLDivElement>()
 const textLayerSize = reactive(useElementSize(textLayerRef))
@@ -35,18 +35,18 @@ const textRef = ref<HTMLDivElement>()
 const textSize = reactive(useElementSize(textRef))
 
 const repeatTimes = ref(1)
-const texts = computed(() => `${prop.text} `.repeat(repeatTimes.value))
+const texts = computed(() => `${props.text} `.repeat(repeatTimes.value))
 
-const rotateValue = computed(() => `${prop.rotate}deg`)
-const durationValue = computed(() => `${prop.animationDuration}s`)
-const delayValue = computed(() => `${prop.index * prop.animationDelay}s`)
-const marginValue = computed(() => `-${prop.index * 10}%`)
-const backgroundValue = computed(() => `url('${prop.src}')`)
+const rotateValue = computed(() => `${props.rotate}deg`)
+const durationValue = computed(() => `${props.animationDuration}s`)
+const delayValue = computed(() => `${props.index * props.animationDelay}s`)
+const marginValue = computed(() => `-${props.index * 10}%`)
+const backgroundValue = computed(() => `url('${props.src}')`)
 
 watch(() => [
   textLayerSize.width,
   textSize.width,
-  prop.text,
+  props.text,
 ], async () => {
   setTimeout(() => {
     // 計算目前文字框面積與文字層面積的比例
@@ -68,7 +68,7 @@ watch(() => [
 
 /** 實現 restart animation */
 const animationValue = ref<'text-in' | 'none'>('text-in')
-watch(() => prop.src, async () => {
+watch(() => props.src, async () => {
   animationValue.value = 'none'
 
   // nextTick 沒用，改為土炮法

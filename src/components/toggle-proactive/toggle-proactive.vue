@@ -390,7 +390,7 @@ interface Props {
   padColor?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   size: '4rem',
 
@@ -432,7 +432,7 @@ const KEYFRAME_IDS = [
 ] as const
 
 const uid = useId()
-const modelValue = useVModel(prop, 'modelValue', emit)
+const modelValue = useVModel(props, 'modelValue', emit)
 const [currentValue, toggleCurrentValue] = useToggle(modelValue.value)
 
 interface KeyframeOption extends anime.AnimeParams {
@@ -502,14 +502,14 @@ const svgClass = ref<string[]>([])
 
 const currentTrackClass = computed(() => {
   const result = [
-    prop.trackClass,
+    props.trackClass,
   ]
 
   if (currentValue.value) {
-    result.push(prop.trackActiveClass)
+    result.push(props.trackActiveClass)
   }
   else {
-    result.push(prop.trackInactiveClass)
+    result.push(props.trackInactiveClass)
   }
 
   return result
@@ -517,15 +517,15 @@ const currentTrackClass = computed(() => {
 
 const currentThumbClass = computed(() => {
   const result = [
-    prop.thumbClass,
+    props.thumbClass,
   ]
 
   if (currentValue.value) {
-    result.push(prop.thumbActiveClass)
+    result.push(props.thumbActiveClass)
     result.push('active')
   }
   else {
-    result.push(prop.thumbInactiveClass)
+    result.push(props.thumbInactiveClass)
   }
 
   return result
@@ -606,7 +606,7 @@ function toggle() {
   if (isPlaying.value)
     return
 
-  if (prop.disabled) {
+  if (props.disabled) {
     toggleCurrentValue()
     start()
     return
@@ -674,7 +674,7 @@ onBeforeMount(() => {
 <style scoped lang="sass">
 .toggle-proactive
   aspect-ratio: 2
-  height: v-bind('prop.size')
+  height: v-bind('props.size')
   .track
     position: relative
     width: 100%

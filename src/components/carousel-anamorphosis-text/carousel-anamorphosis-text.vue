@@ -69,7 +69,7 @@ interface Props {
   animationDelay?: number;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   height: '400px',
   animationDuration: 3.4,
   animationDelay: 0.4,
@@ -88,11 +88,11 @@ defineSlots<{
 // #endregion Slots
 
 const style = computed<CSSProperties>(() => ({
-  height: prop.height,
+  height: props.height,
 }))
 
 const imgs = computed(() => pipe(
-  prop.srcList,
+  props.srcList,
   map(({ url }) => url),
   unique(),
 ))
@@ -102,17 +102,17 @@ const currentIndex = ref(0)
 /** 目前圖片 index。因為新圖片會比文字的圖片延遲更換，所以需要分開 */
 const imgIndex = ref(0)
 
-const srcItem = computed(() => prop.srcList[currentIndex.value]!)
-const imgSrcItem = computed(() => prop.srcList[imgIndex.value]!)
+const srcItem = computed(() => props.srcList[currentIndex.value]!)
+const imgSrcItem = computed(() => props.srcList[imgIndex.value]!)
 const imgStyle = computed(() => ({
   'background-image': `url('${imgSrcItem.value.url}')`,
 }))
 
 const animationDuration = computed(
-  () => srcItem.value.animationDuration ?? prop.animationDuration,
+  () => srcItem.value.animationDuration ?? props.animationDuration,
 )
 const animationDelay = computed(
-  () => srcItem.value.animationDelay ?? prop.animationDelay,
+  () => srcItem.value.animationDelay ?? props.animationDelay,
 )
 
 /** 總動畫時間。單位 ms
@@ -122,7 +122,7 @@ const animationDelay = computed(
 const totalAnimationDuration = computed(() => pipe(
   srcItem.value,
   ({ text }) => {
-    const { animationDelay, animationDuration } = prop
+    const { animationDelay, animationDuration } = props
 
     if (typeof text === 'string') {
       /** 預設 3 層 */
@@ -148,7 +148,7 @@ function next() {
     return
 
   isPlaying.value = true
-  currentIndex.value = (currentIndex.value + 1) % prop.srcList.length
+  currentIndex.value = (currentIndex.value + 1) % props.srcList.length
 
   setTimeout(() => {
     isPlaying.value = false
@@ -162,7 +162,7 @@ function prev() {
     return
 
   isPlaying.value = true
-  currentIndex.value = (currentIndex.value - 1 + prop.srcList.length) % prop.srcList.length
+  currentIndex.value = (currentIndex.value - 1 + props.srcList.length) % props.srcList.length
 
   setTimeout(() => {
     isPlaying.value = false

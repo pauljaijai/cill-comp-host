@@ -30,7 +30,7 @@ export interface Props {
   selectedColor?: string;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   size: 10,
   color: '#444',
   selectedColor: '#ff8d0a',
@@ -44,7 +44,7 @@ const svgSize = reactive(useElementSize(svgRef, undefined, {
 const attr = reactive({
   offsetX: 0,
   offsetY: 0,
-  color: prop.color,
+  color: props.color,
 })
 
 function removeAnime() {
@@ -63,10 +63,10 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offsetX: prop.size / 4,
-        offsetY: prop.size / 4,
-        color: prop.color,
-        strokeWidth: prop.strokeWidth,
+        offsetX: props.size / 4,
+        offsetY: props.size / 4,
+        color: props.color,
+        strokeWidth: props.strokeWidth,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -125,7 +125,7 @@ const animeMap: PartAnimeFcnMap = {
         targets: attr,
         offsetX: -svgSize.width / 2,
         offsetY: -svgSize.height / 2,
-        color: prop.color,
+        color: props.color,
         duration,
         delay: delay + 100,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -152,9 +152,9 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offsetX: -prop.size / 4,
-        offsetY: -prop.size / 4,
-        color: prop.selectedColor,
+        offsetX: -props.size / 4,
+        offsetY: -props.size / 4,
+        color: props.selectedColor,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -181,10 +181,10 @@ const animeMap: PartAnimeFcnMap = {
     const tasks = [
       anime({
         targets: attr,
-        offsetX: prop.size / 2,
-        offsetY: prop.size / 2,
-        color: prop.color,
-        strokeWidth: prop.strokeWidth,
+        offsetX: props.size / 2,
+        offsetY: props.size / 2,
+        color: props.color,
+        strokeWidth: props.strokeWidth,
         duration,
         delay,
         easing: 'cubicBezier(1, 0.1, 0, 0.9)',
@@ -222,22 +222,22 @@ const cornerStyleMap = computed(() => pipe(
       y: 0,
     },
     rt: {
-      x: svgSize.width - prop.size,
+      x: svgSize.width - props.size,
       y: 0,
     },
     rb: {
-      x: svgSize.width - prop.size,
-      y: svgSize.height - prop.size,
+      x: svgSize.width - props.size,
+      y: svgSize.height - props.size,
     },
     lb: {
       x: 0,
-      y: svgSize.height - prop.size,
+      y: svgSize.height - props.size,
     },
   },
   mapValues((value) => ({
     ...value,
-    width: prop.size,
-    height: prop.size,
+    width: props.size,
+    height: props.size,
     fill: attr.color,
   })),
 ))

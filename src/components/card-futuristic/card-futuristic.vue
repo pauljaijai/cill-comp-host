@@ -6,7 +6,7 @@
     <suspense v-if="bgComponent">
       <component
         :is="bgComponent"
-        v-bind="prop.bg"
+        v-bind="props.bg"
         class="pointer-events-none absolute z-[-1]"
       />
     </suspense>
@@ -14,7 +14,7 @@
     <suspense v-if="borderComponent">
       <component
         :is="borderComponent"
-        v-bind="prop.border"
+        v-bind="props.border"
         class="pointer-events-none absolute z-[-1]"
       />
     </suspense>
@@ -22,7 +22,7 @@
     <suspense v-if="cornerComponent">
       <component
         :is="cornerComponent"
-        v-bind="prop.corner"
+        v-bind="props.corner"
         class="pointer-events-none absolute z-[-1]"
       />
     </suspense>
@@ -31,7 +31,7 @@
       <component
         :is="contentComponent"
         ref="contentRef"
-        v-bind="prop.content"
+        v-bind="props.content"
       >
         <slot />
       </component>
@@ -76,7 +76,7 @@ interface Props {
   content?: ContentParam | null;
 }
 // #endregion Props
-const prop = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   animeSequence: undefined,
 
   visible: true,
@@ -150,17 +150,17 @@ const contentSize = reactive(useElementSize(contentRef, undefined, {
   box: 'border-box',
 }))
 
-const contentComponent = computed(() => findPartComponent('content', prop.content?.type))
-const borderComponent = computed(() => findPartComponent('border', prop.border?.type))
-const bgComponent = computed(() => findPartComponent('bg', prop.bg?.type))
-const cornerComponent = computed(() => findPartComponent('corner', prop.corner?.type))
+const contentComponent = computed(() => findPartComponent('content', props.content?.type))
+const borderComponent = computed(() => findPartComponent('border', props.border?.type))
+const bgComponent = computed(() => findPartComponent('bg', props.bg?.type))
+const cornerComponent = computed(() => findPartComponent('corner', props.corner?.type))
 
 /** 儲存 part 資料 */
 const partMap = new Map<`${Part}`, PartAnimeFcnMap>()
 
 /** debounce 後初始化 parts */
 const initPart = debounce(async () => {
-  const { visible } = prop
+  const { visible } = props
 
   // console.log(`🚀 ~ parts init Anime:`)
   await playPartsAnime(
@@ -196,7 +196,7 @@ const textMap = new Map<string, {
 
 /** debounce 後初始化 text */
 const initText = debounce(async () => {
-  const { visible } = prop
+  const { visible } = props
 
   textMap.forEach(async ({ animeMap }) => {
     visible
@@ -217,7 +217,7 @@ const bindText: ProvideContent['bindText'] = (data) => {
 }
 
 provide(PROVIDE_KEY, {
-  visible: computed(() => prop.visible),
+  visible: computed(() => props.visible),
   contentSize: computed(() => ({
     width: contentSize.width,
     height: contentSize.height,
@@ -244,7 +244,7 @@ const defaultAnimeSequence: AnimeSequence = {
   },
 }
 const animeSequence = computed<AnimeSequence>(() => defaultsDeep(
-  clone(prop.animeSequence),
+  clone(props.animeSequence),
   clone(defaultAnimeSequence),
 ))
 async function playPartsAnime(
@@ -330,8 +330,8 @@ async function playPartsAnime(
 
 const isHovered = useElementHover(cardRef)
 const hover = computed(() => {
-  if (prop.hover !== undefined) {
-    return prop.hover
+  if (props.hover !== undefined) {
+    return props.hover
   }
 
   return isHovered.value
@@ -344,8 +344,8 @@ interface StateObject {
 }
 /** 彙整所有狀態 */
 const stateObject = computed<StateObject>(() => ({
-  visible: prop.visible,
-  selected: prop.selected,
+  visible: props.visible,
+  selected: props.selected,
   hover: hover.value,
 }))
 /** 方便比對狀態變化 */
