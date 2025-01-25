@@ -140,6 +140,7 @@ export default defineConfig({
             text: '文字',
             items: [
               { text: '逐字轉場', link: '/components/text-characters-transition/' },
+              { text: '怕鼠的文字', link: '/components/text-hate-mouse/' },
             ],
           },
           {
