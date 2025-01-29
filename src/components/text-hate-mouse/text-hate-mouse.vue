@@ -340,17 +340,11 @@ watchDebounced(
 
 watchDebounced(
   () => [
-    props.evasionRadius,
     props.stiffness,
     props.damping,
   ],
   () => {
     pauseUpdate()
-    if (cursorBody.value) {
-      //
-
-      cursorBody.value = createCursorBody()
-    }
 
     Composite
       .allConstraints(engine.value.world)
@@ -358,6 +352,7 @@ watchDebounced(
         constraint.stiffness = props.stiffness
         constraint.damping = props.damping
       })
+
     resumeUpdate()
   },
   {
