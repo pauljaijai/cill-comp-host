@@ -14,6 +14,7 @@
       scrolling="no"
       frameborder="0"
       :src
+      class="my-4 rounded-xl"
     />
 
     <div class="rounded-xl bg-slate-50 p-4 text-center text-lg text-gray-600">

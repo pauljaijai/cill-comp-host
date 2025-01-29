@@ -1,5 +1,5 @@
 ---
-description: 可以讓元素有酷酷的 3D 偏轉效果。ˋ( ° ▽、° ) 
+description: 可以讓元素有酷酷的 3D 偏轉效果。ˋ( ° ▽、° )
 ---
 
 <script setup>

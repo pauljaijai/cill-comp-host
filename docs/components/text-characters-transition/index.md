@@ -11,7 +11,7 @@ import TransitionType from '../../../src/components/text-characters-transition/e
 import CustomTransition from '../../../src/components/text-characters-transition/examples/custom-transition.vue'
 </script>
 
-# 逐字轉場
+# 逐字轉場 <Badge type="info" text="text" />
 
 讓每個文字都有進入進出動畫。( •̀ ω •́ )✧
 
