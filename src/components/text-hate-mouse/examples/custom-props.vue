@@ -1,18 +1,18 @@
 <template>
   <div class="w-full flex flex-col gap-4 border border-gray-300 p-6 text-center">
-    <div class="flex flex-col p-4">
+    <div class="flex flex-col gap-4">
       <base-input
         v-model="params.text"
         label="自定義文字"
         type="text"
-        class="w-full p-2 text-left"
+        class="w-full text-left"
       />
 
       <base-input
         v-model.number="params.stiffness"
         :label="`約束力：${params.stiffness}`"
         type="range"
-        class="w-full p-2 text-left"
+        class="w-full text-left"
         :max="0.3"
         :step="0.001"
         :min="0.001"
@@ -22,14 +22,16 @@
         v-model.number="params.damping"
         :label="`阻尼：${params.damping}`"
         type="range"
-        class="w-full p-2 text-left"
+        class="w-full text-left"
         :max="1"
         :step="0.01"
         :min="0"
       />
     </div>
 
-    <text-hate-mouse v-bind="params" />
+    <div class="border p-4">
+      <text-hate-mouse v-bind="params" />
+    </div>
   </div>
 </template>
 
