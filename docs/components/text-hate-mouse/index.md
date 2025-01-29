@@ -20,7 +20,7 @@ import CustomProps from '../../../src/components/text-hate-mouse/examples/custom
 
 ## 使用範例
 
-<!-- ### 基本用法
+### 基本用法
 
 「有勞贖！Σ(ˊДˋ;)」
 
@@ -38,7 +38,7 @@ import CustomProps from '../../../src/components/text-hate-mouse/examples/custom
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/text-hate-mouse/examples/more-case.vue
-::: -->
+:::
 
 ### 自定義參數
 
