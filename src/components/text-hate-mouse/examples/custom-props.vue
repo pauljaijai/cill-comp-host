@@ -54,7 +54,7 @@ import TextHateMouse from '../text-hate-mouse.vue'
 type Props = ExtractComponentProps<typeof TextHateMouse>
 
 const params = ref({
-  text: '字字字字字字',
+  text: '哆啦哆啦哆啦哆啦哆啦 A 夢',
   evasionRadius: 40,
   stiffness: 0.01,
   damping: 0.05,
