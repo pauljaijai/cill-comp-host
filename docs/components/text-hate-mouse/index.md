@@ -6,6 +6,7 @@ description: 滑鼠靠近時會躲得遠遠的文字。(。-`ω´-)
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/text-hate-mouse/examples/basic-usage.vue'
+import MoreCase from '../../../src/components/text-hate-mouse/examples/more-case.vue'
 import CustomProps from '../../../src/components/text-hate-mouse/examples/custom-props.vue'
 </script>
 
@@ -29,9 +30,19 @@ import CustomProps from '../../../src/components/text-hate-mouse/examples/custom
 <<< ../../../src/components/text-hate-mouse/examples/basic-usage.vue
 :::
 
-### 調整參數
+### 不同組合
 
 不同參數有不同效果
+
+<more-case/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/text-hate-mouse/examples/more-case.vue
+:::
+
+### 自定義參數
+
+變出有趣的效果吧！ԅ(´∀` ԅ)
 
 <custom-props/>
 

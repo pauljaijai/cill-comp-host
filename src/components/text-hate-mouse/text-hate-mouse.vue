@@ -29,7 +29,7 @@
 import type {
   CSSProperties,
 } from 'vue'
-import { useElementBounding, useIntervalFn, useMouse, useWindowScroll } from '@vueuse/core'
+import { useElementBounding, useIntervalFn, useMouse, useWindowScroll, watchDebounced } from '@vueuse/core'
 import Matter from 'matter-js'
 import { filter, flat, isTruthy, join, map, pipe, reduce } from 'remeda'
 import {
@@ -249,7 +249,10 @@ function isSmallEnough(value: number) {
 }
 
 /** 持續更新狀態 */
-useIntervalFn(() => {
+const {
+  resume: resumeUpdate,
+  pause: pauseUpdate,
+} = useIntervalFn(() => {
   const bodyList = Composite.allBodies(engine.value.world)
 
   // 更新 cursor 位置
@@ -311,6 +314,49 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clear()
 })
+
+// 動態更新參數
+watchDebounced(
+  () => [
+    props.text,
+    props.splitter,
+  ],
+  () => {
+    pauseUpdate()
+    clear()
+    init()
+    start()
+    resumeUpdate()
+  },
+  {
+    debounce: 500,
+  },
+)
+
+watchDebounced(
+  () => [
+    props.evasionRadius,
+    props.stiffness,
+    props.damping,
+  ],
+  () => {
+    pauseUpdate()
+    if (cursorBody.value) {
+      cursorBody.value.circleRadius = props.evasionRadius
+    }
+
+    Composite
+      .allConstraints(engine.value.world)
+      .forEach((constraint) => {
+        constraint.stiffness = props.stiffness
+        constraint.damping = props.damping
+      })
+    resumeUpdate()
+  },
+  {
+    debounce: 500,
+  },
+)
 </script>
 
 <style scoped lang="sass">

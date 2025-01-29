@@ -22,10 +22,10 @@
 </template>
 
 <script setup lang="ts">
-import type { InputTypeHTMLAttribute } from 'vue'
+import type { InputHTMLAttributes, InputTypeHTMLAttribute } from 'vue'
 import { useVModel } from '@vueuse/core'
 
-interface Props {
+interface Props extends /* @vue-ignore */ InputHTMLAttributes {
   modelValue?: string | number;
   label?: string;
   labelClass?: string;
