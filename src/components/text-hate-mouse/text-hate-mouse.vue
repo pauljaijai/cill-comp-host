@@ -1,16 +1,20 @@
 <template>
   <component
     :is="props.tag"
-    ref="wrapperRef"
-    :aria-label="labelText"
+    ref="containerRef"
+    :aria-label="ariaLabel"
+    class="relative whitespace-pre-wrap"
   >
     <span
-      v-for="char, i in chars"
-      :key="i"
+      v-for="item in chars"
+      :id="item.id"
+      :key="item.id"
+      ref="charRefList"
+      :style="charStyleMap.get(item.id)"
       aria-hidden
       class="inline-block"
     >
-      {{ char }}
+      {{ item.char }}
     </span>
 
     <canvas
@@ -22,9 +26,12 @@
 </template>
 
 <script setup lang="ts">
-import { useElementBounding } from '@vueuse/core'
+import type {
+  CSSProperties,
+} from 'vue'
+import { useElementBounding, useIntervalFn, useMouse } from '@vueuse/core'
 import Matter from 'matter-js'
-import { join, map, pipe } from 'remeda'
+import { filter, flat, isTruthy, join, map, pipe, reduce } from 'remeda'
 import {
   computed,
   onBeforeUnmount,
@@ -32,11 +39,14 @@ import {
   reactive,
   ref,
   shallowRef,
+  triggerRef,
+  useId,
 } from 'vue'
 
 // #region Props
 interface Props {
-  label: string | string[];
+  /** string[] 表示提供已分割好的文字 */
+  text: string | string[];
 
   /** html tag
    *
@@ -51,15 +61,21 @@ interface Props {
    * @default /.*?/u
    */
   splitter?: RegExp | ((label: string) => string[]);
+
+  /** 閃避半徑 */
+  radius?: number;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
-  label: '',
+  text: '',
   tag: 'p',
+  radius: 40,
 })
 
+const id = useId()
+
 const chars = computed(() => pipe(
-  props.label,
+  props.text,
   (data) => {
     if (Array.isArray(data)) {
       return data
@@ -72,11 +88,30 @@ const chars = computed(() => pipe(
     /** Regex 加上 u 才不會導致 emoji 被拆分成亂碼 */
     return data.split(props.splitter ?? /.*?/u)
   },
+  map((char, i) => ({
+    id: `${id}-${i}`,
+    char,
+  })),
 ))
 
-const labelText = computed(() => pipe(
+const charRefList = ref<HTMLSpanElement[]>()
+const charRefMap = computed(() => pipe(
+  charRefList.value ?? [],
+  reduce((refMap, el) => {
+    refMap.set(el.id, el)
+    return refMap
+  }, new Map<string, HTMLSpanElement>()),
+))
+const charStyleMap = shallowRef(new Map<string, CSSProperties>())
+/** body 初始值，方便計算偏移量 */
+const charBodyInitMap = shallowRef(new Map<string, {
+  x: number;
+  y: number;
+}>())
+
+const ariaLabel = computed(() => pipe(
   chars.value,
-  map((char) => char),
+  map(({ char }) => char),
   join(''),
 ))
 
@@ -86,15 +121,16 @@ const {
   Runner,
   Bodies,
   Composite,
-  Body,
 } = Matter
 
 const debug = false
 
-const wrapperRef = ref<HTMLDivElement>()
+const mouse = reactive(useMouse())
+
+const containerRef = ref<HTMLDivElement>()
 const canvasRef = ref<HTMLCanvasElement>()
-const wrapperBounding = reactive(
-  useElementBounding(wrapperRef, {
+const containerBounding = reactive(
+  useElementBounding(containerRef, {
     windowResize: false,
     windowScroll: false,
   }),
@@ -104,14 +140,14 @@ const wrapperBounding = reactive(
  *
  * 以免畫面滾動後，重新建立物理世界時，物體位置不正確
  */
-let wrapperInitPosition = {
+let containerInitPosition = {
   x: 0,
   y: 0,
 }
 onMounted(() => {
-  wrapperInitPosition = {
-    x: wrapperBounding.x,
-    y: wrapperBounding.y,
+  containerInitPosition = {
+    x: containerBounding.x,
+    y: containerBounding.y,
   }
 })
 
@@ -121,18 +157,71 @@ const engine = shallowRef(Engine.create({
 
 const runner = shallowRef(Runner.create())
 
-onMounted(() => {
-  init()
-  start()
-})
-
-onBeforeUnmount(() => {
-  clear()
-})
-
 function init() {
+  const charBodyList = pipe(
+    chars.value,
+    map(({ id }) => {
+      const targetRef = charRefMap.value.get(id)
+      if (!targetRef) {
+        return
+      }
+
+      const elRect = targetRef.getBoundingClientRect()
+
+      /**
+       * el body 的 xy 是相對於網頁左上角為 0 點，
+       * 所以要先減去 container 的 x, y 來取得相對於
+       * container 的 x, y，再加上 width, height 的
+       * 一半，偏移自身中心
+       */
+      const { x, y } = {
+        x: elRect.x - containerInitPosition.x + elRect.width / 2,
+        y: elRect.y - containerInitPosition.y + elRect.height / 2,
+      }
+
+      charBodyInitMap.value.set(id, { x, y })
+
+      const radius = Math.min(elRect.width, elRect.height) / 2
+      const body = Bodies.circle(x, y, radius, {
+        label: id,
+        friction: 0,
+      })
+
+      const constraint = Matter.Constraint.create({
+        bodyA: body,
+        pointB: { x, y },
+        stiffness: 0.001,
+        damping: 0.05,
+      })
+
+      return [body, constraint]
+    }),
+    filter(isTruthy),
+    flat(),
+  )
+  Composite.add(engine.value.world, charBodyList)
+
+  // 建立一個持續跟隨滑鼠的圓形
+  pipe(
+    undefined,
+    () => {
+      const ball = Bodies.circle(-100, -100, props.radius, {
+        mass: 1000,
+        restitution: 0,
+      })
+      Composite.add(engine.value.world, ball)
+
+      Matter.Events.on(engine.value, 'afterUpdate', () => {
+        ball.position = {
+          x: mouse.x - containerInitPosition.x,
+          y: mouse.y - containerInitPosition.y,
+        }
+      })
+    },
+  )
+
   if (debug) {
-    const { width, height } = wrapperBounding
+    const { width, height } = containerBounding
 
     const render = Render.create({
       canvas: canvasRef.value,
@@ -162,6 +251,37 @@ function clear() {
   Engine.clear(engine.value)
   Runner.stop(runner.value)
 }
+
+useIntervalFn(() => {
+  const bodyList = Composite.allBodies(engine.value.world)
+
+  chars.value.reduce((styleMap, char) => {
+    const body = bodyList.find(({ label }) => label === char.id)
+    const initValue = charBodyInitMap.value.get(char.id)
+    if (body && initValue) {
+      const offsetX = body.position.x - initValue.x
+      const offsetY = body.position.y - initValue.y
+      const rotate = body.angle * 180 / Math.PI
+
+      styleMap.set(char.id, {
+        transform: `translate(${offsetX}px, ${offsetY}px) rotate(${rotate}deg)`,
+      })
+    }
+
+    return styleMap
+  }, charStyleMap.value)
+
+  triggerRef(charStyleMap)
+}, 15)
+
+onMounted(() => {
+  init()
+  start()
+})
+
+onBeforeUnmount(() => {
+  clear()
+})
 </script>
 
 <style scoped lang="sass">

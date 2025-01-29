@@ -1,5 +1,5 @@
 ---
-description:
+description: 滑鼠靠近時會躲得遠遠的文字。(。-`ω´-)
 ---
 
 <script setup>
@@ -8,9 +8,13 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 import BasicUsage from '../../../src/components/text-hate-mouse/examples/basic-usage.vue'
 </script>
 
-# 標題 <Badge type="info" text="" />
+# 怕鼠的文字 <Badge type="info" text="text" />
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+滑鼠靠近時會躲得遠遠的文字。
+
+::: tip
+此元件針對滑鼠設計，建議使用電腦或可以使用滑鼠的裝置瀏覽。
+:::
 
 ## 使用範例
 
@@ -43,15 +47,3 @@ import BasicUsage from '../../../src/components/text-hate-mouse/examples/basic-u
 ### Props
 
 <<< ../../../src/components/text-hate-mouse/text-hate-mouse.vue/#Props
-
-### Emits
-
-<<< ../../../src/components/text-hate-mouse/text-hate-mouse.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/text-hate-mouse/text-hate-mouse.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/text-hate-mouse/text-hate-mouse.vue/#Slots
