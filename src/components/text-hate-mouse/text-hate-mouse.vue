@@ -30,7 +30,7 @@ import type {
   CSSProperties,
 } from 'vue'
 import { useElementBounding, useIntervalFn, useMouse, useWindowScroll } from '@vueuse/core'
-import Matter, { Bodies, Composite, Engine, Render, Runner } from 'matter-js'
+import Matter from 'matter-js'
 import { filter, flat, isTruthy, join, map, pipe, reduce } from 'remeda'
 import {
   computed,
@@ -129,6 +129,8 @@ const ariaLabel = computed(() => pipe(
   map(({ char }) => char),
   join(''),
 ))
+
+const { Bodies, Composite, Engine, Render, Runner } = Matter
 
 const canvasRef = ref<HTMLCanvasElement>()
 const containerRef = ref<HTMLDivElement>()
