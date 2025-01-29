@@ -86,6 +86,7 @@ const props = withDefaults(defineProps<Props>(), {
   damping: 0.05,
 })
 
+const debug = false
 const id = useId()
 
 const chars = computed(() => pipe(
@@ -136,8 +137,6 @@ const {
   Bodies,
   Composite,
 } = Matter
-
-const debug = false
 
 const mouse = reactive(useMouse())
 
@@ -216,14 +215,13 @@ function init() {
   Composite.add(engine.value.world, charBodyList)
 
   // 建立一個持續跟隨滑鼠的圓形
-  pipe(
+  const ball = pipe(
     undefined,
     () => {
       const ball = Bodies.circle(-100, -100, props.evasionRadius, {
         mass: 1000,
         restitution: 0,
       })
-      Composite.add(engine.value.world, ball)
 
       Matter.Events.on(engine.value, 'afterUpdate', () => {
         ball.position = {
@@ -231,8 +229,11 @@ function init() {
           y: mouse.y - containerInitPosition.y,
         }
       })
+
+      return ball
     },
   )
+  Composite.add(engine.value.world, ball)
 
   if (debug) {
     const { width, height } = containerBounding

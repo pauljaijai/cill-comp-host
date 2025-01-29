@@ -32,6 +32,7 @@ import BgSakuraFubuki from '../../src/components/bg-sakura-fubuki/examples/full-
 import BgSnow from '../../src/components/bg-snow/examples/basic-usage.vue';
 
 import TextCharactersTransition from '../../src/components/text-characters-transition/examples/custom-transition.vue';
+import TextHateMouse from '../../src/components/text-hate-mouse/examples/basic-usage.vue';
 
 import UtilPartyPopper from '../../src/components/util-party-popper/examples/wide-area-emit.vue';
 
@@ -293,6 +294,12 @@ Motion Graphic 風格的 Transition 元件
 <text-characters-transition  />
 
 鱈魚：「那個沒有也太晚出現了吧！Σ(ˊДˋ;)」
+
+### [怕鼠的文字](./text-hate-mouse/) <Badge type="info" text="text" />
+
+「有勞鼠！Σ(ˊДˋ;)」
+
+<text-hate-mouse  />
 
 </expansion-section>
 
