@@ -30,7 +30,7 @@ import type {
   CSSProperties,
 } from 'vue'
 import { useElementBounding, useIntervalFn, useMouse, useWindowScroll } from '@vueuse/core'
-import Matter, { Body } from 'matter-js'
+import Matter, { Bodies, Composite, Engine, Render, Runner } from 'matter-js'
 import { filter, flat, isTruthy, join, map, pipe, reduce } from 'remeda'
 import {
   computed,
@@ -41,7 +41,6 @@ import {
   shallowRef,
   triggerRef,
   useId,
-  watchEffect,
 } from 'vue'
 
 // #region Props
@@ -83,7 +82,7 @@ const props = withDefaults(defineProps<Props>(), {
   text: '',
   tag: 'p',
   evasionRadius: 40,
-  stiffness: 0.02,
+  stiffness: 0.01,
   damping: 0.05,
 })
 
@@ -131,14 +130,6 @@ const ariaLabel = computed(() => pipe(
   join(''),
 ))
 
-const {
-  Engine,
-  Render,
-  Runner,
-  Bodies,
-  Composite,
-} = Matter
-
 const canvasRef = ref<HTMLCanvasElement>()
 const containerRef = ref<HTMLDivElement>()
 const containerBounding = reactive(
@@ -154,16 +145,6 @@ const runner = shallowRef(Runner.create())
 const mouse = reactive(useMouse())
 const windowScroll = reactive(useWindowScroll())
 const cursorBody = shallowRef<Matter.Body>()
-watchEffect(() => {
-  if (!cursorBody.value) {
-    return
-  }
-
-  Body.setPosition(cursorBody.value, {
-    x: mouse.x - containerBounding.x - windowScroll.x,
-    y: mouse.y - containerBounding.y - windowScroll.y,
-  })
-})
 
 function init() {
   const charBodyList = pipe(
@@ -214,7 +195,10 @@ function init() {
     undefined,
     () => {
       const ball = Bodies.circle(-100, -100, props.evasionRadius, {
-        isStatic: true,
+        mass: 9999,
+        restitution: 0.8,
+        /** 刻意保留物理碰撞，這樣會有抖動效果，更有害怕的感覺 */
+        // isStatic: true,
       })
 
       return ball
@@ -262,9 +246,17 @@ function isSmallEnough(value: number) {
   return Math.abs(value) < 0.05
 }
 
-/** 儲存 body 狀態資料 */
+/** 持續更新狀態 */
 useIntervalFn(() => {
   const bodyList = Composite.allBodies(engine.value.world)
+
+  // 更新 cursor 位置
+  if (cursorBody.value) {
+    cursorBody.value.position = {
+      x: mouse.x - containerBounding.x - windowScroll.x,
+      y: mouse.y - containerBounding.y - windowScroll.y,
+    }
+  }
 
   // 轉正
   bodyList.forEach((body) => {
@@ -275,6 +267,7 @@ useIntervalFn(() => {
     body.angle -= body.angle * (props.stiffness * 2)
   })
 
+  // 儲存 body 狀態
   let hasUpdate = false
   chars.value.reduce((styleMap, char) => {
     const body = bodyList.find(({ label }) => label === char.id)
