@@ -21,7 +21,7 @@ import CustomProps from '../../../src/components/text-hate-mouse/examples/custom
 
 ### 基本用法
 
-「有勞鼠！Σ(ˊДˋ;)」
+「有勞贖！Σ(ˊДˋ;)」
 
 <basic-usage/>
 

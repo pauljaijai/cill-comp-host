@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import type { ExtractComponentProps } from '../../../types'
+import { times } from 'remeda'
 import TextHateMouse from '../text-hate-mouse.vue'
 
 type Props = ExtractComponentProps<typeof TextHateMouse>
@@ -22,7 +23,7 @@ const list: Props[] = [
     evasionRadius: 30,
   },
   {
-    text: '怕爆怕爆怕爆怕爆怕爆怕爆怕爆怕爆怕爆怕爆',
+    text: times(10, () => '逆走開'),
     evasionRadius: 200,
   },
 ]
