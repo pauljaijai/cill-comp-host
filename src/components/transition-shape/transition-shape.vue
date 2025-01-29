@@ -32,12 +32,12 @@
 import type { CSSProperties, TransitionProps } from 'vue'
 import type { TransitionType } from './type'
 import { promiseTimeout, useElementBounding } from '@vueuse/core'
-import { nanoid } from 'nanoid'
 import { find, pipe } from 'remeda'
 import {
   computed,
   nextTick,
   ref,
+  useId,
 } from 'vue'
 import ShapeMask from './shape-mask.vue'
 
@@ -231,7 +231,7 @@ const handleAfterLeave: TransitionProps['onAfterLeave'] = (el) => {
   leaveEl.value = undefined
 }
 
-const anchorName = ref(`--${nanoid()}`)
+const anchorName = ref(`--${useId()}`)
 </script>
 
 <style lang="sass">

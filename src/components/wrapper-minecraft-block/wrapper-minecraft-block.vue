@@ -23,9 +23,8 @@ import {
   useMousePressed,
   useVibrate,
 } from '@vueuse/core'
-import { nanoid } from 'nanoid'
 import { find, map, pick, pipe, range, sample } from 'remeda'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref, useId, watch } from 'vue'
 
 import { useLongPressTimings } from '../../composables/use-long-press-timings'
 
@@ -63,7 +62,7 @@ defineSlots<{
 const bus = useEventBus(eventKey)
 
 /** 方塊 ID */
-const id = nanoid()
+const id = useId()
 
 const blockRef = ref<HTMLElement>()
 const blockBounding = reactive(useElementBounding(blockRef))
