@@ -30,6 +30,13 @@ export default defineConfig({
         gtag('js', new Date());
         gtag('config', 'G-2T520RHFM9');`,
       ],
+      [
+        'meta',
+        {
+          httpEquiv: 'Content-Security-Policy',
+          content: 'script-src \'self\' \'unsafe-inline\' \'wasm-unsafe-eval\' www.google-analytics.com www.googletagmanager.com use.typekit.net static.cloudflareinsights.com;',
+        },
+      ],
     ]
   },
   transformPageData(pageData) {
