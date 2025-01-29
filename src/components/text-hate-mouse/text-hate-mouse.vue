@@ -29,8 +29,8 @@
 import type {
   CSSProperties,
 } from 'vue'
-import { useElementBounding, useIntervalFn, useMouse } from '@vueuse/core'
-import Matter from 'matter-js'
+import { useElementBounding, useIntervalFn, useMouse, useWindowScroll } from '@vueuse/core'
+import Matter, { Body } from 'matter-js'
 import { filter, flat, isTruthy, join, map, pipe, reduce } from 'remeda'
 import {
   computed,
@@ -41,6 +41,7 @@ import {
   shallowRef,
   triggerRef,
   useId,
+  watchEffect,
 } from 'vue'
 
 // #region Props
@@ -82,7 +83,7 @@ const props = withDefaults(defineProps<Props>(), {
   text: '',
   tag: 'p',
   evasionRadius: 40,
-  stiffness: 0.01,
+  stiffness: 0.02,
   damping: 0.05,
 })
 
@@ -138,8 +139,6 @@ const {
   Composite,
 } = Matter
 
-const mouse = reactive(useMouse())
-
 const canvasRef = ref<HTMLCanvasElement>()
 const containerRef = ref<HTMLDivElement>()
 const containerBounding = reactive(
@@ -151,6 +150,20 @@ const engine = shallowRef(Engine.create({
 }))
 
 const runner = shallowRef(Runner.create())
+
+const mouse = reactive(useMouse())
+const windowScroll = reactive(useWindowScroll())
+const cursorBody = shallowRef<Matter.Body>()
+watchEffect(() => {
+  if (!cursorBody.value) {
+    return
+  }
+
+  Body.setPosition(cursorBody.value, {
+    x: mouse.x - containerBounding.x - windowScroll.x,
+    y: mouse.y - containerBounding.y - windowScroll.y,
+  })
+})
 
 function init() {
   const charBodyList = pipe(
@@ -201,21 +214,14 @@ function init() {
     undefined,
     () => {
       const ball = Bodies.circle(-100, -100, props.evasionRadius, {
-        mass: 1000,
-        restitution: 0,
-      })
-
-      Matter.Events.on(engine.value, 'afterUpdate', () => {
-        ball.position = {
-          x: mouse.x - containerBounding.x - document.documentElement.scrollLeft,
-          y: mouse.y - containerBounding.y - document.documentElement.scrollTop,
-        }
+        isStatic: true,
       })
 
       return ball
     },
   )
   Composite.add(engine.value.world, ball)
+  cursorBody.value = ball
 
   if (debug) {
     const { width, height } = containerRef.value?.getBoundingClientRect() ?? {
