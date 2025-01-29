@@ -299,7 +299,7 @@ Motion Graphic 風格的 Transition 元件
 
 「有勞鼠！Σ(ˊДˋ;)」
 
-<text-hate-mouse  />
+<text-hate-mouse class="h-[70vh] flex items-center"  />
 
 </expansion-section>
 
