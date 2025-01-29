@@ -148,6 +148,26 @@ const mouse = reactive(useMouse())
 const windowScroll = reactive(useWindowScroll())
 const cursorBody = shallowRef<Matter.Body>()
 
+/** 建立一個持續跟隨滑鼠的圓形 */
+function createCursorBody() {
+  const ball = pipe(
+    undefined,
+    () => {
+      const ball = Bodies.circle(-100, -100, props.evasionRadius, {
+        mass: 9999,
+        restitution: 0.8,
+        /** 刻意保留物理碰撞，這樣會有抖動效果，更有害怕的感覺 */
+        // isStatic: true,
+      })
+
+      return ball
+    },
+  )
+  Composite.add(engine.value.world, ball)
+
+  return ball
+}
+
 function init() {
   const charBodyList = pipe(
     chars.value,
@@ -192,22 +212,7 @@ function init() {
   )
   Composite.add(engine.value.world, charBodyList)
 
-  // 建立一個持續跟隨滑鼠的圓形
-  const ball = pipe(
-    undefined,
-    () => {
-      const ball = Bodies.circle(-100, -100, props.evasionRadius, {
-        mass: 9999,
-        restitution: 0.8,
-        /** 刻意保留物理碰撞，這樣會有抖動效果，更有害怕的感覺 */
-        // isStatic: true,
-      })
-
-      return ball
-    },
-  )
-  Composite.add(engine.value.world, ball)
-  cursorBody.value = ball
+  cursorBody.value = createCursorBody()
 
   if (debug) {
     const { width, height } = containerRef.value?.getBoundingClientRect() ?? {
@@ -335,15 +340,11 @@ watchDebounced(
 
 watchDebounced(
   () => [
-    props.evasionRadius,
     props.stiffness,
     props.damping,
   ],
   () => {
     pauseUpdate()
-    if (cursorBody.value) {
-      cursorBody.value.circleRadius = props.evasionRadius
-    }
 
     Composite
       .allConstraints(engine.value.world)
@@ -351,6 +352,26 @@ watchDebounced(
         constraint.stiffness = props.stiffness
         constraint.damping = props.damping
       })
+
+    resumeUpdate()
+  },
+  {
+    debounce: 500,
+  },
+)
+
+watchDebounced(
+  () => props.evasionRadius,
+  () => {
+    pauseUpdate()
+
+    // 銷毀原本的 body
+    if (cursorBody.value) {
+      Composite.remove(engine.value.world, cursorBody.value)
+    }
+
+    cursorBody.value = createCursorBody()
+
     resumeUpdate()
   },
   {

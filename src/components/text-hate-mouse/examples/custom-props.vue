@@ -9,6 +9,16 @@
       />
 
       <base-input
+        v-model.number="params.evasionRadius"
+        :label="`閃避半徑：${params.evasionRadius}`"
+        type="range"
+        class="w-full text-left"
+        :max="300"
+        :step="1"
+        :min="20"
+      />
+
+      <base-input
         v-model.number="params.stiffness"
         :label="`約束力：${params.stiffness}`"
         type="range"
