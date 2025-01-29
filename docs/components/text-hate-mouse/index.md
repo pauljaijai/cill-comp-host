@@ -6,6 +6,7 @@ description: 滑鼠靠近時會躲得遠遠的文字。(。-`ω´-)
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/text-hate-mouse/examples/basic-usage.vue'
+import CustomProps from '../../../src/components/text-hate-mouse/examples/custom-props.vue'
 </script>
 
 # 怕鼠的文字 <Badge type="info" text="text" />
@@ -20,7 +21,7 @@ import BasicUsage from '../../../src/components/text-hate-mouse/examples/basic-u
 
 ### 基本用法
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+「有勞鼠！Σ(ˊДˋ;)」
 
 <basic-usage/>
 
@@ -28,15 +29,19 @@ import BasicUsage from '../../../src/components/text-hate-mouse/examples/basic-u
 <<< ../../../src/components/text-hate-mouse/examples/basic-usage.vue
 :::
 
+### 調整參數
+
+不同參數有不同效果
+
+<custom-props/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/text-hate-mouse/examples/custom-props.vue
+:::
+
 ## 原理
 
 文字文字文字文字文字文字文字文字文字文字文字文字
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
-:::
 
 ## 原始碼
 

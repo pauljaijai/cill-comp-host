@@ -63,13 +63,27 @@ interface Props {
   splitter?: RegExp | ((label: string) => string[]);
 
   /** 閃避半徑 */
-  radius?: number;
+  evasionRadius?: number;
+
+  /** 約束力
+   *
+   * 表示回復原味的力量，1 表示最強，0.2 則類似軟彈簧作用
+   */
+  stiffness?: number;
+
+  /** 阻尼
+   *
+   * 0.1 表示強烈阻尼，幾乎不會有任何震盪，0 表示沒有任何阻尼
+   */
+  damping?: number;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   text: '',
   tag: 'p',
-  radius: 40,
+  evasionRadius: 40,
+  stiffness: 0.01,
+  damping: 0.05,
 })
 
 const id = useId()
@@ -190,8 +204,8 @@ function init() {
       const constraint = Matter.Constraint.create({
         bodyA: body,
         pointB: { x, y },
-        stiffness: 0.001,
-        damping: 0.05,
+        stiffness: props.stiffness,
+        damping: props.damping,
       })
 
       return [body, constraint]
@@ -205,7 +219,7 @@ function init() {
   pipe(
     undefined,
     () => {
-      const ball = Bodies.circle(-100, -100, props.radius, {
+      const ball = Bodies.circle(-100, -100, props.evasionRadius, {
         mass: 1000,
         restitution: 0,
       })
@@ -252,9 +266,24 @@ function clear() {
   Runner.stop(runner.value)
 }
 
+function isSmallEnough(value: number) {
+  return Math.abs(value) < 0.05
+}
+
+/** 儲存 body 狀態資料 */
 useIntervalFn(() => {
   const bodyList = Composite.allBodies(engine.value.world)
 
+  // 轉正
+  bodyList.forEach((body) => {
+    const rotate = body.angle * 180 / Math.PI
+    if (isSmallEnough(rotate))
+      return
+
+    body.angle -= body.angle * (props.stiffness * 2)
+  })
+
+  let hasUpdate = false
   chars.value.reduce((styleMap, char) => {
     const body = bodyList.find(({ label }) => label === char.id)
     const initValue = charBodyInitMap.value.get(char.id)
@@ -263,15 +292,28 @@ useIntervalFn(() => {
       const offsetY = body.position.y - initValue.y
       const rotate = body.angle * 180 / Math.PI
 
+      if (
+        isSmallEnough(offsetX)
+        && isSmallEnough(offsetY)
+        && isSmallEnough(rotate)
+      ) {
+        styleMap.delete(char.id)
+        return styleMap
+      }
+
       styleMap.set(char.id, {
         transform: `translate(${offsetX}px, ${offsetY}px) rotate(${rotate}deg)`,
       })
+
+      hasUpdate = true
     }
 
     return styleMap
   }, charStyleMap.value)
 
-  triggerRef(charStyleMap)
+  if (hasUpdate) {
+    triggerRef(charStyleMap)
+  }
 }, 15)
 
 onMounted(() => {
