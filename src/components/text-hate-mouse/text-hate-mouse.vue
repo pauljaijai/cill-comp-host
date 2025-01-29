@@ -140,29 +140,11 @@ const {
 
 const mouse = reactive(useMouse())
 
-const containerRef = ref<HTMLDivElement>()
 const canvasRef = ref<HTMLCanvasElement>()
+const containerRef = ref<HTMLDivElement>()
 const containerBounding = reactive(
-  useElementBounding(containerRef, {
-    windowResize: false,
-    windowScroll: false,
-  }),
+  useElementBounding(containerRef),
 )
-
-/** 物理世界座標初始值
- *
- * 以免畫面滾動後，重新建立物理世界時，物體位置不正確
- */
-let containerInitPosition = {
-  x: 0,
-  y: 0,
-}
-onMounted(() => {
-  containerInitPosition = {
-    x: containerBounding.x,
-    y: containerBounding.y,
-  }
-})
 
 const engine = shallowRef(Engine.create({
   gravity: { scale: 0 },
@@ -182,14 +164,14 @@ function init() {
       const elRect = targetRef.getBoundingClientRect()
 
       /**
-       * el body 的 xy 是相對於網頁左上角為 0 點，
+       * elRect 的 xy 是相對於網頁左上角為 0 點，
        * 所以要先減去 container 的 x, y 來取得相對於
        * container 的 x, y，再加上 width, height 的
        * 一半，偏移自身中心
        */
       const { x, y } = {
-        x: elRect.x - containerInitPosition.x + elRect.width / 2,
-        y: elRect.y - containerInitPosition.y + elRect.height / 2,
+        x: elRect.x - containerBounding.x + elRect.width / 2,
+        y: elRect.y - containerBounding.y + elRect.height / 2,
       }
 
       charBodyInitMap.value.set(id, { x, y })
@@ -225,8 +207,8 @@ function init() {
 
       Matter.Events.on(engine.value, 'afterUpdate', () => {
         ball.position = {
-          x: mouse.x - containerInitPosition.x,
-          y: mouse.y - containerInitPosition.y,
+          x: mouse.x - containerBounding.x - document.documentElement.scrollLeft,
+          y: mouse.y - containerBounding.y - document.documentElement.scrollTop,
         }
       })
 
@@ -236,7 +218,10 @@ function init() {
   Composite.add(engine.value.world, ball)
 
   if (debug) {
-    const { width, height } = containerBounding
+    const { width, height } = containerRef.value?.getBoundingClientRect() ?? {
+      width: 0,
+      height: 0,
+    }
 
     const render = Render.create({
       canvas: canvasRef.value,
