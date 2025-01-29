@@ -54,7 +54,7 @@ import CustomProps from '../../../src/components/text-hate-mouse/examples/custom
 
 基於 `Matter.js` 實現物理模擬效果。
 
-從實作來看，基本上就是[逐字轉場](https://chillcomponent.codlin.me/components/text-characters-transition/)與[物理包裝器](https://chillcomponent.codlin.me/components/wrapper-physics/)的融合。
+基本上就是[逐字轉場](https://chillcomponent.codlin.me/components/text-characters-transition/)與[物理包裝器](https://chillcomponent.codlin.me/components/wrapper-physics/)的融合。
 
 ## 原始碼
 

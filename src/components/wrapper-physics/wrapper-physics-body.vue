@@ -9,8 +9,7 @@
 
 <script setup lang="ts">
 import { useElementBounding, useIntervalFn } from '@vueuse/core'
-import { nanoid } from 'nanoid'
-import { computed, inject, onMounted, reactive, ref, watch } from 'vue'
+import { computed, inject, onMounted, reactive, ref, useId, watch } from 'vue'
 import { PROVIDE_KEY } from '.'
 
 // #region Props
@@ -58,7 +57,7 @@ defineSlots<{
 }>()
 // #endregion Slots
 
-const id = nanoid()
+const id = useId()
 const wrapper = inject(PROVIDE_KEY)
 if (!wrapper) {
   console.warn('wrapper-physics-body 必須在 wrapper-physics 元件中使用')

@@ -5,8 +5,7 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue'
 import type { ProvideContent } from '.'
-import { nanoid } from 'nanoid'
-import { computed, inject, onBeforeUnmount, onMounted } from 'vue'
+import { computed, inject, onBeforeUnmount, onMounted, useId } from 'vue'
 import { PROVIDE_KEY } from '.'
 
 interface Props {
@@ -20,7 +19,7 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
 }>()
 
-const id = nanoid()
+const id = useId()
 const wrapper = inject<ProvideContent>(PROVIDE_KEY)
 
 const style = computed<StyleValue>(() => {

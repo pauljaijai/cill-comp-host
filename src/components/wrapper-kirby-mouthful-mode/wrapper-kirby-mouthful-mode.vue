@@ -60,13 +60,13 @@ import type { CSSProperties } from 'vue'
 import type { Size, StyleMap } from './type'
 import { throttleFilter, useMouseInElement } from '@vueuse/core'
 import anime from 'animejs'
-import { nanoid } from 'nanoid'
 
 import {
   computed,
   nextTick,
   onMounted,
   ref,
+  useId,
   watch,
 } from 'vue'
 import Blushes from './kirby-blushes.vue'
@@ -107,7 +107,7 @@ const props = withDefaults(defineProps<Props>(), {
   mouthRounded: 10,
 })
 
-const maskId = nanoid()
+const maskId = useId()
 const wrapperRef = ref<HTMLDivElement>()
 const {
   elementWidth,

@@ -19,9 +19,8 @@
 <script setup lang="ts">
 import type { AnimeFuncParam, TransitionName } from './transition-provider'
 import anime from 'animejs'
-import { customAlphabet } from 'nanoid'
 import { join, map, pipe } from 'remeda'
-import { computed, onBeforeUnmount, onMounted, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, useId, watch } from 'vue'
 import { transitionProvider } from './transition-provider'
 
 // #region Props
@@ -67,14 +66,14 @@ const props = withDefaults(defineProps<Props>(), {
 
 // #region Emits
 const emit = defineEmits<{
-  'before-enter': [];
-  'after-enter': [];
-  'before-leave': [];
-  'after-leave': [];
+  beforeEnter: [];
+  afterEnter: [];
+  beforeLeave: [];
+  afterLeave: [];
 }>()
 // #endregion Emits
 
-const id = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 10)()
+const id = useId()
 
 /** 沒有指定 TransitionName 的話預設都是 fade */
 function getAnimeParam(
@@ -143,7 +142,7 @@ const labelText = computed(() => pipe(
 async function startEnter(end = false) {
   anime.remove(`.${id}`)
 
-  emit('before-enter')
+  emit('beforeEnter')
 
   const tasks = chars.value.map((char) => {
     const data = char.enter()
@@ -161,7 +160,7 @@ async function startEnter(end = false) {
 
   await Promise.allSettled(tasks)
 
-  emit('after-enter')
+  emit('afterEnter')
 }
 
 /** 離開動畫
@@ -171,7 +170,7 @@ async function startEnter(end = false) {
 async function startLeave(end = false) {
   anime.remove(`.${id}`)
 
-  emit('before-leave')
+  emit('beforeLeave')
 
   const tasks = chars.value.map((char) => {
     const data = char.leave()
@@ -189,7 +188,7 @@ async function startLeave(end = false) {
 
   await Promise.allSettled(tasks)
 
-  emit('after-leave')
+  emit('afterLeave')
 }
 
 watch(() => props.visible, (visible) => {

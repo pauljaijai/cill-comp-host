@@ -31,9 +31,8 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import { useElementSize, useVModel } from '@vueuse/core'
-import { nanoid } from 'nanoid'
 
-import { computed, ref } from 'vue'
+import { computed, ref, useId } from 'vue'
 
 interface Props {
   modelValue?: string;
@@ -44,7 +43,7 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), {
   modelValue: undefined,
-  value: () => nanoid(),
+  value: () => useId(),
   header: '點擊展開',
   headerClass: '',
   contentClass: '',
