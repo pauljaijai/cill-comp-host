@@ -9,7 +9,7 @@
     </div>
 
     <div class="flex flex-col items-start gap-4">
-      <wrapper-stereoscopic :enable="enable">
+      <wrapper-stereoscopic :enable>
         <div class="h-80 w-80 flex-center rounded bg-gray-300">
           <div class="h-40 w-40 flex-center rounded bg-gray-100">
             <div class="text-xl text-gray-600 font-bold">
@@ -20,19 +20,19 @@
       </wrapper-stereoscopic>
 
       <div class="flex flex-col items-start justify-start gap-4">
-        <wrapper-stereoscopic :enable="enable">
+        <wrapper-stereoscopic :enable>
           <div class="border rounded-full p-4 text-xl text-gray-600 font-bold">
             漂起來惹
           </div>
         </wrapper-stereoscopic>
 
-        <wrapper-stereoscopic :enable="enable">
+        <wrapper-stereoscopic :enable>
           <div class="border rounded-full p-4 text-xl text-gray-600 font-bold">
             酷酷的漂浮
           </div>
         </wrapper-stereoscopic>
 
-        <wrapper-stereoscopic :enable="enable">
+        <wrapper-stereoscopic :enable>
           <div class="border rounded-full p-4 text-xl text-gray-600 font-bold">
             安安
           </div>
