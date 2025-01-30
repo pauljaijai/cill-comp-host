@@ -56,11 +56,11 @@ interface Props {
 
   /** 如何切割文字
    *
-   * 只有在 label 為 string 時有效
+   * 只有在 text 為 string 時有效
    *
    * @default /.*?/u
    */
-  splitter?: RegExp | ((label: string) => string[]);
+  splitter?: RegExp | ((text: string) => string[]);
 
   /** 閃避半徑 */
   evasionRadius?: number;
