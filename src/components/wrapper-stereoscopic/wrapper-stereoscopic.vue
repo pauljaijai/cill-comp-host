@@ -23,7 +23,6 @@ import {
   useIntervalFn,
   useMouseInElement,
   useMousePressed,
-  watchThrottled,
 } from '@vueuse/core'
 
 import {
@@ -64,6 +63,12 @@ interface Props {
 
   /** 旋轉、懸浮距離邏輯 */
   strategy?: (params: StrategyParams) => Record<'x' | 'y' | 'zOffset', number>;
+
+  /** 更新週期，越短會越快到達目標狀態
+   *
+   * @default 15
+   */
+  updateInterval?: number;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -90,6 +95,7 @@ const props = withDefaults(defineProps<Props>(), {
       zOffset: params.zOffset,
     }
   },
+  updateInterval: 15,
 })
 
 const wrapperRef = ref<HTMLDivElement>()
@@ -124,41 +130,27 @@ const mousePosition = reactiveComputed(() => {
 })
 
 const currentState = ref({ x: 0, y: 0, zOffset: props.zOffset })
-const targetState = ref({ x: 0, y: 0, zOffset: props.zOffset })
-
-watchThrottled(
-  () => [
-    props.enable,
-    mousePosition,
-    pressed,
-    isVisible,
-  ],
-  () => {
-    targetState.value = props.strategy({
-      ...props,
-      mousePosition,
-      size: { width: width.value, height: height.value },
-      isOutside: isOutside.value,
-      isVisible: isVisible.value,
-      isPressed: pressed.value,
-    })
-  },
-  { throttle: 15, deep: true },
-)
 
 const style = computed<CSSProperties>(() => ({
   transform: `rotateX(${currentState.value.x}deg) rotateY(${-currentState.value.y}deg)`,
 }))
 /** 利用誤差積分方式調整角度，保證所有動作都有動畫效果 */
 useIntervalFn(() => {
-  const target = targetState.value
+  const target = props.strategy({
+    ...props,
+    mousePosition,
+    size: { width: width.value, height: height.value },
+    isOutside: isOutside.value,
+    isVisible: isVisible.value,
+    isPressed: pressed.value,
+  })
 
   currentState.value = {
     x: currentState.value.x + (target.x - currentState.value.x) * 0.2,
     y: currentState.value.y + (target.y - currentState.value.y) * 0.2,
     zOffset: currentState.value.zOffset + (target.zOffset - currentState.value.zOffset) * 0.2,
   }
-}, 15)
+}, () => props.updateInterval)
 
 const slotStyle = computed<StyleValue>(() => ({
   transformStyle: 'preserve-3d',
@@ -176,7 +168,7 @@ function unbindLayer(id: string) {
 provide(PROVIDE_KEY, {
   bindLayer,
   unbindLayer,
-  zOffset: computed(() => targetState.value.zOffset),
+  zOffset: computed(() => currentState.value.zOffset),
 })
 </script>
 
