@@ -24,11 +24,11 @@
     <div class="w-full flex justify-between">
       <base-btn
         ref="btnRef1"
-        label="看這"
+        label="嗨"
       />
       <base-btn
         ref="btnRef2"
-        label="看這"
+        label="嗨"
       />
     </div>
   </div>
@@ -54,8 +54,21 @@ const isPressed = computed(() => btn1Pressed.value || btn2Pressed.value)
 
 const params: Props = {
   strategy(params) {
+    const {
+      mousePosition: { x, y },
+      size: { width, height },
+    } = params
+
+    if (isPressed.value) {
+      return {
+        x: mapNumber(y, -height, height, -30, 30),
+        y: mapNumber(x, -width, width, -40, 40),
+        zOffset: -100,
+      }
+    }
+
     if (
-      (params.isOutside && !isPressed.value)
+      params.isOutside
       || !params.enable
       || !params.isVisible
       || params.isPressed) {
@@ -65,11 +78,6 @@ const params: Props = {
         zOffset: 0,
       }
     }
-
-    const {
-      mousePosition: { x, y },
-      size: { width, height },
-    } = params
 
     return {
       x: mapNumber(y, -height, height, -30, 30),
