@@ -22,6 +22,7 @@ import {
   useIntersectionObserver,
   useIntervalFn,
   useMouseInElement,
+  useMousePressed,
   watchThrottled,
 } from '@vueuse/core'
 
@@ -47,6 +48,8 @@ interface StrategyParams {
   isOutside: boolean;
   /** 元素是否可見 */
   isVisible: boolean;
+  /** 是否被按下 */
+  isPressed: boolean;
 }
 
 interface Props {
@@ -59,7 +62,7 @@ interface Props {
   /** 懸浮高度 */
   zOffset?: number;
 
-  /** 旋轉、懸浮邏輯 */
+  /** 旋轉、懸浮距離邏輯 */
   strategy?: (params: StrategyParams) => Record<'x' | 'y' | 'zOffset', number>;
 }
 // #endregion Props
@@ -89,7 +92,7 @@ const props = withDefaults(defineProps<Props>(), {
   },
 })
 
-const wrapperRef = ref()
+const wrapperRef = ref<HTMLDivElement>()
 const {
   elementX: mouseX,
   elementY: mouseY,
@@ -100,6 +103,7 @@ const {
   eventFilter: throttleFilter(35),
 })
 
+const { pressed } = useMousePressed({ target: wrapperRef })
 const isVisible = ref(false)
 useIntersectionObserver(
   wrapperRef,
@@ -122,15 +126,25 @@ const mousePosition = reactiveComputed(() => {
 const currentState = ref({ x: 0, y: 0, zOffset: props.zOffset })
 const targetState = ref({ x: 0, y: 0, zOffset: props.zOffset })
 
-watchThrottled(mousePosition, ({ x, y }) => {
-  targetState.value = props.strategy({
-    ...props,
-    mousePosition: { x, y },
-    size: { width: width.value, height: height.value },
-    isOutside: isOutside.value,
-    isVisible: isVisible.value,
-  })
-}, { throttle: 15 })
+watchThrottled(
+  () => [
+    props.enable,
+    mousePosition,
+    pressed,
+    isVisible,
+  ],
+  () => {
+    targetState.value = props.strategy({
+      ...props,
+      mousePosition,
+      size: { width: width.value, height: height.value },
+      isOutside: isOutside.value,
+      isVisible: isVisible.value,
+      isPressed: pressed.value,
+    })
+  },
+  { throttle: 15, deep: true },
+)
 
 const style = computed<CSSProperties>(() => ({
   transform: `rotateX(${currentState.value.x}deg) rotateY(${-currentState.value.y}deg)`,

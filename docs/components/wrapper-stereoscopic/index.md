@@ -60,7 +60,7 @@ import CustomStrategy from '../../../src/components/wrapper-stereoscopic/example
 
 ### 自訂策略
 
-可以自訂旋轉、懸浮，做出有趣的互動。
+可以自訂旋轉、懸浮距離，做出更豐富的互動。
 
 <custom-strategy/>
 
