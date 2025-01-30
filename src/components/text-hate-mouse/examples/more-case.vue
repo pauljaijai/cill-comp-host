@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6 text-center">
+  <div class="w-full flex flex-col gap-8 border border-gray-300 p-6 text-center">
     <text-hate-mouse
       v-for="item, i in list"
       :key="i"
@@ -13,7 +13,9 @@ import type { ExtractComponentProps } from '../../../types'
 import { times } from 'remeda'
 import TextHateMouse from '../text-hate-mouse.vue'
 
-type Props = ExtractComponentProps<typeof TextHateMouse>
+type Props = ExtractComponentProps<typeof TextHateMouse> & {
+  class?: string;
+}
 
 const list: Props[] = [
   {
@@ -25,6 +27,18 @@ const list: Props[] = [
   {
     text: times(10, () => '逆走開'),
     evasionRadius: 200,
+  },
+  {
+    text: [
+      '🀀🀁🀂🀃🀄🀅🀆🀇🀈🀉🀊🀋🀌🀍🀎🀏',
+      '🀐🀑🀒🀓🀔🀕🀖🀗🀘🀖🀗🀘',
+      '🀙🀚🀛🀜🀝🀞🀟🀠🀡',
+      '🀢🀣🀤🀥🀦🀧🀨🀩🀪🀫',
+
+    ].join(''),
+    stiffness: 0.002,
+    damping: 1,
+    class: 'text-2xl',
   },
 ]
 </script>
