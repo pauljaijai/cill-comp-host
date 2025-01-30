@@ -2,7 +2,7 @@
   <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
     <div class="flex gap-4 border rounded p-4">
       <base-input
-        v-model="zOffset"
+        v-model.number="zOffset"
         type="range"
         :label="`懸浮距離: ${zOffset} px`"
         class="w-full"
@@ -45,8 +45,8 @@
 import { ref } from 'vue'
 
 import BaseInput from '../../base-input.vue'
-import WrapperStereoscopic from '../wrapper-stereoscopic.vue'
 import WrapperStereoscopicLayer from '../wrapper-stereoscopic-layer.vue'
+import WrapperStereoscopic from '../wrapper-stereoscopic.vue'
 
 const zOffset = ref(100)
 </script>
