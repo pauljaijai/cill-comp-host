@@ -9,6 +9,7 @@ import BasicUsage from '../../../src/components/wrapper-stereoscopic/examples/ba
 import MultiLayer from '../../../src/components/wrapper-stereoscopic/examples/multi-layer.vue'
 import AngleRange from '../../../src/components/wrapper-stereoscopic/examples/angle-range.vue'
 import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-offset.vue'
+import CustomStrategy from '../../../src/components/wrapper-stereoscopic/examples/custom-strategy.vue'
 </script>
 
 # 立體包裝器 <Badge type="info" text="wrapper" />
@@ -55,6 +56,16 @@ import ZOffset from '../../../src/components/wrapper-stereoscopic/examples/z-off
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-stereoscopic/examples/z-offset.vue
+:::
+
+### 自訂策略
+
+可以自訂旋轉、懸浮，做出有趣的互動。
+
+<custom-strategy/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-stereoscopic/examples/custom-strategy.vue
 :::
 
 ## 原理

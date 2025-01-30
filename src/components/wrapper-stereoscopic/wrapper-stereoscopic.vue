@@ -59,8 +59,8 @@ interface Props {
   /** 懸浮高度 */
   zOffset?: number;
 
-  /** 旋轉策略 */
-  rotationStrategy?: (params: StrategyParams) => Record<'x' | 'y', number>;
+  /** 旋轉、懸浮邏輯 */
+  strategy?: (params: StrategyParams) => Record<'x' | 'y', number>;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -69,7 +69,7 @@ const props = withDefaults(defineProps<Props>(), {
   yMaxAngle: 15,
   zOffset: 100,
 
-  rotationStrategy: (params: StrategyParams) => {
+  strategy: (params: StrategyParams) => {
     if (!params.isVisible || !params.enable) {
       return {
         x: 0,
@@ -120,7 +120,7 @@ const mousePosition = reactiveComputed(() => {
 const currentAngle = ref({ x: 0, y: 0 })
 const targetAngle = ref({ x: 0, y: 0 })
 watchThrottled(mousePosition, ({ x, y }) => {
-  targetAngle.value = props.rotationStrategy({
+  targetAngle.value = props.strategy({
     ...props,
     mousePosition: { x, y },
     size: { width: width.value, height: height.value },
