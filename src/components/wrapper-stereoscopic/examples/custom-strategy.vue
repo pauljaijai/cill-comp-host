@@ -6,7 +6,7 @@
         v-bind="params"
       >
         <div
-          class="cursor-pointer select-none border rounded-full"
+          class="cursor-zoom-in select-none border rounded-full"
           :style="wrapper.style"
         >
           <wrapper-stereoscopic-layer v-slot="layer01">
@@ -21,11 +21,12 @@
       </wrapper-stereoscopic>
     </div>
 
-    <base-btn
-      ref="btnRef"
-      label="嗨"
-      class="w-full"
-    />
+    <div
+      ref="blockRef"
+      class="w-full cursor-zoom-in border rounded border-dashed p-2 text-center text-xs tracking-widest"
+    >
+      看這裡
+    </div>
   </div>
 </template>
 
@@ -34,14 +35,13 @@ import type { ExtractComponentProps } from '../../../types'
 import { useElementHover } from '@vueuse/core'
 import { ref } from 'vue'
 import { mapNumber } from '../../../common/utils'
-import BaseBtn from '../../base-btn.vue'
 import WrapperStereoscopicLayer from '../wrapper-stereoscopic-layer.vue'
 import WrapperStereoscopic from '../wrapper-stereoscopic.vue'
 
 type Props = ExtractComponentProps<typeof WrapperStereoscopic>
 
-const btnRef = ref()
-const isHovered = useElementHover(btnRef)
+const blockRef = ref()
+const isHovered = useElementHover(blockRef)
 
 const params: Props = {
   strategy(params) {
