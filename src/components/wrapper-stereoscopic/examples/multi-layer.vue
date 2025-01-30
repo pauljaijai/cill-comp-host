@@ -28,8 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import WrapperStereoscopic from '../wrapper-stereoscopic.vue'
 import WrapperStereoscopicLayer from '../wrapper-stereoscopic-layer.vue'
+import WrapperStereoscopic from '../wrapper-stereoscopic.vue'
 </script>
 
 <style lang="sass" scoped>

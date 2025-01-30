@@ -17,13 +17,13 @@ import type {
   StyleValue,
 } from 'vue'
 import {
+  reactiveComputed,
   throttleFilter,
   useIntersectionObserver,
   useIntervalFn,
   useMouseInElement,
-  watchThrottled,
+  useMousePressed,
 } from '@vueuse/core'
-import { pipe } from 'remeda'
 
 import {
   computed,
@@ -34,6 +34,23 @@ import { type Layer, PROVIDE_KEY } from '.'
 import { mapNumber } from '../../common/utils'
 
 // #region Props
+interface StrategyParams {
+  enable: boolean;
+  xMaxAngle: number;
+  yMaxAngle: number;
+  zOffset: number;
+  /** 以元素中心為零點，目前滑鼠的座標 */
+  mousePosition: Record<'x' | 'y', number>;
+  /** 元素尺寸 */
+  size: Record<'width' | 'height', number>;
+  /** 滑鼠是否在元素外 */
+  isOutside: boolean;
+  /** 元素是否可見 */
+  isVisible: boolean;
+  /** 是否被按下 */
+  isPressed: boolean;
+}
+
 interface Props {
   /** 是否開啟 */
   enable?: boolean;
@@ -43,6 +60,15 @@ interface Props {
   yMaxAngle?: number;
   /** 懸浮高度 */
   zOffset?: number;
+
+  /** 旋轉、懸浮距離邏輯 */
+  strategy?: (params: StrategyParams) => Record<'x' | 'y' | 'zOffset', number>;
+
+  /** 更新週期，越短會越快到達目標狀態
+   *
+   * @default 15
+   */
+  updateInterval?: number;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -50,18 +76,40 @@ const props = withDefaults(defineProps<Props>(), {
   xMaxAngle: 15,
   yMaxAngle: 15,
   zOffset: 100,
+
+  strategy: (params: StrategyParams) => {
+    if (!params.isVisible || !params.enable) {
+      return {
+        x: 0,
+        y: 0,
+        zOffset: 0,
+      }
+    }
+
+    const { xMaxAngle, yMaxAngle, mousePosition } = params
+    const { x, y } = mousePosition
+
+    return {
+      x: mapNumber(y, -200, 200, -yMaxAngle, yMaxAngle),
+      y: mapNumber(x, -200, 200, -xMaxAngle, xMaxAngle),
+      zOffset: params.zOffset,
+    }
+  },
+  updateInterval: 15,
 })
 
-const wrapperRef = ref()
+const wrapperRef = ref<HTMLDivElement>()
 const {
   elementX: mouseX,
   elementY: mouseY,
   elementWidth: width,
   elementHeight: height,
+  isOutside,
 } = useMouseInElement(wrapperRef, {
   eventFilter: throttleFilter(35),
 })
 
+const { pressed } = useMousePressed({ target: wrapperRef })
 const isVisible = ref(false)
 useIntersectionObserver(
   wrapperRef,
@@ -70,11 +118,8 @@ useIntersectionObserver(
   },
 )
 
-/** 畫面外自動停用 */
-const enable = computed(() => props.enable && isVisible.value)
-
-/** 計算滑鼠到與物體的中心距離 */
-const coordinate = computed(() => {
+/** 計算滑鼠到與元素的中心距離 */
+const mousePosition = reactiveComputed(() => {
   const x = width.value / 2 - mouseX.value
   const y = height.value / 2 - mouseY.value
 
@@ -84,39 +129,28 @@ const coordinate = computed(() => {
   }
 })
 
-const currentAngle = ref({ x: 0, y: 0 })
-const targetAngle = ref({ x: 0, y: 0 })
-watchThrottled(coordinate, ({ x, y }) => {
-  if (!enable.value)
-    return
-
-  const { xMaxAngle, yMaxAngle } = props
-
-  const yAngle = mapNumber(x, -200, 200, -xMaxAngle, xMaxAngle)
-  const xAngle = mapNumber(y, -200, 200, -yMaxAngle, yMaxAngle)
-
-  targetAngle.value = {
-    x: xAngle,
-    y: yAngle,
-  }
-}, { throttle: 15 })
+const currentState = ref({ x: 0, y: 0, zOffset: props.zOffset })
 
 const style = computed<CSSProperties>(() => ({
-  transform: `rotateX(${currentAngle.value.x}deg) rotateY(${-currentAngle.value.y}deg)`,
+  transform: `rotateX(${currentState.value.x}deg) rotateY(${-currentState.value.y}deg)`,
 }))
 /** 利用誤差積分方式調整角度，保證所有動作都有動畫效果 */
 useIntervalFn(() => {
-  const target = pipe(enable.value, (value) => {
-    if (!value)
-      return { x: 0, y: 0 }
-    return targetAngle.value
+  const target = props.strategy({
+    ...props,
+    mousePosition,
+    size: { width: width.value, height: height.value },
+    isOutside: isOutside.value,
+    isVisible: isVisible.value,
+    isPressed: pressed.value,
   })
 
-  currentAngle.value = {
-    x: currentAngle.value.x + (target.x - currentAngle.value.x) * 0.2,
-    y: currentAngle.value.y + (target.y - currentAngle.value.y) * 0.2,
+  currentState.value = {
+    x: currentState.value.x + (target.x - currentState.value.x) * 0.2,
+    y: currentState.value.y + (target.y - currentState.value.y) * 0.2,
+    zOffset: currentState.value.zOffset + (target.zOffset - currentState.value.zOffset) * 0.2,
   }
-}, 15)
+}, () => props.updateInterval)
 
 const slotStyle = computed<StyleValue>(() => ({
   transformStyle: 'preserve-3d',
@@ -134,7 +168,7 @@ function unbindLayer(id: string) {
 provide(PROVIDE_KEY, {
   bindLayer,
   unbindLayer,
-  zOffset: computed(() => props.zOffset),
+  zOffset: computed(() => currentState.value.zOffset),
 })
 </script>
 

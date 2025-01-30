@@ -2,7 +2,7 @@
   <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
     <div class="flex gap-4 border rounded p-4">
       <base-input
-        v-model="x"
+        v-model.number="x"
         type="range"
         :label="`X 最大角度: ${x} 度`"
         class="w-full"
@@ -11,7 +11,7 @@
       />
 
       <base-input
-        v-model="y"
+        v-model.number="y"
         type="range"
         :label="`Y 軸最大角度: ${y} 度`"
         class="w-full"

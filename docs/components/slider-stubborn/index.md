@@ -9,7 +9,7 @@ import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-u
 import CustomProp from '../../../src/components/slider-stubborn/examples/custom-prop.vue'
 </script>
 
-# 固執的滑動條
+# 固執的滑動條 <Badge type="info" text="slider" />
 
 停用時絕不妥協的滑動條。( ・ิω・ิ)
 
