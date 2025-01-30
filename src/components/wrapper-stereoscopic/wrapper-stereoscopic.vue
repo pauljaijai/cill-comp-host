@@ -17,13 +17,13 @@ import type {
   StyleValue,
 } from 'vue'
 import {
+  reactiveComputed,
   throttleFilter,
   useIntersectionObserver,
   useIntervalFn,
   useMouseInElement,
   watchThrottled,
 } from '@vueuse/core'
-import { pipe } from 'remeda'
 
 import {
   computed,
@@ -34,6 +34,21 @@ import { type Layer, PROVIDE_KEY } from '.'
 import { mapNumber } from '../../common/utils'
 
 // #region Props
+interface StrategyParams {
+  enable: boolean;
+  xMaxAngle: number;
+  yMaxAngle: number;
+  zOffset: number;
+  /** 以元素中心為零點，目前滑鼠的座標 */
+  mousePosition: Record<'x' | 'y', number>;
+  /** 元素尺寸 */
+  size: Record<'width' | 'height', number>;
+  /** 滑鼠是否在元素外 */
+  isOutside: boolean;
+  /** 元素是否可見 */
+  isVisible: boolean;
+}
+
 interface Props {
   /** 是否開啟 */
   enable?: boolean;
@@ -43,6 +58,9 @@ interface Props {
   yMaxAngle?: number;
   /** 懸浮高度 */
   zOffset?: number;
+
+  /** 旋轉策略 */
+  rotationStrategy?: (params: StrategyParams) => Record<'x' | 'y', number>;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -50,6 +68,23 @@ const props = withDefaults(defineProps<Props>(), {
   xMaxAngle: 15,
   yMaxAngle: 15,
   zOffset: 100,
+
+  rotationStrategy: (params: StrategyParams) => {
+    if (!params.isVisible || !params.enable) {
+      return {
+        x: 0,
+        y: 0,
+      }
+    }
+
+    const { xMaxAngle, yMaxAngle, mousePosition } = params
+    const { x, y } = mousePosition
+
+    return {
+      x: mapNumber(y, -200, 200, -yMaxAngle, yMaxAngle),
+      y: mapNumber(x, -200, 200, -xMaxAngle, xMaxAngle),
+    }
+  },
 })
 
 const wrapperRef = ref()
@@ -58,6 +93,7 @@ const {
   elementY: mouseY,
   elementWidth: width,
   elementHeight: height,
+  isOutside,
 } = useMouseInElement(wrapperRef, {
   eventFilter: throttleFilter(35),
 })
@@ -70,11 +106,8 @@ useIntersectionObserver(
   },
 )
 
-/** 畫面外自動停用 */
-const enable = computed(() => props.enable && isVisible.value)
-
-/** 計算滑鼠到與物體的中心距離 */
-const coordinate = computed(() => {
+/** 計算滑鼠到與元素的中心距離 */
+const mousePosition = reactiveComputed(() => {
   const x = width.value / 2 - mouseX.value
   const y = height.value / 2 - mouseY.value
 
@@ -86,19 +119,14 @@ const coordinate = computed(() => {
 
 const currentAngle = ref({ x: 0, y: 0 })
 const targetAngle = ref({ x: 0, y: 0 })
-watchThrottled(coordinate, ({ x, y }) => {
-  if (!enable.value)
-    return
-
-  const { xMaxAngle, yMaxAngle } = props
-
-  const yAngle = mapNumber(x, -200, 200, -xMaxAngle, xMaxAngle)
-  const xAngle = mapNumber(y, -200, 200, -yMaxAngle, yMaxAngle)
-
-  targetAngle.value = {
-    x: xAngle,
-    y: yAngle,
-  }
+watchThrottled(mousePosition, ({ x, y }) => {
+  targetAngle.value = props.rotationStrategy({
+    ...props,
+    mousePosition: { x, y },
+    size: { width: width.value, height: height.value },
+    isOutside: isOutside.value,
+    isVisible: isVisible.value,
+  })
 }, { throttle: 15 })
 
 const style = computed<CSSProperties>(() => ({
@@ -106,11 +134,7 @@ const style = computed<CSSProperties>(() => ({
 }))
 /** 利用誤差積分方式調整角度，保證所有動作都有動畫效果 */
 useIntervalFn(() => {
-  const target = pipe(enable.value, (value) => {
-    if (!value)
-      return { x: 0, y: 0 }
-    return targetAngle.value
-  })
+  const target = targetAngle.value
 
   currentAngle.value = {
     x: currentAngle.value.x + (target.x - currentAngle.value.x) * 0.2,
