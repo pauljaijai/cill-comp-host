@@ -9,7 +9,7 @@ import BasicUsage from '../../../src/components/toggle-proactive/examples/basic-
 import CustomProp from '../../../src/components/toggle-proactive/examples/custom-prop.vue'
 </script>
 
-# 主動的開關
+# 主動的開關 <Badge type="info" text="toggle" />
 
 停用時切換狀態會和你唱反調。( ´థ౪థ)
 

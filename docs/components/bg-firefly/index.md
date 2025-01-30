@@ -10,7 +10,7 @@ import FullBackground from '../../../src/components/bg-firefly/examples/full-bac
 
 </script>
 
-# 螢火蟲
+# 螢火蟲 <Badge type="info" text="bg" />
 
 讓網頁充滿漫天飛舞的小小螢火。ヾ(◍'౪`◍)ﾉﾞ
 

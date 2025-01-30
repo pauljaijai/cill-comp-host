@@ -9,7 +9,7 @@ import BasicUsage from '../../../src/components/carousel-space-floating/examples
 import CustomPosture from '../../../src/components/carousel-space-floating/examples/custom-posture.vue'
 </script>
 
-# 空間懸浮輪播
+# 空間懸浮輪播 <Badge type="info" text="carousel" />
 
 所有的圖片會漂浮在空間中！ヾ(◍'౪`◍)ﾉﾞ
 

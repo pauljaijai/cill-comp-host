@@ -9,7 +9,7 @@ import BasicUsage from '../../../src/components/wrapper-minecraft-block/examples
 import OtherBlock from '../../../src/components/wrapper-minecraft-block/examples/other-block.vue'
 </script>
 
-# Minecraft 方塊包裝器
+# Minecraft 方塊包裝器 <Badge type="info" text="wrapper" />
 
 大家有玩過 [Minecraft](https://www.minecraft.net/zh-hant) 嗎？
 

@@ -9,7 +9,7 @@ import BasicUsage from '../../../src/components/cursor-sidekick/examples/basic-u
 import CustomProvider from '../../../src/components/cursor-sidekick/examples/custom-provider.vue'
 </script>
 
-# 游標小跟班
+# 游標小跟班 <Badge type="info" text="cursor" />
 
 跟著游標跑的小跟班。(´ ・ω・`)ﾉ╰(・ิω・ิ )
 

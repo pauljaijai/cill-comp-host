@@ -9,7 +9,7 @@ import BasicUsage from '../../../src/components/bg-sakura-fubuki/examples/basic-
 import FullBackground from '../../../src/components/bg-sakura-fubuki/examples/full-background.vue'
 </script>
 
-# 櫻吹雪
+# 櫻吹雪 <Badge type="info" text="bg" />
 
 大家有看過新海誠的經典作品《秒速 5 公分》嗎？
 

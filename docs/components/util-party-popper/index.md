@@ -12,7 +12,7 @@ import ConfettiShape from '../../../src/components/util-party-popper/examples/co
 import CustomText from '../../../src/components/util-party-popper/examples/custom-text.vue'
 </script>
 
-# 拉炮
+# 拉炮 <Badge type="info" text="util" />
 
 隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
 
