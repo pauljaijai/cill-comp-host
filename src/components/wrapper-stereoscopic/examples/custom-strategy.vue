@@ -21,23 +21,18 @@
       </wrapper-stereoscopic>
     </div>
 
-    <div class="w-full flex justify-between">
-      <base-btn
-        ref="btnRef1"
-        label="嗨"
-      />
-      <base-btn
-        ref="btnRef2"
-        label="嗨"
-      />
-    </div>
+    <base-btn
+      ref="btnRef"
+      label="嗨"
+      class="w-full"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ExtractComponentProps } from '../../../types'
-import { useMousePressed } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { useElementHover } from '@vueuse/core'
+import { ref } from 'vue'
 import { mapNumber } from '../../../common/utils'
 import BaseBtn from '../../base-btn.vue'
 import WrapperStereoscopicLayer from '../wrapper-stereoscopic-layer.vue'
@@ -45,12 +40,8 @@ import WrapperStereoscopic from '../wrapper-stereoscopic.vue'
 
 type Props = ExtractComponentProps<typeof WrapperStereoscopic>
 
-const btnRef1 = ref()
-const { pressed: btn1Pressed } = useMousePressed({ target: btnRef1 })
-
-const btnRef2 = ref()
-const { pressed: btn2Pressed } = useMousePressed({ target: btnRef2 })
-const isPressed = computed(() => btn1Pressed.value || btn2Pressed.value)
+const btnRef = ref()
+const isHovered = useElementHover(btnRef)
 
 const params: Props = {
   strategy(params) {
@@ -59,10 +50,10 @@ const params: Props = {
       size: { width, height },
     } = params
 
-    if (isPressed.value) {
+    if (isHovered.value) {
       return {
-        x: mapNumber(y, -height, height, -30, 30),
-        y: mapNumber(x, -width, width, -40, 40),
+        x: mapNumber(y, -height, height, -50, 50),
+        y: mapNumber(x, -width, width, -60, 60),
         zOffset: -100,
       }
     }
