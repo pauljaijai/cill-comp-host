@@ -53,7 +53,11 @@ export default defineConfig({
     initialValue: undefined,
   },
 
+  lastUpdated: true,
   themeConfig: {
+    lastUpdated: {
+      text: '更新於',
+    },
     footer: {
       message: `v${version}`,
       copyright: 'MIT License<br>Copyright © 2024-present <a href="https://gitlab.com/codfish2140">Codfish</a>',
