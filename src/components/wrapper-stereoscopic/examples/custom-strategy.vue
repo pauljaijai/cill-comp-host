@@ -14,7 +14,7 @@
             class="flex-center"
           >
             <div
-              class="flex-center text-xl"
+              class="flex-center px-6 py-2 text-xl"
               :style="layer01.style"
             >
               按鈕
@@ -38,6 +38,7 @@ const params: Props = {
     return {
       x: 0,
       y: 0,
+      zOffset: 0,
     }
   },
 }

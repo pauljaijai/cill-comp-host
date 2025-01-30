@@ -60,7 +60,7 @@ interface Props {
   zOffset?: number;
 
   /** 旋轉、懸浮邏輯 */
-  strategy?: (params: StrategyParams) => Record<'x' | 'y', number>;
+  strategy?: (params: StrategyParams) => Record<'x' | 'y' | 'zOffset', number>;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
@@ -74,6 +74,7 @@ const props = withDefaults(defineProps<Props>(), {
       return {
         x: 0,
         y: 0,
+        zOffset: 0,
       }
     }
 
@@ -83,6 +84,7 @@ const props = withDefaults(defineProps<Props>(), {
     return {
       x: mapNumber(y, -200, 200, -yMaxAngle, yMaxAngle),
       y: mapNumber(x, -200, 200, -xMaxAngle, xMaxAngle),
+      zOffset: params.zOffset,
     }
   },
 })
@@ -117,10 +119,11 @@ const mousePosition = reactiveComputed(() => {
   }
 })
 
-const currentAngle = ref({ x: 0, y: 0 })
-const targetAngle = ref({ x: 0, y: 0 })
+const currentState = ref({ x: 0, y: 0, zOffset: props.zOffset })
+const targetState = ref({ x: 0, y: 0, zOffset: props.zOffset })
+
 watchThrottled(mousePosition, ({ x, y }) => {
-  targetAngle.value = props.strategy({
+  targetState.value = props.strategy({
     ...props,
     mousePosition: { x, y },
     size: { width: width.value, height: height.value },
@@ -130,15 +133,16 @@ watchThrottled(mousePosition, ({ x, y }) => {
 }, { throttle: 15 })
 
 const style = computed<CSSProperties>(() => ({
-  transform: `rotateX(${currentAngle.value.x}deg) rotateY(${-currentAngle.value.y}deg)`,
+  transform: `rotateX(${currentState.value.x}deg) rotateY(${-currentState.value.y}deg)`,
 }))
 /** 利用誤差積分方式調整角度，保證所有動作都有動畫效果 */
 useIntervalFn(() => {
-  const target = targetAngle.value
+  const target = targetState.value
 
-  currentAngle.value = {
-    x: currentAngle.value.x + (target.x - currentAngle.value.x) * 0.2,
-    y: currentAngle.value.y + (target.y - currentAngle.value.y) * 0.2,
+  currentState.value = {
+    x: currentState.value.x + (target.x - currentState.value.x) * 0.2,
+    y: currentState.value.y + (target.y - currentState.value.y) * 0.2,
+    zOffset: currentState.value.zOffset + (target.zOffset - currentState.value.zOffset) * 0.2,
   }
 }, 15)
 
@@ -158,7 +162,7 @@ function unbindLayer(id: string) {
 provide(PROVIDE_KEY, {
   bindLayer,
   unbindLayer,
-  zOffset: computed(() => props.zOffset),
+  zOffset: computed(() => targetState.value.zOffset),
 })
 </script>
 
