@@ -11,6 +11,7 @@ import CallMethod from '../../../src/components/btn-naughty/examples/call-method
 import CustomButton from '../../../src/components/btn-naughty/examples/custom-button.vue'
 import CustomRubbing from '../../../src/components/btn-naughty/examples/custom-rubbing.vue'
 import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.vue'
+import FormExample from '../../../src/components/btn-naughty/examples/form-example.vue'
 </script>
 
 # 調皮的按鈕 <Badge type="info" text="button" />
@@ -81,6 +82,16 @@ import SlotProps from '../../../src/components/btn-naughty/examples/slot-props.v
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/btn-naughty/examples/slot-props.vue
+:::
+
+### 表單範例
+
+沒填完就沒得按。(╯•̀ὤ•́)╯
+
+<form-example class="h-[30vh] flex-center"/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/btn-naughty/examples/form-example.vue
 :::
 
 ## 原理
