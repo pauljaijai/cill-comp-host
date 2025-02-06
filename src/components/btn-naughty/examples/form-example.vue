@@ -33,10 +33,15 @@
     <transition name="opacity">
       <div
         v-if="isSubmitted"
-        class="absolute inset-0 z-[40] flex items-center justify-center rounded-xl bg-slate-600 bg-opacity-90"
+        class="absolute inset-0 z-[40] flex flex-col items-center justify-center gap-6 rounded-xl bg-slate-600 bg-opacity-90 text-white"
+        @click="reset"
       >
-        <span class="text-xl text-white tracking-wide">
+        <span class="text-xl tracking-wide">
           表單已送出！(*´∀`)~♥
+        </span>
+
+        <span class="cursor-pointer text-xs">
+          點一下再來一次
         </span>
       </div>
     </transition>
@@ -62,6 +67,15 @@ function handleSubmit() {
     return
   }
   isSubmitted.value = true
+}
+
+function reset() {
+  isSubmitted.value = false
+
+  form.value = {
+    username: '',
+    password: '',
+  }
 }
 </script>
 
