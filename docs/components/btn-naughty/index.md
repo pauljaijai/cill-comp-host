@@ -88,7 +88,7 @@ import FormExample from '../../../src/components/btn-naughty/examples/form-examp
 
 沒填完就沒得按。(╯•̀ὤ•́)╯
 
-<form-example/>
+<form-example class="h-[30vh] flex-center"/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/btn-naughty/examples/form-example.vue

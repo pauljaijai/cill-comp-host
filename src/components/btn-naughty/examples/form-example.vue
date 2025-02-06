@@ -30,14 +30,16 @@
       </div>
     </div>
 
-    <div
-      v-if="isSubmitted"
-      class="absolute inset-0 z-[40] flex items-center justify-center rounded-xl bg-slate-600 bg-opacity-90"
-    >
-      <span class="text-xl text-white tracking-wide">
-        表單已送出！(*´∀`)~♥
-      </span>
-    </div>
+    <transition name="opacity">
+      <div
+        v-if="isSubmitted"
+        class="absolute inset-0 z-[40] flex items-center justify-center rounded-xl bg-slate-600 bg-opacity-90"
+      >
+        <span class="text-xl text-white tracking-wide">
+          表單已送出！(*´∀`)~♥
+        </span>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -62,5 +64,16 @@ function handleSubmit() {
 
 <style lang="sass" scoped>
 .rubbing
-  padding: 0.5rem 1rem
+  padding: 0.75rem
+  color: #ff7530
+  opacity: 0.8
+  border: 1px dashed #ff7530
+  border-radius: 0.2rem
+  white-space: nowrap
+  text-align: center
+
+.opacity-enter-active, .opacity-leave-active
+  transition-duration: 0.4s
+.opacity-enter-from, .opacity-leave-to
+  opacity: 0 !important
 </style>
