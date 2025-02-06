@@ -58,6 +58,9 @@ const disabled = computed(() => {
 
 const isSubmitted = ref(false)
 function handleSubmit() {
+  if (disabled.value) {
+    return
+  }
   isSubmitted.value = true
 }
 </script>
