@@ -3,24 +3,30 @@
     <div class="max-w-[20rem] flex flex-col gap-4">
       <base-input
         v-model="form.username"
-        label="帳號"
+        label="帳號 *"
         class="w-full"
       />
 
       <base-input
         v-model="form.password"
         type="password"
-        label="密碼"
+        label="密碼 *"
         class="w-full"
       />
 
       <div class="mt-3 flex justify-center">
         <btn-naughty
-          label="送出"
+          label="送出表單"
           :disabled
           z-index="30"
           @click="handleSubmit"
-        />
+        >
+          <template #rubbing>
+            <div class="rubbing">
+              請完成表單
+            </div>
+          </template>
+        </btn-naughty>
       </div>
     </div>
 
@@ -53,3 +59,8 @@ function handleSubmit() {
   isSubmitted.value = true
 }
 </script>
+
+<style lang="sass" scoped>
+.rubbing
+  padding: 0.5rem 1rem
+</style>
