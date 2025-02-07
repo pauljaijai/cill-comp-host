@@ -158,6 +158,7 @@ export default defineConfig({
             text: '實用',
             items: [
               { text: '拉炮', link: '/components/util-party-popper/' },
+              { text: '貓臉', link: '/components/util-cat-face/' },
             ],
           },
         ],
