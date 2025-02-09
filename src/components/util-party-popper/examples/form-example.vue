@@ -226,15 +226,15 @@ const canSubmit = computed(() =>
 
 const fieldEdgeMap: Record<
   keyof typeof form.value,
-  'top' | 'bottom' | 'left' | 'right'
+  Array<'top' | 'bottom' | 'left' | 'right'>
 > = {
-  howToKnow: 'top',
-  score: 'left',
-  text: 'bottom',
+  howToKnow: ['top'],
+  score: ['left'],
+  text: ['left', 'right'],
 }
 function handleBlur(field: keyof typeof form.value) {
   if (form.value[field]) {
-    emitFromEdge(fieldEdgeMap[field])
+    fieldEdgeMap[field].forEach(emitFromEdge)
   }
 }
 
