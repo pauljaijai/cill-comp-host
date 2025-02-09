@@ -40,6 +40,7 @@ const popperRef = ref<InstanceType<typeof UtilPartyPopper>>()
 const popperBounding = useElementBounding(popperRef)
 
 const text = ref('🎈✨🎉🍖🐟🎁💎')
+/** 用於強制更新元件 */
 const key = ref(crypto.randomUUID())
 watchDebounced(text, () => {
   key.value = crypto.randomUUID()

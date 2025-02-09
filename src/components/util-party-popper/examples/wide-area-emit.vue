@@ -63,57 +63,64 @@ const popperBounding = useElementBounding(popperRef)
 function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
   const offset = 50
 
-  const params = conditional(position, [
-    isDeepEqual('top'),
-    constant(() => ({
-      x: Scalar.RandomRange(0, popperBounding.width.value),
-      y: -offset,
-      velocity: {
-        x: Scalar.RandomRange(1, -1),
-        y: Scalar.RandomRange(0, -10),
-      },
-    })),
-  ], [
-    isDeepEqual('bottom'),
-    constant(() => ({
-      x: Scalar.RandomRange(0, popperBounding.width.value),
-      y: popperBounding.height.value + offset,
-      velocity: {
-        x: Scalar.RandomRange(1, -1),
-        y: Scalar.RandomRange(10, 15),
-      },
-    })),
-  ], [
-    isDeepEqual('bottom-center'),
-    () => ({
-      x: Scalar.RandomRange(0, popperBounding.width.value),
-      y: popperBounding.height.value + offset,
-      velocity: {
-        x: 0,
-        y: Scalar.RandomRange(8, 20),
-      },
-    }),
-  ], [
-    isDeepEqual('left'),
-    constant(() => ({
-      x: -offset,
-      y: Scalar.RandomRange(0, popperBounding.height.value),
-      velocity: {
-        x: Scalar.RandomRange(-5, -10),
-        y: Scalar.RandomRange(-1, 1),
-      },
-    })),
-  ], [
-    isDeepEqual('right'),
-    constant(() => ({
-      x: popperBounding.width.value + offset,
-      y: Scalar.RandomRange(0, popperBounding.height.value),
-      velocity: {
-        x: Scalar.RandomRange(5, 10),
-        y: Scalar.RandomRange(-1, 1),
-      },
-    })),
-  ])
+  const params = conditional(
+    position,
+    [
+      isDeepEqual('top'),
+      constant(() => ({
+        x: Scalar.RandomRange(0, popperBounding.width.value),
+        y: -offset,
+        velocity: {
+          x: Scalar.RandomRange(1, -1),
+          y: Scalar.RandomRange(0, -10),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('bottom'),
+      constant(() => ({
+        x: Scalar.RandomRange(0, popperBounding.width.value),
+        y: popperBounding.height.value + offset,
+        velocity: {
+          x: Scalar.RandomRange(1, -1),
+          y: Scalar.RandomRange(10, 15),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('bottom-center'),
+      () => ({
+        x: Scalar.RandomRange(0, popperBounding.width.value),
+        y: popperBounding.height.value + offset,
+        velocity: {
+          x: 0,
+          y: Scalar.RandomRange(8, 20),
+        },
+      }),
+    ],
+    [
+      isDeepEqual('left'),
+      constant(() => ({
+        x: -offset,
+        y: Scalar.RandomRange(0, popperBounding.height.value),
+        velocity: {
+          x: Scalar.RandomRange(-5, -10),
+          y: Scalar.RandomRange(-1, 1),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('right'),
+      constant(() => ({
+        x: popperBounding.width.value + offset,
+        y: Scalar.RandomRange(0, popperBounding.height.value),
+        velocity: {
+          x: Scalar.RandomRange(5, 10),
+          y: Scalar.RandomRange(-1, 1),
+        },
+      })),
+    ],
+  )
 
   popperRef.value?.emit(params)
 }
