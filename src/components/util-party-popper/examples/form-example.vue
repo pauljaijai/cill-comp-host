@@ -47,7 +47,7 @@
           @click="reset"
         >
           <span class="text-xl tracking-wide">
-            表單已送出，感謝您的回饋！(*´∀`)~♥
+            表單已送出<br>感謝您的回饋！(*´∀`)~♥
           </span>
 
           <span class="cursor-pointer text-xs">
