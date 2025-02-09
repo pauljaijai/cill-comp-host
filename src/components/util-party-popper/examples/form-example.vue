@@ -35,10 +35,26 @@
       />
 
       <base-btn
-        class="mt-2 bg-[#c7f6ff]/50"
+        class="mt-6"
         label="送出"
         @click="submit"
       />
+
+      <transition name="opacity">
+        <div
+          v-if="isSubmitted"
+          class="absolute inset-0 z-[40] flex flex-col items-center justify-center gap-6 rounded-xl bg-[#c7f6ff] bg-opacity-90"
+          @click="reset"
+        >
+          <span class="text-xl tracking-wide">
+            表單已送出，感謝您的回饋！(*´∀`)~♥
+          </span>
+
+          <span class="cursor-pointer text-xs">
+            （點一下再來一次）
+          </span>
+        </div>
+      </transition>
 
       <util-party-popper
         ref="popperRef"
@@ -64,6 +80,7 @@ const form = ref({
   score: undefined,
   text: '',
 })
+const isSubmitted = ref(false)
 
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>()
 const popperBounding = reactive(useElementBounding(popperRef))
@@ -168,9 +185,9 @@ async function emitFromClick(event: MouseEvent) {
   popperRef.value?.emit(params)
 }
 
-const canSubmit = computed(() => {
-  return form.value.howToKnow && form.value.score !== undefined
-})
+const canSubmit = computed(() =>
+  form.value.howToKnow && form.value.score !== undefined && form.value.text,
+)
 
 const fieldMap: Record<
   keyof typeof form.value,
@@ -198,5 +215,25 @@ function submit() {
       emitLikeFirework()
     }, i * 100)
   }
+
+  setTimeout(() => {
+    isSubmitted.value = true
+  }, 1000)
+}
+function reset() {
+  isSubmitted.value = false
+
+  form.value = {
+    howToKnow: '',
+    score: undefined,
+    text: '',
+  }
 }
 </script>
+
+<style lang="sass" scoped>
+.opacity-enter-active, .opacity-leave-active
+  transition-duration: 0.4s
+.opacity-enter-from, .opacity-leave-to
+  opacity: 0 !important
+</style>
