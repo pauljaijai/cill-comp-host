@@ -35,7 +35,7 @@
       />
 
       <base-btn
-        class="mt-2"
+        class="mt-2 bg-[#c7f6ff]/50"
         label="送出"
         @click="submit"
       />
@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import { Scalar } from '@babylonjs/core'
-import { promiseTimeout, useElementBounding, useRefHistory } from '@vueuse/core'
+import { promiseTimeout, useElementBounding } from '@vueuse/core'
 import { conditional, constant, isDeepEqual, pipe } from 'remeda'
 import { computed, nextTick, reactive, ref } from 'vue'
 import BaseBtn from '../../base-btn.vue'
@@ -63,9 +63,6 @@ const form = ref({
   howToKnow: '',
   score: undefined,
   text: '',
-})
-const { history } = useRefHistory(form, {
-  capacity: 1,
 })
 
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>()
@@ -184,13 +181,7 @@ const fieldMap: Record<
   text: 'bottom',
 }
 function handleBlur(field: keyof typeof form.value) {
-  const oldForm = history.value[0]
-  if (!oldForm) {
-    return
-  }
-
-  console.log(`🚀 ~ oldForm:`, oldForm)
-  if (form.value[field] && oldForm.snapshot[field] !== form.value[field]) {
+  if (form.value[field]) {
     emitFromEdge(fieldMap[field])
   }
 }
@@ -202,13 +193,10 @@ function submit() {
     return
   }
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 10; i++) {
     setTimeout(() => {
       emitLikeFirework()
     }, i * 100)
   }
-
-  // eslint-disable-next-line no-alert
-  alert('感謝您的填寫！(*´∀`)~♥')
 }
 </script>
