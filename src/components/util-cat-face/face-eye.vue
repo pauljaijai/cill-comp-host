@@ -76,12 +76,10 @@ import { getKeyframeList } from './utils'
 interface Props {
   facialExpression: FacialExpression;
   /** 眼睛偏移半徑 */
-  eyeOffsetRadius?: number;
+  eyeOffsetRadius: number;
 }
 // #endregion Props
-const props = withDefaults(defineProps<Props>(), {
-  eyeOffsetRadius: 50,
-})
+const props = withDefaults(defineProps<Props>(), {})
 
 const partIdList = ['eye-r', 'eye-l'] as const
 

@@ -25,11 +25,14 @@ import FaceMouth from './face-mouth.vue'
 interface Props {
   facialExpression?: FacialExpression;
   strokeColor?: string;
+  /** 眼睛追蹤偏移半徑 */
+  eyeOffsetRadius?: number;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {
   facialExpression: 'neutral',
   strokeColor: 'black',
+  eyeOffsetRadius: 40,
 })
 
 // #region Emits
