@@ -494,8 +494,6 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
 
     /** 根據 groupIndex 取得正確 index  */
     const index = particleIndexMapList[i + groupIndex * props.quantityOfPerEmit]
-    console.log(`🚀 ~ groupIndex:`, groupIndex)
-    console.log(`🚀 ~ index:`, index)
     if (index === undefined)
       continue
 
