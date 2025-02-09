@@ -1,5 +1,5 @@
 ---
-description:
+description: 各種表情變化，讓網站提供更多情緒價值。ヾ(◍'౪`◍)ﾉﾞ
 ---
 
 <script setup>
@@ -8,9 +8,9 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 import BasicUsage from '../../../src/components/util-cat-face/examples/basic-usage.vue'
 </script>
 
-# 標題 <Badge type="info" text="" />
+# 貓臉 <Badge type="info" text="util" />
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+各種表情變化，讓網站提供更多情緒價值。ヾ(◍'౪`◍)ﾉﾞ
 
 ## 使用範例
 
