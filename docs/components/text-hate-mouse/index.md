@@ -22,7 +22,7 @@ import CustomProps from '../../../src/components/text-hate-mouse/examples/custom
 
 ### 基本用法
 
-「有勞贖！Σ(ˊДˋ;)」
+滑鼠靠近時，文字會遠離滑鼠。
 
 <basic-usage/>
 
@@ -32,7 +32,7 @@ import CustomProps from '../../../src/components/text-hate-mouse/examples/custom
 
 ### 不同組合
 
-不同參數有不同效果
+不同參數有不同效果。
 
 <more-case/>
 

@@ -10,6 +10,7 @@ import WideAreaEmit from '../../../src/components/util-party-popper/examples/wid
 import MousePopper from '../../../src/components/util-party-popper/examples/mouse-popper.vue'
 import ConfettiShape from '../../../src/components/util-party-popper/examples/confetti-shape.vue'
 import CustomText from '../../../src/components/util-party-popper/examples/custom-text.vue'
+import FormExample from '../../../src/components/util-party-popper/examples/form-example.vue'
 </script>
 
 # 拉炮 <Badge type="info" text="util" />
@@ -74,13 +75,23 @@ import CustomText from '../../../src/components/util-party-popper/examples/custo
 <<< ../../../src/components/util-party-popper/examples/mouse-popper.vue
 :::
 
+### 表單範例
+
+提升填寫表單的動力。(´,,•ω•,,)
+
+<form-example class="h-[70vh]"/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/util-party-popper/examples/form-example.vue
+:::
+
 ## 原理
 
 利用 babylon.js 製作粒子效果。
 
 📚 [babylon.js](https://doc.babylonjs.com/)
 
-預設使用 WebGPU，效能好棒棒！*｡✧*｡٩(ˊᗜˋ*)و✧*｡
+預設使用 WebGPU，性能好棒棒！*｡✧*｡٩(ˊᗜˋ*)و✧*｡
 
 ## 原始碼
 
