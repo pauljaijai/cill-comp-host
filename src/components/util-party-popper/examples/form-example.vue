@@ -61,12 +61,14 @@
         class="pointer-events-none left-0 top-0 z-50 h-full w-full !absolute"
         :quantity-of-per-emit
         :max-concurrency="100"
+        :confetti="confettiList"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { ExtractArrayType } from '../../../types'
 import { Scalar } from '@babylonjs/core'
 import { promiseTimeout, useElementBounding } from '@vueuse/core'
 import { conditional, constant, isDeepEqual, pipe } from 'remeda'
@@ -74,6 +76,10 @@ import { computed, nextTick, reactive, ref } from 'vue'
 import BaseBtn from '../../base-btn.vue'
 import BaseInput from '../../base-input.vue'
 import UtilPartyPopper from '../util-party-popper.vue'
+
+type Confetti = ExtractArrayType<
+  InstanceType<typeof UtilPartyPopper>['confetti']
+>
 
 const form = ref({
   howToKnow: '',
@@ -85,6 +91,35 @@ const isSubmitted = ref(false)
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>()
 const popperBounding = reactive(useElementBounding(popperRef))
 
+const confettiList: Confetti[] = [
+  {
+    shape: 'plane',
+    width: 10,
+    height: 10,
+  },
+  {
+    shape: 'cylinder',
+    diameter: 10,
+    height: 1,
+  },
+  {
+    shape: 'disc',
+    radius: 10,
+    tessellation: 3,
+    arc: 1,
+  },
+  {
+    shape: 'disc',
+    radius: 8,
+    tessellation: 8,
+    arc: 1,
+  },
+  {
+    shape: 'torus',
+    diameter: 12,
+    thickness: 2,
+  },
+]
 const quantityOfPerEmit = ref(50)
 
 async function emitFromEdge(position: 'top' | 'bottom' | 'left' | 'right') {
@@ -189,7 +224,7 @@ const canSubmit = computed(() =>
   form.value.howToKnow && form.value.score !== undefined && form.value.text,
 )
 
-const fieldMap: Record<
+const fieldEdgeMap: Record<
   keyof typeof form.value,
   'top' | 'bottom' | 'left' | 'right'
 > = {
@@ -199,7 +234,7 @@ const fieldMap: Record<
 }
 function handleBlur(field: keyof typeof form.value) {
   if (form.value[field]) {
-    emitFromEdge(fieldMap[field])
+    emitFromEdge(fieldEdgeMap[field])
   }
 }
 
