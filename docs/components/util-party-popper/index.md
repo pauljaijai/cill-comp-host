@@ -78,6 +78,8 @@ import FormExample from '../../../src/components/util-party-popper/examples/form
 
 ### 勞贖嘉年華
 
+沿著滑鼠軌跡一路發射彩帶吧。
+
 勞贖！滿滿的勞贖！Σ(ˊДˋ;)
 
 <mouse-popper/>
