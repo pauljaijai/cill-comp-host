@@ -231,59 +231,66 @@ useIntervalFn(() => {
 
 const meshProviders: (
   (param: Confetti) => Mesh | undefined
-)[] = [(data) => {
-  if (data.shape !== 'plane')
-    return
-  return MeshBuilder.CreateBox('mesh', data)
-}, (data) => {
-  if (data.shape !== 'cylinder')
-    return
-  return MeshBuilder.CreateCylinder('mesh', {
-    ...data,
-    tessellation: 8,
-  })
-}, (data) => {
-  if (data.shape !== 'disc')
-    return
-  return MeshBuilder.CreateDisc('mesh', data)
-}, (data) => {
-  if (data.shape !== 'torus')
-    return
-  return MeshBuilder.CreateTorus('mesh', {
-    ...data,
-    tessellation: 6,
-  })
-}, (data) => {
-  if (data.shape !== 'polyhedron')
-    return
-  return MeshBuilder.CreatePolyhedron('mesh', data)
-}, (data) => {
-  if (data.shape !== 'text')
-    return
-  const mesh = MeshBuilder.CreatePlane('text', data)
+)[] = [
+  (data) => {
+    if (data.shape !== 'plane')
+      return
+    return MeshBuilder.CreateBox('mesh', data)
+  },
+  (data) => {
+    if (data.shape !== 'cylinder')
+      return
+    return MeshBuilder.CreateCylinder('mesh', {
+      ...data,
+      tessellation: 8,
+    })
+  },
+  (data) => {
+    if (data.shape !== 'disc')
+      return
+    return MeshBuilder.CreateDisc('mesh', data)
+  },
+  (data) => {
+    if (data.shape !== 'torus')
+      return
+    return MeshBuilder.CreateTorus('mesh', {
+      ...data,
+      tessellation: 6,
+    })
+  },
+  (data) => {
+    if (data.shape !== 'polyhedron')
+      return
+    return MeshBuilder.CreatePolyhedron('mesh', data)
+  },
+  (data) => {
+    if (data.shape !== 'text')
+      return
+    const mesh = MeshBuilder.CreatePlane('text', data)
 
-  const texture = new DynamicTexture('text', {
-    width: data.width,
-    height: data.height,
-  })
+    const texture = new DynamicTexture('text', {
+      width: data.width,
+      height: data.height,
+    })
 
-  // 量測文字寬度
-  const ctx = texture.getContext()
-  const size = 12
-  ctx.font = `${size}px monospace`
-  const textWidth = ctx.measureText(data.char).width
-  const ratio = textWidth / size
-  const fontSize = Math.floor(data.width / ratio)
+    // 量測文字寬度
+    const ctx = texture.getContext()
+    const size = 12
+    ctx.font = `${size}px monospace`
+    const textWidth = ctx.measureText(data.char).width
+    const ratio = textWidth / size
+    const fontSize = Math.floor(data.width / ratio)
 
-  texture.drawText(data.char, null, null, `${fontSize}px monospace`, 'black', 'white', true)
+    texture.drawText(data.char, null, null, `${fontSize}px monospace`, 'black', 'white', true)
 
-  const material = new StandardMaterial('material')
-  material.diffuseTexture = texture
+    const material = new StandardMaterial('material')
+    material.diffuseTexture = texture
 
-  mesh.material = material
+    mesh.material = material
 
-  return mesh
-}]
+    return mesh
+  },
+]
 
 async function createParticleSystem({ scene }: InitParam) {
   const useModelMaterial = pipe(props.confetti, (data) => Array.isArray(data) ? data : [data], (data) => data.some(({ shape }) => shape === 'text'))
@@ -440,11 +447,12 @@ function initParticle(particle: SolidParticle) {
 }
 
 let groupIndex = 0
+
 /** 要平均取得每個 mesh。預先建立 index 映射表，用查表法取得目前 groupIndex 對應之 particle index */
 const particleIndexMapList = pipe(
   range(0, totalAmount),
   (list) => {
-    const numCols = totalAmount / numberOfMeshType
+    const numCols = Math.ceil(list.length / numberOfMeshType)
     const result: number[] = []
 
     // 重組陣列
@@ -460,6 +468,7 @@ const particleIndexMapList = pipe(
     return result
   },
 )
+
 interface EmitParam {
   x: number;
   y: number;
@@ -485,6 +494,8 @@ function emit(param: EmitParam | ((index: number) => EmitParam)) {
 
     /** 根據 groupIndex 取得正確 index  */
     const index = particleIndexMapList[i + groupIndex * props.quantityOfPerEmit]
+    console.log(`🚀 ~ groupIndex:`, groupIndex)
+    console.log(`🚀 ~ index:`, index)
     if (index === undefined)
       continue
 

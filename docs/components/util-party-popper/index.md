@@ -9,6 +9,7 @@ import BasicUsage from '../../../src/components/util-party-popper/examples/basic
 import WideAreaEmit from '../../../src/components/util-party-popper/examples/wide-area-emit.vue'
 import MousePopper from '../../../src/components/util-party-popper/examples/mouse-popper.vue'
 import ConfettiShape from '../../../src/components/util-party-popper/examples/confetti-shape.vue'
+import UseText from '../../../src/components/util-party-popper/examples/use-text.vue'
 import CustomText from '../../../src/components/util-party-popper/examples/custom-text.vue'
 import FormExample from '../../../src/components/util-party-popper/examples/form-example.vue'
 </script>
@@ -57,15 +58,27 @@ import FormExample from '../../../src/components/util-party-popper/examples/form
 
 例如鱈魚又胖了 2 公斤！(/≧▽≦)/
 
-<custom-text/>
+<use-text/>
 
 鱈魚：「這種事別拿出來慶祝啊！╭(°A ,°`)╮」
+
+::: details 查看範例原始碼
+<<< ../../../src/components/util-party-popper/examples/use-text.vue
+:::
+
+### 自定義文字
+
+想撒甚麼就撒甚麼！੭ ˙ᗜ˙ )੭
+
+<custom-text/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/util-party-popper/examples/custom-text.vue
 :::
 
 ### 勞贖嘉年華
+
+沿著滑鼠軌跡一路發射彩帶吧。
 
 勞贖！滿滿的勞贖！Σ(ˊДˋ;)
 
