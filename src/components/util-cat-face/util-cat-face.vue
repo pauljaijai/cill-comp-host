@@ -1,8 +1,8 @@
 <template>
   <div class="relative aspect-[3/2]">
-    <face-eye class="absolute" />
-    <face-eyebrow class="absolute" />
-    <face-mouth class="absolute" />
+    <face-eye class="absolute left-0 top-0" />
+    <face-eyebrow class="absolute left-0 top-0" />
+    <face-mouth class="absolute left-0 top-0" />
   </div>
 </template>
 
