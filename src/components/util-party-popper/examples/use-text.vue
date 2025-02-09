@@ -1,13 +1,8 @@
 <template>
   <div class="w-full flex flex-col gap-4">
-    <div class="h-full w-full flex items-center justify-center gap-10 p-6">
-      <base-input
-        v-model="text"
-        label="輸入 emoji"
-      />
-
+    <div class="h-full w-full flex items-center justify-center gap-10 p-10">
       <div
-        class="cursor-pointer select-none rounded bg-white px-4 py-2 text-4xl"
+        class="cursor-pointer select-none rounded bg-white px-4 py-2 text-2xl"
         @click="emit()"
       >
         🎉
@@ -16,10 +11,9 @@
 
     <util-party-popper
       ref="popperRef"
-      :key
       :confetti="confettiList"
       class="pointer-events-none left-0 top-0 z-50 h-full w-full !fixed"
-      :quantity-of-per-emit="50"
+      :quantity-of-per-emit="20"
       :max-concurrency="50"
       :max-angular-velocity="Math.PI / 100"
       :color="{ r: 1, g: 1, b: 1 }"
@@ -30,33 +24,42 @@
 <script setup lang="ts">
 import type { ExtractArrayType } from '../../../types/main.type'
 import { Scalar } from '@babylonjs/core'
-import { useElementBounding, watchDebounced } from '@vueuse/core'
-import { map, pipe } from 'remeda'
-import { computed, ref } from 'vue'
-import BaseInput from '../../base-input.vue'
+import { useElementBounding } from '@vueuse/core'
+import { ref } from 'vue'
 import UtilPartyPopper from '../util-party-popper.vue'
 
 const popperRef = ref<InstanceType<typeof UtilPartyPopper>>()
 const popperBounding = useElementBounding(popperRef)
 
-const text = ref('🎈✨🎉🍖🐟🎁💎')
-const key = ref(crypto.randomUUID())
-watchDebounced(text, () => {
-  key.value = crypto.randomUUID()
-}, { debounce: 1000 })
-
 type Confetti = ExtractArrayType<
   InstanceType<typeof UtilPartyPopper>['confetti']
 >
-const confettiList = computed(() => pipe(
-  text.value.split(/.*?/u),
-  map((char) => ({
+const confettiList: Confetti[] = [
+  {
+    shape: 'text',
+    width: 40,
+    height: 40,
+    char: '🐟',
+  },
+  {
+    shape: 'text',
+    width: 40,
+    height: 20,
+    char: '肥魚',
+  },
+  {
+    shape: 'text',
+    width: 80,
+    height: 40,
+    char: '2 KG！',
+  },
+  {
     shape: 'text',
     width: 30,
     height: 30,
-    char,
-  } satisfies Confetti)),
-))
+    char: '✨',
+  },
+]
 
 function emit() {
   popperRef.value?.emit(() => ({
