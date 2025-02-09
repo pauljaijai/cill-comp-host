@@ -95,52 +95,59 @@ function emit(
     return
   }
 
-  const params = conditional(direction, [
-    isDeepEqual('rt'),
-    constant(() => ({
-      ...position,
-      velocity: {
-        x: -Scalar.RandomRange(velocityRange.min, velocityRange.max),
-        y: Scalar.RandomRange(velocityRange.min, velocityRange.max),
-      },
-    })),
-  ], [
-    isDeepEqual('lt'),
-    constant(() => ({
-      ...position,
-      velocity: {
-        x: Scalar.RandomRange(velocityRange.min, velocityRange.max),
-        y: Scalar.RandomRange(velocityRange.min, velocityRange.max),
-      },
-    })),
-  ], [
-    isDeepEqual('t'),
-    constant(() => ({
-      ...position,
-      velocity: {
-        x: Scalar.RandomRange(-2, 2),
-        y: Scalar.RandomRange(velocityRange.min, velocityRange.max),
-      },
-    })),
-  ], [
-    isDeepEqual('l'),
-    constant(() => ({
-      ...position,
-      velocity: {
-        x: Scalar.RandomRange(velocityRange.min, velocityRange.max),
-        y: Scalar.RandomRange(-2, 2),
-      },
-    })),
-  ], [
-    isDeepEqual('r'),
-    constant(() => ({
-      ...position,
-      velocity: {
-        x: -Scalar.RandomRange(velocityRange.min, velocityRange.max),
-        y: Scalar.RandomRange(-2, 2),
-      },
-    })),
-  ])
+  const params = conditional(
+    direction,
+    [
+      isDeepEqual('rt'),
+      constant(() => ({
+        ...position,
+        velocity: {
+          x: -Scalar.RandomRange(velocityRange.min, velocityRange.max),
+          y: Scalar.RandomRange(velocityRange.min, velocityRange.max),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('lt'),
+      constant(() => ({
+        ...position,
+        velocity: {
+          x: Scalar.RandomRange(velocityRange.min, velocityRange.max),
+          y: Scalar.RandomRange(velocityRange.min, velocityRange.max),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('t'),
+      constant(() => ({
+        ...position,
+        velocity: {
+          x: Scalar.RandomRange(-2, 2),
+          y: Scalar.RandomRange(velocityRange.min, velocityRange.max),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('l'),
+      constant(() => ({
+        ...position,
+        velocity: {
+          x: Scalar.RandomRange(velocityRange.min, velocityRange.max),
+          y: Scalar.RandomRange(-2, 2),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('r'),
+      constant(() => ({
+        ...position,
+        velocity: {
+          x: -Scalar.RandomRange(velocityRange.min, velocityRange.max),
+          y: Scalar.RandomRange(-2, 2),
+        },
+      })),
+    ],
+  )
 
   popperRef.value?.emit(params)
 }
