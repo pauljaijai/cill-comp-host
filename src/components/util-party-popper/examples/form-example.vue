@@ -127,47 +127,53 @@ async function emitFromEdge(position: 'top' | 'bottom' | 'left' | 'right') {
 
   const offset = 50
 
-  const params = conditional(position, [
-    isDeepEqual('top'),
-    constant(() => ({
-      x: Scalar.RandomRange(0, popperBounding.width),
-      y: -offset,
-      velocity: {
-        x: Scalar.RandomRange(1, -1),
-        y: Scalar.RandomRange(0, -10),
-      },
-    })),
-  ], [
-    isDeepEqual('bottom'),
-    constant(() => ({
-      x: Scalar.RandomRange(0, popperBounding.width),
-      y: popperBounding.height + offset,
-      velocity: {
-        x: Scalar.RandomRange(1, -1),
-        y: Scalar.RandomRange(10, 15),
-      },
-    })),
-  ], [
-    isDeepEqual('left'),
-    constant(() => ({
-      x: -offset,
-      y: Scalar.RandomRange(0, popperBounding.height),
-      velocity: {
-        x: Scalar.RandomRange(-5, -10),
-        y: Scalar.RandomRange(-1, 1),
-      },
-    })),
-  ], [
-    isDeepEqual('right'),
-    constant(() => ({
-      x: popperBounding.width + offset,
-      y: Scalar.RandomRange(0, popperBounding.height),
-      velocity: {
-        x: Scalar.RandomRange(5, 10),
-        y: Scalar.RandomRange(-1, 1),
-      },
-    })),
-  ])
+  const params = conditional(
+    position,
+    [
+      isDeepEqual('top'),
+      constant(() => ({
+        x: Scalar.RandomRange(0, popperBounding.width),
+        y: -offset,
+        velocity: {
+          x: Scalar.RandomRange(1, -1),
+          y: Scalar.RandomRange(0, -10),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('bottom'),
+      constant(() => ({
+        x: Scalar.RandomRange(0, popperBounding.width),
+        y: popperBounding.height + offset,
+        velocity: {
+          x: Scalar.RandomRange(1, -1),
+          y: Scalar.RandomRange(10, 15),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('left'),
+      constant(() => ({
+        x: -offset,
+        y: Scalar.RandomRange(0, popperBounding.height),
+        velocity: {
+          x: Scalar.RandomRange(-5, -10),
+          y: Scalar.RandomRange(-1, 1),
+        },
+      })),
+    ],
+    [
+      isDeepEqual('right'),
+      constant(() => ({
+        x: popperBounding.width + offset,
+        y: Scalar.RandomRange(0, popperBounding.height),
+        velocity: {
+          x: Scalar.RandomRange(5, 10),
+          y: Scalar.RandomRange(-1, 1),
+        },
+      })),
+    ],
+  )
 
   await nextTick()
   popperRef.value?.emit(params)
