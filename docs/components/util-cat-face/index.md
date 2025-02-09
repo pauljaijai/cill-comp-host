@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/util-cat-face/examples/basic-usa
 
 ### 基本用法
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+可以切換各種生動的表情。
 
 <basic-usage/>
 
@@ -25,14 +25,6 @@ import BasicUsage from '../../../src/components/util-cat-face/examples/basic-usa
 :::
 
 ## 原理
-
-文字文字文字文字文字文字文字文字文字文字文字文字
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
-:::
 
 ## 原始碼
 
