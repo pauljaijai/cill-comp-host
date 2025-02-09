@@ -1,9 +1,11 @@
 <template>
   <svg
+    ref="svgRef"
     class="h-full w-full"
-    viewBox="0 0 1500 1000"
+    :viewBox
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    v-bind="$attrs"
   >
     <g id="face-eye">
       <path
@@ -62,82 +64,117 @@
 </template>
 
 <script setup lang="ts">
+import type { FacialExpression } from './type'
+import { throttleFilter, useMouseInElement } from '@vueuse/core'
 import anime from 'animejs'
-import { omit, pipe, piped, reduce } from 'remeda'
-import { onMounted } from 'vue'
+import { isNumber, map, pipe } from 'remeda'
+import { computed, onMounted, reactive, ref } from 'vue'
+import { mapNumber } from '../../common/utils'
+import { getKeyframeList } from './utils'
 
 // #region Props
 interface Props {
-  modelValue?: string;
+  facialExpression: FacialExpression;
+  /** 眼睛偏移半徑 */
+  eyeOffsetRadius?: number;
 }
 // #endregion Props
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {
+  eyeOffsetRadius: 50,
+})
 
 const partIdList = ['eye-r', 'eye-l'] as const
 
-const getPathAttrs = piped(
-  (attrNode?: NamedNodeMap) => {
-    if (!attrNode)
-      return {}
+const svgRef = ref()
+const mouseInfo = reactive(useMouseInElement(svgRef, {
+  eventFilter: throttleFilter(15),
+}))
 
-    const result: Record<string, string> = {}
-    for (let i = 0; i < attrNode.length; i++) {
-      const node = attrNode[i]
-      if (!node)
-        continue
+const viewBox = computed(() => {
+  const offset = props.eyeOffsetRadius
 
-      const { name, value } = node
-      result[name] = value
-    }
-    return result
-  },
-  omit(['id', 'ref', 'fill', 'stroke', 'stroke-linecap']),
-)
-
-async function init() {
-  const keyframeList = pipe(
-    Array.from(document.querySelectorAll('.neutral')),
-    (list) => list.map((item) => {
-      const partList = pipe(
-        partIdList,
-        reduce((acc, partId) => {
-          const target = item.querySelector(`#${partId}`)
-          acc[partId] = getPathAttrs(target?.attributes)
-
-          return acc
-        }, {} as Record<typeof partIdList[number], Record<string, string>>),
+  const [x, y] = pipe(
+    /** 以 svg 為中心為原點之滑鼠座標 */
+    {
+      x: mouseInfo.elementWidth / 2 - mouseInfo.elementX,
+      y: mouseInfo.elementHeight / 2 - mouseInfo.elementY,
+    },
+    /** 計算角度並從 eyeOffsetRadius 計算 xy 分量 */
+    (position) => {
+      const xRadius = Math.abs(
+        mapNumber(
+          position.x,
+          -mouseInfo.elementWidth / 2,
+          mouseInfo.elementWidth / 2,
+          -offset,
+          offset,
+        ),
       )
 
-      return partList
-    }),
+      const yRadius = Math.abs(
+        mapNumber(
+          position.y,
+          -mouseInfo.elementHeight / 2,
+          mouseInfo.elementHeight / 2,
+          -offset,
+          offset,
+        ),
+      )
+
+      const angle = Math.atan2(position.y, position.x)
+      return [
+        Math.cos(angle) * xRadius,
+        Math.sin(angle) * yRadius,
+      ]
+    },
+    map((value) => isNumber(value) ? value : 0),
   )
 
-  anime.remove(
-    partIdList.map((id) => `#face-eye #${id}`),
-  )
+  return `${x} ${y} 1500 1000`
+})
 
-  await Promise.all(
-    partIdList.map((id) =>
-      anime({
-        targets: `#face-eye #${id}`,
-        ...keyframeList[0]?.[id],
-        duration: 500,
-      }),
-    ),
-  )
+const facialExpressionProviderMap: Record<
+  FacialExpression,
+  () => Promise<void>
+> = {
+  neutral: async () => {
+    const keyframeList = getKeyframeList(partIdList, 'neutral')
 
-  await Promise.all(
-    partIdList.map((id) =>
-      anime({
-        targets: `#face-eye #${id}`,
-        keyframes: keyframeList.map((keyframe) => keyframe[id]),
-        duration: 50,
-        delay: 3000,
-        loop: true,
-        direction: 'alternate',
-      }),
-    ),
-  )
+    anime.remove(
+      partIdList.map((id) => `#face-eye #${id}`),
+    )
+
+    await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#face-eye #${id}`,
+          ...keyframeList[0]?.[id],
+          duration: 500,
+        }),
+      ),
+    )
+
+    await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#face-eye #${id}`,
+          keyframes: keyframeList.map((keyframe) => keyframe[id]),
+          duration: 50,
+          delay: 3000,
+          loop: true,
+          direction: 'alternate',
+        }),
+      ),
+    )
+  },
+  happy: () => Promise.resolve(),
+  sad: () => Promise.resolve(),
+  angry: () => Promise.resolve(),
+  surprised: () => Promise.resolve(),
+}
+
+async function init() {
+  facialExpressionProviderMap[props.facialExpression]?.()
 }
 
 onMounted(() => {
