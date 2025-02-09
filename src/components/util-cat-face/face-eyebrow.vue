@@ -5,19 +5,19 @@
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g id="neutral">
+    <g id="cat-face">
       <path
-        id="eye-r"
-        d="M166 508C166 445.94 215.945 418 256 418C296.055 418 346 448.165 346 508C346 567.835 316.082 598 256 598C195.918 598 166 563.879 166 513.192"
+        id="eyebrow-r"
+        d="M488.637 226.299C508.23 224.465 512.982 222.616 532.387 223.274"
         stroke="black"
-        stroke-width="200"
+        stroke-width="50"
         stroke-linecap="round"
       />
       <path
-        id="eye-l"
-        d="M1346 508C1346 445.94 1296.05 418 1256 418C1215.95 418 1166 448.165 1166 508C1166 567.835 1195.92 598 1256 598C1316.08 598 1346 563.879 1346 513.192"
+        id="eyebrow-l"
+        d="M996.368 226.553C976.798 224.491 972.067 222.588 952.656 223.021"
         stroke="black"
-        stroke-width="200"
+        stroke-width="50"
         stroke-linecap="round"
       />
     </g>

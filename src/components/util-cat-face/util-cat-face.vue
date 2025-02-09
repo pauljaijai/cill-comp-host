@@ -1,18 +1,31 @@
 <template>
-  <div class="" />
+  <div class="relative aspect-[3/2]">
+    <face-eye class="absolute" />
+    <face-eyebrow class="absolute" />
+    <face-mouth class="absolute" />
+  </div>
 </template>
 
 <script setup lang="ts">
+import FaceEye from './face-eye.vue'
+import FaceEyebrow from './face-eyebrow.vue'
+import FaceMouth from './face-mouth.vue'
+
 // #region Props
+type FacialExpression = 'neutral' | 'happy' | 'sad' | 'angry' | 'surprised'
+
 interface Props {
-  modelValue?: string;
+  facialExpression?: string;
+  strokeColor?: string;
 }
 // #endregion Props
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {
+  strokeColor: 'black',
+})
 
 // #region Emits
 const emit = defineEmits<{
-  'update:modelValue': [value: Props['modelValue']];
+  change: [];
 }>()
 // #endregion Emits
 
