@@ -63,7 +63,7 @@ const popperBounding = useElementBounding(popperRef)
 function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
   const offset = 50
 
-  const param = conditional(position, [
+  const params = conditional(position, [
     isDeepEqual('top'),
     constant(() => ({
       x: Scalar.RandomRange(0, popperBounding.width.value),
@@ -115,6 +115,6 @@ function emit(position: 'top' | 'bottom' | 'left' | 'right' | 'bottom-center') {
     })),
   ])
 
-  popperRef.value?.emit(param)
+  popperRef.value?.emit(params)
 }
 </script>

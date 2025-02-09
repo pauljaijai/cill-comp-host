@@ -95,7 +95,7 @@ function emit(
     return
   }
 
-  const param = conditional(direction, [
+  const params = conditional(direction, [
     isDeepEqual('rt'),
     constant(() => ({
       ...position,
@@ -142,6 +142,6 @@ function emit(
     })),
   ])
 
-  popperRef.value?.emit(param)
+  popperRef.value?.emit(params)
 }
 </script>
