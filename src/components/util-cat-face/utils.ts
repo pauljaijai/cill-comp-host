@@ -20,11 +20,12 @@ export const getPathAttrs = piped(
   omit(['id', 'ref', 'fill', 'stroke', 'stroke-linecap']),
 )
 export function getKeyframeList<Id extends string>(
+  svgId: string,
   partIdList: (readonly Id[]) | Id[],
-  facialExpression: FacialExpression,
+  facialExpression: `${FacialExpression}`,
 ) {
   return pipe(
-    Array.from(document.querySelectorAll(`.${facialExpression}`)),
+    Array.from(document.querySelectorAll(`#${svgId} .${facialExpression}`)),
     (list) => list.map((item) => {
       const partList = pipe(
         partIdList,

@@ -1,1 +1,8 @@
-export type FacialExpression = 'neutral' | 'happy' | 'sad' | 'angry' | 'surprised'
+export enum FacialExpression {
+  NEUTRAL = 'neutral',
+  EXCITED = 'excited',
+  HAPPY = 'happy',
+  SAD = 'sad',
+  ANGRY = 'angry',
+  SURPRISED = 'surprised',
+}

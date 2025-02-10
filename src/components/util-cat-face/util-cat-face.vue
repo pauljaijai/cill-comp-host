@@ -23,7 +23,7 @@ import FaceMouth from './face-mouth.vue'
 
 // #region Props
 interface Props {
-  facialExpression?: FacialExpression;
+  facialExpression?: `${FacialExpression}`;
   strokeColor?: string;
   /** 眼睛追蹤偏移半徑 */
   eyeOffsetRadius?: number;
