@@ -24,7 +24,7 @@
       />
     </g>
 
-    <div class="hidden">
+    <defs class="hidden">
       <!-- neutral -->
       <g class="neutral">
         <path
@@ -92,7 +92,7 @@
           stroke-linecap="round"
         />
       </g>
-    </div>
+    </defs>
   </svg>
 </template>
 
