@@ -92,6 +92,40 @@
           stroke-linecap="round"
         />
       </g>
+
+      <!-- happy -->
+      <g class="happy">
+        <path
+          id="eye-r"
+          d="M152 499.74C162.347 474.172 199.536 423.244 210.325 415.5C221.114 407.756 276.302 356.431 311.709 362.407C347.116 368.384 383.16 442.239 390.362 453.089C397.565 463.94 419.667 516.232 420.66 545.09"
+          stroke="black"
+          stroke-width="100"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1357.83 497.74C1347.48 472.172 1310.29 421.244 1299.5 413.5C1288.71 405.756 1233.52 354.431 1198.12 360.407C1162.71 366.384 1126.67 440.239 1119.46 451.089C1112.26 461.94 1090.16 514.232 1089.17 543.09"
+          stroke="black"
+          stroke-width="100"
+          stroke-linecap="round"
+        />
+      </g>
+      <g class="happy">
+        <path
+          id="eye-r"
+          d="M155.381 482.808C164.301 456.708 198.624 403.806 208.969 395.478C219.315 387.151 271.587 332.859 307.27 336.873C342.953 340.887 383.016 412.641 390.806 423.077C398.596 433.514 423.55 484.507 426.134 513.266"
+          stroke="black"
+          stroke-width="100"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1349.4 490.989C1342.37 464.317 1311.93 409.092 1302.2 400.044C1292.48 390.997 1244.23 333.099 1208.36 334.546C1172.48 335.993 1127.37 404.692 1118.86 414.544C1110.34 424.395 1081.8 473.469 1077.16 501.969"
+          stroke="black"
+          stroke-width="100"
+          stroke-linecap="round"
+        />
+      </g>
     </defs>
   </svg>
 </template>
@@ -234,7 +268,40 @@ const facialExpressionProviderMap: Record<
       ),
     )
   },
-  happy: () => Promise.resolve(),
+  happy: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'happy')
+
+    await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#${nameId} #${id}`,
+          ...keyframeList[0]?.[id],
+          duration: 500,
+        }).finished,
+      ),
+    )
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          keyframes: pipe(
+            keyframeList.map((keyframe) => keyframe[partId]),
+            /** 頭尾相接
+             *
+             * 因為使用 direction: 'alternate' 效果不自然
+             */
+            (list) => {
+              const newList = [...list].reverse().slice(1)
+              return [...list, ...newList]
+            },
+          ),
+          duration: 1600,
+          loop: true,
+        }).finished,
+      ),
+    )
+  },
   sad: () => Promise.resolve(),
   angry: () => Promise.resolve(),
   surprised: () => Promise.resolve(),

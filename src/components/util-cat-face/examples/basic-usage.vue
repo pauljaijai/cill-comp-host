@@ -1,5 +1,10 @@
 <template>
   <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
+    <util-cat-face
+      class="h-[14vh]"
+      :facial-expression
+    />
+
     <div class="border-2 border-[#999] rounded">
       <select
         v-model="facialExpression"
@@ -14,11 +19,6 @@
         </option>
       </select>
     </div>
-
-    <util-cat-face
-      class="h-[14vh]"
-      :facial-expression
-    />
   </div>
 </template>
 

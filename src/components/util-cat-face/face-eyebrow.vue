@@ -59,6 +59,24 @@
           stroke-linecap="round"
         />
       </g>
+
+      <!-- happy -->
+      <g class="happy">
+        <path
+          id="eyebrow-r"
+          d="M109 181.939C128.302 178.106 132.839 175.78 152.21 174.447"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eyebrow-l"
+          d="M1372.23 179.875C1353.41 174.104 1349.14 171.33 1330 168.037"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
     </defs>
   </svg>
 </template>
@@ -111,7 +129,19 @@ const facialExpressionProviderMap: Record<
       ),
     )
   },
-  happy: () => Promise.resolve(),
+  happy: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'happy')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
   sad: () => Promise.resolve(),
   angry: () => Promise.resolve(),
   surprised: () => Promise.resolve(),

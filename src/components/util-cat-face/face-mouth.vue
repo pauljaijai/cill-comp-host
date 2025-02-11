@@ -75,6 +75,40 @@
           stroke-linecap="round"
         />
       </g>
+
+      <!-- happy -->
+      <g class="happy">
+        <path
+          id="palate"
+          d="M582.369 591C521.595 634.267 572.57 679 632.925 679C709.834 679 744.255 597.6 748.557 597.6C752.859 597.6 784.592 679 865.803 679C937.14 679 972.831 635.733 919.048 591"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="jaw"
+          d="M569.887 679C547.501 709.5 513.947 858.15 573.772 903.251C611.164 931.438 665.453 959 747.809 959C830.165 959 876.783 938.955 921.069 903.251C972.401 861.865 949.001 726 932.723 679"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+      <g class="happy">
+        <path
+          id="palate"
+          d="M574.774 578C514 621.267 564.976 666 625.33 666C702.239 666 736.66 584.6 740.962 584.6C745.265 584.6 776.997 666 858.209 666C929.545 666 965.236 622.733 911.453 578"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="jaw"
+          d="M562.291 666C539.905 696.5 502.467 804.399 562.292 849.5C599.683 877.688 653.972 905.249 736.329 905.249C818.685 905.249 865.303 885.205 909.589 849.5C960.921 808.115 941.405 713 925.127 666"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
     </defs>
   </svg>
 </template>
@@ -141,7 +175,33 @@ const facialExpressionProviderMap: Record<
       ),
     )
   },
-  happy: () => Promise.resolve(),
+  happy: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'happy')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+
+    await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#${nameId} #${id}`,
+          keyframes: keyframeList.map((keyframe) => keyframe[id]),
+          duration: 600,
+          delay: 400,
+          loop: true,
+          easing: 'easeInOutCirc',
+          direction: 'alternate',
+        }).finished,
+      ),
+    )
+  },
   sad: () => Promise.resolve(),
   angry: () => Promise.resolve(),
   surprised: () => Promise.resolve(),
