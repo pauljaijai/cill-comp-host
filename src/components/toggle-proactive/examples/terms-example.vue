@@ -87,15 +87,11 @@ const titleRefList = useTemplateRefsList<HTMLElement>()
 
 const timeList = ref<ComputedRef<number>[]>([])
 onMounted(() => {
-  init()
-})
-
-function init() {
   timeList.value = titleRefList.value.map((el) => {
     const { totalVisibleTime } = useElementVisibilityTime(el)
     return totalVisibleTime
   })
-}
+})
 
 /** 最小閱讀時間 */
 const MIN_READ_MS = 1000
