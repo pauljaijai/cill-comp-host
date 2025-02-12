@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full flex flex-center flex-col gap-4 border border-gray-300 p-6">
-    <div class="h-[40vh] overflow-y-auto border rounded-xl bg-slate-50 p-4">
+    <div class="h-[40vh] overflow-y-auto border rounded-xl p-4">
       <h1>🐟 鱈魚使用須知</h1>
 
       <h2 :ref="titleRefList.set">

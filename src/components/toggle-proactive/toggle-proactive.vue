@@ -390,7 +390,7 @@ interface Props {
   /** @default '' */
   thumbActiveClass?: string;
 
-  /** @default '#222' */
+  /** @default '#444' */
   furColor?: string;
   /** @default '#FFA5A5' */
   padColor?: string;
@@ -407,7 +407,7 @@ const props = withDefaults(defineProps<Props>(), {
   thumbInactiveClass: '',
   thumbActiveClass: '',
 
-  furColor: '#222',
+  furColor: '#444',
   padColor: '#FFA5A5',
 })
 
