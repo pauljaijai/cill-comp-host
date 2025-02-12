@@ -353,6 +353,12 @@
         </svg>
       </div>
     </div>
+
+    <input
+      type="checkbox"
+      class="hidden"
+      @click="toggle"
+    >
   </div>
 </template>
 
@@ -673,7 +679,7 @@ onBeforeMount(() => {
 
 <style scoped lang="sass">
 .toggle-proactive
-  aspect-ratio: 2
+  aspect-ratio: 1.8
   height: v-bind('props.size')
   .track
     position: relative
