@@ -40,7 +40,7 @@ import TermsExample from '../../../src/components/toggle-proactive/examples/term
 <<< ../../../src/components/toggle-proactive/examples/custom-prop.vue
 :::
 
-### 使用條款
+### 使用須知
 
 讓使用者心甘情願（？接受條款。(´,,•ω•,,)
 
