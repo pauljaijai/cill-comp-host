@@ -48,6 +48,8 @@ import TermsExample from '../../../src/components/toggle-proactive/examples/term
 
 <terms-example/>
 
+UI：「這裡不應該用 toggle 吧！ Σ(ˊДˋ;)」
+
 ::: details 查看範例原始碼
 <<< ../../../src/components/toggle-proactive/examples/terms-example.vue
 :::
