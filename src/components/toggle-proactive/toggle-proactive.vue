@@ -620,7 +620,7 @@ const toggle = debounce(() => {
 
   currentValue.value = !currentValue.value
   modelValue.value = currentValue.value
-}, 100)
+}, 50)
 
 /** 延遲時間，會越按越短，更有不耐煩的感覺
  *
