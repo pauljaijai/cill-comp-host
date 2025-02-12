@@ -353,6 +353,12 @@
         </svg>
       </div>
     </div>
+
+    <input
+      type="checkbox"
+      class="hidden"
+      @click="toggle"
+    >
   </div>
 </template>
 
@@ -384,7 +390,7 @@ interface Props {
   /** @default '' */
   thumbActiveClass?: string;
 
-  /** @default '#222' */
+  /** @default '#444' */
   furColor?: string;
   /** @default '#FFA5A5' */
   padColor?: string;
@@ -401,7 +407,7 @@ const props = withDefaults(defineProps<Props>(), {
   thumbInactiveClass: '',
   thumbActiveClass: '',
 
-  furColor: '#222',
+  furColor: '#444',
   padColor: '#FFA5A5',
 })
 
@@ -602,7 +608,7 @@ function toKeyframe(
   return Promise.all(tasks)
 }
 
-function toggle() {
+const toggle = debounce(() => {
   if (isPlaying.value)
     return
 
@@ -614,7 +620,7 @@ function toggle() {
 
   currentValue.value = !currentValue.value
   modelValue.value = currentValue.value
-}
+}, 50)
 
 /** 延遲時間，會越按越短，更有不耐煩的感覺
  *
@@ -673,7 +679,7 @@ onBeforeMount(() => {
 
 <style scoped lang="sass">
 .toggle-proactive
-  aspect-ratio: 2
+  aspect-ratio: 1.8
   height: v-bind('props.size')
   .track
     position: relative
