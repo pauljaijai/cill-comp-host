@@ -44,7 +44,7 @@ import TermsExample from '../../../src/components/toggle-proactive/examples/term
 
 讓使用者心甘情願（？接受條款。(´,,•ω•,,)
 
-（閱讀率 100% 時才能切換開關。）
+閱讀率 100% 時才能切換開關，否則會被強制回復。
 
 <terms-example/>
 
