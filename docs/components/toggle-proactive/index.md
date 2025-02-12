@@ -42,7 +42,7 @@ import TermsExample from '../../../src/components/toggle-proactive/examples/term
 
 ### 使用須知
 
-讓使用者心甘情願（？接受條款。(´,,•ω•,,)
+讓使用者心甘情願（？閱讀須知。(´,,•ω•,,)
 
 閱讀率 100% 時才能切換開關，否則會被強制回復。
 
