@@ -1,12 +1,15 @@
 <template>
-  <div class="relative aspect-[3/2]">
-    <face-eye
-      v-bind="props"
-      class="absolute left-0 top-0"
-    />
+  <div
+    ref="faceRef"
+    class="relative aspect-[3/2]"
+  >
     <face-eyebrow
       class="absolute left-0 top-0"
       v-bind="props"
+    />
+    <face-eye
+      v-bind="props"
+      class="absolute left-0 top-0"
     />
     <face-mouth
       class="absolute left-0 top-0"
@@ -17,6 +20,7 @@
 
 <script setup lang="ts">
 import type { FacialExpression } from './type'
+import { ref } from 'vue'
 import FaceEye from './face-eye.vue'
 import FaceEyebrow from './face-eyebrow.vue'
 import FaceMouth from './face-mouth.vue'
@@ -41,11 +45,7 @@ const emit = defineEmits<{
 }>()
 // #endregion Emits
 
-// #region Slots
-defineSlots<{
-  default?: (props: { isRunning: boolean }) => unknown;
-}>()
-// #endregion Slots
+const faceRef = ref<HTMLElement>()
 
 // #region Methods
 defineExpose({})

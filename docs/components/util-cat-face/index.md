@@ -43,7 +43,3 @@ import BasicUsage from '../../../src/components/util-cat-face/examples/basic-usa
 ### Methods
 
 <<< ../../../src/components/util-cat-face/util-cat-face.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/util-cat-face/util-cat-face.vue/#Slots
