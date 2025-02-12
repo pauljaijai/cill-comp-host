@@ -7,6 +7,7 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/toggle-proactive/examples/basic-usage.vue'
 import CustomProp from '../../../src/components/toggle-proactive/examples/custom-prop.vue'
+import TermsExample from '../../../src/components/toggle-proactive/examples/terms-example.vue'
 </script>
 
 # 主動的開關 <Badge type="info" text="toggle" />
@@ -37,6 +38,16 @@ import CustomProp from '../../../src/components/toggle-proactive/examples/custom
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/toggle-proactive/examples/custom-prop.vue
+:::
+
+### 使用條款
+
+讓使用者心甘情願接受條款。(´,,•ω•,,)
+
+<terms-example/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/toggle-proactive/examples/terms-example.vue
 :::
 
 ## 原理
