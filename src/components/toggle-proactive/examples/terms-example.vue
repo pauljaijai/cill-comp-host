@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-center flex-col gap-4 border border-gray-300 p-6">
+  <div class="relative w-full flex flex-center flex-col gap-4 border border-gray-300 p-6">
     <div class="h-[40vh] overflow-y-auto border rounded-xl bg-slate-50 p-4">
       <h1>🐟 鱈魚使用須知</h1>
 
@@ -47,6 +47,7 @@
         🎉 結語
       </h2>
       <p>請以尊重與幽默的態度對待鱈魚，如有任何不滿，請記得它只是一隻魚</p>
+      <p>歡迎提出 MR 補充以上須知</p>
     </div>
 
     閱讀率：{{ readRate.toFixed(1) }}%
@@ -60,6 +61,17 @@
         size="2rem"
       />
     </label>
+
+    <transition name="opacity">
+      <div
+        v-if="value"
+        class="absolute inset-0 z-[40] flex flex-col items-center justify-center gap-6 rounded-xl bg-[#c7f6ff] bg-opacity-90"
+      >
+        <span class="text-xl tracking-wide">
+          感謝您的閱讀！(*´∀`)~♥
+        </span>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -75,11 +87,15 @@ const titleRefList = useTemplateRefsList<HTMLElement>()
 
 const timeList = ref<ComputedRef<number>[]>([])
 onMounted(() => {
+  init()
+})
+
+function init() {
   timeList.value = titleRefList.value.map((el) => {
     const { totalVisibleTime } = useElementVisibilityTime(el)
     return totalVisibleTime
   })
-})
+}
 
 /** 最小閱讀時間 */
 const MIN_READ_MS = 1000
@@ -98,5 +114,12 @@ const readRate = computed(() => pipe(
 ))
 
 const disabled = computed(() => readRate.value < 100)
-const value = computed(() => !disabled.value)
+const value = ref(false)
 </script>
+
+<style lang="sass" scoped>
+.opacity-enter-active, .opacity-leave-active
+  transition-duration: 0.4s
+.opacity-enter-from, .opacity-leave-to
+  opacity: 0 !important
+</style>
