@@ -77,6 +77,22 @@
           stroke-linecap="round"
         />
       </g>
+      <g class="happy">
+        <path
+          id="eyebrow-r"
+          d="M110.142 186.069C128.329 178.556 132.328 175.392 151.069 170.316"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eyebrow-l"
+          d="M1368.21 187.683C1353.17 174.994 1350.32 170.764 1334.01 160.23"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
     </defs>
   </svg>
 </template>
@@ -85,6 +101,7 @@
 import type { FacialExpression } from './type'
 import { useMounted } from '@vueuse/core'
 import anime from 'animejs'
+import { pipe } from 'remeda'
 import { onMounted, useId, watch } from 'vue'
 import { getKeyframeList } from './utils'
 
@@ -133,11 +150,32 @@ const facialExpressionProviderMap: Record<
     const keyframeList = getKeyframeList(id, partIdList, 'happy')
 
     await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#${nameId} #${id}`,
+          ...keyframeList[0]?.[id],
+          duration: 500,
+        }).finished,
+      ),
+    )
+
+    await Promise.all(
       partIdList.map((partId) =>
         anime({
           targets: `#${nameId} #${partId}`,
-          ...keyframeList[0]?.[partId],
-          duration: 500,
+          keyframes: pipe(
+            keyframeList.map((keyframe) => keyframe[partId]),
+            /** 頭尾相接
+             *
+             * 因為使用 direction: 'alternate' 效果不自然
+             */
+            (list) => {
+              const newList = [...list].reverse().slice(1)
+              return [...list, ...newList]
+            },
+          ),
+          duration: 1800,
+          loop: true,
         }).finished,
       ),
     )
