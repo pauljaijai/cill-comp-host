@@ -417,7 +417,7 @@ const emit = defineEmits<{
 }>()
 // #endregion Emits
 
-const OBJECT_IDS = [
+const OBJECT_ID_LIST = [
   'cat-elbow',
   'arm',
   'elbow',
@@ -429,7 +429,7 @@ const OBJECT_IDS = [
   'digital-pad-4',
 ] as const
 
-const KEYFRAME_IDS = [
+const KEYFRAME_ID_LIST = [
   'cat-arm-1',
   'cat-arm-2',
   'cat-arm-3',
@@ -444,14 +444,14 @@ const [currentValue, toggleCurrentValue] = useToggle(modelValue.value)
 interface KeyframeOption extends anime.AnimeParams {
   action?: () => void;
   objectAttrMap?: Partial<Record<
-    typeof OBJECT_IDS[number],
+    typeof OBJECT_ID_LIST[number],
     CSSProperties
   >>;
 }
 const keyframeOptionMap: Record<
   'in' | 'out',
   Record<
-    typeof KEYFRAME_IDS[number],
+    typeof KEYFRAME_ID_LIST[number],
     KeyframeOption
   >
 > = {
@@ -541,15 +541,15 @@ const currentThumbClass = computed(() => {
 const keyframeVisible = ref(true)
 /** 儲存 keyframe attr 資料 */
 const keyframeAttrMap: Partial<Record<
-  (typeof KEYFRAME_IDS)[number],
+  (typeof KEYFRAME_ID_LIST)[number],
   Record<
-    (typeof OBJECT_IDS)[number],
+    (typeof OBJECT_ID_LIST)[number],
     Record<string, string>
   >
 >> = {}
 onMounted(() => {
-  KEYFRAME_IDS.forEach((keyframeId) => {
-    OBJECT_IDS.forEach((objectId) => {
+  KEYFRAME_ID_LIST.forEach((keyframeId) => {
+    OBJECT_ID_LIST.forEach((objectId) => {
       // 取得所有 attr
       const attrMap = pipe(
         document.querySelector(`#${uid} #${keyframeId} #${objectId}`)?.attributes,
@@ -574,7 +574,7 @@ onMounted(() => {
       const data = {
         ...keyframeAttrMap[keyframeId],
         [objectId]: attrMap,
-      } as Record<typeof OBJECT_IDS[number], Record<string, string>>
+      } as Record<typeof OBJECT_ID_LIST[number], Record<string, string>>
 
       keyframeAttrMap[keyframeId] = data
     })
@@ -586,9 +586,9 @@ onMounted(() => {
 /** 播放至指定 keyframe */
 function toKeyframe(
   direction: keyof typeof keyframeOptionMap,
-  keyframeId: (typeof KEYFRAME_IDS)[number],
+  keyframeId: (typeof KEYFRAME_ID_LIST)[number],
 ) {
-  const tasks = OBJECT_IDS.map((objectId) => {
+  const tasks = OBJECT_ID_LIST.map((objectId) => {
     // 取得所有 attr
     const attrMap = keyframeAttrMap[keyframeId]?.[objectId]
     if (!attrMap) {
@@ -673,7 +673,7 @@ async function start() {
 }
 
 onBeforeMount(() => {
-  anime.remove(OBJECT_IDS.map((id) => `#${id}`))
+  anime.remove(OBJECT_ID_LIST.map((id) => `#${id}`))
 })
 </script>
 
