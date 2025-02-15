@@ -6,25 +6,32 @@ interface Props {
   modelValue?: string;
 }
 // #endregion Props
+
+// #region Emits
+interface Emits {
+  'update:modelValue': [value: Props['modelValue']];
+}
+// #endregion Emits
+
+// #region Slots
+interface Slots {
+  default?: () => unknown;
+}
+// #endregion Slots
+
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
 })
 
-// #region Emits
-const emit = defineEmits<{
-  'update:modelValue': [value: Props['modelValue']];
-}>()
-// #endregion Emits
+const emit = defineEmits<Emits>()
 
-// #region Slots
-defineSlots<{
-  default?: () => unknown;
-}>()
-// #endregion Slots
+defineSlots<Slots>()
 
 // #region Methods
-defineExpose({})
+interface Expose { }
 // #endregion Methods
+
+defineExpose<Expose>({})
 </script>
 
 <style scoped lang="sass">
