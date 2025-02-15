@@ -8,6 +8,7 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 import BasicUsage from '../../../src/components/toggle-proactive/examples/basic-usage.vue'
 import CustomProp from '../../../src/components/toggle-proactive/examples/custom-prop.vue'
 import TermsExample from '../../../src/components/toggle-proactive/examples/terms-example.vue'
+import ImpossibleThing from '../../../src/components/toggle-proactive/examples/impossible-thing.vue'
 </script>
 
 # 主動的開關 <Badge type="info" text="toggle" />
@@ -52,6 +53,16 @@ UI：「這裡不應該用 toggle 吧！ Σ(ˊДˋ;)」
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/toggle-proactive/examples/terms-example.vue
+:::
+
+### 不可能的事
+
+可以可愛又不失禮貌地打槍客戶。(´・ω・`)
+
+<impossible-thing/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/toggle-proactive/examples/impossible-thing.vue
 :::
 
 ## 原理
