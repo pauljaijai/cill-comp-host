@@ -57,7 +57,7 @@ UI：「這裡不應該用 toggle 吧！ Σ(ˊДˋ;)」
 
 ### 不可能的事
 
-可以可愛又不失禮貌地打槍客戶。(´・ω・`)
+可愛又不失禮貌地打槍客戶。ヾ(◍'౪`◍)ﾉﾞ
 
 <impossible-thing/>
 
@@ -92,3 +92,7 @@ SVG 內的物件為甚麼有辦法忽然變換堆疊順序？大家來猜猜看�
 ### Emits
 
 <<< ../../../src/components/toggle-proactive/toggle-proactive.vue/#Emits
+
+### Methods
+
+<<< ../../../src/components/toggle-proactive/toggle-proactive.vue/#Methods
