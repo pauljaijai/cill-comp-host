@@ -35,7 +35,7 @@ interface State {
 
 type Toggle = InstanceType<typeof ToggleProactive>
 
-const toggleRefList = ref<[Toggle, Toggle, Toggle]>()
+const toggleRefList = ref<Toggle[]>()
 
 const colorList = [
   {
@@ -65,7 +65,7 @@ const colorList = [
 ] as const
 let colorIndex = 0
 
-const stateList = ref<[State, State, State]>([
+const stateList = ref<State[]>([
   {
     label: '要快',
     value: false,
