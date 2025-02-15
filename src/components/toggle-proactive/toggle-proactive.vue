@@ -2,7 +2,7 @@
   <div class="cursor-pointer select-none overflow-visible">
     <div
       class="toggle-proactive"
-      @click="toggle"
+      @click="handleToggle"
     >
       <div
         :id="`${uid}-cat-arm`"
@@ -357,7 +357,7 @@
     <input
       type="checkbox"
       class="hidden"
-      @click="toggle"
+      @click="handleToggle"
     >
   </div>
 </template>
@@ -396,6 +396,13 @@ interface Props {
   padColor?: string;
 }
 // #endregion Props
+
+// #region Emits
+interface Emits {
+  'update:modelValue': [value: boolean];
+}
+// #endregion Emits
+
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   size: '4rem',
@@ -411,11 +418,7 @@ const props = withDefaults(defineProps<Props>(), {
   padColor: '#FFA5A5',
 })
 
-// #region Emits
-const emit = defineEmits<{
-  'update:modelValue': [value: boolean];
-}>()
-// #endregion Emits
+const emit = defineEmits<Emits>()
 
 const OBJECT_ID_LIST = [
   'cat-elbow',
@@ -608,13 +611,13 @@ function toKeyframe(
   return Promise.all(tasks)
 }
 
-const toggle = debounce(() => {
+const handleToggle = debounce(() => {
   if (isPlaying.value)
     return
 
   if (props.disabled) {
     toggleCurrentValue()
-    start()
+    startCatAnimate()
     return
   }
 
@@ -634,7 +637,7 @@ const resetDelayMs = debounce(() => {
 }, 2000)
 
 /** 開始貓貓手動畫 */
-async function start() {
+async function startCatAnimate(delay?: number) {
   if (currentValue.value) {
     svgClass.value = []
   }
@@ -647,7 +650,7 @@ async function start() {
   delayMs = Math.max(0, delayMs - 300)
   resetDelayMs()
 
-  await promiseTimeout(delayMs)
+  await promiseTimeout(delay ?? delayMs)
 
   for (const id of [
     'cat-arm-2',
@@ -674,6 +677,24 @@ async function start() {
 
 onBeforeMount(() => {
   anime.remove(OBJECT_ID_LIST.map((id) => `#${id}`))
+})
+
+// #region Methods
+interface Expose {
+  /** 觸發切換動畫 */
+  toggle: () => Promise<void>;
+}
+// #endregion Methods
+
+defineExpose<Expose>({
+  async toggle() {
+    if (isPlaying.value)
+      return
+
+    await startCatAnimate(0)
+
+    modelValue.value = currentValue.value
+  },
 })
 </script>
 
