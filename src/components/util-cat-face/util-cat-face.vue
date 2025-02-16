@@ -74,17 +74,62 @@ const animeProviderMap: Record<
   happy: () => anime({
     targets: faceRef.value,
     keyframes: [
-      { translateY: 5 },
-      { translateY: -5 },
+      {
+        translateY: 5,
+        easing: 'easeInCubic',
+      },
+      {
+        translateY: -5,
+        easing: 'easeOutCubic',
+      },
     ],
-    easing: 'easeInOutQuint',
     direction: 'alternate',
-    duration: 1000,
+    duration: 800,
     loop: true,
   }).finished,
-  sad: () => Promise.resolve(),
-  angry: () => Promise.resolve(),
-  surprised: () => Promise.resolve(),
+  sad: () => anime({
+    targets: faceRef.value,
+    keyframes: [
+      { translateY: 1 },
+      { translateY: -1 },
+    ],
+    easing: 'linear',
+    direction: 'alternate',
+    duration: 100,
+    loop: true,
+  }).finished,
+  angry: () => anime({
+    targets: faceRef.value,
+    keyframes: [
+      {
+        translateY: 5,
+        easing: 'easeInOutCirc',
+      },
+      {
+        translateY: -5,
+        easing: 'easeInOutCirc',
+      },
+    ],
+    direction: 'alternate',
+    duration: 1200,
+    loop: true,
+  }).finished,
+  surprised: () => anime({
+    targets: faceRef.value,
+    keyframes: [
+      {
+        translateX: 2,
+        easing: 'linear',
+      },
+      {
+        translateX: -2,
+        easing: 'linear',
+      },
+    ],
+    direction: 'alternate',
+    duration: 100,
+    loop: true,
+  }).finished,
 }
 
 watch(

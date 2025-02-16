@@ -93,6 +93,60 @@
           stroke-linecap="round"
         />
       </g>
+
+      <!-- sad -->
+      <g class="sad">
+        <path
+          id="eyebrow-r"
+          d="M453 244.885C505.515 236.385 505.515 222.885 505.515 202.14"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eyebrow-l"
+          d="M1045.7 242.288C1002.2 242.288 988.196 227.788 988.196 204.304"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <!-- angry -->
+      <g class="angry">
+        <path
+          id="eyebrow-r"
+          d="M495.754 208.569C509.348 222.797 513.746 225.377 525.269 241.005"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eyebrow-l"
+          d="M990.811 210.117C975.869 222.923 971.236 225.053 958.216 239.457"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <!-- surprised -->
+      <g class="surprised">
+        <path
+          id="eyebrow-r"
+          d="M295.464 185.306C315.047 133.237 382.886 114.42 397.709 203.805"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eyebrow-l"
+          d="M1195.81 193.431C1188.17 165.918 1108.65 82.6492 1094.27 221.603"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
     </defs>
   </svg>
 </template>
@@ -180,9 +234,45 @@ const facialExpressionProviderMap: Record<
       ),
     )
   },
-  sad: () => Promise.resolve(),
-  angry: () => Promise.resolve(),
-  surprised: () => Promise.resolve(),
+  sad: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'sad')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
+  angry: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'angry')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
+  surprised: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'surprised')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
 }
 function startAnimation() {
   anime.remove(partIdList.map((id) => `#${nameId} #${id}`))

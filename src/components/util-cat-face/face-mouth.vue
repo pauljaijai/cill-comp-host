@@ -109,6 +109,76 @@
           stroke-linecap="round"
         />
       </g>
+
+      <!-- sad -->
+      <g class="sad">
+        <path
+          id="jaw"
+          d="M529 735C583.5 701 623.479 751 666.346 751C720.971 751 745.419 669.6 748.475 669.6C751.531 669.6 774.069 751 831.75 751C882.417 751 903.5 698.5 970 759"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="palate"
+          d="M529 735C583.5 701 623.479 751 666.346 751C720.971 751 745.419 669.6 748.475 669.6C751.531 669.6 774.069 751 831.75 751C882.417 751 903.5 698.5 970 759"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <!-- angry -->
+      <g class="angry">
+        <path
+          id="palate"
+          d="M560.999 675.001C517.834 718.267 551.632 752.5 594.499 752.5C711.5 752.5 745.419 669.601 748.475 669.601C751.531 669.601 761.5 752.5 888.999 761.001C939.554 764.371 1005.7 719.733 967.499 675"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="jaw"
+          d="M560.999 675.001C517.834 718.267 551.632 752.5 594.499 752.5C711.5 752.5 745.419 669.601 748.475 669.601C751.531 669.601 761.5 752.5 888.999 761.001C939.554 764.371 1005.7 719.733 967.499 675"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <!-- surprised -->
+      <g class="surprised">
+        <path
+          id="palate"
+          d="M550.492 529C478.342 572.267 538.859 617 610.51 617C701.815 617 742.679 535.6 747.787 535.6C752.895 535.6 790.566 617 886.979 617C971.669 617 1014.04 573.733 950.19 529"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="jaw"
+          d="M577.001 627C526 694 538 925 552.501 942.5C567.001 960 675.001 971.5 740.5 971.5C806 971.5 913.5 964.5 929.5 942.5C945.5 920.5 955.199 663.733 917 619"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+      <g class="surprised">
+        <path
+          id="palate"
+          d="M550.492 529C478.342 572.267 538.859 617 610.51 617C701.815 617 742.679 535.6 747.787 535.6C752.895 535.6 790.566 617 886.979 617C971.669 617 1014.04 573.733 950.19 529"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="jaw"
+          d="M577.002 627C526.002 694 545.5 838.5 560 856C574.501 873.5 682.501 885 748 885C813.499 885 921 878 937 856C953 834 955.201 663.733 917.002 619"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
     </defs>
   </svg>
 </template>
@@ -202,9 +272,73 @@ const facialExpressionProviderMap: Record<
       ),
     )
   },
-  sad: () => Promise.resolve(),
-  angry: () => Promise.resolve(),
-  surprised: () => Promise.resolve(),
+  sad: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'sad')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+
+    await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#${nameId} #${id}`,
+          keyframes: keyframeList.map((keyframe) => keyframe[id]),
+          duration: 600,
+          delay: 400,
+          loop: true,
+          easing: 'easeInOutCirc',
+          direction: 'alternate',
+        }).finished,
+      ),
+    )
+  },
+  angry: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'angry')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
+  surprised: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'surprised')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+
+    await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#${nameId} #${id}`,
+          keyframes: keyframeList.map((keyframe) => keyframe[id]),
+          duration: 600,
+          delay: 400,
+          loop: true,
+          easing: 'easeInOutCirc',
+          direction: 'alternate',
+        }).finished,
+      ),
+    )
+  },
 }
 function startAnimation() {
   anime.remove(partIdList.map((id) => `#${nameId} #${id}`))

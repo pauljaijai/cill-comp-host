@@ -126,6 +126,92 @@
           stroke-linecap="round"
         />
       </g>
+
+      <!-- sad -->
+      <g class="sad">
+        <path
+          id="eye-r"
+          d="M166 508C166 475.5 177 494.662 256 460.5C335 426.338 346 448.165 346 508C346 567.835 316.082 598 256 598C195.918 598 166 563.879 166 513.192"
+          stroke="black"
+          stroke-width="180"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1346 520.535C1346 492.799 1294.5 480.78 1240.5 453.043C1186.5 425.307 1166 465.215 1166 520.535C1166 575.856 1195.92 603.744 1256 603.744C1316.08 603.744 1326 603.037 1354.5 652.5"
+          stroke="black"
+          stroke-width="180"
+          stroke-linecap="round"
+        />
+      </g>
+      <g class="sad">
+        <path
+          id="eye-r"
+          d="M166 508C166 475.5 177 495.162 256 461C335 426.838 346 448.165 346 508C346 567.835 316.082 598 256 598C195.918 598 166 563.879 166 513.192"
+          stroke="black"
+          stroke-width="180"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1346 520.535C1346 494 1298.5 482.236 1244.5 454.5C1190.5 426.764 1166 465.215 1166 520.535C1166 575.855 1195.92 603.744 1256 603.744C1316.08 603.744 1346 638 1359.5 687.5"
+          stroke="black"
+          stroke-width="180"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <!-- angry -->
+      <g class="angry">
+        <path
+          id="eye-r"
+          d="M166 508C166 445.94 202.445 431 242.5 431C246.5 431 346 501 346 508C346 567.835 316.082 598 256 598C195.918 598 166 563.879 166 513.192"
+          stroke="black"
+          stroke-width="200"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1346 508C1346 445.939 1317.55 433 1277.5 433C1271.5 433 1166 501.5 1166 508C1166 567.835 1195.92 598 1256 598C1316.08 598 1346 563.879 1346 513.192"
+          stroke="black"
+          stroke-width="200"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <!-- surprised -->
+      <g class="surprised">
+        <path
+          id="eye-r"
+          d="M128 508C128 422.495 199.033 384 256 384C312.967 384 384 425.56 384 508C384 590.44 341.451 632 256 632C170.549 632 128 584.989 128 515.154"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1401 508C1401 422.495 1326.64 384 1267 384C1207.36 384 1133 425.56 1133 508C1133 590.44 1177.54 632 1267 632C1356.46 632 1401 584.989 1401 515.154"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+      <g class="surprised">
+        <path
+          id="eye-r"
+          d="M117 508C117 411.462 194.137 368 256 368C317.863 368 395 414.923 395 508C395 601.077 348.794 648 256 648C163.206 648 117 594.923 117 516.077"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1406 508C1406 416.288 1328.86 375 1267 375C1205.14 375 1128 419.577 1128 508C1128 596.423 1174.21 641 1267 641C1359.79 641 1406 590.577 1406 515.673"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
     </defs>
   </svg>
 </template>
@@ -158,7 +244,12 @@ const mouseInfo = reactive(useMouseInElement(svgRef, {
 }))
 
 const viewBox = computed(() => {
-  if (props.facialExpression !== 'neutral') {
+  const ignoredList: `${FacialExpression}`[] = [
+    'excited',
+    'happy',
+  ]
+
+  if (ignoredList.includes(props.facialExpression)) {
     return '0 0 1500 1000'
   }
 
@@ -302,9 +393,90 @@ const facialExpressionProviderMap: Record<
       ),
     )
   },
-  sad: () => Promise.resolve(),
-  angry: () => Promise.resolve(),
-  surprised: () => Promise.resolve(),
+  sad: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'sad')
+
+    await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#${nameId} #${id}`,
+          ...keyframeList[0]?.[id],
+          duration: 500,
+        }).finished,
+      ),
+    )
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          keyframes: pipe(
+            keyframeList.map((keyframe) => keyframe[partId]),
+            /** 頭尾相接
+             *
+             * 因為使用 direction: 'alternate' 效果不自然
+             */
+            (list) => {
+              const newList = [...list].reverse().slice(1)
+              return [...list, ...newList]
+            },
+          ),
+          duration: 1600,
+          easing: 'easeInOutCubic',
+          loop: true,
+        }).finished,
+      ),
+    )
+  },
+  angry: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'angry')
+
+    await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#${nameId} #${id}`,
+          ...keyframeList[0]?.[id],
+          duration: 200,
+          easing: 'easeInOutCirc',
+        }).finished,
+      ),
+    )
+  },
+  surprised: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'surprised')
+
+    await Promise.all(
+      partIdList.map((id) =>
+        anime({
+          targets: `#${nameId} #${id}`,
+          ...keyframeList[0]?.[id],
+          duration: 500,
+        }).finished,
+      ),
+    )
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: `#${nameId} #${partId}`,
+          keyframes: pipe(
+            keyframeList.map((keyframe) => keyframe[partId]),
+            /** 頭尾相接
+             *
+             * 因為使用 direction: 'alternate' 效果不自然
+             */
+            (list) => {
+              const newList = [...list].reverse().slice(1)
+              return [...list, ...newList]
+            },
+          ),
+          duration: 1400,
+          delay: 400,
+          loop: true,
+        }).finished,
+      ),
+    )
+  },
 }
 function startAnimation() {
   anime.remove(partIdList.map((id) => `#${nameId} #${id}`))
