@@ -13,7 +13,7 @@
         <toggle-proactive
           ref="toggleRefList"
           v-model="state.value"
-          v-bind="state"
+          v-bind="colorData"
           size="3.5rem"
         />
       </label>
@@ -22,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+import { useCycleList } from '@vueuse/core'
 import { pipe, reduce, sample } from 'remeda'
 import { computed, ref, watch } from 'vue'
 import ToggleProactive from '../toggle-proactive.vue'
@@ -29,15 +30,16 @@ import ToggleProactive from '../toggle-proactive.vue'
 interface State {
   value: boolean;
   label: string;
-  furColor: string;
-  padColor: string;
 }
 
 type Toggle = InstanceType<typeof ToggleProactive>
 
 const toggleRefList = ref<Toggle[]>()
 
-const colorList = [
+const {
+  state: colorData,
+  next: nextColor,
+} = useCycleList([
   {
     furColor: '#7DDAEA',
     padColor: '#000',
@@ -62,27 +64,20 @@ const colorList = [
     furColor: '#F3F2F2',
     padColor: '#000',
   },
-] as const
-let colorIndex = 0
+])
 
 const stateList = ref<State[]>([
   {
     label: '要快',
     value: false,
-    furColor: '#DFC57B',
-    padColor: '#FFF',
   },
   {
     label: '要好',
     value: false,
-    furColor: '#DFC57B',
-    padColor: '#FFF',
   },
   {
     label: '要便宜',
     value: false,
-    furColor: '#DFC57B',
-    padColor: '#FFF',
   },
 ])
 const booleanList = computed(
@@ -106,14 +101,7 @@ watch(booleanList, (value, oldValue) => {
     ([i]) => i ?? 0,
   )
 
-  /** 依序變換顏色 */
-  const color = colorList[colorIndex] ?? colorList[0]
-  colorIndex = (colorIndex + 1) % colorList.length
-
-  if (stateList.value[targetIndex]) {
-    stateList.value[targetIndex].furColor = color.furColor
-    stateList.value[targetIndex].padColor = color.padColor
-  }
+  nextColor()
 
   toggleRefList.value?.[targetIndex]?.toggle()
 })
