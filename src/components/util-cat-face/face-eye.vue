@@ -238,6 +238,10 @@ const id = useId()
 const nameId = 'face-eye'
 const partIdList = ['eye-r', 'eye-l'] as const
 
+function getTargetId(partId: string) {
+  return `#${id} #${nameId} #${partId}`
+}
+
 const svgRef = ref()
 const mouseInfo = reactive(useMouseInElement(svgRef, {
   eventFilter: throttleFilter(15),
@@ -303,10 +307,10 @@ const facialExpressionProviderMap: Record<
     const keyframeList = getKeyframeList(id, partIdList, 'neutral')
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          ...keyframeList[0]?.[id],
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
       ),
@@ -315,7 +319,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           keyframes: keyframeList.map((keyframe) => keyframe[partId]),
           duration: 50,
           delay: 3000,
@@ -329,10 +333,10 @@ const facialExpressionProviderMap: Record<
     const keyframeList = getKeyframeList(id, partIdList, 'excited')
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          ...keyframeList[0]?.[id],
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
       ),
@@ -341,7 +345,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           keyframes: pipe(
             keyframeList.map((keyframe) => keyframe[partId]),
             /** 頭尾相接
@@ -363,10 +367,10 @@ const facialExpressionProviderMap: Record<
     const keyframeList = getKeyframeList(id, partIdList, 'happy')
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          ...keyframeList[0]?.[id],
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
       ),
@@ -375,7 +379,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           keyframes: pipe(
             keyframeList.map((keyframe) => keyframe[partId]),
             /** 頭尾相接
@@ -397,10 +401,10 @@ const facialExpressionProviderMap: Record<
     const keyframeList = getKeyframeList(id, partIdList, 'sad')
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          ...keyframeList[0]?.[id],
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
       ),
@@ -409,7 +413,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           keyframes: pipe(
             keyframeList.map((keyframe) => keyframe[partId]),
             /** 頭尾相接
@@ -432,10 +436,10 @@ const facialExpressionProviderMap: Record<
     const keyframeList = getKeyframeList(id, partIdList, 'angry')
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          ...keyframeList[0]?.[id],
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
           duration: 200,
           easing: 'easeInOutCirc',
         }).finished,
@@ -446,10 +450,10 @@ const facialExpressionProviderMap: Record<
     const keyframeList = getKeyframeList(id, partIdList, 'surprised')
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          ...keyframeList[0]?.[id],
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
       ),
@@ -458,7 +462,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           keyframes: pipe(
             keyframeList.map((keyframe) => keyframe[partId]),
             /** 頭尾相接

@@ -46,30 +46,14 @@
       <g class="excited">
         <path
           id="palate"
-          d="M630.439 663C587.274 706.267 623.48 751 666.346 751C720.972 751 745.419 669.6 748.475 669.6C751.531 669.6 774.069 751 831.75 751C882.417 751 907.767 707.733 869.568 663"
+          d="M621.439 523C578.274 566.267 614.48 611 657.346 611C711.972 611 736.419 529.6 739.475 529.6C742.531 529.6 765.069 611 822.75 611C873.417 611 898.767 567.733 860.568 523"
           stroke="black"
           stroke-width="50"
           stroke-linecap="round"
         />
         <path
           id="jaw"
-          d="M633 753.5C576.999 820.5 597 896.5 635.5 932.5C659.563 955 694.5 977 747.5 977C800.499 977 830.5 961 859 932.5C892.034 899.466 913.5 799.5 866.5 753.5"
-          stroke="black"
-          stroke-width="50"
-          stroke-linecap="round"
-        />
-      </g>
-      <g class="excited">
-        <path
-          id="palate"
-          d="M630.439 663C587.274 706.267 623.48 751 666.346 751C720.972 751 745.419 669.6 748.475 669.6C751.531 669.6 774.069 751 831.75 751C882.417 751 907.767 707.733 869.568 663"
-          stroke="black"
-          stroke-width="50"
-          stroke-linecap="round"
-        />
-        <path
-          id="jaw"
-          d="M632.999 753.5C613 774 614.999 827 627.499 862C638.58 893.024 691.5 930 744.5 930C797.5 930 824 906.5 852.5 878C885.534 844.966 878.999 768.5 866.499 753.5"
+          d="M625.5 607C569.5 674 633 888 671.5 924C695.563 946.5 730.5 968.5 783.5 968.5C836.5 968.5 866.501 952.5 895 924C928.034 890.966 906.001 653 859.001 607"
           stroke="black"
           stroke-width="50"
           stroke-linecap="round"
@@ -201,6 +185,10 @@ const id = useId()
 const nameId = 'face-mouth'
 const partIdList = ['palate', 'jaw'] as const
 
+function getTargetId(partId: string) {
+  return `#${id} #${nameId} #${partId}`
+}
+
 const facialExpressionProviderMap: Record<
   FacialExpression,
   () => Promise<void>
@@ -211,7 +199,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -224,7 +212,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -232,10 +220,10 @@ const facialExpressionProviderMap: Record<
     )
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          keyframes: keyframeList.map((keyframe) => keyframe[id]),
+          targets: getTargetId(partId),
+          keyframes: keyframeList.map((keyframe) => keyframe[partId]),
           duration: 600,
           delay: 400,
           loop: true,
@@ -251,7 +239,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -259,10 +247,10 @@ const facialExpressionProviderMap: Record<
     )
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          keyframes: keyframeList.map((keyframe) => keyframe[id]),
+          targets: getTargetId(partId),
+          keyframes: keyframeList.map((keyframe) => keyframe[partId]),
           duration: 600,
           delay: 400,
           loop: true,
@@ -278,7 +266,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -286,10 +274,10 @@ const facialExpressionProviderMap: Record<
     )
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          keyframes: keyframeList.map((keyframe) => keyframe[id]),
+          targets: getTargetId(partId),
+          keyframes: keyframeList.map((keyframe) => keyframe[partId]),
           duration: 600,
           delay: 400,
           loop: true,
@@ -305,7 +293,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -318,7 +306,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -326,10 +314,10 @@ const facialExpressionProviderMap: Record<
     )
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          keyframes: keyframeList.map((keyframe) => keyframe[id]),
+          targets: getTargetId(partId),
+          keyframes: keyframeList.map((keyframe) => keyframe[partId]),
           duration: 600,
           delay: 400,
           loop: true,

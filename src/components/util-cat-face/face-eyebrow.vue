@@ -170,6 +170,10 @@ const id = useId()
 const nameId = 'face-eyebrow'
 const partIdList = ['eyebrow-r', 'eyebrow-l'] as const
 
+function getTargetId(partId: string) {
+  return `#${id} #${nameId} #${partId}`
+}
+
 const facialExpressionProviderMap: Record<
   FacialExpression,
   () => Promise<void>
@@ -180,7 +184,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -193,7 +197,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -216,7 +220,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           keyframes: pipe(
             keyframeList.map((keyframe) => keyframe[partId]),
             /** 頭尾相接
@@ -240,7 +244,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -253,7 +257,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
@@ -266,7 +270,7 @@ const facialExpressionProviderMap: Record<
     await Promise.all(
       partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${partId}`,
+          targets: getTargetId(partId),
           ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,

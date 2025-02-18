@@ -68,6 +68,8 @@ const animeProviderMap: Record<
       { rotate: 5 },
       { rotate: -5 },
     ],
+    easing: 'easeInOutCubic',
+    direction: 'alternate',
     duration: 1400,
     loop: true,
   }).finished,
