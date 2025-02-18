@@ -6,6 +6,8 @@ description: 各種表情變化，讓網站提供更多情緒價值。ヾ(◍'�
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/util-cat-face/examples/basic-usage.vue'
+import InteractiveCase from '../../../src/components/util-cat-face/examples/interactive-case.vue'
+import FormCase from '../../../src/components/util-cat-face/examples/form-case.vue'
 </script>
 
 # 貓臉 <Badge type="info" text="util" />
@@ -24,7 +26,33 @@ import BasicUsage from '../../../src/components/util-cat-face/examples/basic-usa
 <<< ../../../src/components/util-cat-face/examples/basic-usage.vue
 :::
 
+### 簡單互動
+
+配合使用者動作互動
+
+<interactive-case/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/util-cat-face/examples/interactive-case.vue
+:::
+
+### 表單
+
+滿滿的情緒價值，讓使用者更有共鳴，~~表單永遠填不完~~。ᕕ( ﾟ ∀。)ᕗ
+
+<form-case/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/util-cat-face/examples/form-case.vue
+:::
+
 ## 原理
+
+嘗試複雜一點的 svg 動畫，表情變化皆有完整的過度效果。
+
+實務上推薦使用 [Lottie](https://lottiefiles.com/) 或 [Rive](https://rive.app/)，功能更強更容易開發。
+
+Lottie 比較早出來，社群較大，有素材網站販售；Rive 功能更強，有狀態機等功能，可以做出複雜互動，但是素材比較少。
 
 ## 原始碼
 

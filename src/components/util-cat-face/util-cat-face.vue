@@ -70,7 +70,7 @@ const animeProviderMap: Record<
     ],
     easing: 'easeInOutCubic',
     direction: 'alternate',
-    duration: 1400,
+    duration: 800,
     loop: true,
   }).finished,
   happy: () => anime({

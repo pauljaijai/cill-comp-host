@@ -33,6 +33,7 @@
     "vueuse",
     "webp",
     "wenkai",
+    "xstate",
     "yoyo"
   ],
   "editor.tabSize": 2,
