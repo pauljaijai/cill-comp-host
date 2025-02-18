@@ -1,8 +1,9 @@
 <template>
   <div class="w-full flex flex-col items-center gap-4 border border-gray-300 p-6">
     <util-cat-face
-      class="h-[14vh]"
+      class="h-[10vh] cursor-pointer"
       :facial-expression
+      @click="setFacialExpression(FacialExpression.EXCITED)"
     />
 
     <form class="flex flex-col gap-4">
@@ -11,6 +12,7 @@
         label="姓名"
         required
         @invalid="handleInvalid"
+        @blur="handleBlur"
       />
 
       <base-input
@@ -19,6 +21,7 @@
         pattern="09\d{8}"
         required
         @invalid="handleInvalid"
+        @blur="handleBlur"
       />
 
       <button type="submit">
@@ -29,11 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import { useMachine } from '@xstate/vue'
-import { debounce } from 'lodash-es'
-import { fromEntries, fromKeys, map, pipe, sample } from 'remeda'
-import { computed, ref, watchEffect } from 'vue'
-import { createMachine } from 'xstate'
+import { refAutoReset } from '@vueuse/core'
+import { sample } from 'remeda'
+import { ref, watchEffect } from 'vue'
 import BaseInput from '../../base-input.vue'
 import { FacialExpression } from '../type'
 import UtilCatFace from '../util-cat-face.vue'
@@ -44,41 +45,13 @@ const form = ref({
   phone: '',
 })
 
-const states = {
-  ...pipe(
-    Object.values(FacialExpression),
-    fromKeys(() => ({
-      after: [
-        {
-          delay: 2000,
-          target: FacialExpression.NEUTRAL,
-        },
-      ],
-    })),
-  ),
-  [FacialExpression.NEUTRAL]: {
-    on: pipe(
-      Object.entries(FacialExpression),
-      map(([, value]) => [value, value] as const),
-      fromEntries(),
-    ),
-  },
+const facialExpression = refAutoReset(FacialExpression.NEUTRAL, 1000)
+function setFacialExpression(type: FacialExpression) {
+  if (facialExpression.value !== FacialExpression.NEUTRAL) {
+    return
+  }
+  facialExpression.value = type
 }
-console.log(`🚀 ~ states:`, states)
-
-const { snapshot, send } = useMachine(createMachine({
-  initial: FacialExpression.NEUTRAL,
-  states,
-  predictableActionArguments: true,
-}))
-const setExpression = debounce((type: FacialExpression) => {
-  console.log(`🚀 ~ [setExpression] type:`, type)
-  send({ type })
-}, 10, { trailing: false, leading: true })
-
-const facialExpression = computed(
-  () => snapshot.value.value as FacialExpression,
-)
 watchEffect(() => {
   console.log(`🚀 ~ facialExpression`, facialExpression.value)
 })
@@ -87,9 +60,17 @@ const invalidFaceList = [
   FacialExpression.SAD,
   FacialExpression.SURPRISED,
 ] as const
-
 function handleInvalid() {
   const [type] = sample(invalidFaceList, 1)
-  setExpression(type)
+  setFacialExpression(type)
+}
+
+const blurFaceList = [
+  FacialExpression.SAD,
+  FacialExpression.SURPRISED,
+] as const
+function handleBlur() {
+  const [type] = sample(blurFaceList, 1)
+  setFacialExpression(type)
 }
 </script>
