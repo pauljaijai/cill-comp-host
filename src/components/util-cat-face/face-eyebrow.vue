@@ -208,10 +208,10 @@ const facialExpressionProviderMap: Record<
     const keyframeList = getKeyframeList(id, partIdList, 'happy')
 
     await Promise.all(
-      partIdList.map((id) =>
+      partIdList.map((partId) =>
         anime({
-          targets: `#${nameId} #${id}`,
-          ...keyframeList[0]?.[id],
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
           duration: 500,
         }).finished,
       ),
