@@ -12,6 +12,9 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
+  "dependencies": {
+    "xstate": "^5.0.0"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "^3.11.2",
     "@babylonjs/core": "^7.40.1",
