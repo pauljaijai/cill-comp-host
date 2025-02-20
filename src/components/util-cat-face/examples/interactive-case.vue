@@ -25,6 +25,8 @@ const { pressed: isPressed } = useMousePressed()
 const { state, next } = useCycleList([
   'neutral',
   'angry',
+  'pleasant',
+  'derpy',
 ] satisfies `${FacialExpression}`[])
 
 useIntervalFn(next, 3000)

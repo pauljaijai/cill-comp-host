@@ -38,7 +38,9 @@ import FormCase from '../../../src/components/util-cat-face/examples/form-case.v
 
 ### 表單
 
-滿滿的情緒價值，讓使用者更有共鳴，~~表單永遠填不完~~。ᕕ( ﾟ ∀。)ᕗ
+滿滿的情緒價值，讓使用者更有共鳴。
+
+~~玩到表單永遠填不完~~。ᕕ( ﾟ ∀。)ᕗ
 
 <form-case/>
 
