@@ -35,7 +35,6 @@
 import { refAutoReset } from '@vueuse/core'
 import { sample } from 'remeda'
 import { ref, watchEffect } from 'vue'
-import { createActor, createMachine } from 'xstate'
 import BaseInput from '../../base-input.vue'
 import { FacialExpression } from '../type'
 import UtilCatFace from '../util-cat-face.vue'
@@ -45,27 +44,6 @@ const form = ref({
   email: '',
   phone: '',
 })
-
-const stateMachine = createMachine({
-  id: 'cat-face',
-  initial: FacialExpression.NEUTRAL,
-  states: {
-    [FacialExpression.NEUTRAL]: {
-      on: {
-        [FacialExpression.ANGRY]: FacialExpression.ANGRY,
-      },
-    },
-    [FacialExpression.ANGRY]: {
-      after: { 2000: { target: FacialExpression.NEUTRAL } },
-    },
-  },
-})
-
-const actor = createActor(stateMachine)
-actor.subscribe((state) => {
-  console.log(`🚀 ~ state`, state.value)
-})
-actor.start()
 
 const facialExpression = refAutoReset(FacialExpression.NEUTRAL, 600)
 function setFacialExpression(type: FacialExpression) {
