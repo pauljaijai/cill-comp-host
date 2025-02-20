@@ -24,7 +24,6 @@
     </g>
 
     <defs class="hidden">
-      <!-- neutral -->
       <g class="neutral">
         <path
           id="palate"
@@ -37,12 +36,11 @@
           id="jaw"
           d="M630.439 663C587.274 706.267 623.48 751 666.346 751C720.972 751 745.419 669.6 748.475 669.6C751.531 669.6 774.069 751 831.75 751C882.417 751 907.767 707.733 869.568 663"
           stroke="black"
-          stroke-width="50"
+          stroke-width="0"
           stroke-linecap="round"
         />
       </g>
 
-      <!-- excited -->
       <g class="excited">
         <path
           id="palate"
@@ -60,41 +58,23 @@
         />
       </g>
 
-      <!-- happy -->
       <g class="happy">
         <path
           id="palate"
-          d="M582.369 591C521.595 634.267 572.57 679 632.925 679C709.834 679 744.255 597.6 748.557 597.6C752.859 597.6 784.592 679 865.803 679C937.14 679 972.831 635.733 919.048 591"
+          d="M621.848 381C575.254 424.267 614.336 469 660.607 469C719.571 469 745.96 387.6 749.259 387.6C752.557 387.6 776.885 469 839.148 469C893.839 469 921.202 425.733 879.969 381"
           stroke="black"
           stroke-width="50"
           stroke-linecap="round"
         />
         <path
           id="jaw"
-          d="M569.887 679C547.501 709.5 513.947 858.15 573.772 903.251C611.164 931.438 665.453 959 747.809 959C830.165 959 876.783 938.955 921.069 903.251C972.401 861.865 949.001 726 932.723 679"
-          stroke="black"
-          stroke-width="50"
-          stroke-linecap="round"
-        />
-      </g>
-      <g class="happy">
-        <path
-          id="palate"
-          d="M574.774 578C514 621.267 564.976 666 625.33 666C702.239 666 736.66 584.6 740.962 584.6C745.265 584.6 776.997 666 858.209 666C929.545 666 965.236 622.733 911.453 578"
-          stroke="black"
-          stroke-width="50"
-          stroke-linecap="round"
-        />
-        <path
-          id="jaw"
-          d="M562.291 666C539.905 696.5 502.467 804.399 562.292 849.5C599.683 877.688 653.972 905.249 736.329 905.249C818.685 905.249 865.303 885.205 909.589 849.5C960.921 808.115 941.405 713 925.127 666"
+          d="M615.47 477C598.311 507.44 551.583 791.83 615.471 876.663C664.702 942.033 717.976 959 748.872 959C779.769 959 852.521 934.408 881.626 892.132C956.691 783.097 906.066 523.907 893.589 477"
           stroke="black"
           stroke-width="50"
           stroke-linecap="round"
         />
       </g>
 
-      <!-- sad -->
       <g class="sad">
         <path
           id="jaw"
@@ -112,7 +92,6 @@
         />
       </g>
 
-      <!-- angry -->
       <g class="angry">
         <path
           id="palate"
@@ -130,7 +109,6 @@
         />
       </g>
 
-      <!-- surprised -->
       <g class="surprised">
         <path
           id="palate"
@@ -163,6 +141,58 @@
           stroke-linecap="round"
         />
       </g>
+
+      <g class="derpy">
+        <path
+          id="palate"
+          d="M553.5 399.5C476.675 442.767 525.211 544 601.505 544C698.726 544 725.061 499.5 730.5 499.5C735.939 499.5 793.227 544 895.887 544C986.064 544 1005.49 454.233 937.5 409.5"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="jaw"
+          d="M574 553C585.5 617.5 605.537 662 624.5 698C649.958 746.33 687.5 800.5 744.5 800.5C801.5 800.5 846.404 716 858.5 690.5C870.596 665 888.5 620.5 904 553"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <g class="speechless">
+        <path
+          id="palate"
+          d="M542 494C479.823 598.725 561.753 707 623.5 707C748.5 707 763.598 553 768 553C772.402 553 789.5 707 893.975 707C1011.5 707 1030.52 602.275 975.5 494"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="jaw"
+          d="M542 494C479.823 598.725 561.753 707 623.5 707C748.5 707 763.598 553 768 553C772.402 553 789.5 707 893.975 707C1011.5 707 1030.52 602.275 975.5 494"
+          stroke="black"
+          stroke-width="0"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <g class="pleasant">
+        <path
+          id="palate"
+          d="M437.686 525C346.06 613.5 466.796 705 557.788 705C741.992 705 764.241 574.859 770.728 574.859C777.214 574.859 802.411 705 956.369 705C1129.56 705 1157.59 616.5 1076.51 525"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="jaw"
+          d="M437.686 525C346.06 613.5 466.796 705 557.788 705C741.992 705 764.241 574.859 770.728 574.859C777.214 574.859 802.411 705 956.369 705C1129.56 705 1157.59 616.5 1076.51 525"
+          stroke="black"
+          stroke-width="0"
+          stroke-linecap="round"
+        />
+      </g>
+
     </defs>
   </svg>
 </template>
@@ -323,6 +353,45 @@ const facialExpressionProviderMap: Record<
           loop: true,
           easing: 'easeInOutCirc',
           direction: 'alternate',
+        }).finished,
+      ),
+    )
+  },
+  derpy: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'derpy')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
+  speechless: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'speechless')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
+  pleasant: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'pleasant')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 500,
         }).finished,
       ),
     )

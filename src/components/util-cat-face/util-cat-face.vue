@@ -60,6 +60,8 @@ const animeProviderMap: Record<
     rotate: 0,
     translateX: 0,
     translateY: 0,
+    scaleX: 1,
+    scaleY: 1,
     duration: 200,
   }).finished,
   excited: () => anime({
@@ -70,7 +72,7 @@ const animeProviderMap: Record<
     ],
     easing: 'easeInOutCubic',
     direction: 'alternate',
-    duration: 800,
+    duration: 600,
     loop: true,
   }).finished,
   happy: () => anime({
@@ -86,7 +88,7 @@ const animeProviderMap: Record<
       },
     ],
     direction: 'alternate',
-    duration: 800,
+    duration: 600,
     loop: true,
   }).finished,
   sad: () => anime({
@@ -132,6 +134,26 @@ const animeProviderMap: Record<
     duration: 100,
     loop: true,
   }).finished,
+  derpy: () => anime({
+    targets: faceRef.value,
+    keyframes: [
+      {
+        scaleX: 0.9,
+        scaleY: 1.1,
+        easing: 'easeInOutCirc',
+      },
+      {
+        scaleX: 1.1,
+        scaleY: 0.9,
+        easing: 'easeInOutCirc',
+      },
+    ],
+    direction: 'alternate',
+    duration: 1200,
+    loop: true,
+  }).finished,
+  speechless: () => Promise.resolve(),
+  pleasant: () => Promise.resolve(),
 }
 
 watch(

@@ -24,7 +24,6 @@
     </g>
 
     <defs class="hidden">
-      <!-- neutral -->
       <g class="neutral">
         <path
           id="eyebrow-r"
@@ -42,7 +41,6 @@
         />
       </g>
 
-      <!-- excited -->
       <g class="excited">
         <path
           id="eyebrow-r"
@@ -60,7 +58,6 @@
         />
       </g>
 
-      <!-- happy -->
       <g class="happy">
         <path
           id="eyebrow-r"
@@ -94,7 +91,6 @@
         />
       </g>
 
-      <!-- sad -->
       <g class="sad">
         <path
           id="eyebrow-r"
@@ -112,7 +108,6 @@
         />
       </g>
 
-      <!-- angry -->
       <g class="angry">
         <path
           id="eyebrow-r"
@@ -130,7 +125,6 @@
         />
       </g>
 
-      <!-- surprised -->
       <g class="surprised">
         <path
           id="eyebrow-r"
@@ -147,6 +141,58 @@
           stroke-linecap="round"
         />
       </g>
+
+      <g class="derpy">
+        <path
+          id="eyebrow-r"
+          d="M368 167.389C386.175 159.844 390.168 156.673 408.901 151.566"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eyebrow-l"
+          d="M1169.64 352.826C1150.62 347.762 1146.24 345.149 1127 342.574"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <g class="speechless">
+        <path
+          id="eyebrow-r"
+          d="M435.179 131C447.792 146.105 452.008 148.973 462.46 165.336"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eyebrow-l"
+          d="M1076.62 165C1063.84 179.967 1059.6 182.789 1048.97 199.037"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <g class="pleasant">
+        <path
+          id="eyebrow-r"
+          d="M221 199.27C236.261 186.846 239.182 182.667 255.674 172.419"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eyebrow-l"
+          d="M1299.14 182.222C1285.97 167.603 1283.72 163.024 1269 150.367"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
     </defs>
   </svg>
 </template>
@@ -266,6 +312,45 @@ const facialExpressionProviderMap: Record<
   },
   surprised: async () => {
     const keyframeList = getKeyframeList(id, partIdList, 'surprised')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
+  derpy: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'derpy')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
+  speechless: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'speechless')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
+  pleasant: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'pleasant')
 
     await Promise.all(
       partIdList.map((partId) =>

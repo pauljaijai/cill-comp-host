@@ -5,4 +5,7 @@ export enum FacialExpression {
   SAD = 'sad',
   ANGRY = 'angry',
   SURPRISED = 'surprised',
+  DERPY = 'derpy',
+  SPEECHLESS = 'speechless',
+  PLEASANT = 'pleasant',
 }

@@ -25,7 +25,6 @@
     </g>
 
     <defs class="hidden">
-      <!-- neutral -->
       <g class="neutral">
         <path
           id="eye-r"
@@ -59,7 +58,6 @@
         />
       </g>
 
-      <!-- excited -->
       <g class="excited">
         <path
           id="eye-r"
@@ -93,7 +91,6 @@
         />
       </g>
 
-      <!-- happy -->
       <g class="happy">
         <path
           id="eye-r"
@@ -127,7 +124,6 @@
         />
       </g>
 
-      <!-- sad -->
       <g class="sad">
         <path
           id="eye-r"
@@ -161,7 +157,6 @@
         />
       </g>
 
-      <!-- angry -->
       <g class="angry">
         <path
           id="eye-r"
@@ -179,7 +174,6 @@
         />
       </g>
 
-      <!-- surprised -->
       <g class="surprised">
         <path
           id="eye-r"
@@ -209,6 +203,57 @@
           d="M1406 508C1406 416.288 1328.86 375 1267 375C1205.14 375 1128 419.577 1128 508C1128 596.423 1174.21 641 1267 641C1359.79 641 1406 590.577 1406 515.673"
           stroke="black"
           stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <g class="derpy">
+        <path
+          id="eye-r"
+          d="M196 375C196 312.94 245.945 285 286 285C326.055 285 376 315.165 376 375C376 434.835 346.082 465 286 465C225.918 465 196 430.879 196 380.192"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1336 590C1336 527.94 1286.05 500 1246 500C1205.95 500 1156 530.165 1156 590C1156 649.835 1185.92 680 1246 680C1306.08 680 1336 645.879 1336 595.192"
+          stroke="black"
+          stroke-width="50"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <g class="speechless">
+        <path
+          id="eye-r"
+          d="M166 498C166 500.069 215.945 501 256 501C296.055 501 346 499.995 346 498C346 496.005 316.082 495 256 495C195.918 495 166 496.137 166 497.827"
+          stroke="black"
+          stroke-width="100"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1370 514C1370 516.069 1320.05 517 1280 517C1239.95 517 1190 515.995 1190 514C1190 512.005 1219.92 511 1280 511C1340.08 511 1370 512.137 1370 513.827"
+          stroke="black"
+          stroke-width="100"
+          stroke-linecap="round"
+        />
+      </g>
+
+      <g class="pleasant">
+        <path
+          id="eye-r"
+          d="M167.791 499.18C169.026 500.84 198.959 479.73 222.52 462.2C246.08 444.671 274.858 422.007 273.667 420.407C272.477 418.807 254.279 431.093 218.938 457.387C183.598 483.68 166.679 497.686 167.687 499.041"
+          stroke="black"
+          stroke-width="100"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1361.59 521.126C1358.54 523.971 1332.8 499.184 1313.26 478.278C1293.72 457.372 1270.83 429.922 1273.76 427.179C1276.69 424.436 1292.77 438.668 1322.09 470.027C1351.4 501.386 1364.33 518.565 1361.84 520.888"
+          stroke="black"
+          stroke-width="100"
           stroke-linecap="round"
         />
       </g>
@@ -477,6 +522,45 @@ const facialExpressionProviderMap: Record<
           duration: 1400,
           delay: 400,
           loop: true,
+        }).finished,
+      ),
+    )
+  },
+  derpy: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'derpy')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 800,
+        }).finished,
+      ),
+    )
+  },
+  speechless: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'speechless')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 800,
+        }).finished,
+      ),
+    )
+  },
+  pleasant: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'pleasant')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 800,
         }).finished,
       ),
     )
