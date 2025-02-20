@@ -398,7 +398,7 @@ const facialExpressionProviderMap: Record<
   },
 }
 function startAnimation() {
-  anime.remove(partIdList.map((id) => `#${nameId} #${id}`))
+  anime.remove(partIdList.map((id) => getTargetId(id)))
   facialExpressionProviderMap[props.facialExpression]?.()
 }
 
