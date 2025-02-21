@@ -12,37 +12,37 @@
       <path
         id="part-1"
         d="M1831.34 1957.11L1124.23 1250L1123.55 1957.79L1831.34 1957.11Z"
-        fill="#A5FF60"
+        :fill="props.colors[0]"
       />
       <path
         id="part-2"
         d="M1050 1145L1050 2144.93L1551 1644.96L1050 1145Z"
-        fill="#60DCFF"
+        :fill="props.colors[1]"
       />
       <path
         id="part-3"
         d="M1801.46 2101.01L1551.47 2352L1301.5 2100.99L1551.49 1851L1801.46 2101.01Z"
-        fill="#E5A5FF"
+        :fill="props.colors[2]"
       />
       <path
         id="part-4"
         d="M2287.32 2175.55L1933.76 1822L1933.78 2175.54L2287.32 2175.55Z"
-        fill="#608DFF"
+        :fill="props.colors[3]"
       />
       <path
         id="part-5"
         d="M1050 2190L1050 2689.96L1301 2439.98L1050 2190Z"
-        fill="#FFDC4F"
+        :fill="props.colors[4]"
       />
       <path
         id="part-6"
         d="M1404 1292L1404.07 1792L1904.04 1791L1404 1292Z"
-        fill="#FF8C45"
+        :fill="props.colors[5]"
       />
       <path
         id="part-7"
         d="M1049.78 938.001L1049.76 1291.54L1403.29 1645.07L1402.6 1292.24L1049.78 938.001Z"
-        fill="#FF6767"
+        :fill="props.colors[6]"
       />
     </g>
 
@@ -344,6 +344,7 @@ import { getCursorAttrs, getSpreadAttrs } from './utils'
 
 interface Props {
   cursor: NonNullable<CSSProperties['cursor']>;
+  colors: [string, string, string, string, string, string, string];
   size: string;
 }
 const props = withDefaults(defineProps<Props>(), {})

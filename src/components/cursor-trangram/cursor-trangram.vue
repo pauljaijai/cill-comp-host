@@ -18,6 +18,7 @@ import BaseCursor from './base-cursor.vue'
 type Cursor = NonNullable<CSSProperties['cursor']>
 
 interface Props {
+  colors?: [string, string, string, string, string, string, string];
   size?: string;
   offsetX?: number | ((cursor: Cursor) => number);
   offsetY?: number | ((cursor: Cursor) => number);
@@ -25,6 +26,15 @@ interface Props {
 // #endregion Props
 
 const props = withDefaults(defineProps<Props>(), {
+  colors: () => [
+    '#A5FF60',
+    '#60DCFF',
+    '#E5A5FF',
+    '#608DFF',
+    '#FFDC4F',
+    '#FF8C45',
+    '#FF6767',
+  ],
   size: '8rem',
   offsetX: -40,
   offsetY: -40,
