@@ -43,15 +43,3 @@ import BasicUsage from '../../../src/components/cursor-trangram/examples/basic-u
 ### Props
 
 <<< ../../../src/components/cursor-trangram/cursor-trangram.vue/#Props
-
-### Emits
-
-<<< ../../../src/components/cursor-trangram/cursor-trangram.vue/#Emits
-
-### Methods
-
-<<< ../../../src/components/cursor-trangram/cursor-trangram.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/cursor-trangram/cursor-trangram.vue/#Slots

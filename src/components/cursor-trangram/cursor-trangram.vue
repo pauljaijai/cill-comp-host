@@ -2,6 +2,8 @@
   <base-cursor
     v-bind="props"
     :cursor
+    :style
+    class="pointer-events-none fixed"
   />
 </template>
 
@@ -15,17 +17,27 @@ import BaseCursor from './base-cursor.vue'
 // #region Props
 interface Props {
   size?: string;
+  offsetX?: number;
+  offsetY?: number;
 }
 // #endregion Props
 
 const props = withDefaults(defineProps<Props>(), {
   size: '6rem',
+  offsetX: -30,
+  offsetY: -30,
 })
 
 const mouse = useMouse({
   eventFilter: throttleFilter(15),
+  type: 'client',
 })
 const { element } = useElementByPoint(mouse)
+
+const style = computed<CSSProperties>(() => ({
+  top: `${mouse.y.value + props.offsetX}px`,
+  left: `${mouse.x.value + props.offsetY}px`,
+}))
 
 const cursorTagNameMap = {
   text: [

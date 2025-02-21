@@ -12,7 +12,7 @@
       安安
     </div>
 
-    <cursor-trangram />
+    <cursor-trangram class="z-50" />
   </div>
 </template>
 
