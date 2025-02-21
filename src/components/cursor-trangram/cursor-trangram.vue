@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import { throttleFilter, useElementByPoint, useMouse } from '@vueuse/core'
-import { find, pipe } from 'remeda'
+import { find, isFunction, pipe } from 'remeda'
 import { computed } from 'vue'
 import BaseCursor from './base-cursor.vue'
 
@@ -74,24 +74,12 @@ const cursor = computed<Cursor>(() => {
 
 const style = computed<CSSProperties>(() => ({
   top: `${pipe(
-    mouse.y.value,
-    (value) => {
-      if (typeof props.offsetY === 'function') {
-        return props.offsetY(cursor.value) + value
-      }
-
-      return value + props.offsetY
-    },
+    isFunction(props.offsetY) ? props.offsetY(cursor.value) : props.offsetY,
+    (value) => value + mouse.y.value,
   )}px`,
   left: `${pipe(
-    mouse.x.value,
-    (value) => {
-      if (typeof props.offsetX === 'function') {
-        return props.offsetX(cursor.value) + value
-      }
-
-      return value + props.offsetX
-    },
+    isFunction(props.offsetX) ? props.offsetX(cursor.value) : props.offsetX,
+    (value) => value + mouse.x.value,
   )}px`,
 }))
 </script>
