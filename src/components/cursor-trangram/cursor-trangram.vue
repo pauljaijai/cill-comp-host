@@ -41,6 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const mouse = useMouse({
+  initialValue: { x: -500, y: -500 },
   eventFilter: throttleFilter(15),
   type: 'client',
 })
