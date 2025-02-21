@@ -8,6 +8,10 @@
       />
     </div>
 
+    <div class="cursor-pointer">
+      安安
+    </div>
+
     <cursor-trangram />
   </div>
 </template>
