@@ -15,17 +15,19 @@ import { computed } from 'vue'
 import BaseCursor from './base-cursor.vue'
 
 // #region Props
+type Cursor = NonNullable<CSSProperties['cursor']>
+
 interface Props {
   size?: string;
-  offsetX?: number;
-  offsetY?: number;
+  offsetX?: number | ((cursor: Cursor) => number);
+  offsetY?: number | ((cursor: Cursor) => number);
 }
 // #endregion Props
 
 const props = withDefaults(defineProps<Props>(), {
-  size: '6rem',
-  offsetX: -30,
-  offsetY: -30,
+  size: '8rem',
+  offsetX: -40,
+  offsetY: -40,
 })
 
 const mouse = useMouse({
@@ -33,11 +35,6 @@ const mouse = useMouse({
   type: 'client',
 })
 const { element } = useElementByPoint(mouse)
-
-const style = computed<CSSProperties>(() => ({
-  top: `${mouse.y.value + props.offsetX}px`,
-  left: `${mouse.x.value + props.offsetY}px`,
-}))
 
 const cursorTagNameMap = {
   text: [
@@ -57,9 +54,7 @@ const cursorTagNameMap = {
   ],
 }
 
-const cursor = computed<NonNullable<
-  CSSProperties['cursor']
->>(() => {
+const cursor = computed<Cursor>(() => {
   if (!element.value) {
     return 'default'
   }
@@ -76,6 +71,29 @@ const cursor = computed<NonNullable<
 
   return value
 })
+
+const style = computed<CSSProperties>(() => ({
+  top: `${pipe(
+    mouse.y.value,
+    (value) => {
+      if (typeof props.offsetY === 'function') {
+        return props.offsetY(cursor.value) + value
+      }
+
+      return value + props.offsetY
+    },
+  )}px`,
+  left: `${pipe(
+    mouse.x.value,
+    (value) => {
+      if (typeof props.offsetX === 'function') {
+        return props.offsetX(cursor.value) + value
+      }
+
+      return value + props.offsetX
+    },
+  )}px`,
+}))
 </script>
 
 <style scoped lang="sass">

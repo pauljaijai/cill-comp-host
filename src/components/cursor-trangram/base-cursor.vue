@@ -388,7 +388,7 @@ async function startSpreadAnimate() {
         ...target[partId],
         duration: 150,
         delay: delayList[i],
-        easing: 'easeOutCirc',
+        easing: 'easeInOutCirc',
       }).finished,
     ),
   )
@@ -406,9 +406,9 @@ async function startCursorAnimate(
       anime({
         targets: getTargetId(partId),
         ...list[partId],
-        duration: 150,
+        duration: 300,
         delay: delayList[i],
-        easing: 'easeInOutQuint',
+        easing: 'easeInOutCirc',
       }).finished,
     ),
   )
