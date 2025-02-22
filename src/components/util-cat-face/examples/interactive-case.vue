@@ -5,7 +5,7 @@
       class="cursor-pointer"
     >
       <util-cat-face
-        class="h-[14vh]"
+        class="h-[20vmin]"
         :facial-expression
       />
     </div>

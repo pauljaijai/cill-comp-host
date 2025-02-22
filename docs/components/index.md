@@ -35,6 +35,7 @@ import TextCharactersTransition from '../../src/components/text-characters-trans
 import TextHateMouse from '../../src/components/text-hate-mouse/examples/basic-usage.vue';
 
 import UtilPartyPopper from '../../src/components/util-party-popper/examples/wide-area-emit.vue';
+import UtilCatFace from '../../src/components/util-cat-face/examples/interactive-case.vue';
 
 import { ref } from 'vue';
 
@@ -317,5 +318,11 @@ Motion Graphic 風格的 Transition 元件
 隨時隨地都可以慶祝！✧｡٩(ˊᗜˋ*)و✧*｡
 
 <util-party-popper class="h-[70vh]" />
+
+### [貓臉](./util-cat-face/) <Badge type="info" text="util" />
+
+提供滿滿的情緒價值。(=¯ω¯=)
+
+<util-cat-face  />
 
 </expansion-section>
