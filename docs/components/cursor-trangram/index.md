@@ -1,5 +1,5 @@
 ---
-description:
+description: 隨著滑鼠型態變形的七巧板，讓游標變得超酷。ヽ(●`∀´●)ﾉ
 ---
 
 <script setup>
@@ -8,15 +8,19 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 import BasicUsage from '../../../src/components/cursor-trangram/examples/basic-usage.vue'
 </script>
 
-# 標題 <Badge type="info" text="" />
+# 七巧板游標 <Badge type="info" text="cursor" />
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+隨著滑鼠型態變形的七巧板，讓游標變得超酷。ヽ(●`∀´●)ﾉ
+
+::: tip
+此元件針對滑鼠設計，建議使用電腦或可以使用滑鼠的裝置瀏覽。
+:::
 
 ## 使用範例
 
 ### 基本用法
 
-文字文字文字文字文字文字文字文字文字文字文字文字
+隨著 cursor 型態持續變化。
 
 <basic-usage/>
 
@@ -25,14 +29,6 @@ import BasicUsage from '../../../src/components/cursor-trangram/examples/basic-u
 :::
 
 ## 原理
-
-文字文字文字文字文字文字文字文字文字文字文字文字
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
-:::
 
 ## 原始碼
 

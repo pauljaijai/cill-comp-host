@@ -13,10 +13,10 @@
         v-for="item in list"
         :key="item"
         class="border px-8 py-4"
-        :class="item"
+        :style="{ cursor: item }"
       >
         <div class="text-sm opacity-40">
-          {{ item.replace('cursor-', '') }}
+          {{ item }}
         </div>
       </div>
     </div>
@@ -29,31 +29,33 @@
 </template>
 
 <script setup lang="ts">
+import type { CSSProperties } from 'vue'
 import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import CursorTrangram from '../cursor-trangram.vue'
 
 const visible = ref(true)
 
-const list: string[] = [
-  'cursor-pointer',
-  'cursor-text',
-  'cursor-wait',
-  'cursor-move',
-  'cursor-not-allowed',
-  'cursor-help',
-  'cursor-crosshair',
-  'cursor-zoom-in',
-  'cursor-zoom-out',
-  'cursor-grab',
-  'cursor-grabbing',
-  'cursor-all-scroll',
-  'cursor-no-drop',
-  'cursor-vertical-text',
-  'cursor-context-menu',
-  'cursor-cell',
-  'cursor-progress',
-  'cursor-copy',
-  'cursor-alias',
+const list: CSSProperties['cursor'][] = [
+  'none',
+  'pointer',
+  'text',
+  'wait',
+  'move',
+  'not-allowed',
+  'help',
+  'crosshair',
+  'zoom-in',
+  'zoom-out',
+  'grab',
+  'grabbing',
+  'all-scroll',
+  'no-drop',
+  'vertical-text',
+  'context-menu',
+  'cell',
+  'progress',
+  'copy',
+  'alias',
 ]
 </script>
