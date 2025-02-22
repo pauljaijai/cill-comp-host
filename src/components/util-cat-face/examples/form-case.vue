@@ -103,6 +103,7 @@ function handleFocus() {
   const [type] = sample([
     FacialExpression.PLEASANT,
     FacialExpression.EXCITED,
+    FacialExpression.CONFIDENCE,
   ], 1)
   setFacialExpression(type)
 }

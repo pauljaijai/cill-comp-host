@@ -24,7 +24,7 @@ const { pressed: isPressed } = useMousePressed()
 
 const { state, next } = useCycleList([
   'neutral',
-  'angry',
+  'confidence',
   'pleasant',
   'derpy',
 ] satisfies `${FacialExpression}`[])
