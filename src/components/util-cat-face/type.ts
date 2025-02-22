@@ -8,4 +8,5 @@ export enum FacialExpression {
   DERPY = 'derpy',
   SPEECHLESS = 'speechless',
   PLEASANT = 'pleasant',
+  CONFIDENCE = 'confidence',
 }

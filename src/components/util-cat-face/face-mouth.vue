@@ -95,14 +95,14 @@
       <g class="angry">
         <path
           id="palate"
-          d="M560.999 675.001C517.834 718.267 551.632 752.5 594.499 752.5C711.5 752.5 745.419 669.601 748.475 669.601C751.531 669.601 761.5 752.5 888.999 761.001C939.554 764.371 1005.7 719.733 967.499 675"
+          d="M569.25 599.543C577.102 636.695 590.737 676.357 634.957 666.818C679.177 657.279 759.474 537.5 762 537.5C764.526 537.5 849.44 666.818 878.368 675.353C919.062 687.361 937.465 631.172 943.25 589"
           stroke="black"
           stroke-width="50"
           stroke-linecap="round"
         />
         <path
           id="jaw"
-          d="M560.999 675.001C517.834 718.267 551.632 752.5 594.499 752.5C711.5 752.5 745.419 669.601 748.475 669.601C751.531 669.601 761.5 752.5 888.999 761.001C939.554 764.371 1005.7 719.733 967.499 675"
+          d="M614 683.984C614 726.385 636.886 827.692 655.356 864.184C668.99 891.122 733.885 826 759.5 826C785.115 826 829.701 907.584 861.512 871.667C888.686 840.987 897 720.898 897 677"
           stroke="black"
           stroke-width="50"
           stroke-linecap="round"
@@ -193,6 +193,10 @@
         />
       </g>
 
+      <g id="confidence">
+        <path id="palate" d="M560.999 675.001C517.834 718.267 551.632 752.5 594.499 752.5C711.5 752.5 745.419 669.601 748.475 669.601C751.531 669.601 761.5 752.5 888.999 761.001C939.554 764.371 1005.7 719.733 967.499 675" stroke="black" stroke-width="50" stroke-linecap="round" />
+        <path id="jaw" d="M560.999 675.001C517.834 718.267 551.632 752.5 594.499 752.5C711.5 752.5 745.419 669.601 748.475 669.601C751.531 669.601 761.5 752.5 888.999 761.001C939.554 764.371 1005.7 719.733 967.499 675" stroke="black" stroke-width="50" stroke-linecap="round" />
+      </g>
     </defs>
   </svg>
 </template>
@@ -385,6 +389,19 @@ const facialExpressionProviderMap: Record<
   },
   pleasant: async () => {
     const keyframeList = getKeyframeList(id, partIdList, 'pleasant')
+
+    await Promise.all(
+      partIdList.map((partId) =>
+        anime({
+          targets: getTargetId(partId),
+          ...keyframeList[0]?.[partId],
+          duration: 500,
+        }).finished,
+      ),
+    )
+  },
+  confidence: async () => {
+    const keyframeList = getKeyframeList(id, partIdList, 'confidence')
 
     await Promise.all(
       partIdList.map((partId) =>

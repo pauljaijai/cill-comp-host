@@ -154,6 +154,7 @@ const animeProviderMap: Record<
   }).finished,
   speechless: () => Promise.resolve(),
   pleasant: () => Promise.resolve(),
+  confidence: () => Promise.resolve(),
 }
 
 watch(
