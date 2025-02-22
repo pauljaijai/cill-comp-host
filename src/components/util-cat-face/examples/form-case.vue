@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col items-center gap-4 border border-gray-300 p-6">
     <util-cat-face
-      class="h-[10vh] cursor-pointer"
+      class="h-[20vmin] cursor-pointer"
       :facial-expression="currentFacialExpression"
       @click="handleClick()"
     />
@@ -15,7 +15,7 @@
         label="姓名"
         required
         @invalid="handleInvalid"
-        @blur="handleBlur(form.name)"
+        @focus="handleFocus()"
       />
 
       <base-input
@@ -25,7 +25,7 @@
         required
         placeholder="必須為 09 開頭的 10 位數字"
         @invalid="handleInvalid"
-        @blur="handleBlur(form.phone)"
+        @focus="handleFocus()"
       />
 
       <base-btn
@@ -94,23 +94,16 @@ function handleInvalid() {
   const [type] = sample([
     FacialExpression.SAD,
     FacialExpression.SURPRISED,
+    FacialExpression.SPEECHLESS,
   ], 1)
   setFacialExpression(type)
 }
 
-function handleBlur(value?: any) {
-  if (!value) {
-    const [type] = sample([
-      FacialExpression.ANGRY,
-      FacialExpression.SPEECHLESS,
-    ], 1)
-    setFacialExpression(type)
-    return
-  }
-
+function handleFocus() {
   const [type] = sample([
     FacialExpression.PLEASANT,
     FacialExpression.EXCITED,
+    FacialExpression.CONFIDENCE,
   ], 1)
   setFacialExpression(type)
 }

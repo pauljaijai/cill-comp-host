@@ -5,7 +5,7 @@
       class="cursor-pointer"
     >
       <util-cat-face
-        class="h-[14vh]"
+        class="h-[20vmin]"
         :facial-expression
       />
     </div>
@@ -24,7 +24,7 @@ const { pressed: isPressed } = useMousePressed()
 
 const { state, next } = useCycleList([
   'neutral',
-  'angry',
+  'confidence',
   'pleasant',
   'derpy',
 ] satisfies `${FacialExpression}`[])
