@@ -84,55 +84,46 @@ const PART_ID_LIST = [
 
 const DELAY_MS_LIST = pipe(
   range(0, PART_ID_LIST.length),
-  map((i) => i * 40),
+  map((i) => i * 30),
 )
 
-async function startSpreadAnimate() {
-  anime.remove(PART_ID_LIST.map(getTargetId))
-
-  const list = getSpreadAttrs(id, PART_ID_LIST)
-  const [target] = sample(list, 1)
-  if (!target) {
-    return
-  }
-
-  const delayList = shuffle(DELAY_MS_LIST)
-
-  await Promise.all(
-    PART_ID_LIST.map((partId, i) =>
-      anime({
-        targets: getTargetId(partId),
-        ...target[partId],
-        duration: 200,
-        delay: delayList[i],
-        easing: 'cubicBezier(0, 1, 0, 1)',
-      }).finished,
-    ),
-  )
-}
 async function startCursorAnimate(
   cursor: CSSProperties['cursor'],
 ) {
   anime.remove(PART_ID_LIST.map(getTargetId))
 
-  const list = getCursorAttrs(id, PART_ID_LIST, cursor)
+  const spreadMapList = getSpreadAttrs(id, PART_ID_LIST)
+  const [spreadMap] = sample(spreadMapList, 1)
+  if (!spreadMap) {
+    return
+  }
+
+  const cursorMap = getCursorAttrs(id, PART_ID_LIST, cursor)
   const delayList = shuffle(DELAY_MS_LIST)
 
   await Promise.all(
-    PART_ID_LIST.map((partId, i) =>
-      anime({
+    PART_ID_LIST.map(async (partId, i) => {
+      await anime({
         targets: getTargetId(partId),
-        ...list[partId],
-        duration: 300,
+        ...spreadMap[partId],
+        duration: 160,
         delay: delayList[i],
-        easing: 'cubicBezier(0.000, 1.515, 0.530, 0.885)',
-      }).finished,
-    ),
+        easing: 'cubicBezier(0.000, 0.520, 0.005, 0.865)',
+      }).finished
+
+      await anime({
+        targets: getTargetId(partId),
+        ...cursorMap[partId],
+        duration: 200,
+        easing: 'easeInOutCirc',
+        // easing: 'easeOutElastic(1, 0.7)',
+        // easing: 'spring(0, 50, 40, 40)',
+      }).finished
+    }),
   )
 }
 
 async function startAnimate(value: string) {
-  await startSpreadAnimate()
   await startCursorAnimate(value)
 }
 
