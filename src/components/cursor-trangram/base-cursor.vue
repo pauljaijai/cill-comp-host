@@ -105,7 +105,7 @@ async function startSpreadAnimate() {
         ...target[partId],
         duration: 200,
         delay: delayList[i],
-        easing: 'cubicBezier(0.000, 1.000, 0.205, 1.255)',
+        easing: 'cubicBezier(0, 1, 0, 1)',
       }).finished,
     ),
   )
@@ -125,7 +125,7 @@ async function startCursorAnimate(
         ...list[partId],
         duration: 300,
         delay: delayList[i],
-        easing: 'cubicBezier(1.000, 0.005, 0.000, 1.175)',
+        easing: 'cubicBezier(0.000, 1.515, 0.530, 0.885)',
       }).finished,
     ),
   )
