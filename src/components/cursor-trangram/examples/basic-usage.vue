@@ -8,14 +8,14 @@
       />
     </div>
 
-    <div class="w-full flex flex-wrap gap-4">
+    <div class="grid grid-cols-2 w-full gap-4 md:grid-cols-3">
       <div
         v-for="item in list"
         :key="item"
-        class="border px-8 py-4"
+        class="border px-8 py-4 text-center"
         :style="{ cursor: item }"
       >
-        <div class="text-sm opacity-40">
+        <div class="text-sm opacity-60">
           {{ item }}
         </div>
       </div>
@@ -49,12 +49,8 @@ const list: CSSProperties['cursor'][] = [
   'zoom-out',
   'grab',
   'grabbing',
-  'all-scroll',
-  'no-drop',
   'vertical-text',
-  'context-menu',
   'cell',
-  'progress',
   'copy',
   'alias',
 ]
