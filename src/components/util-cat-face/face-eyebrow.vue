@@ -193,7 +193,7 @@
         />
       </g>
 
-      <g id="confidence">
+      <g class="confidence">
         <path id="eyebrow-r" d="M495.754 208.568C509.348 222.797 513.746 225.377 525.269 241.004" stroke="black" stroke-width="50" stroke-linecap="round" />
         <path id="eyebrow-l" d="M990.811 210.116C975.869 222.922 971.236 225.052 958.216 239.457" stroke="black" stroke-width="50" stroke-linecap="round" />
       </g>
