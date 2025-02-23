@@ -54,7 +54,7 @@
 import type { CSSProperties } from 'vue'
 import anime from 'animejs'
 import { map, pipe, range, sample, shuffle } from 'remeda'
-import { ref, useId, watch } from 'vue'
+import { onMounted, ref, useId, watch } from 'vue'
 import BaseCursorDefs from './base-cursor-defs.vue'
 import { getCursorAttrs, getSpreadAttrs } from './utils'
 
@@ -87,11 +87,52 @@ const DELAY_MS_LIST = pipe(
   map((i) => i * 30),
 )
 
+function clearAnimate() {
+  anime.remove([
+    ...PART_ID_LIST.map(getTargetId),
+    svgRef.value,
+  ])
+}
+
+async function startSpreadAnimate() {
+  const spreadMapList = getSpreadAttrs(id, PART_ID_LIST)
+
+  const [spreadMap] = sample(spreadMapList, 1)
+  if (!spreadMap) {
+    return
+  }
+
+  await Promise.all(
+    PART_ID_LIST.map(async (partId, i) => {
+      await anime({
+        targets: getTargetId(partId),
+        ...spreadMap[partId],
+        duration: 200,
+        easing: 'cubicBezier(0.000, 0.520, 0.005, 0.865)',
+      }).finished
+
+      await anime({
+        targets: getTargetId(partId),
+        keyframes: spreadMapList.map((spreadMap, j) => {
+          return {
+            ...spreadMap[partId],
+            duration: 3000,
+            delay: (i + j) * 100,
+          }
+        }),
+        // easing: 'spring(1, 80, 10, 0)',
+        // easing: 'easeInOutCirc',
+        easing: 'cubicBezier(0.925, 0.000, 0.000, 1.165)',
+        direction: 'alternate',
+        loop: true,
+      }).finished
+    }),
+  )
+}
+
 async function startCursorAnimate(
   cursor: CSSProperties['cursor'],
 ) {
-  anime.remove(PART_ID_LIST.map(getTargetId))
-
   const spreadMapList = getSpreadAttrs(id, PART_ID_LIST)
   const [spreadMap] = sample(spreadMapList, 1)
   if (!spreadMap) {
@@ -101,21 +142,21 @@ async function startCursorAnimate(
   const cursorMap = getCursorAttrs(id, PART_ID_LIST, cursor)
   const delayList = shuffle(DELAY_MS_LIST)
 
+  anime({
+    targets: svgRef.value,
+    rotate: 0,
+    duration: 200,
+    easing: 'easeInOutCirc',
+  })
+
   await Promise.all(
     PART_ID_LIST.map(async (partId, i) => {
-      await anime({
-        targets: getTargetId(partId),
-        ...spreadMap[partId],
-        duration: 160,
-        delay: delayList[i],
-        easing: 'cubicBezier(0.000, 0.520, 0.005, 0.865)',
-      }).finished
-
       await anime({
         targets: getTargetId(partId),
         ...cursorMap[partId],
         duration: 200,
         easing: 'easeInOutCirc',
+        delay: delayList[i],
         // easing: 'easeOutElastic(1, 0.7)',
         // easing: 'spring(0, 50, 40, 40)',
       }).finished
@@ -123,36 +164,40 @@ async function startCursorAnimate(
   )
 }
 
-async function startAnimate(value: string) {
-  await startCursorAnimate(value)
-}
-
-const ROTATE_LIST = [60, 90, -90, -120] as const
 function startSvgAnimate() {
   return anime({
     targets: svgRef.value,
-    keyframes: [
-      {
-        rotate: 0,
-        duration: 0,
-      },
-      {
-        rotate: sample(ROTATE_LIST, 1)[0],
-        duration: 300,
-      },
-    ],
+    keyframes: pipe(
+      range(0, 10),
+      map(() => ({
+        rotate: Math.random() * 90 - 45,
+        duration: 4000,
+      })),
+    ),
     direction: 'alternate',
     easing: 'easeInOutCirc',
+    loop: true,
   }).finished
 }
 
+async function startAnimate(value: string) {
+  clearAnimate()
+
+  if (value === 'default') {
+    startSvgAnimate()
+    startSpreadAnimate()
+    return
+  }
+
+  startCursorAnimate(value)
+}
+
 watch(() => props.cursor, async (value) => {
-  Promise.all([
-    // startSvgAnimate(),
-    startAnimate(value),
-  ])
-}, {
-  immediate: true,
+  startAnimate(value)
+})
+
+onMounted(() => {
+  startAnimate(props.cursor)
 })
 </script>
 

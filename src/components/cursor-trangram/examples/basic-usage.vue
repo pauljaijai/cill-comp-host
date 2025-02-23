@@ -8,7 +8,7 @@
       />
     </div>
 
-    <div class="grid grid-cols-2 w-full gap-4 md:grid-cols-3">
+    <div class="grid grid-cols-2 w-full gap-16 md:grid-cols-3">
       <div
         v-for="item in list"
         :key="item"
