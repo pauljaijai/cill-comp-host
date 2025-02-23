@@ -9,19 +9,23 @@
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import { throttleFilter, useElementByPoint, useMouse } from '@vueuse/core'
+import { reactiveComputed, throttleFilter, useElementByPoint, useMouse } from '@vueuse/core'
 import { find, isFunction, pipe } from 'remeda'
-import { computed } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
 import BaseCursor from './base-cursor.vue'
 
 // #region Props
 type Cursor = NonNullable<CSSProperties['cursor']>
 
 interface Props {
+  /** 7 個積木顏色 */
   colors?: [string, string, string, string, string, string, string];
   size?: string;
   offsetX?: number | ((cursor: Cursor) => number);
   offsetY?: number | ((cursor: Cursor) => number);
+
+  /** 可自定義位置。預設跟隨滑鼠 */
+  positionProvider?: () => { x: number; y: number };
 }
 // #endregion Props
 
@@ -38,14 +42,20 @@ const props = withDefaults(defineProps<Props>(), {
   size: '8rem',
   offsetX: -40,
   offsetY: -40,
+  positionProvider: undefined,
 })
 
-const mouse = useMouse({
+const mouse = reactive(useMouse({
   initialValue: { x: -500, y: -500 },
   eventFilter: throttleFilter(15),
   type: 'client',
-})
-const { element } = useElementByPoint(mouse)
+}))
+const position = reactiveComputed(() => ({
+  x: props.positionProvider?.().x ?? mouse.x,
+  y: props.positionProvider?.().y ?? mouse.y,
+}))
+
+const { element } = useElementByPoint(toRefs(position))
 
 const cursorTagNameMap = {
   text: [
@@ -86,11 +96,11 @@ const cursor = computed<Cursor>(() => {
 const style = computed<CSSProperties>(() => ({
   top: `${pipe(
     isFunction(props.offsetY) ? props.offsetY(cursor.value) : props.offsetY,
-    (value) => value + mouse.y.value,
+    (value) => value + position.y,
   )}px`,
   left: `${pipe(
     isFunction(props.offsetX) ? props.offsetX(cursor.value) : props.offsetX,
-    (value) => value + mouse.x.value,
+    (value) => value + position.x,
   )}px`,
 }))
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
+  <div class="w-full flex flex-col gap-10 p-6">
     <div class="flex flex-col gap-4 border rounded">
       <base-checkbox
         v-model="visible"
@@ -8,7 +8,7 @@
       />
     </div>
 
-    <div class="grid grid-cols-2 w-full gap-4 md:grid-cols-3">
+    <div class="grid grid-cols-2 w-full gap-10 md:grid-cols-3">
       <div
         v-for="item in list"
         :key="item"
@@ -34,7 +34,7 @@ import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import CursorTrangram from '../cursor-trangram.vue'
 
-const visible = ref(false)
+const visible = ref(true)
 
 const list: CSSProperties['cursor'][] = [
   'none',

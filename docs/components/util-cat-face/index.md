@@ -50,7 +50,7 @@ import FormCase from '../../../src/components/util-cat-face/examples/form-case.v
 
 ## 原理
 
-嘗試複雜一點的 svg 動畫，表情變化皆有完整的過度效果。
+嘗試複雜一點的 svg 動畫，表情變化皆有流暢的轉換過程。
 
 實務上推薦使用 [Lottie](https://lottiefiles.com/) 或 [Rive](https://rive.app/)，功能更強更容易開發。
 
