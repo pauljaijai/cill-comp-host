@@ -34,7 +34,7 @@ import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import CursorTrangram from '../cursor-trangram.vue'
 
-const visible = ref(false)
+const visible = ref(true)
 
 const list: CSSProperties['cursor'][] = [
   'none',
