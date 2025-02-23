@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
+  <div class="w-full flex flex-col gap-4 p-6">
     <div class="flex flex-col gap-4 border rounded">
       <base-checkbox
         v-model="visible"
