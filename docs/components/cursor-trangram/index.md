@@ -30,6 +30,12 @@ import BasicUsage from '../../../src/components/cursor-trangram/examples/basic-u
 
 ## 原理
 
+使用 [`useElementByPoint`](https://vueuse.org/core/useElementByPoint/) 取得目前觸碰的元素。
+
+接著使用 `getComputedStyle` 取得目標具體的 CSS 屬性，再透過 `cursor` 屬性設定游標樣式。
+
+最後就是 anime.js 與 svg 動畫的部分惹。(´,,•ω•,,)
+
 ## 原始碼
 
 <source-link-list name="cursor-trangram"/>
