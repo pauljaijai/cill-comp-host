@@ -10,14 +10,14 @@
       <path
         id="palate"
         d="M630.439 663C587.274 706.267 623.48 751 666.346 751C720.972 751 745.419 669.6 748.475 669.6C751.531 669.6 774.069 751 831.75 751C882.417 751 907.767 707.733 869.568 663"
-        stroke="black"
+        :stroke="props.strokeColor"
         stroke-width="50"
         stroke-linecap="round"
       />
       <path
         id="jaw"
         d="M630.439 663C587.274 706.267 623.48 751 666.346 751C720.972 751 745.419 669.6 748.475 669.6C751.531 669.6 774.069 751 831.75 751C882.417 751 907.767 707.733 869.568 663"
-        stroke="black"
+        :stroke="props.strokeColor"
         stroke-width="50"
         stroke-linecap="round"
       />
@@ -211,6 +211,7 @@ import { getKeyframeList } from './utils'
 // #region Props
 interface Props {
   facialExpression: `${FacialExpression}`;
+  strokeColor: string;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {})

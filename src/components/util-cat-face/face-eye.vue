@@ -11,14 +11,14 @@
       <path
         id="eye-r"
         d="M166 508C166 445.94 215.945 418 256 418C296.055 418 346 448.165 346 508C346 567.835 316.082 598 256 598C195.918 598 166 563.879 166 513.192"
-        stroke="black"
+        :stroke="props.strokeColor"
         stroke-width="200"
         stroke-linecap="round"
       />
       <path
         id="eye-l"
         d="M1346 508C1346 445.94 1296.05 418 1256 418C1215.95 418 1166 448.165 1166 508C1166 567.835 1195.92 598 1256 598C1316.08 598 1346 563.879 1346 513.192"
-        stroke="black"
+        :stroke="props.strokeColor"
         stroke-width="200"
         stroke-linecap="round"
       />
@@ -259,8 +259,20 @@
       </g>
 
       <g class="confidence">
-        <path id="eye-r" d="M166 508C166 445.939 202.445 431 242.5 431C328.5 416 346 501 346 508C346 567.835 316.082 598 256 598C195.918 598 166 563.879 166 513.192" stroke="black" stroke-width="200" stroke-linecap="round" />
-        <path id="eye-l" d="M1346 508C1346 445.939 1317.55 433 1277.5 433C1217.5 433 1166 460.5 1166 508C1166 567.835 1195.92 598 1256 598C1316.08 598 1346 563.879 1346 513.192" stroke="black" stroke-width="200" stroke-linecap="round" />
+        <path
+          id="eye-r"
+          d="M166 508C166 445.939 202.445 431 242.5 431C328.5 416 346 501 346 508C346 567.835 316.082 598 256 598C195.918 598 166 563.879 166 513.192"
+          stroke="black"
+          stroke-width="200"
+          stroke-linecap="round"
+        />
+        <path
+          id="eye-l"
+          d="M1346 508C1346 445.939 1317.55 433 1277.5 433C1217.5 433 1166 460.5 1166 508C1166 567.835 1195.92 598 1256 598C1316.08 598 1346 563.879 1346 513.192"
+          stroke="black"
+          stroke-width="200"
+          stroke-linecap="round"
+        />
       </g>
 
     </defs>
@@ -281,6 +293,7 @@ interface Props {
   facialExpression: `${FacialExpression}`;
   /** 眼睛偏移半徑 */
   eyeOffsetRadius: number;
+  strokeColor: string;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {})

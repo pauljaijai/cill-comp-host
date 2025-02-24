@@ -7,6 +7,7 @@
       <util-cat-face
         class="h-[20vmin]"
         :facial-expression
+        :stroke-color
       />
     </div>
   </div>
@@ -15,8 +16,12 @@
 <script setup lang="ts">
 import type { FacialExpression } from '../type'
 import { useCycleList, useIntervalFn, useMouseInElement, useMousePressed } from '@vueuse/core'
+import { useData } from 'vitepress'
 import { computed, reactive, ref } from 'vue'
 import UtilCatFace from '../util-cat-face.vue'
+
+const { isDark } = useData()
+const strokeColor = computed(() => isDark.value ? '#ddd' : '#222')
 
 const faceRef = ref<HTMLDivElement>()
 const mouseInElement = reactive(useMouseInElement(faceRef))

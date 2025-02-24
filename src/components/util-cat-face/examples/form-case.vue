@@ -3,6 +3,7 @@
     <util-cat-face
       class="h-[20vmin] cursor-pointer"
       :facial-expression="currentFacialExpression"
+      :stroke-color
       @click="handleClick()"
     />
 
@@ -55,11 +56,15 @@
 <script setup lang="ts">
 import { refAutoReset } from '@vueuse/core'
 import { sample } from 'remeda'
+import { useData } from 'vitepress'
 import { computed, ref } from 'vue'
 import BaseBtn from '../../base-btn.vue'
 import BaseInput from '../../base-input.vue'
 import { FacialExpression } from '../type'
 import UtilCatFace from '../util-cat-face.vue'
+
+const { isDark } = useData()
+const strokeColor = computed(() => isDark.value ? '#ddd' : '#222')
 
 const form = ref({
   name: '',
