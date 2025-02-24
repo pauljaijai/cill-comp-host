@@ -21,17 +21,15 @@ import {
   UniversalCamera,
   Vector3,
 } from '@babylonjs/core'
+import { useEventBus, useRafFn, useWindowSize } from '@vueuse/core'
 import { debounce } from 'lodash-es'
 import { pipe } from 'remeda'
 import { computed, reactive, watchEffect } from 'vue'
-import { createHole } from './hole'
-import { eventKey } from './type'
-
+import { useBabylonScene } from '../../composables/use-babylon-scene'
 // import '@babylonjs/core/Debug/debugLayer';
 // import '@babylonjs/inspector';
-
-import { useEventBus, useRafFn, useWindowSize } from '@vueuse/core'
-import { useBabylonScene } from '../../composables/use-babylon-scene'
+import { createHole } from './hole'
+import { eventKey } from './type'
 
 type ElData = Extract<BusData, { type: 'add' }>
 

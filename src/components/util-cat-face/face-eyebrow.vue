@@ -10,14 +10,14 @@
       <path
         id="eyebrow-r"
         d="M488.637 226.299C508.23 224.465 512.982 222.616 532.387 223.274"
-        stroke="black"
+        :stroke="props.strokeColor"
         stroke-width="50"
         stroke-linecap="round"
       />
       <path
         id="eyebrow-l"
         d="M996.368 226.553C976.798 224.491 972.067 222.588 952.656 223.021"
-        stroke="black"
+        :stroke="props.strokeColor"
         stroke-width="50"
         stroke-linecap="round"
       />
@@ -212,6 +212,7 @@ import { getKeyframeList } from './utils'
 // #region Props
 interface Props {
   facialExpression: `${FacialExpression}`;
+  strokeColor: string;
 }
 // #endregion Props
 const props = withDefaults(defineProps<Props>(), {})

@@ -3,6 +3,7 @@
     <util-cat-face
       class="h-[20vmin]"
       :facial-expression
+      :stroke-color
     />
 
     <div class="border-2 border-[#999] rounded">
@@ -23,10 +24,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useData } from 'vitepress'
+import { computed, ref } from 'vue'
 import { FacialExpression } from '../type'
 import UtilCatFace from '../util-cat-face.vue'
 
 const facialExpression = ref<`${FacialExpression}`>('neutral')
 const options = Object.values(FacialExpression)
+
+const { isDark } = useData()
+const strokeColor = computed(() => isDark.value ? '#ddd' : '#222')
 </script>
