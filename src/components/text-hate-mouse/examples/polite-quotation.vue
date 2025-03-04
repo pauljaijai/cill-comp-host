@@ -54,7 +54,7 @@ const budgetList = [
 const evasionRadius = computed(() => budget.value === 0 ? 50 : 0)
 
 const list: Props[] = [
-  { text: '連絡電話：0987-654-321' },
+  { text: '聯絡電話：0987-654-321' },
   { text: 'E-mail：hi@codlin.me' },
 ]
 </script>
