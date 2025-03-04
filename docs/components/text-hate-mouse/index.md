@@ -53,7 +53,7 @@ import PoliteQuotation from '../../../src/components/text-hate-mouse/examples/po
 
 ### 委婉的報價單
 
-預算過低時，委婉地拒絕客戶。
+預算過低時，委婉地暗示客戶。
 
 <polite-quotation/>
 
