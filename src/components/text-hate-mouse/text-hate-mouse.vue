@@ -334,7 +334,7 @@ watchDebounced(
     resumeUpdate()
   },
   {
-    debounce: 500,
+    debounce: 200,
   },
 )
 
@@ -356,7 +356,7 @@ watchDebounced(
     resumeUpdate()
   },
   {
-    debounce: 500,
+    debounce: 200,
   },
 )
 
@@ -375,7 +375,7 @@ watchDebounced(
     resumeUpdate()
   },
   {
-    debounce: 500,
+    debounce: 200,
   },
 )
 </script>
