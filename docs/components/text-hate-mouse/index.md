@@ -8,6 +8,7 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 import BasicUsage from '../../../src/components/text-hate-mouse/examples/basic-usage.vue'
 import MoreCase from '../../../src/components/text-hate-mouse/examples/more-case.vue'
 import CustomProps from '../../../src/components/text-hate-mouse/examples/custom-props.vue'
+import PoliteQuotation from '../../../src/components/text-hate-mouse/examples/polite-quotation.vue'
 </script>
 
 # 怕鼠的文字 <Badge type="info" text="text" />
@@ -48,6 +49,16 @@ import CustomProps from '../../../src/components/text-hate-mouse/examples/custom
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/text-hate-mouse/examples/custom-props.vue
+:::
+
+### 委婉的報價單
+
+預算過低時，委婉地拒絕客戶。
+
+<polite-quotation/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/text-hate-mouse/examples/polite-quotation.vue
 :::
 
 ## 原理
