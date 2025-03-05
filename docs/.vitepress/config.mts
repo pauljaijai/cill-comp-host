@@ -31,10 +31,22 @@ export default defineConfig({
         gtag('config', 'G-2T520RHFM9');`,
       ],
       [
+        'script',
+        { async: '', src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6608581811170481', crossorigin: 'anonymous' },
+        '',
+      ],
+      [
         'meta',
         {
           httpEquiv: 'Content-Security-Policy',
           content: 'script-src \'self\' \'unsafe-inline\' \'wasm-unsafe-eval\' www.google-analytics.com www.googletagmanager.com use.typekit.net static.cloudflareinsights.com;',
+        },
+      ],
+      [
+        'meta',
+        {
+          name: 'google-adsense-account',
+          content: 'ca-pub-6608581811170481',
         },
       ],
     ]
