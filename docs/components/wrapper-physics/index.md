@@ -21,7 +21,7 @@ import PoliteQuotation from '../../../src/components/wrapper-physics/examples/po
 
 ## 使用範例
 
-<!-- ### 基本用法
+### 基本用法
 
 開始運行後，被 body 包裹的元素會產生物理效果
 
@@ -109,7 +109,7 @@ import PoliteQuotation from '../../../src/components/wrapper-physics/examples/po
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/device-motion.vue
-::: -->
+:::
 
 ### 委婉的報價單
 
