@@ -64,7 +64,7 @@ const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>()
 const rows: Row[][] = [
   [
     { text: '營業時間：全天', isStatic: true },
-    { text: '無' },
+    { text: '無', restitution: 1.4 },
     { text: '休', isStatic: true },
   ],
   'E-mail：hi@codlin.me'.split('').map((char) => ({ text: char })),
@@ -73,8 +73,7 @@ const rows: Row[][] = [
 const budget = ref(-1)
 const budgetList = [
   { text: '$10,000 以下' },
-  { text: '$10,000 - $50,000' },
-  { text: '$50,000 - $100,000' },
+  { text: '$10,000 - $100,000' },
   { text: '$100,000 以上' },
 ]
 
