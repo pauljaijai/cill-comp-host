@@ -25,21 +25,23 @@
 
     <wrapper-physics
       ref="wrapperRef"
-      class="h-[30vh] w-full flex flex-col items-center justify-center"
+      class="h-[30vh] w-full flex flex-col items-center justify-center gap-2"
       :class="{ 'select-none': budget === 0 }"
     >
       <div
-        v-for="item, i in list"
+        v-for="row, i in rows"
         :key="i"
-        class="flex"
+        class="min-h-[1rem] flex"
       >
         <wrapper-physics-body
-          v-for="char in item.text"
-          :key="char"
-          :restitution="1.4"
-          :friction-air="0.03"
+          v-for="item in row"
+          :key="item.text"
+          :restitution="0.98"
+          :friction="0.005"
+          :friction-air="0.005"
+          v-bind="item"
         >
-          {{ char }}
+          {{ item.text }}
         </wrapper-physics-body>
       </div>
     </wrapper-physics>
@@ -51,11 +53,21 @@ import { ref, watchEffect } from 'vue'
 import WrapperPhysicsBody from '../wrapper-physics-body.vue'
 import WrapperPhysics from '../wrapper-physics.vue'
 
+type BodyProps = InstanceType<typeof WrapperPhysicsBody>['$props']
+
+interface Row extends BodyProps {
+  text: string;
+}
+
 const wrapperRef = ref<InstanceType<typeof WrapperPhysics>>()
 
-const list = [
-  { text: 'Phone：0987-654-321'.split('') },
-  { text: 'E-mail：hi@codlin.me'.split('') },
+const rows: Row[][] = [
+  [
+    { text: '營業時間：全天', isStatic: true },
+    { text: '無' },
+    { text: '休', isStatic: true },
+  ],
+  'E-mail：hi@codlin.me'.split('').map((char) => ({ text: char })),
 ]
 
 const budget = ref(-1)
