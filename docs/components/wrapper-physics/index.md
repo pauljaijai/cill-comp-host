@@ -12,6 +12,7 @@ import WindowScroll from '../../../src/components/wrapper-physics/examples/windo
 import BodyPolygon from '../../../src/components/wrapper-physics/examples/body-polygon.vue'
 import ScopeProp from '../../../src/components/wrapper-physics/examples/scope-prop.vue'
 import DeviceMotion from '../../../src/components/wrapper-physics/examples/device-motion.vue'
+import PoliteQuotation from '../../../src/components/wrapper-physics/examples/polite-quotation.vue'
 </script>
 
 # 物理包裝器 <Badge type="info" text="wrapper" />
@@ -20,7 +21,7 @@ import DeviceMotion from '../../../src/components/wrapper-physics/examples/devic
 
 ## 使用範例
 
-### 基本用法
+<!-- ### 基本用法
 
 開始運行後，被 body 包裹的元素會產生物理效果
 
@@ -108,6 +109,16 @@ import DeviceMotion from '../../../src/components/wrapper-physics/examples/devic
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-physics/examples/device-motion.vue
+::: -->
+
+### 委婉的報價單
+
+預算過低時，原地解散！◝( •ω• )◟
+
+<polite-quotation/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-physics/examples/polite-quotation.vue
 :::
 
 ## 原理
