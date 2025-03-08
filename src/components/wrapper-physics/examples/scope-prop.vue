@@ -42,10 +42,10 @@ import type { CSSProperties } from 'vue'
 import { ref } from 'vue'
 import { getVectorLength, mapNumber } from '../../../common/utils'
 import BaseBtn from '../../base-btn.vue'
-import WrapperPhysics from '../wrapper-physics.vue'
 import WrapperPhysicsBody from '../wrapper-physics-body.vue'
+import WrapperPhysics from '../wrapper-physics.vue'
 
-type ScopeProp = Parameters<
+type ScopeProps = Parameters<
   NonNullable<InstanceType<typeof WrapperPhysicsBody>['$slots']['default']>
 >[0]
 
@@ -66,7 +66,7 @@ const list = [
   '肝',
 ]
 
-function getStyle(scope: ScopeProp): CSSProperties {
+function getStyle(scope: ScopeProps): CSSProperties {
   /** 計算偏移距離 */
   const distance = getVectorLength({
     x: scope.offsetX,

@@ -35,12 +35,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import BaseBtn from '../../base-btn.vue'
-import WrapperPhysics from '../wrapper-physics.vue'
 import WrapperPhysicsBody from '../wrapper-physics-body.vue'
+import WrapperPhysics from '../wrapper-physics.vue'
 
-type BodyProp = InstanceType<typeof WrapperPhysicsBody>['$props']
+type BodyProps = InstanceType<typeof WrapperPhysicsBody>['$props']
 
-interface Item extends BodyProp {
+interface Item extends BodyProps {
   text: string;
 }
 
