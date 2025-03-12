@@ -3,13 +3,13 @@
     <div class="flex flex-col gap-4 border rounded">
       <base-checkbox
         v-model="enable"
-        label="啟用"
+        label="閃躲飄"
         class="p-4"
       />
     </div>
 
     <div class="flex justify-center">
-      <wrapper-dodging>
+      <wrapper-dodging class="w-full">
         <div class="border p-2">
           ( •̀ ω •́ )✧
         </div>

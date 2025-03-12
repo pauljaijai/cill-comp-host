@@ -60,16 +60,10 @@ const cursorBody = shallowRef<Matter.Body>()
 
 /** 建立一個持續跟隨滑鼠的圓形 */
 function createCursorBody() {
-  const ball = pipe(
-    undefined,
-    () => {
-      const ball = Bodies.circle(-100, -100, 20, {
-        isStatic: true,
-      })
+  const ball = Bodies.circle(-100, -100, 20, {
+    isStatic: true,
+  })
 
-      return ball
-    },
-  )
   Composite.add(engine.value.world, ball)
 
   return ball
@@ -103,8 +97,8 @@ function init() {
         containerBounding.height,
         {
           label: 'body',
-          frictionAir: 0,
           friction: 0,
+          frictionAir: 0.05,
         },
       )
 
@@ -165,40 +159,50 @@ const {
   resume: resumeUpdate,
   pause: pauseUpdate,
 } = useIntervalFn(() => {
-  // 更新 cursor 位置
-  if (cursorBody.value) {
-    Matter.Body.setPosition(cursorBody.value, {
-      x: mouse.x - containerBounding.x - windowScroll.x,
-      y: mouse.y - containerBounding.y - windowScroll.y,
-    })
-  }
-
   const body = Composite
     .allBodies(engine.value.world)
     .find((body) => body.label === 'body')
 
-  if (body) {
-    // 轉正
-    Matter.Body.setAngularVelocity(body, 0)
+  if (!cursorBody.value || !body) {
+    return
+  }
 
-    const rotate = body.angle * 180 / Math.PI
-    console.log(`🚀 ~ rotate:`, rotate)
+  // 更新 cursor 位置
+  Matter.Body.setPosition(cursorBody.value, {
+    x: mouse.x - containerBounding.x - windowScroll.x,
+    y: mouse.y - containerBounding.y - windowScroll.y,
+  })
 
-    const offsetX = body.position.x - bodyInitPosition.x
-    const offsetY = body.position.y - bodyInitPosition.y
+  // 轉正
+  const collision = Matter.Collision.collides(body, cursorBody.value)
+  console.log(`🚀 ~ collision:`, collision)
 
-    if (
-      isSmallEnough(offsetX)
-      && isSmallEnough(offsetY)
-      && isSmallEnough(rotate)
-    ) {
-      bodyStyle.value = {}
-      return
+  if (isSmallEnough(body.angularVelocity) && !collision?.collided) {
+    if (body.angle > 0) {
+      Matter.Body.setAngle(body, body.angle - Math.abs(body.angle) * 0.1)
     }
-
-    bodyStyle.value = {
-      transform: `translate(${offsetX}px, ${offsetY}px) rotate(${rotate}deg)`,
+    else if (body.angle < 0) {
+      Matter.Body.setAngle(body, body.angle + Math.abs(body.angle) * 0.1)
     }
+  }
+
+  const rotate = body.angle * 180 / Math.PI
+
+  const offsetX = body.position.x - bodyInitPosition.x
+  const offsetY = body.position.y - bodyInitPosition.y
+
+  if (
+    isSmallEnough(offsetX)
+    && isSmallEnough(offsetY)
+    && isSmallEnough(rotate)
+  ) {
+    bodyStyle.value = {}
+    Matter.Body.setAngle(body, 0)
+    return
+  }
+
+  bodyStyle.value = {
+    transform: `translate(${offsetX}px, ${offsetY}px) rotate(${rotate}deg)`,
   }
 }, 15)
 
