@@ -185,21 +185,10 @@ useRafFn(() => {
     }
   }
 
-  // if (body.angle > 0) {
-  //   Matter.Body.setAngularVelocity(body, body.angularVelocity - 0.0015)
-  // }
-  // else if (body.angle < 0) {
-  //   Matter.Body.setAngularVelocity(body, body.angularVelocity + 0.0015)
-  // }
-
-  /** 轉正物體
-   *
-   * 直接 setAngle 會導致抖動；固定角加速度回復速度又太慢
-   *
-   * 使用 PID 控制器來控制角速度，產生更自然有趣的效果
-   */
-  const alpha = pidController.compute(0, body.angle)
-  Matter.Body.setAngularVelocity(body, body.angularVelocity + alpha)
+  /** 轉正物體 */
+  if (Math.abs(body.angle) > 0.0001) {
+    Matter.Body.setAngularVelocity(body, body.angularVelocity - body.angle * 0.01)
+  }
 
   const rotate = body.angle * 180 / Math.PI
 
