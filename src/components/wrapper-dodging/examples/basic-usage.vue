@@ -3,15 +3,18 @@
     <div class="flex flex-col gap-4 border rounded">
       <base-checkbox
         v-model="enable"
-        label="閃躲飄"
+        label="開始閃躲飄"
         class="p-4"
       />
     </div>
 
     <div class="flex justify-center">
-      <wrapper-dodging class="w-full">
-        <div class="border p-2">
-          ( •̀ ω •́ )✧
+      <wrapper-dodging
+        class="w-full"
+        :enable
+      >
+        <div class="flex-1 border bg-white p-2 text-center">
+          ─=≡Σ((( つ•̀ω•́)つ
         </div>
       </wrapper-dodging>
     </div>

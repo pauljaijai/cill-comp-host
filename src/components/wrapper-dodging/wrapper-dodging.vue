@@ -7,19 +7,20 @@
       <slot />
     </div>
 
-    <canvas
+    <!-- <canvas
       ref="canvasRef"
       class="pointer-events-none absolute inset-0 bg-transparent"
-    />
+    /> -->
   </div>
 </template>
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import { useElementBounding, useIntervalFn, useMouse, useWindowScroll } from '@vueuse/core'
-import Matter, { Bodies, Composite, Engine, Render, Runner } from 'matter-js'
+import { useElementBounding, useMouse, useRafFn, useWindowScroll } from '@vueuse/core'
+import Matter, { Bodies, Composite, Engine, Runner } from 'matter-js'
 import { pipe } from 'remeda'
 import { onBeforeUnmount, onMounted, reactive, ref, shallowRef } from 'vue'
+import { PidController } from '../../common/pid-controller'
 
 // #region Props
 interface Props {
@@ -60,7 +61,12 @@ const cursorBody = shallowRef<Matter.Body>()
 
 /** 建立一個持續跟隨滑鼠的圓形 */
 function createCursorBody() {
-  const ball = Bodies.circle(-100, -100, 20, {
+  const radius = Math.min(
+    containerBounding.width,
+    containerBounding.height,
+  ) * 1.1
+
+  const ball = Bodies.circle(-100, -100, radius, {
     isStatic: true,
   })
 
@@ -105,7 +111,7 @@ function init() {
       const constraint = Matter.Constraint.create({
         bodyA: body,
         pointB: { x, y },
-        stiffness: 0.01,
+        stiffness: 0.02,
       })
 
       return [body, constraint]
@@ -117,28 +123,28 @@ function init() {
 
   cursorBody.value = createCursorBody()
 
-  const { width, height } = containerRef.value?.getBoundingClientRect() ?? {
-    width: 0,
-    height: 0,
-  }
+  // const { width, height } = containerRef.value?.getBoundingClientRect() ?? {
+  //   width: 0,
+  //   height: 0,
+  // }
 
-  const render = Render.create({
-    canvas: canvasRef.value,
-    engine: engine.value,
-    bounds: {
-      min: { x: 0, y: 0 },
-      max: { x: width, y: height },
-    },
-    options: {
-      width,
-      height,
-      background: 'transparent',
-      wireframeBackground: 'transparent',
-      // showPerformance: true,
-    },
-  })
+  // const render = Render.create({
+  //   canvas: canvasRef.value,
+  //   engine: engine.value,
+  //   bounds: {
+  //     min: { x: 0, y: 0 },
+  //     max: { x: width, y: height },
+  //   },
+  //   options: {
+  //     width,
+  //     height,
+  //     background: 'transparent',
+  //     wireframeBackground: 'transparent',
+  //     // showPerformance: true,
+  //   },
+  // })
 
-  Render.run(render)
+  // Render.run(render)
 }
 
 function start() {
@@ -154,11 +160,10 @@ function isSmallEnough(value: number) {
   return Math.abs(value) < 0.05
 }
 
+const pidController = new PidController()
+
 /** 持續更新狀態 */
-const {
-  resume: resumeUpdate,
-  pause: pauseUpdate,
-} = useIntervalFn(() => {
+useRafFn(() => {
   const body = Composite
     .allBodies(engine.value.world)
     .find((body) => body.label === 'body')
@@ -168,23 +173,33 @@ const {
   }
 
   // 更新 cursor 位置
-  Matter.Body.setPosition(cursorBody.value, {
-    x: mouse.x - containerBounding.x - windowScroll.x,
-    y: mouse.y - containerBounding.y - windowScroll.y,
-  })
-
-  // 轉正
-  const collision = Matter.Collision.collides(body, cursorBody.value)
-  console.log(`🚀 ~ collision:`, collision)
-
-  if (isSmallEnough(body.angularVelocity) && !collision?.collided) {
-    if (body.angle > 0) {
-      Matter.Body.setAngle(body, body.angle - Math.abs(body.angle) * 0.1)
-    }
-    else if (body.angle < 0) {
-      Matter.Body.setAngle(body, body.angle + Math.abs(body.angle) * 0.1)
+  if (props.enable) {
+    Matter.Body.setPosition(cursorBody.value, {
+      x: mouse.x - containerBounding.x - windowScroll.x,
+      y: mouse.y - containerBounding.y - windowScroll.y,
+    })
+  }
+  else {
+    if (!cursorBody.value.isSleeping) {
+      Matter.Sleeping.set(cursorBody.value, true)
     }
   }
+
+  // if (body.angle > 0) {
+  //   Matter.Body.setAngularVelocity(body, body.angularVelocity - 0.0015)
+  // }
+  // else if (body.angle < 0) {
+  //   Matter.Body.setAngularVelocity(body, body.angularVelocity + 0.0015)
+  // }
+
+  /** 轉正物體
+   *
+   * 直接 setAngle 會導致抖動；固定角加速度回復速度又太慢
+   *
+   * 使用 PID 控制器來控制角速度，產生更自然有趣的效果
+   */
+  const alpha = pidController.compute(0, body.angle)
+  Matter.Body.setAngularVelocity(body, body.angularVelocity + alpha)
 
   const rotate = body.angle * 180 / Math.PI
 
@@ -195,16 +210,18 @@ const {
     isSmallEnough(offsetX)
     && isSmallEnough(offsetY)
     && isSmallEnough(rotate)
+    && isSmallEnough(body.angularVelocity)
   ) {
     bodyStyle.value = {}
     Matter.Body.setAngle(body, 0)
+    Matter.Body.setAngularVelocity(body, 0)
     return
   }
 
   bodyStyle.value = {
     transform: `translate(${offsetX}px, ${offsetY}px) rotate(${rotate}deg)`,
   }
-}, 15)
+})
 
 onMounted(() => {
   init()
