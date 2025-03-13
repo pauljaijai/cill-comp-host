@@ -3,23 +3,21 @@
     ref="containerRef"
     class="relative"
   >
-    <div :style="bodyStyle">
-      <slot />
-    </div>
+    <slot :style="bodyStyle" />
+  </div>
 
-    <!-- <canvas
+  <!-- <canvas
       ref="canvasRef"
       class="pointer-events-none absolute inset-0 bg-transparent"
     /> -->
-  </div>
 </template>
 
 <script setup lang="ts">
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, VNode } from 'vue'
 import { useElementBounding, useMouse, useRafFn, useWindowScroll } from '@vueuse/core'
 import Matter, { Bodies, Composite, Engine, Runner } from 'matter-js'
 import { pipe } from 'remeda'
-import { onBeforeUnmount, onMounted, reactive, ref, shallowRef } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 
 // #region Props
 interface Props {
@@ -29,7 +27,7 @@ interface Props {
 
 // #region Slots
 interface Slots {
-  default?: () => unknown;
+  default?: (params: { style?: CSSProperties }) => VNode[];
 }
 // #endregion Slots
 
@@ -50,7 +48,19 @@ const engine = shallowRef(Engine.create({
 }))
 const runner = shallowRef(Runner.create())
 
-const bodyStyle = ref<CSSProperties>({})
+const bodyStyle = ref<{ transform?: string }>({})
+/** 自動將 style 附加至 slot 中第一個元素 */
+watch(bodyStyle, () => {
+  /** 不知道為甚麼這樣在 el 為 input 時，會取到 null */
+  // const slotEl = slots?.default?.({}).at(0)?.el
+
+  const slotEl = containerRef.value?.firstElementChild
+
+  if (slotEl instanceof HTMLElement) {
+    slotEl.style.transform = bodyStyle.value.transform ?? ''
+  }
+})
+
 /** body 初始值，方便計算偏移量 */
 let bodyInitPosition = { x: 0, y: 0 }
 
