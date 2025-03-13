@@ -35,7 +35,7 @@ interface Slots {
 // #endregion Slots
 
 const props = withDefaults(defineProps<Props>(), {
-  enable: false,
+  enable: true,
 })
 
 defineSlots<Slots>()
@@ -64,7 +64,7 @@ function createCursorBody() {
   const radius = Math.min(
     containerBounding.width,
     containerBounding.height,
-  ) * 1.1
+  ) / 2
 
   const ball = Bodies.circle(-100, -100, radius, {
     isStatic: true,

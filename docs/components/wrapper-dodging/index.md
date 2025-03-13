@@ -6,6 +6,7 @@ description: 被包裹的元素會開始閃躲飄，像極了...。ԅ( ˘ω˘ԅ)
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/wrapper-dodging/examples/basic-usage.vue'
+import ConfidentialData from '../../../src/components/wrapper-dodging/examples/confidential-data.vue'
 </script>
 
 # 閃躲飄包裝器 <Badge type="info" text="wrapper" />
@@ -24,7 +25,21 @@ import BasicUsage from '../../../src/components/wrapper-dodging/examples/basic-u
 <<< ../../../src/components/wrapper-dodging/examples/basic-usage.vue
 :::
 
+### 機密資料
+
+機密到連碰都不能碰。(́⊙◞౪◟⊙‵)
+
+<confidential-data/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-dodging/examples/confidential-data.vue
+:::
+
 ## 原理
+
+使用 Matter.js 實現物理模擬效果
+
+實作基於[怕鼠的文字](/components/text-hate-mouse/){target=_blank}，最大的差別在於物體的形狀為矩形，需要多處理旋轉問題。
 
 ## 原始碼
 
