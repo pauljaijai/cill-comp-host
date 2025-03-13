@@ -20,7 +20,6 @@ import { useElementBounding, useMouse, useRafFn, useWindowScroll } from '@vueuse
 import Matter, { Bodies, Composite, Engine, Runner } from 'matter-js'
 import { pipe } from 'remeda'
 import { onBeforeUnmount, onMounted, reactive, ref, shallowRef } from 'vue'
-import { PidController } from '../../common/pid-controller'
 
 // #region Props
 interface Props {
@@ -160,8 +159,6 @@ function isSmallEnough(value: number) {
   return Math.abs(value) < 0.05
 }
 
-const pidController = new PidController()
-
 /** 持續更新狀態 */
 useRafFn(() => {
   const body = Composite
@@ -174,6 +171,10 @@ useRafFn(() => {
 
   // 更新 cursor 位置
   if (props.enable) {
+    if (cursorBody.value.isSleeping) {
+      Matter.Sleeping.set(cursorBody.value, false)
+    }
+
     Matter.Body.setPosition(cursorBody.value, {
       x: mouse.x - containerBounding.x - windowScroll.x,
       y: mouse.y - containerBounding.y - windowScroll.y,
@@ -182,6 +183,10 @@ useRafFn(() => {
   else {
     if (!cursorBody.value.isSleeping) {
       Matter.Sleeping.set(cursorBody.value, true)
+      Matter.Body.setPosition(cursorBody.value, {
+        x: -containerBounding.width,
+        y: -containerBounding.height,
+      })
     }
   }
 
