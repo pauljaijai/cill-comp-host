@@ -2,17 +2,19 @@ export class PidController {
   #kp: number
   #ki: number
   #kd: number
-  #prevValue: number
-  #integral: number
+  #lastValue: number
+  #integralValue: number
   #lastTime: number
 
-  constructor(params?: { kp?: number; ki?: number; kd?: number }) {
-    this.#kp = params?.kp ?? 2
-    this.#ki = params?.ki ?? 0.01
-    this.#kd = params?.kd ?? 1.8
+  #count = 0
 
-    this.#prevValue = 0
-    this.#integral = 0
+  constructor(params?: { kp?: number; ki?: number; kd?: number }) {
+    this.#kp = params?.kp ?? 0.5
+    this.#ki = params?.ki ?? 0.1
+    this.#kd = params?.kd ?? 0.3
+
+    this.#integralValue = 0
+    this.#lastValue = 0
     this.#lastTime = performance.now()
   }
 
@@ -24,16 +26,25 @@ export class PidController {
     if (dt <= 0)
       return 0
 
-    const error = targetValue - currentValue
-    this.#integral += error * dt
-    const derivative = (error - this.#prevValue) / dt
+    const errorValue = targetValue - currentValue
+    this.#integralValue += errorValue * dt
+    const derivative = (errorValue - this.#lastValue) / dt
 
     /** 角加速度 */
     const alpha = (
-      (this.#kp * error) + (this.#ki * this.#integral) + (this.#kd * derivative)
+      (this.#kp * errorValue) + (this.#ki * this.#integralValue) + (this.#kd * derivative)
     ) * dt
 
-    this.#prevValue = error
+    if (this.#count % 100 === 0) {
+      console.log('error', errorValue)
+      console.log('integralValue', this.#integralValue)
+      console.log('derivative', derivative)
+      console.log('alpha', alpha)
+    }
+
+    this.#count++
+
+    this.#lastValue = errorValue
 
     return Math.abs(alpha) < 0.0000001 ? 0 : alpha
   }
