@@ -17,7 +17,7 @@ import ConfidentialData from '../../../src/components/wrapper-dodging/examples/c
 
 ### 基本用法
 
-啟用後被包裹的元素會以最小幅度、省力地閃躲飄，像極了某些熟悉的同事。(。-`ω´-)
+啟用後被包裹的元素會精準、省力地閃躲飄，像極了某些熟悉的同事。(。-`ω´-)
 
 <basic-usage/>
 
