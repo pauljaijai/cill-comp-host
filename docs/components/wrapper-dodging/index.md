@@ -7,6 +7,7 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/wrapper-dodging/examples/basic-usage.vue'
 import ConfidentialData from '../../../src/components/wrapper-dodging/examples/confidential-data.vue'
+import PointlessSurvey from '../../../src/components/wrapper-dodging/examples/pointless-survey.vue'
 </script>
 
 # 閃躲飄包裝器 <Badge type="info" text="wrapper" />
@@ -27,12 +28,24 @@ import ConfidentialData from '../../../src/components/wrapper-dodging/examples/c
 
 ### 機密資料
 
-機密到連碰都不能碰。(́⊙◞౪◟⊙‵)
+機密到連碰都碰不到。(́⊙◞౪◟⊙‵)
 
 <confidential-data/>
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-dodging/examples/confidential-data.vue
+:::
+
+### 意願調查表
+
+調查下午要不要喝飲料。♪( ◜ω◝و(و
+
+<pointless-survey/>
+
+同事：「強迫喝飲料啦！Σ(ˊДˋ;)」
+
+::: details 查看範例原始碼
+<<< ../../../src/components/wrapper-dodging/examples/pointless-survey.vue
 :::
 
 ## 原理

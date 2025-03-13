@@ -8,12 +8,12 @@
       />
     </div>
 
-    <div class="flex justify-center">
+    <div class="w-full flex justify-center">
       <wrapper-dodging
         class="w-full"
         :enable
       >
-        <div class="flex-1 border bg-white p-2 text-center">
+        <div class="w-full border bg-white p-2 text-center">
           ─=≡Σ((( つ•̀ω•́)つ
         </div>
       </wrapper-dodging>
