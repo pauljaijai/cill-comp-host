@@ -16,7 +16,7 @@
           <div class="border rounded bg-white">
             <input
               type="password"
-              class="w-full p-2 tracking-tighter"
+              class="w-full cursor-not-allowed p-2 tracking-tighter"
               value="鱈魚超超超超超超超超超超超超超超超胖"
             >
           </div>
