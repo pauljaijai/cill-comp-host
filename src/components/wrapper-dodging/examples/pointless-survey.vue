@@ -17,7 +17,7 @@
         </label>
 
         <div
-          v-for="option in ['不想喝', '沒錢', '晚一點再說', '看喝哪一家']"
+          v-for="option in ['不想喝', '有人請客我就喝', '晚一點再說', '看喝哪一家']"
           :key="option"
           class="flex gap-2 text-lg"
         >

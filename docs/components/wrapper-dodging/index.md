@@ -30,7 +30,7 @@ import PointlessSurvey from '../../../src/components/wrapper-dodging/examples/po
 
 機密到連碰都碰不到。(́⊙◞౪◟⊙‵)
 
-<confidential-data/>
+<confidential-data class="h-[50vh]" />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-dodging/examples/confidential-data.vue
