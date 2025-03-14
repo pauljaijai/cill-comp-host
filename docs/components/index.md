@@ -16,6 +16,7 @@ import WrapperPhysics from '../../src/components/wrapper-physics/examples/basic-
 import WrapperCatEar from '../../src/components/wrapper-cat-ear/examples/interactive-effect.vue';
 import WrapperKirbyMouthfulMode from '../../src/components/wrapper-kirby-mouthful-mode/examples/basic-usage.vue';
 import WrapperMinecraftBlock from '../../src/components/wrapper-minecraft-block/examples/other-block.vue';
+import WrapperDodging from '../../src/components/wrapper-dodging/examples/basic-usage.vue';
 
 import CursorSidekick from '../../src/components/cursor-sidekick/examples/basic-usage.vue';
 
@@ -161,6 +162,12 @@ const currentSection = ref('btn');
 ::: warning 暫停展示
 由於在這裡展示會偏移，大家還是前往[元件頁面](./wrapper-minecraft-block/)看看吧。( ・ิω・ิ)
 :::
+
+### [閃躲飄包裝器](./wrapper-dodging/) <Badge type="info" text="wrapper" />
+
+被包裹的元素會開始閃躲飄，像極了...。ԅ( ˘ω˘ԅ)
+
+<wrapper-dodging  />
 
 </expansion-section>
 
