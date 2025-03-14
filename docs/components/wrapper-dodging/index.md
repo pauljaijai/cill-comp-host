@@ -18,7 +18,7 @@ import PointlessSurvey from '../../../src/components/wrapper-dodging/examples/po
 
 ### 基本用法
 
-啟用後被包裹的元素會精準、省力地閃躲飄，像極了某些熟悉的同事。(。-`ω´-)
+啟用後被包裹的元素會精準地閃躲飄，像極了某些閃避率點滿的同事。(。-`ω´-)
 
 <basic-usage/>
 
@@ -42,7 +42,7 @@ import PointlessSurvey from '../../../src/components/wrapper-dodging/examples/po
 
 <pointless-survey/>
 
-同事：「強迫喝飲料啦！Σ(ˊДˋ;)」
+同事：「根本強迫喝飲料！Σ(ˊДˋ;)」
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-dodging/examples/pointless-survey.vue
