@@ -116,6 +116,12 @@ export default defineConfig({
             ],
           },
           {
+            text: '輸入框',
+            items: [
+              { text: '編碼輸入框', link: '/components/input-encoded/' },
+            ],
+          },
+          {
             text: '包裝器',
             items: [
               { text: '立體包裝器', link: '/components/wrapper-stereoscopic/' },

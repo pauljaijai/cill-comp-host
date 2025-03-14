@@ -1,0 +1,53 @@
+<template>
+  <slot>
+    <input
+      v-model="modelValue"
+      type="text"
+      class="input-encoded p-2"
+    >
+  </slot>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+// #region Props
+interface Props {
+  modelValue?: string;
+}
+// #endregion Props
+
+// #region Emits
+interface Emits {
+  'update:modelValue': [value: Props['modelValue']];
+}
+// #endregion Emits
+
+// #region Slots
+interface Slots {
+  default?: () => unknown;
+}
+// #endregion Slots
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: '',
+})
+
+const emit = defineEmits<Emits>()
+
+defineSlots<Slots>()
+
+const modelValue = ref(props.modelValue)
+
+// #region Methods
+interface Expose { }
+// #endregion Methods
+
+defineExpose<Expose>({})
+</script>
+
+<style scoped lang="sass">
+.input-encoded
+  border: 1px solid #ccc
+  border-inline: 2px solid #AAA
+</style>
