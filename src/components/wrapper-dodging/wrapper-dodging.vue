@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import type { CSSProperties, VNode } from 'vue'
 import { useElementBounding, useMouse, useRafFn, useWindowScroll } from '@vueuse/core'
-import Matter, { Bodies, Composite, Engine, Runner } from 'matter-js'
+import Matter from 'matter-js'
 import { pipe } from 'remeda'
 import { onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 
@@ -36,6 +36,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 defineSlots<Slots>()
+
+const { Bodies, Composite, Engine, Runner } = Matter
 
 const canvasRef = ref<HTMLCanvasElement>()
 const containerRef = ref<HTMLDivElement>()
