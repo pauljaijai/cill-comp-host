@@ -20,11 +20,11 @@ interface Props {
   modelValue?: string;
   /** 編碼效果的字元集
    *
-   * 可以根據 char 來決定字元集
+   * 可以根據 char 來決定字元集，依矩陣順序判斷
    *
    * @default 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
    */
-  charset?: string | Array<(char: string) => string>;
+  charset?: string | Array<(char: string) => string | undefined>;
 }
 // #endregion Props
 
@@ -52,7 +52,7 @@ defineSlots<Slots>()
 const activeEl = useActiveElement()
 
 const charList = shallowRef<ReturnType<typeof useChar>[]>(
-  props.modelValue.split('').map((char) => {
+  props.modelValue.split(/.*?/u).map((char) => {
     const charset = pipe(undefined, () => {
       if (typeof props.charset === 'string') {
         return props.charset
@@ -102,11 +102,13 @@ async function handleBeforeInput(event: Event) {
   const deleteCount = selectionEnd - selectionStart
 
   if (event.inputType.includes('delete')) {
+    const offset = event.inputType === 'deleteContentBackward' ? 0 : 1
+
     if (deleteCount > 0) {
       charList.value.splice(selectionStart, deleteCount)
     }
     else {
-      charList.value.splice(selectionStart - 1, 1)
+      charList.value.splice(selectionStart - 1 + offset, 1)
     }
   }
 
@@ -152,7 +154,7 @@ async function handleInput(event: Event) {
     || event.type === 'compositionend'
   ) {
     const charDataList = (event.data ?? '')
-      .split('')
+      .split(/.*?/u)
       .map((char, i) => {
         const charset = pipe(undefined, () => {
           if (typeof props.charset === 'string') {
