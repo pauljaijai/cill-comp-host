@@ -6,6 +6,7 @@ description: 輸入文字時會有酷酷的編碼效果。(⌐■_■)✧
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/input-encoded/examples/basic-usage.vue'
+import CustomCharset from '../../../src/components/input-encoded/examples/custom-charset.vue'
 </script>
 
 # 編碼輸入框 <Badge type="info" text="input" />
@@ -22,6 +23,16 @@ import BasicUsage from '../../../src/components/input-encoded/examples/basic-usa
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/input-encoded/examples/basic-usage.vue
+:::
+
+### 自定義編碼表
+
+自定義編碼表，可以讓你自己定義編碼的對照表。
+
+<custom-charset/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/input-encoded/examples/custom-charset.vue
 :::
 
 ## 原理
