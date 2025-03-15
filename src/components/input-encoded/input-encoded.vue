@@ -17,6 +17,10 @@ import { computed, nextTick, reactive, ref, shallowRef, triggerRef, watch } from
 // #region Props
 interface Props {
   modelValue?: string;
+  /** 編碼效果的字元集合
+   *
+   * @default 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+   */
   charset?: string;
 }
 // #endregion Props
@@ -52,7 +56,7 @@ function useChar(
 ) {
   const {
     count = 10,
-    interval = 10,
+    interval = 20,
   } = options ?? {}
 
   function getRandomChar() {
@@ -64,20 +68,26 @@ function useChar(
     original: value,
     value,
     count,
-    async start() {
+    async start(delay = 0) {
       char.value = getRandomChar() ?? value
 
       return new Promise<void>((resolve) => {
-        const timer = setInterval(() => {
-          char.value = getRandomChar() ?? value
-          char.count -= 1
+        if (charset.length === 0) {
+          return resolve()
+        }
 
-          if (char.count <= 0) {
-            char.value = value
-            clearInterval(timer)
-            resolve()
-          }
-        }, interval)
+        setTimeout(() => {
+          const timer = setInterval(() => {
+            char.value = getRandomChar() ?? value
+            char.count -= 1
+
+            if (char.count <= 0) {
+              char.value = value
+              clearInterval(timer)
+              resolve()
+            }
+          }, interval)
+        }, delay)
       })
     },
   })
@@ -100,6 +110,8 @@ let isComposing = false
 const isAfterInput = ref(false)
 
 async function handleInput(event: Event) {
+  console.log(`🚀 ~ [handleInput] event:`, event)
+
   /** CompositionEvent 用於中文輸入 */
   if (!(event instanceof InputEvent) && !(event instanceof CompositionEvent)) {
     return
@@ -113,20 +125,25 @@ async function handleInput(event: Event) {
   const selectionStart = targetEl.selectionStart ?? targetEl.value.length
 
   if (
-    ('inputType' in event && event.inputType === 'insertText')
+    ('inputType' in event && event.inputType.includes('insert'))
     || event.type === 'compositionend'
   ) {
     // 根據 selectionStart 位置插入 event.data
     const charset = props.charset ?? ''
-    const charData = useChar(event.data ?? '', charset)
+    const charDataList = (event.data ?? '')
+      .split('')
+      .map((char) => useChar(char, charset))
 
     /** 必須在動畫完成後在調整 cursor 位置，否則會因為 value 變化讓 cursor 跳至最後 */
-    charData.start().then(async () => {
-      await nextTick()
-      targetEl.setSelectionRange(selectionStart, selectionStart)
-    })
+    Promise.all(
+      charDataList.map((charData, i) => charData.start(i * 50)),
+    )
+      .then(async () => {
+        await nextTick()
+        targetEl.setSelectionRange(selectionStart + charDataList.length, selectionStart + charDataList.length)
+      })
 
-    charList.value.splice(selectionStart - 1, 0, charData)
+    charList.value.splice(selectionStart - 1, 0, ...charDataList)
     triggerRef(charList)
   }
 
@@ -134,12 +151,13 @@ async function handleInput(event: Event) {
 }
 /** 在 onInput 中取得的 selectionStart selectionEnd 會永遠相同
  *
- * 刪除事件必須在 onBeforeInput 中處理
+ * 刪除、反白後貼上，可能與 selectionRange 相關的事件必須在 onBeforeInput 中處理
  */
 async function handleBeforeInput(event: Event) {
+  console.log(`🚀 ~ [handleBeforeInput] event:`, event)
   isAfterInput.value = false
 
-  if (!(event instanceof InputEvent && event.inputType.includes('delete'))) {
+  if (!(event instanceof InputEvent)) {
     return
   }
 
@@ -150,13 +168,21 @@ async function handleBeforeInput(event: Event) {
 
   const selectionStart = targetEl.selectionStart ?? targetEl.value.length
   const selectionEnd = targetEl.selectionEnd ?? targetEl.value.length
-  const deleteCount = selectionEnd - selectionStart
+  console.log(`🚀 ~ selectionStart:`, selectionStart)
+  console.log(`🚀 ~ selectionEnd:`, selectionEnd)
 
-  if (deleteCount > 0) {
-    charList.value.splice(selectionStart, deleteCount)
-  }
-  else {
-    charList.value.splice(selectionStart - 1, 1)
+  if (
+    event.inputType.includes('delete')
+    || event.inputType === 'insertFromPaste'
+  ) {
+    const deleteCount = selectionEnd - selectionStart
+
+    if (deleteCount > 0) {
+      charList.value.splice(selectionStart, deleteCount)
+    }
+    else {
+      charList.value.splice(selectionStart - 1, 1)
+    }
   }
 
   /** 必須等到 onInput 完成後才能觸發 charList 變更
