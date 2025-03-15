@@ -168,7 +168,7 @@ function clear() {
 }
 
 function isSmallEnough(value: number) {
-  return Math.abs(value) < 0.05
+  return Math.abs(value) < 0.0001
 }
 
 /** 持續更新狀態 */
