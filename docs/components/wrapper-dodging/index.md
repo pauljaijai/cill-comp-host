@@ -52,7 +52,7 @@ import PointlessSurvey from '../../../src/components/wrapper-dodging/examples/po
 
 使用 Matter.js 實現物理模擬效果
 
-實作基於[怕鼠的文字](/components/text-hate-mouse/){target=_blank}，最大的差別在於物體的形狀為矩形，需要多處理旋轉問題。
+實作延伸至基於[怕鼠的文字](/components/text-hate-mouse/){target=_blank}，最大的差別在於物體的形狀為矩形，需要多處理旋轉問題。
 
 ## 原始碼
 
