@@ -27,7 +27,7 @@ import CustomCharset from '../../../src/components/input-encoded/examples/custom
 
 ### 自定義編碼表
 
-自定義編碼表，可以讓你自己定義編碼的對照表。
+自定義編碼表，玩出更多變化。
 
 <custom-charset/>
 

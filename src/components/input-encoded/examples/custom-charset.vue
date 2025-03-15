@@ -4,6 +4,8 @@
       v-model="text"
       class="input-encoded px-3 py-2"
       :charset
+      :encode-interval="80"
+      :encode-times="5"
     />
 
     <span class="border-b px-3 pb-1">
@@ -13,19 +15,25 @@
 </template>
 
 <script setup lang="ts">
+import { constant } from 'remeda'
 import { ref } from 'vue'
 import InputEncoded from '../input-encoded.vue'
 
 const text = ref('')
 
 const charset = [
+  /** 數字 */
+  (char: string) => char.match(/\d/)
+    ? '㊀㊁㊂㊃㊄㊅㊆㊇㊈㊉㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩'
+    : undefined,
+
   /** 中文 */
   (char: string) => char.match(/[\u4E00-\u9FA5]/)
-    ? '🍔🍟🌭🍔🍕🍞🥐🥨🥯🍗🍜🍤🍣'
+    ? 'ㄅㄆㄉㄇㄊㄍㄣㄠㄚㄗㄝㄩㄓㄒㄑㄎㄏ'
     : undefined,
 
   /** 其他 */
-  () => '?!@#$%^&*()_+-=[]{}|;:,.<>?/\\',
+  constant('🐳🐋🐬🐡🦈🐙🦀🦞🦑'),
 ]
 </script>
 

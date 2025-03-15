@@ -13,9 +13,11 @@ export function useChar(
     interval = 20,
   } = options ?? {}
 
+  const charsetList = charset.split(/.*?/u)
+
   function getRandomChar() {
-    const index = Math.floor(Math.random() * charset.length)
-    return charset.at(index)
+    const index = Math.floor(Math.random() * charsetList.length)
+    return charsetList.at(index)
   }
 
   const char = reactive({
@@ -26,7 +28,7 @@ export function useChar(
       char.value = getRandomChar() ?? value
 
       return new Promise<void>((resolve) => {
-        if (charset.length === 0) {
+        if (charsetList.length === 0) {
           return resolve()
         }
 

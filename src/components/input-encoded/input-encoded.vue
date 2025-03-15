@@ -25,6 +25,11 @@ interface Props {
    * @default 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
    */
   charset?: string | Array<(char: string) => string | undefined>;
+
+  /** 字符變化間隔毫秒數 */
+  encodeInterval?: number;
+  /** 編碼次數 */
+  encodeTimes?: number;
 }
 // #endregion Props
 
@@ -43,6 +48,8 @@ interface Slots {
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
   charset: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+  encodeInterval: 20,
+  encodeTimes: 10,
 })
 
 const emit = defineEmits<Emits>()
@@ -68,7 +75,10 @@ const charList = shallowRef<ReturnType<typeof useChar>[]>(
       return ''
     })
 
-    return useChar(char, charset)
+    return useChar(char, charset, {
+      interval: props.encodeInterval,
+      count: props.encodeTimes,
+    })
   }),
 )
 
@@ -171,7 +181,10 @@ async function handleInput(event: Event) {
           return ''
         })
 
-        const result = useChar(char, charset)
+        const result = useChar(char, charset, {
+          interval: props.encodeInterval,
+          count: props.encodeTimes,
+        })
         result.start(i * 20)
 
         return result
