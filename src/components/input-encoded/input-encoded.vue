@@ -18,11 +18,13 @@ import { useChar } from './use-char'
 // #region Props
 interface Props {
   modelValue?: string;
-  /** 編碼效果的字元集合
+  /** 編碼效果的字元集
+   *
+   * 可以根據 char 來決定字元集
    *
    * @default 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
    */
-  charset?: string;
+  charset?: string | Array<(char: string) => string>;
 }
 // #endregion Props
 
@@ -51,11 +53,22 @@ const activeEl = useActiveElement()
 
 const charList = shallowRef<ReturnType<typeof useChar>[]>(
   props.modelValue.split('').map((char) => {
-    if (typeof props.charset === 'string') {
-      return useChar(char, props.charset)
-    }
+    const charset = pipe(undefined, () => {
+      if (typeof props.charset === 'string') {
+        return props.charset
+      }
 
-    return useChar(char, props.charset)
+      for (const getCharset of props.charset) {
+        const result = getCharset(char)
+        if (result) {
+          return result
+        }
+      }
+
+      return ''
+    })
+
+    return useChar(char, charset)
   }),
 )
 
@@ -138,14 +151,31 @@ async function handleInput(event: Event) {
     ('inputType' in event && event.inputType.includes('insert'))
     || event.type === 'compositionend'
   ) {
-    // 根據 selectionStart 位置插入 event.data
-    const charset = props.charset ?? ''
     const charDataList = (event.data ?? '')
       .split('')
-      .map((char) => useChar(char, charset))
+      .map((char, i) => {
+        const charset = pipe(undefined, () => {
+          if (typeof props.charset === 'string') {
+            return props.charset
+          }
 
-    charDataList.forEach(({ start }, i) => start(i * 20))
+          for (const getCharset of props.charset) {
+            const result = getCharset(char)
+            if (result) {
+              return result
+            }
+          }
 
+          return ''
+        })
+
+        const result = useChar(char, charset)
+        result.start(i * 20)
+
+        return result
+      })
+
+    // 根據 selectionStart 位置插入 event.data
     charList.value.splice(selectionStart - 1, 0, ...charDataList)
     triggerRef(charList)
   }
