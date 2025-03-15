@@ -4,7 +4,7 @@
       v-model="text"
       class="input-encoded px-3 py-2"
       :charset
-      :encode-interval="80"
+      :encode-interval="50"
       :encode-times="5"
     />
 
@@ -24,7 +24,7 @@ const text = ref('')
 const charset = [
   /** 數字 */
   (char: string) => char.match(/\d/)
-    ? '㊀㊁㊂㊃㊄㊅㊆㊇㊈㊉㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩'
+    ? '㊀㊁㊂㊃㊄㊅㊆㊇㊈㊉'
     : undefined,
 
   /** 中文 */
