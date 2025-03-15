@@ -10,9 +10,9 @@
 </template>
 
 <script setup lang="ts">
-import { until, useActiveElement } from '@vueuse/core'
+import { useActiveElement } from '@vueuse/core'
 import { pipe, prop } from 'remeda'
-import { computed, ref, shallowRef, triggerRef, watch } from 'vue'
+import { computed, shallowRef, triggerRef, watch } from 'vue'
 import { useChar } from './use-char'
 
 // #region Props
@@ -91,10 +91,37 @@ const charList = shallowRef<ReturnType<typeof useChar>[]>(
 )
 
 let isComposing = false
-/** input 事件已經觸發 */
-const isAfterOnInput = ref(false)
 /** 紀錄 caret 位置 */
 let caretPosition = 0
+
+function getCharDataList(data: string) {
+  return data
+    .split(/.*?/u)
+    .map((char, i) => {
+      const charset = pipe(undefined, () => {
+        if (typeof props.charset === 'string') {
+          return props.charset
+        }
+
+        for (const getCharset of props.charset) {
+          const result = getCharset(char)
+          if (result) {
+            return result
+          }
+        }
+
+        return ''
+      })
+
+      const result = useChar(char, charset, {
+        interval: props.encodeInterval,
+        count: props.encodeTimes,
+      })
+      result.start(i * 20)
+
+      return result
+    })
+}
 
 /** 在 onInput 中取得之 selectionStart、selectionEnd 永遠相同
  *
@@ -104,8 +131,6 @@ let caretPosition = 0
  */
 async function handleBeforeInput(event: Event) {
   // console.log(`🚀 ~ [handleBeforeInput] event:`, event)
-  isAfterOnInput.value = false
-
   if (!(event instanceof InputEvent)) {
     return
   }
@@ -117,39 +142,36 @@ async function handleBeforeInput(event: Event) {
 
   const selectionStart = targetEl.selectionStart ?? targetEl.value.length
   const selectionEnd = targetEl.selectionEnd ?? targetEl.value.length
-  const deleteCount = selectionEnd - selectionStart
+  const selectedTextLength = selectionEnd - selectionStart
+
+  // console.log(`🚀 ~ [handleBeforeInput] selectionStart:`, selectionStart)
+  // console.log(`🚀 ~ [handleBeforeInput] selectionEnd:`, selectionEnd)
 
   if (event.inputType.includes('delete')) {
     const offset = event.inputType === 'deleteContentBackward' ? 0 : 1
 
-    if (deleteCount > 0) {
-      charList.value.splice(selectionStart, deleteCount)
+    if (selectedTextLength > 0) {
+      charList.value.splice(selectionStart, selectedTextLength)
     }
     else {
       charList.value.splice(selectionStart - 1 + offset, 1)
     }
   }
 
-  if (event.inputType.includes('insert') && deleteCount > 0) {
-    charList.value.splice(selectionStart, deleteCount)
+  /** 反白後編輯，僅刪除內容，插入文字同 insertText，所以統一交給 onInput 處理 */
+  if (selectedTextLength > 0 && event.inputType === 'insertText') {
+    charList.value.splice(selectionStart, selectedTextLength)
   }
 
-  /** 必須等到 onInput 完成後才能觸發 charList 變更
-   *
-   * 如果沒有等到 onInput 完成，會導致 input value 多刪除一個字元
-   *
-   * 原因如下：假設字串為 123
-   *
-   * 1. 刪除 3，onBeforeInput 先觸發，讓 charList 變為 12
-   *
-   * 2. 這個時候 input value 還沒實際刪除 3，但是 charList 已經變為 12，所以 input value 變為 12
-   *
-   * 3. 接著 input value 觸發刪除，但是 3 已經沒了，導致 2 被刪掉，最終只剩下 1
-   *
-   * 4. 結果就是從 123 變成 1，而不是預期的 12
-   */
-  await until(isAfterOnInput).toBe(true)
-  triggerRef(charList)
+  // insertFromPaste 需要在 onBeforeInput 處理，onInput 的 selectionStart 位置錯誤
+  if (event.inputType === 'insertFromPaste') {
+    charList.value.splice(selectionStart, selectedTextLength)
+
+    const charDataList = getCharDataList(event.data ?? '')
+
+    // 根據 selectionStart 位置插入 event.data
+    charList.value.splice(selectionStart, 0, ...charDataList)
+  }
 }
 async function handleInput(event: Event) {
   // console.log(`🚀 ~ [handleInput] event:`, event)
@@ -165,45 +187,37 @@ async function handleInput(event: Event) {
   }
 
   const selectionStart = targetEl.selectionStart ?? targetEl.value.length
+  // console.log(`🚀 ~ [handleInput] selectionStart:`, selectionStart)
+
   caretPosition = selectionStart
 
   if (
-    ('inputType' in event && event.inputType.includes('insert'))
+    ('inputType' in event && event.inputType === 'insertText')
     || event.type === 'compositionend'
   ) {
-    const charDataList = (event.data ?? '')
-      .split(/.*?/u)
-      .map((char, i) => {
-        const charset = pipe(undefined, () => {
-          if (typeof props.charset === 'string') {
-            return props.charset
-          }
-
-          for (const getCharset of props.charset) {
-            const result = getCharset(char)
-            if (result) {
-              return result
-            }
-          }
-
-          return ''
-        })
-
-        const result = useChar(char, charset, {
-          interval: props.encodeInterval,
-          count: props.encodeTimes,
-        })
-        result.start(i * 20)
-
-        return result
-      })
+    const charDataList = getCharDataList(event.data ?? '')
 
     // 根據 selectionStart 位置插入 event.data
     charList.value.splice(selectionStart - 1, 0, ...charDataList)
-    triggerRef(charList)
   }
 
-  isAfterOnInput.value = true
+  /** 必須等到 onInput 完成後才能觸發 charList 變更響應
+   *
+   * 如果在 onBeforeInput 觸發，會導致刪除字元（deleteContentBackward）時， input value 多刪除一個字元
+   *
+   * 原因如下：
+   *
+   * 1. 假設字串為 123
+   *
+   * 2. 刪除 3，onBeforeInput 先觸發，讓 charList 變為 12
+   *
+   * 3. 這個時候 input value 還沒實際刪除 3，但是 charList 已經變為 12，所以 input value 變為 12
+   *
+   * 4. 接著 input value 觸發刪除，但是 3 已經沒了，導致 2 被刪掉，最終只剩下 1
+   *
+   * 5. 結果就是從 123 變成 1，而不是預期的 12
+   */
+  triggerRef(charList)
 }
 
 /** 處理中文拼字問題
