@@ -10,9 +10,9 @@
 </template>
 
 <script setup lang="ts">
-import { until } from '@vueuse/core'
+import { until, useActiveElement } from '@vueuse/core'
 import { pipe, prop } from 'remeda'
-import { computed, nextTick, ref, shallowRef, triggerRef, watch } from 'vue'
+import { computed, ref, shallowRef, triggerRef, watch } from 'vue'
 import { useChar } from './use-char'
 
 // #region Props
@@ -47,6 +47,8 @@ const emit = defineEmits<Emits>()
 
 defineSlots<Slots>()
 
+const activeEl = useActiveElement()
+
 const charList = shallowRef<ReturnType<typeof useChar>[]>(
   props.modelValue.split('').map((char) => {
     if (typeof props.charset === 'string') {
@@ -60,6 +62,8 @@ const charList = shallowRef<ReturnType<typeof useChar>[]>(
 let isComposing = false
 /** input 事件已經觸發 */
 const isAfterInput = ref(false)
+/** 紀錄 cursor 位置 */
+let selectionIndex = 0
 
 async function handleInput(event: Event) {
   // console.log(`🚀 ~ [handleInput] event:`, event)
@@ -75,6 +79,7 @@ async function handleInput(event: Event) {
   }
 
   const selectionStart = targetEl.selectionStart ?? targetEl.value.length
+  selectionIndex = selectionStart
 
   if (
     ('inputType' in event && event.inputType.includes('insert'))
@@ -86,14 +91,7 @@ async function handleInput(event: Event) {
       .split('')
       .map((char) => useChar(char, charset))
 
-    /** 必須在動畫完成後在調整 cursor 位置，否則會因為 value 變化讓 cursor 跳至最後 */
-    Promise.all(
-      charDataList.map((charData, i) => charData.start(i * 50)),
-    )
-      .then(async () => {
-        await nextTick()
-        targetEl.setSelectionRange(selectionStart + charDataList.length, selectionStart + charDataList.length)
-      })
+    charDataList.forEach(({ start }, i) => start(i * 20))
 
     charList.value.splice(selectionStart - 1, 0, ...charDataList)
     triggerRef(charList)
@@ -103,7 +101,7 @@ async function handleInput(event: Event) {
 }
 /** 在 onInput 中取得的 selectionStart selectionEnd 會永遠相同
  *
- * 刪除、反白後貼上，可能與 selectionRange 相關的事件必須在 onBeforeInput 中處理
+ * 刪除、反白後編輯，可能與 selectionRange 相關的事件必須在 onBeforeInput 中處理
  */
 async function handleBeforeInput(event: Event) {
   // console.log(`🚀 ~ [handleBeforeInput] event:`, event)
@@ -120,19 +118,20 @@ async function handleBeforeInput(event: Event) {
 
   const selectionStart = targetEl.selectionStart ?? targetEl.value.length
   const selectionEnd = targetEl.selectionEnd ?? targetEl.value.length
+  const deleteCount = selectionEnd - selectionStart
 
-  if (
-    event.inputType.includes('delete')
-    || event.inputType === 'insertFromPaste'
-  ) {
-    const deleteCount = selectionEnd - selectionStart
-
+  if (event.inputType.includes('delete')) {
     if (deleteCount > 0) {
       charList.value.splice(selectionStart, deleteCount)
     }
     else {
       charList.value.splice(selectionStart - 1, 1)
     }
+  }
+
+  if (event.inputType.includes('insert') && deleteCount > 0
+  ) {
+    charList.value.splice(selectionStart, deleteCount)
   }
 
   /** 必須等到 onInput 完成後才能觸發 charList 變更
@@ -166,6 +165,18 @@ const currentString = computed(() => pipe(
   charList.value,
   (chars) => chars.map(prop('value')).join(''),
 ))
+
+/** value 變化會讓 cursor 跳至最後，所以要不斷復歸位置
+ *
+ * DOM 更新後觸發 setSelectionRange 才有用，所以 flush 設為 post
+ */
+watch(currentString, async () => {
+  if (!(activeEl.value instanceof HTMLInputElement)) {
+    return
+  }
+
+  activeEl.value.setSelectionRange(selectionIndex, selectionIndex)
+}, { flush: 'post' })
 
 watch(charList, (list) => {
   const value = list.map(prop('original')).join('')
