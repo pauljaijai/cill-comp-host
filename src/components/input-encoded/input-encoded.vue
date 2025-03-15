@@ -234,7 +234,7 @@ function handleCompositionEnd(event: Event) {
 
 const currentString = computed(() => pipe(
   charList.value,
-  (chars) => chars.map(prop('value')).join(''),
+  (chars) => chars.map(({ char }) => char.value).join(''),
 ))
 
 /** value 變化會讓 caret 跳至最後，所以要不斷復歸位置

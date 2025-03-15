@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { ref } from 'vue'
 
 export function useChar(
   value: string,
@@ -20,33 +20,35 @@ export function useChar(
     return charsetList.at(index)
   }
 
-  const char = reactive({
+  let times = count
+  const char = ref(value)
+
+  async function start(delay = 0) {
+    char.value = getRandomChar() ?? value
+
+    return new Promise<void>((resolve) => {
+      if (charsetList.length === 0) {
+        return resolve()
+      }
+
+      setTimeout(() => {
+        const timer = setInterval(() => {
+          char.value = getRandomChar() ?? value
+          times -= 1
+
+          if (times <= 0) {
+            char.value = value
+            clearInterval(timer)
+            resolve()
+          }
+        }, interval)
+      }, delay)
+    })
+  }
+
+  return {
     original: value,
-    value,
-    count,
-    async start(delay = 0) {
-      char.value = getRandomChar() ?? value
-
-      return new Promise<void>((resolve) => {
-        if (charsetList.length === 0) {
-          return resolve()
-        }
-
-        setTimeout(() => {
-          const timer = setInterval(() => {
-            char.value = getRandomChar() ?? value
-            char.count -= 1
-
-            if (char.count <= 0) {
-              char.value = value
-              clearInterval(timer)
-              resolve()
-            }
-          }, interval)
-        }, delay)
-      })
-    },
-  })
-
-  return char
+    char,
+    start,
+  }
 }
