@@ -62,8 +62,8 @@ const charList = shallowRef<ReturnType<typeof useChar>[]>(
 let isComposing = false
 /** input 事件已經觸發 */
 const isAfterOnInput = ref(false)
-/** 紀錄 cursor 位置 */
-let selectionIndex = 0
+/** 紀錄 caret 位置 */
+let caretPosition = 0
 
 /** 在 onInput 中取得之 selectionStart、selectionEnd 永遠相同
  *
@@ -132,7 +132,7 @@ async function handleInput(event: Event) {
   }
 
   const selectionStart = targetEl.selectionStart ?? targetEl.value.length
-  selectionIndex = selectionStart
+  caretPosition = selectionStart
 
   if (
     ('inputType' in event && event.inputType.includes('insert'))
@@ -170,7 +170,7 @@ const currentString = computed(() => pipe(
   (chars) => chars.map(prop('value')).join(''),
 ))
 
-/** value 變化會讓 cursor 跳至最後，所以要不斷復歸位置
+/** value 變化會讓 caret 跳至最後，所以要不斷復歸位置
  *
  * DOM 更新後觸發 setSelectionRange 才有用，所以 flush 設為 post
  */
@@ -179,7 +179,7 @@ watch(currentString, async () => {
     return
   }
 
-  activeEl.value.setSelectionRange(selectionIndex, selectionIndex)
+  activeEl.value.setSelectionRange(caretPosition, caretPosition)
 }, { flush: 'post' })
 
 watch(charList, (list) => {
