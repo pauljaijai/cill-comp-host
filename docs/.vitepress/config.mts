@@ -118,7 +118,7 @@ export default defineConfig({
           {
             text: '輸入框',
             items: [
-              { text: '編碼輸入框', link: '/components/input-encoded/' },
+              { text: '解碼輸入框', link: '/components/input-decoding/' },
             ],
           },
           {

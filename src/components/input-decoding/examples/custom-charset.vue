@@ -1,8 +1,8 @@
 <template>
   <div class="w-full flex flex-col items-center gap-4 border border-gray-300 p-6">
-    <input-encoded
+    <input-decoding
       v-model="text"
-      class="input-encoded px-3 py-2"
+      class="input-decoding px-3 py-2"
       :charset
       :encode-interval="50"
       :encode-times="5"
@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import InputEncoded from '../input-encoded.vue'
+import InputDecoding from '../input-decoding.vue'
 
 const text = ref('')
 
@@ -37,7 +37,7 @@ const charset = [
 </script>
 
 <style scoped lang="sass">
-.input-encoded
+.input-decoding
   border: 1px solid #ccc
   border-inline: 2px solid #AAA
 </style>

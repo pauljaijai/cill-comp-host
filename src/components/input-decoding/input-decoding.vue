@@ -19,7 +19,7 @@ import { useChar } from './use-char'
 interface Props {
   modelValue?: string;
 
-  /** 編碼效果的字元集
+  /** 解碼效果的字元集
    *
    * 可以根據 char 來決定字元集，依矩陣順序判斷
    *
@@ -33,7 +33,7 @@ interface Props {
    */
   encodeInterval?: number;
 
-  /** 編碼次數
+  /** 解碼次數
    *
    * @default 10
    */
