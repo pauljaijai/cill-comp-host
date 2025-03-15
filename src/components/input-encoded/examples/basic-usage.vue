@@ -1,24 +1,25 @@
 <template>
-  <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
-    <div class="flex flex-col gap-4 border rounded">
-      <base-checkbox
-        v-model="disabled"
-        label="停用按鈕"
-        class="p-4"
-      />
-    </div>
+  <div class="w-full flex flex-col items-center gap-4 border border-gray-300 p-6">
+    <input-encoded
+      v-model="text"
+      class="input-encoded px-3 py-2"
+    />
 
-    <div class="flex justify-center">
-      <input-encoded />
+    <div class="">
+      {{ text }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import BaseCheckbox from '../../base-checkbox.vue'
 import InputEncoded from '../input-encoded.vue'
 
 const text = ref('')
-const disabled = ref(true)
 </script>
+
+<style scoped lang="sass">
+.input-encoded
+  border: 1px solid #ccc
+  border-inline: 2px solid #AAA
+</style>
