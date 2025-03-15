@@ -17,7 +17,7 @@ import CustomCharset from '../../../src/components/input-decoding/examples/custo
 
 ### 基本用法
 
-不管是輸入還是貼上，都會有解碼效果。
+不管是輸入還是貼上，都會有解碼效果，而且完全不會干擾輸入過程。
 
 <basic-usage/>
 
@@ -37,20 +37,31 @@ import CustomCharset from '../../../src/components/input-decoding/examples/custo
 
 ## 原理
 
-透過 `input` 輸入事件偵測輸入文字，處理每個字元並轉換為動態的解碼效果。
+透過 `input` 輸入事件偵測每個輸入文字，轉換每個字元為動態解碼效果。
 
-這裡長了新知識，就是 `compositionstart` 和 `compositionend` 事件，可以確保對中文正常輸入，拼字的時候不會被誤判成多次輸入。
+:::tip 中文拼字怎麼處理？
+開發這個元件讓我長了新知識，就是 `input` 的 `compositionstart` 和 `compositionend` 事件，可以確保中文正常輸入，拼字的時候不會被誤判成多次輸入。
+:::
 
-每個字元會被轉換為 `useChar` 產生的動態解碼對象，根據設定的 `charset`（解碼字元集）、`encodeInterval`（解碼間隔時間）和 `encodeTimes`（解碼次數）產生隨機變化的效果，使字元看起來像是被「解碼」一樣逐漸顯示。
+輸入時，每個字元會被轉換為 `useChar` 產生的動態解碼對象，根據設定產生隨機變化的效果，使字元看起來像是被「解碼」一樣逐漸顯示。
 
-組件還處理了複雜的輸入情境，包括：
+說起來簡單，實際上還要考慮各種輸入情境，包括：
 
-- 文字選取與取代
-- 粘貼文字
-- 刪除操作
-- 光標位置控制
+1. **輸入、貼上、拖動文字**
 
-所有這些輸入處理完成後，組件會透過 `update:modelValue` 事件將原始值同步回父組件。
+    都是插入文字，但是有些微差別，需要分別在 `onInput` 或 `onBeforeInput` 處理。
+
+1. **選取**
+
+    第 1 點的操作加上選取，需特別注意 caret 位置或隱含的刪除行為。
+
+1. **刪除**
+
+    有分 `Forward` 與 `Backward` 兩個方向。
+
+1. **維持插入點（caret）**
+
+    `input` 內容變化時，插入點位置會被重置到最尾端，所以解碼動畫播放時，也要不斷維持插入點位置。
 
 ## 原始碼
 
