@@ -114,7 +114,7 @@ const currentSection = ref('btn');
 
 不管是輸入還是貼上，都會有解碼效果，而且完全不會干擾輸入過程。(⌐■_■)✧
 
-<input-decoding z-index="999"/>
+<input-decoding class="h-[30vmax] flex-center" z-index="999"/>
 
 </expansion-section>
 

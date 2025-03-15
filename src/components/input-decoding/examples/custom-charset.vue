@@ -4,8 +4,8 @@
       v-model="text"
       class="input-decoding px-3 py-2"
       :charset
-      :encode-interval="50"
-      :encode-times="5"
+      :encode-interval="40"
+      :encode-times="10"
     />
 
     <span class="border-b px-3 pb-1">
@@ -23,16 +23,17 @@ const text = ref('')
 const charset = [
   /** 數字 */
   (char: string) => char.match(/\d/)
-    ? '㊀㊁㊂㊃㊄㊅㊆㊇㊈㊉'
+    ? 'ⅠⅡⅢⅣⅤⅦⅥⅧⅨⅫ'
     : undefined,
 
   /** 中文 */
   (char: string) => char.match(/[\u4E00-\u9FA5]/)
-    ? 'ㄅㄆㄉㄇㄊㄍㄣㄠㄚㄗㄝㄩㄓㄒㄑㄎㄏ'
+    ? '⺔⺗⺝⺞⺤⺪⺭⺰⺯⺩⺫⺬⺮⺗⺻⻂⻌⻏⻞⺳'
     : undefined,
 
   /** 其他 */
-  () => '🐳🐋🐬🐡🦈🐙🦀🦞🦑',
+  // () => '🐳🐋🐬🐡🦈🐙🦀🦞🦑',
+  () => '◉◎◒◓◐◕◑◔◵◴◷◶',
 ]
 </script>
 
