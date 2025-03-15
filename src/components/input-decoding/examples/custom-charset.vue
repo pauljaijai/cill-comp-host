@@ -4,8 +4,7 @@
       v-model="text"
       class="input-decoding px-3 py-2"
       :charset
-      :encode-interval="40"
-      :encode-times="10"
+      :decode-interval="40"
     />
 
     <span class="border-b px-3 pb-1">

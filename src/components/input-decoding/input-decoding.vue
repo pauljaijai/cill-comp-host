@@ -31,13 +31,13 @@ interface Props {
    *
    * @default 20
    */
-  encodeInterval?: number;
+  decodeInterval?: number;
 
   /** 解碼次數
    *
    * @default 10
    */
-  encodeTimes?: number;
+  decodeTimes?: number;
 }
 // #endregion Props
 
@@ -56,8 +56,8 @@ interface Slots {
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
   charset: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
-  encodeInterval: 20,
-  encodeTimes: 10,
+  decodeInterval: 20,
+  decodeTimes: 10,
 })
 
 const emit = defineEmits<Emits>()
@@ -84,8 +84,8 @@ const charList = shallowRef<ReturnType<typeof useChar>[]>(
     })
 
     return useChar(char, charset, {
-      interval: props.encodeInterval,
-      count: props.encodeTimes,
+      interval: props.decodeInterval,
+      count: props.decodeTimes,
     })
   }),
 )
@@ -114,8 +114,8 @@ function getCharDataList(data: string) {
       })
 
       const result = useChar(char, charset, {
-        interval: props.encodeInterval,
-        count: props.encodeTimes,
+        interval: props.decodeInterval,
+        count: props.decodeTimes,
       })
       result.start(i * 20)
 
