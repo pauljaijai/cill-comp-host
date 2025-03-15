@@ -127,7 +127,7 @@ function getCharDataList(data: string) {
  *
  * 刪除、反白後編輯，這類可能與 selectionRange 相關的事件必須在 onBeforeInput 中處理
  *
- * 反白後編輯則預先刪除反白部分
+ * 反白後編輯（有 selectionRange 的 insertText）則預先刪除反白部分
  */
 async function handleBeforeInput(event: Event) {
   // console.log(`🚀 ~ [handleBeforeInput] event:`, event)
@@ -168,8 +168,6 @@ async function handleBeforeInput(event: Event) {
     charList.value.splice(selectionStart, selectedTextLength)
 
     const charDataList = getCharDataList(event.data ?? '')
-
-    // 根據 selectionStart 位置插入 event.data
     charList.value.splice(selectionStart, 0, ...charDataList)
   }
 }
@@ -191,14 +189,17 @@ async function handleInput(event: Event) {
 
   caretPosition = selectionStart
 
+  const charDataList = getCharDataList(event.data ?? '')
+
   if (
     ('inputType' in event && event.inputType === 'insertText')
     || event.type === 'compositionend'
   ) {
-    const charDataList = getCharDataList(event.data ?? '')
-
-    // 根據 selectionStart 位置插入 event.data
     charList.value.splice(selectionStart - 1, 0, ...charDataList)
+  }
+
+  if ('inputType' in event && event.inputType === 'insertFromDrop') {
+    charList.value.splice(selectionStart, 0, ...charDataList)
   }
 
   /** 必須等到 onInput 完成後才能觸發 charList 變更響應
