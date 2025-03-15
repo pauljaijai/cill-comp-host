@@ -51,10 +51,6 @@ import CustomCharset from '../../../src/components/input-encoded/examples/custom
 
 <<< ../../../src/components/input-encoded/input-encoded.vue/#Emits
 
-### Methods
-
-<<< ../../../src/components/input-encoded/input-encoded.vue/#Methods
-
 ### Slots
 
 <<< ../../../src/components/input-encoded/input-encoded.vue/#Slots

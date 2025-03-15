@@ -18,6 +18,7 @@ import { useChar } from './use-char'
 // #region Props
 interface Props {
   modelValue?: string;
+
   /** 編碼效果的字元集
    *
    * 可以根據 char 來決定字元集，依矩陣順序判斷
@@ -26,9 +27,16 @@ interface Props {
    */
   charset?: string | Array<(char: string) => string | undefined>;
 
-  /** 字符變化間隔毫秒數 */
+  /** 字符變化間隔毫秒數
+   *
+   * @default 20
+   */
   encodeInterval?: number;
-  /** 編碼次數 */
+
+  /** 編碼次數
+   *
+   * @default 10
+   */
   encodeTimes?: number;
 }
 // #endregion Props
@@ -231,12 +239,6 @@ watch(charList, (list) => {
   const value = list.map(prop('original')).join('')
   emit('update:modelValue', value)
 })
-
-// #region Methods
-interface Expose { }
-// #endregion Methods
-
-defineExpose<Expose>({})
 </script>
 
 <style scoped lang="sass">
