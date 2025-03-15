@@ -9,6 +9,8 @@ import SliderStubborn from '../../src/components/slider-stubborn/examples/basic-
 
 import ToggleProactive from '../../src/components/toggle-proactive/examples/basic-usage.vue';
 
+import InputDecoding from '../../src/components/input-decoding/examples/basic-usage.vue';
+
 import WrapperStereoscopic from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic.vue';
 import WrapperStereoscopicLayer from '../../src/components/wrapper-stereoscopic/wrapper-stereoscopic-layer.vue';
 
@@ -96,6 +98,23 @@ const currentSection = ref('btn');
 停用時切換狀態會和你唱反調。( ´థ౪థ)
 
 <toggle-proactive class="h-[60vh]" z-index="999"/>
+
+</expansion-section>
+
+## 輸入框
+
+風格化的輸入框
+
+<expansion-section
+  v-model="currentSection"
+  header-class="border p-2 rounded-lg"
+>
+
+### [解碼輸入框](./input-decoding/) <Badge type="info" text="input" />
+
+不管是輸入還是貼上，都會有解碼效果，而且完全不會干擾輸入過程。(⌐■_■)✧
+
+<input-decoding class="h-[30vmax] flex-center" z-index="999"/>
 
 </expansion-section>
 
