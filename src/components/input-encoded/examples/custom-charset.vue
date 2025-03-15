@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { constant } from 'remeda'
 import { ref } from 'vue'
 import InputEncoded from '../input-encoded.vue'
 
@@ -33,7 +32,7 @@ const charset = [
     : undefined,
 
   /** 其他 */
-  constant('🐳🐋🐬🐡🦈🐙🦀🦞🦑'),
+  () => '🐳🐋🐬🐡🦈🐙🦀🦞🦑',
 ]
 </script>
 
