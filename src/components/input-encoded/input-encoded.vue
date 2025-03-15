@@ -12,7 +12,8 @@
 <script setup lang="ts">
 import { until } from '@vueuse/core'
 import { pipe, prop } from 'remeda'
-import { computed, nextTick, reactive, ref, shallowRef, triggerRef, watch } from 'vue'
+import { computed, nextTick, ref, shallowRef, triggerRef, watch } from 'vue'
+import { useChar } from './use-char'
 
 // #region Props
 interface Props {
@@ -46,55 +47,6 @@ const emit = defineEmits<Emits>()
 
 defineSlots<Slots>()
 
-function useChar(
-  value: string,
-  charset: string,
-  options?: Partial<{
-    count: number;
-    interval: number;
-  }>,
-) {
-  const {
-    count = 10,
-    interval = 20,
-  } = options ?? {}
-
-  function getRandomChar() {
-    const index = Math.floor(Math.random() * charset.length)
-    return charset.at(index)
-  }
-
-  const char = reactive({
-    original: value,
-    value,
-    count,
-    async start(delay = 0) {
-      char.value = getRandomChar() ?? value
-
-      return new Promise<void>((resolve) => {
-        if (charset.length === 0) {
-          return resolve()
-        }
-
-        setTimeout(() => {
-          const timer = setInterval(() => {
-            char.value = getRandomChar() ?? value
-            char.count -= 1
-
-            if (char.count <= 0) {
-              char.value = value
-              clearInterval(timer)
-              resolve()
-            }
-          }, interval)
-        }, delay)
-      })
-    },
-  })
-
-  return char
-}
-
 const charList = shallowRef<ReturnType<typeof useChar>[]>(
   props.modelValue.split('').map((char) => {
     if (typeof props.charset === 'string') {
@@ -110,7 +62,7 @@ let isComposing = false
 const isAfterInput = ref(false)
 
 async function handleInput(event: Event) {
-  console.log(`🚀 ~ [handleInput] event:`, event)
+  // console.log(`🚀 ~ [handleInput] event:`, event)
 
   /** CompositionEvent 用於中文輸入 */
   if (!(event instanceof InputEvent) && !(event instanceof CompositionEvent)) {
@@ -154,7 +106,7 @@ async function handleInput(event: Event) {
  * 刪除、反白後貼上，可能與 selectionRange 相關的事件必須在 onBeforeInput 中處理
  */
 async function handleBeforeInput(event: Event) {
-  console.log(`🚀 ~ [handleBeforeInput] event:`, event)
+  // console.log(`🚀 ~ [handleBeforeInput] event:`, event)
   isAfterInput.value = false
 
   if (!(event instanceof InputEvent)) {
@@ -168,8 +120,6 @@ async function handleBeforeInput(event: Event) {
 
   const selectionStart = targetEl.selectionStart ?? targetEl.value.length
   const selectionEnd = targetEl.selectionEnd ?? targetEl.value.length
-  console.log(`🚀 ~ selectionStart:`, selectionStart)
-  console.log(`🚀 ~ selectionEnd:`, selectionEnd)
 
   if (
     event.inputType.includes('delete')
