@@ -4,8 +4,8 @@
     type="text"
     @compositionstart="handleCompositionStart"
     @compositionend="handleCompositionEnd"
-    @input="handleInput"
     @beforeinput="handleBeforeInput"
+    @input="handleInput"
   >
 </template>
 
@@ -61,44 +61,10 @@ const charList = shallowRef<ReturnType<typeof useChar>[]>(
 
 let isComposing = false
 /** input 事件已經觸發 */
-const isAfterInput = ref(false)
+const isAfterOnInput = ref(false)
 /** 紀錄 cursor 位置 */
 let selectionIndex = 0
 
-async function handleInput(event: Event) {
-  // console.log(`🚀 ~ [handleInput] event:`, event)
-
-  /** CompositionEvent 用於中文輸入 */
-  if (!(event instanceof InputEvent) && !(event instanceof CompositionEvent)) {
-    return
-  }
-
-  const targetEl = event.target
-  if (isComposing || !(targetEl instanceof HTMLInputElement)) {
-    return
-  }
-
-  const selectionStart = targetEl.selectionStart ?? targetEl.value.length
-  selectionIndex = selectionStart
-
-  if (
-    ('inputType' in event && event.inputType.includes('insert'))
-    || event.type === 'compositionend'
-  ) {
-    // 根據 selectionStart 位置插入 event.data
-    const charset = props.charset ?? ''
-    const charDataList = (event.data ?? '')
-      .split('')
-      .map((char) => useChar(char, charset))
-
-    charDataList.forEach(({ start }, i) => start(i * 20))
-
-    charList.value.splice(selectionStart - 1, 0, ...charDataList)
-    triggerRef(charList)
-  }
-
-  isAfterInput.value = true
-}
 /** 在 onInput 中取得之 selectionStart、selectionEnd 永遠相同
  *
  * 刪除、反白後編輯，這類可能與 selectionRange 相關的事件必須在 onBeforeInput 中處理
@@ -107,7 +73,7 @@ async function handleInput(event: Event) {
  */
 async function handleBeforeInput(event: Event) {
   // console.log(`🚀 ~ [handleBeforeInput] event:`, event)
-  isAfterInput.value = false
+  isAfterOnInput.value = false
 
   if (!(event instanceof InputEvent)) {
     return
@@ -149,9 +115,44 @@ async function handleBeforeInput(event: Event) {
    *
    * 4. 結果就是從 123 變成 1，而不是預期的 12
    */
-  await until(isAfterInput).toBe(true)
+  await until(isAfterOnInput).toBe(true)
   triggerRef(charList)
 }
+async function handleInput(event: Event) {
+  // console.log(`🚀 ~ [handleInput] event:`, event)
+
+  /** CompositionEvent 用於中文輸入 */
+  if (!(event instanceof InputEvent) && !(event instanceof CompositionEvent)) {
+    return
+  }
+
+  const targetEl = event.target
+  if (isComposing || !(targetEl instanceof HTMLInputElement)) {
+    return
+  }
+
+  const selectionStart = targetEl.selectionStart ?? targetEl.value.length
+  selectionIndex = selectionStart
+
+  if (
+    ('inputType' in event && event.inputType.includes('insert'))
+    || event.type === 'compositionend'
+  ) {
+    // 根據 selectionStart 位置插入 event.data
+    const charset = props.charset ?? ''
+    const charDataList = (event.data ?? '')
+      .split('')
+      .map((char) => useChar(char, charset))
+
+    charDataList.forEach(({ start }, i) => start(i * 20))
+
+    charList.value.splice(selectionStart - 1, 0, ...charDataList)
+    triggerRef(charList)
+  }
+
+  isAfterOnInput.value = true
+}
+
 /** 處理中文拼字問題
  *
  * 等到拼字結束後才觸發 input 事件
