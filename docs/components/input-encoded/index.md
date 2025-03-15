@@ -16,7 +16,7 @@ import BasicUsage from '../../../src/components/input-encoded/examples/basic-usa
 
 ### 基本用法
 
-輸入文字時會有酷酷的編碼效果。
+不管是輸入還是貼上，都會有編碼效果。
 
 <basic-usage/>
 

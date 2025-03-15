@@ -5,9 +5,9 @@
       class="input-encoded px-3 py-2"
     />
 
-    <div class="">
+    <span class="border-b px-3 pb-1">
       {{ text }}
-    </div>
+    </span>
   </div>
 </template>
 
