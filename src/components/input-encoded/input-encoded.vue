@@ -99,9 +99,11 @@ async function handleInput(event: Event) {
 
   isAfterInput.value = true
 }
-/** 在 onInput 中取得的 selectionStart selectionEnd 會永遠相同
+/** 在 onInput 中取得之 selectionStart、selectionEnd 永遠相同
  *
- * 刪除、反白後編輯，可能與 selectionRange 相關的事件必須在 onBeforeInput 中處理
+ * 刪除、反白後編輯，這類可能與 selectionRange 相關的事件必須在 onBeforeInput 中處理
+ *
+ * 反白後編輯則預先刪除反白部分
  */
 async function handleBeforeInput(event: Event) {
   // console.log(`🚀 ~ [handleBeforeInput] event:`, event)
@@ -129,8 +131,7 @@ async function handleBeforeInput(event: Event) {
     }
   }
 
-  if (event.inputType.includes('insert') && deleteCount > 0
-  ) {
+  if (event.inputType.includes('insert') && deleteCount > 0) {
     charList.value.splice(selectionStart, deleteCount)
   }
 
@@ -140,16 +141,18 @@ async function handleBeforeInput(event: Event) {
    *
    * 原因如下：假設字串為 123
    *
-   * 1. 刪除 3，onBeforeInput 觸發，讓 charList 變為 12
+   * 1. 刪除 3，onBeforeInput 先觸發，讓 charList 變為 12
    *
-   * 2. 這個時候 input value 還沒觸發刪除，但是 charList 已經變為 12，所以 input value 變為 12
+   * 2. 這個時候 input value 還沒實際刪除 3，但是 charList 已經變為 12，所以 input value 變為 12
    *
-   * 3. 接著 input value 觸發刪除，導致 2 被刪掉，最終變成 1
+   * 3. 接著 input value 觸發刪除，但是 3 已經沒了，導致 2 被刪掉，最終只剩下 1
+   *
+   * 4. 結果就是從 123 變成 1，而不是預期的 12
    */
   await until(isAfterInput).toBe(true)
   triggerRef(charList)
 }
-/** 處理拼字問題
+/** 處理中文拼字問題
  *
  * 等到拼字結束後才觸發 input 事件
  */
