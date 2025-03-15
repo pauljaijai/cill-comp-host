@@ -14,7 +14,7 @@
         :enable
       >
         <div class="w-full border bg-white p-2 text-center">
-          ─=≡Σ((( つ•̀ω•́)つ
+          「這是鱈魚叫我寫的 bug ( ◔ ௰◔) 」
         </div>
       </wrapper-dodging>
     </div>

@@ -18,9 +18,9 @@ import PointlessSurvey from '../../../src/components/wrapper-dodging/examples/po
 
 ### 基本用法
 
-啟用後被包裹的元素會精準地閃躲飄，像極了某些閃避率點滿的同事。(。-`ω´-)
+啟用後被包裹的元素會精準地閃躲飄，像極了那些閃避率點滿的同事。(。-`ω´-)
 
-<basic-usage/>
+<basic-usage />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-dodging/examples/basic-usage.vue
@@ -30,7 +30,7 @@ import PointlessSurvey from '../../../src/components/wrapper-dodging/examples/po
 
 機密到連碰都碰不到。(́⊙◞౪◟⊙‵)
 
-<confidential-data class="h-[50vh]" />
+<confidential-data class="h-[20vmax]" />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/wrapper-dodging/examples/confidential-data.vue
