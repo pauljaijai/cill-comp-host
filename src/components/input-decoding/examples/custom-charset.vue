@@ -22,17 +22,21 @@ const text = ref('')
 const charset = [
   /** 數字 */
   (char: string) => char.match(/\d/)
-    ? 'ⅠⅡⅢⅣⅤⅦⅥⅧⅨⅫ'
+    ? '¥$¢€£'
     : undefined,
 
   /** 中文 */
   (char: string) => char.match(/[\u4E00-\u9FA5]/)
-    ? '⺔⺗⺝⺞⺤⺪⺭⺰⺯⺩⺫⺬⺮⺗⺻⻂⻌⻏⻞⺳'
+    ? 'ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ'
+    : undefined,
+
+  /** emoji */
+  (char: string) => char.match(/\p{Emoji}/u)
+    ? '♩♪♫♬𝄞'
     : undefined,
 
   /** 其他 */
-  // () => '🐳🐋🐬🐡🦈🐙🦀🦞🦑',
-  () => '◉◎◒◓◐◕◑◔◵◴◷◶',
+  () => 'ᚠᚢᚦᚨᚱᚳᚷᚹᚻᚾᛁᛂᛇᛈᛉᛊᛏᛒᛖᛗᛚᛝᛟᛡᛢᛣᛤᛥᛦᛧᛨ',
 ]
 </script>
 
