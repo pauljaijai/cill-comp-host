@@ -18,6 +18,8 @@
           class="font-orbitron px-3 py-2"
           :class="{ 'pointer-events-none': !visible }"
           charset="ᚠᚢᚦᚨᚱᚳᚷᚹᚻᚾᛁᛂᛇᛈᛉᛊᛏᛒᛖᛗᛚᛝᛟᛡᛢᛣᛤᛥᛦᛧᛨ"
+          @focus="cardParams.selected = true"
+          @blur="cardParams.selected = false"
         />
       </card-futuristic>
 
@@ -29,21 +31,23 @@
 </template>
 
 <script setup lang="ts">
+import type { Writable } from 'type-fest'
 import type { ExtractComponentProps } from '../../../types'
 import { ref } from 'vue'
 import BaseCheckbox from '../../base-checkbox.vue'
 import CardFuturistic from '../../card-futuristic/card-futuristic.vue'
 import InputDecoding from '../input-decoding.vue'
 
-type CardParams = ExtractComponentProps<typeof CardFuturistic>
+type CardParams = Writable<ExtractComponentProps<typeof CardFuturistic>>
 
 const visible = ref(false)
 const text = ref('codlin')
 
-const cardParams: CardParams = {
+const cardParams = ref<CardParams>({
+  selected: false,
   corner: {
     type: 'square',
-    size: 2,
+    size: 4,
   },
   bg: null,
   content: {
@@ -66,7 +70,7 @@ const cardParams: CardParams = {
       content: { delay: 0 },
     },
   },
-}
+})
 </script>
 
 <style lang="sass">
