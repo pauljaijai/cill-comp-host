@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { useActiveElement } from '@vueuse/core'
 import { pipe, prop } from 'remeda'
-import { computed, shallowRef, triggerRef, watch } from 'vue'
+import { computed, nextTick, shallowRef, triggerRef, watch } from 'vue'
 import { useChar } from './use-char'
 
 // #region Props
@@ -66,7 +66,10 @@ defineSlots<Slots>()
 
 const activeEl = useActiveElement()
 
-function getCharDataList(data: string) {
+function getCharDataList(
+  data: string,
+  autoStart = true,
+) {
   return data
     /** 確保 emoji 不會被拆分 */
     .split(/.*?/u)
@@ -90,7 +93,9 @@ function getCharDataList(data: string) {
         interval: props.decodeInterval,
         count: props.decodeTimes,
       })
-      result.start(i * 20)
+      if (autoStart) {
+        result.start(i * 20)
+      }
 
       return result
     })
@@ -114,6 +119,7 @@ let caretEnd = 0
  */
 async function handleBeforeInput(event: Event) {
   // console.log(`🚀 ~ [handleBeforeInput] event:`, event)
+  // console.log(`🚀 ~ [handleBeforeInput] charList:`, charList)
   if (!(event instanceof InputEvent)) {
     return
   }
@@ -132,19 +138,9 @@ async function handleBeforeInput(event: Event) {
   // console.log(`🚀 ~ [handleBeforeInput] isComposing:`, isComposing)
   // console.log(`🚀 ~ [handleBeforeInput] isFirstComposed:`, isFirstComposed)
 
-  if (event.inputType.includes('delete')) {
-    const offset = event.inputType === 'deleteContentBackward' ? 0 : 1
-
-    if (selectedTextLength > 0) {
-      charList.value.splice(caretStart, selectedTextLength)
-    }
-    else {
-      charList.value.splice(caretStart - 1 + offset, 1)
-    }
-  }
-
   /** 反白後編輯，僅刪除內容，插入文字同 insertText，所以統一交給 onInput 處理 */
   if (selectedTextLength > 0 && event.inputType === 'insertText') {
+    // FIX: 若文字內有 emoji，這種刪除方式會刪錯位置，暫時找不到解法
     charList.value.splice(caretStart, selectedTextLength)
   }
 
@@ -158,6 +154,7 @@ async function handleBeforeInput(event: Event) {
 }
 async function handleInput(event: Event) {
   // console.log(`🚀 ~ [handleInput] event:`, event)
+  // console.log(`🚀 ~ [handleInput] charList:`, charList)
 
   /** CompositionEvent 用於中文輸入 */
   if (!(event instanceof InputEvent) && !(event instanceof CompositionEvent)) {
@@ -194,6 +191,34 @@ async function handleInput(event: Event) {
 
   if ('inputType' in event && event.inputType === 'insertFromDrop') {
     charList.value.splice(caretStart, 0, ...charDataList)
+  }
+
+  /** 全部停止並重建，避免 emoji 導致誤判 caret 位置，而刪錯字元 */
+  if ('inputType' in event && event.inputType.includes('delete')) {
+    let anyPlaying = false
+    charList.value.forEach(({ stop, isPlaying }) => {
+      if (isPlaying.value) {
+        anyPlaying = true
+      }
+
+      stop()
+    })
+
+    await nextTick()
+
+    const inputValue = pipe(
+      targetEl.value,
+      (value) => {
+        /** 刪除最後一個字元 */
+        if (anyPlaying && event.inputType.includes('Backward')) {
+          /** 考慮到 emoji，不能直接用 string.slice(0, -1) */
+          return [...value].slice(0, -1).join('')
+        }
+        return value
+      },
+    )
+
+    charList.value = getCharDataList(inputValue, false)
   }
 
   /** 必須等到 onInput 完成後才能觸發 charList 變更響應
