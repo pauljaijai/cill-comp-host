@@ -1,12 +1,8 @@
 <template>
-  <div
-    class="frame w-full flex flex-col gap-4 border border-gray-300"
-    @click="next"
-    @click.right.prevent="prev"
-  >
+  <div class="frame w-full flex flex-col gap-4">
     <carousel-space-floating
       ref="carouselRef"
-      class="h-full bg-[#e5e5d9]"
+      class="h-full border border-gray-300 bg-[#e5e5d9]"
       :images="images"
       :fog-end="10"
       :init-index="0"
@@ -90,6 +86,19 @@
         </transition-group>
       </div>
     </carousel-space-floating>
+
+    <div class="flex gap-4">
+      <base-btn
+        label="上一個"
+        class="flex-1"
+        @click="prev()"
+      />
+      <base-btn
+        label="下一個"
+        class="flex-1"
+        @click="next()"
+      />
+    </div>
   </div>
 </template>
 
@@ -99,6 +108,7 @@ import { Vector2, Vector3 } from '@babylonjs/core'
 import { addProp, map } from 'remeda'
 import { ref } from 'vue'
 
+import BaseBtn from '../../base-btn.vue'
 import CarouselSpaceFloating from '../carousel-space-floating.vue'
 
 type CarouselProp = ExtractComponentProps<typeof CarouselSpaceFloating>
