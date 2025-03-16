@@ -32,7 +32,7 @@ const charset = [
 
   /** emoji */
   (char: string) => char.match(/\p{Emoji}/u)
-    ? '∴∷∶∵∻∼'
+    ? '♩♪♫♬𝄞'
     : undefined,
 
   /** 其他 */
