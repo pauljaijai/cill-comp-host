@@ -22,7 +22,7 @@ const text = ref('')
 const charset = [
   /** 數字 */
   (char: string) => char.match(/\d/)
-    ? 'ⅠⅡⅢⅣⅤⅦⅥⅧⅨⅫ'
+    ? '¥$¢€£'
     : undefined,
 
   /** 中文 */
