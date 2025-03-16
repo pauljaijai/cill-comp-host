@@ -67,6 +67,18 @@ import CustomCharset from '../../../src/components/input-decoding/examples/custo
 
     中文拼字時，`onInput` 與 `onBeforeInput` 中的 `input.selectionStart` 與 `input.selectionEnd` 與英文輸入不同，需要特別處理。
 
+1. **emoji**
+
+    1 個 emoji 為 2 字元，需要謹慎處理。
+
+### 已知 Bug
+
+若文字內有 emoji，反白後編輯與段落中插入文字，都會有錯位問題。
+
+主因是因為 emoji 會讓 `selectionStart` 與 `selectionEnd` 與實際文字長度不同，
+
+目前還想不到甚麼好辦法。( ´•̥̥̥ ω •̥̥̥` )
+
 ## 原始碼
 
 <source-link-list name="input-decoding"/>
