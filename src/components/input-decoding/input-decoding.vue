@@ -100,8 +100,11 @@ const charList = shallowRef(getCharDataList(props.modelValue))
 
 /** 處理中文拼字問題 */
 let isComposing = false
+let isFirstComposed = false
+
 /** 紀錄 caret 位置 */
-let caretPosition = 0
+let caretStart = 0
+let caretEnd = 0
 
 /** 在 onInput 中取得之 selectionStart、selectionEnd 永遠相同
  *
@@ -120,35 +123,37 @@ async function handleBeforeInput(event: Event) {
     return
   }
 
-  const selectionStart = targetEl.selectionStart ?? targetEl.value.length
-  const selectionEnd = targetEl.selectionEnd ?? targetEl.value.length
-  const selectedTextLength = selectionEnd - selectionStart
+  caretStart = targetEl.selectionStart ?? targetEl.value.length
+  caretEnd = targetEl.selectionEnd ?? targetEl.value.length
+  const selectedTextLength = caretEnd - caretStart
 
-  // console.log(`🚀 ~ [handleBeforeInput] selectionStart:`, selectionStart)
-  // console.log(`🚀 ~ [handleBeforeInput] selectionEnd:`, selectionEnd)
+  // console.log(`🚀 ~ [handleBeforeInput] caretStart:`, caretStart)
+  // console.log(`🚀 ~ [handleBeforeInput] caretEnd:`, caretEnd)
+  // console.log(`🚀 ~ [handleBeforeInput] isComposing:`, isComposing)
+  // console.log(`🚀 ~ [handleBeforeInput] isFirstComposed:`, isFirstComposed)
 
   if (event.inputType.includes('delete')) {
     const offset = event.inputType === 'deleteContentBackward' ? 0 : 1
 
     if (selectedTextLength > 0) {
-      charList.value.splice(selectionStart, selectedTextLength)
+      charList.value.splice(caretStart, selectedTextLength)
     }
     else {
-      charList.value.splice(selectionStart - 1 + offset, 1)
+      charList.value.splice(caretStart - 1 + offset, 1)
     }
   }
 
   /** 反白後編輯，僅刪除內容，插入文字同 insertText，所以統一交給 onInput 處理 */
   if (selectedTextLength > 0 && event.inputType === 'insertText') {
-    charList.value.splice(selectionStart, selectedTextLength)
+    charList.value.splice(caretStart, selectedTextLength)
   }
 
   // insertFromPaste 需要在 onBeforeInput 處理，onInput 的 selectionStart 位置錯誤
   if (event.inputType === 'insertFromPaste') {
-    charList.value.splice(selectionStart, selectedTextLength)
+    charList.value.splice(caretStart, selectedTextLength)
 
     const charDataList = getCharDataList(event.data ?? '')
-    charList.value.splice(selectionStart, 0, ...charDataList)
+    charList.value.splice(caretStart, 0, ...charDataList)
   }
 }
 async function handleInput(event: Event) {
@@ -164,10 +169,19 @@ async function handleInput(event: Event) {
     return
   }
 
-  const selectionStart = targetEl.selectionStart ?? targetEl.value.length
-  // console.log(`🚀 ~ [handleInput] selectionStart:`, selectionStart)
+  if (caretStart !== caretEnd && isFirstComposed) {
+    // 表示有拼音選字，須根據 onBeforeInput 的 selectionStart 位置偏移後插入
+    caretStart += 1
+  }
+  else {
+    caretStart = targetEl.selectionStart ?? targetEl.value.length
+  }
+  caretEnd = targetEl.selectionEnd ?? targetEl.value.length
 
-  caretPosition = selectionStart
+  // console.log(`🚀 ~ [handleInput] caretStart:`, caretStart)
+  // console.log(`🚀 ~ [handleInput] caretEnd:`, caretEnd)
+  // console.log(`🚀 ~ [handleInput] isComposing:`, isComposing)
+  // console.log(`🚀 ~ [handleInput] isFirstComposed:`, isFirstComposed)
 
   const charDataList = getCharDataList(event.data ?? '')
 
@@ -175,11 +189,11 @@ async function handleInput(event: Event) {
     ('inputType' in event && event.inputType === 'insertText')
     || event.type === 'compositionend'
   ) {
-    charList.value.splice(selectionStart - 1, 0, ...charDataList)
+    charList.value.splice(caretStart - 1, 0, ...charDataList)
   }
 
   if ('inputType' in event && event.inputType === 'insertFromDrop') {
-    charList.value.splice(selectionStart, 0, ...charDataList)
+    charList.value.splice(caretStart, 0, ...charDataList)
   }
 
   /** 必須等到 onInput 完成後才能觸發 charList 變更響應
@@ -206,11 +220,15 @@ async function handleInput(event: Event) {
  * 等到拼字結束後才觸發 input 事件
  */
 function handleCompositionStart() {
+  // console.log(`🚀 ~ [handleCompositionStart]:`)
   isComposing = true
 }
 function handleCompositionEnd(event: Event) {
+  // console.log(`🚀 ~ [handleCompositionEnd]:`)
   isComposing = false
+  isFirstComposed = true
   handleInput(event)
+  isFirstComposed = false
 }
 
 const currentString = computed(() => pipe(
@@ -227,7 +245,8 @@ watch(currentString, async () => {
     return
   }
 
-  activeEl.value.setSelectionRange(caretPosition, caretPosition)
+  const position = Math.max(caretEnd, caretStart)
+  activeEl.value.setSelectionRange(position, position)
 }, { flush: 'post' })
 
 watch(charList, (list) => {
