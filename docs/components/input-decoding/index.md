@@ -43,7 +43,7 @@ import CustomCharset from '../../../src/components/input-decoding/examples/custo
 開發這個元件讓我長了新知識，就是 `input` 的 `compositionstart` 和 `compositionend` 事件，可以確保中文正常輸入，拼字的時候不會被誤判成多次輸入。
 :::
 
-輸入時，每個字元會被轉換為 `useChar` 產生的動態解碼對象，根據設定產生隨機變化的效果，使字元看起來像是被「解碼」一樣逐漸顯示。
+輸入時，每個字元會被轉換為 [`useChar`](https://gitlab.com/side_project/chill-component/-/blob/main/src/components/input-decoding/use-char.ts?ref_type=heads) 產生的動態解碼對象，根據設定產生隨機變化的效果，使字元看起來像是被「解碼」一樣逐漸顯示。
 
 說起來簡單，實際上還要考慮各種輸入情境，包括：
 
@@ -62,6 +62,10 @@ import CustomCharset from '../../../src/components/input-decoding/examples/custo
 1. **維持插入點（caret）**
 
     `input` 內容變化時，插入點位置會被重置到最尾端，所以解碼動畫播放時，也要不斷維持插入點位置。
+
+1. **拼字與插入點（caret）**
+
+    中文拼字時，`onInput` 與 `onBeforeInput` 中的 `input.selectionStart` 與 `input.selectionEnd` 與英文輸入不同，需要特別處理。
 
 ## 原始碼
 
