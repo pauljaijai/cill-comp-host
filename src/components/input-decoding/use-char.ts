@@ -21,6 +21,7 @@ export function useChar(
   }
 
   let times = count
+  const isPlaying = ref(false)
   const char = ref(value)
 
   async function start(delay = 0) {
@@ -32,23 +33,35 @@ export function useChar(
       }
 
       setTimeout(() => {
-        const timer = setInterval(() => {
-          char.value = getRandomChar() ?? value
-          times -= 1
+        isPlaying.value = true
 
+        const timer = setInterval(() => {
           if (times <= 0) {
             char.value = value
             clearInterval(timer)
+            isPlaying.value = false
             resolve()
+            return
           }
+
+          char.value = getRandomChar() ?? value
+          times -= 1
         }, interval)
       }, delay)
     })
   }
 
+  function stop() {
+    char.value = value
+    times = 0
+    isPlaying.value = false
+  }
+
   return {
     original: value,
     char,
+    isPlaying,
     start,
+    stop,
   }
 }
