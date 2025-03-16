@@ -7,6 +7,7 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/input-decoding/examples/basic-usage.vue'
 import CustomCharset from '../../../src/components/input-decoding/examples/custom-charset.vue'
+import FuturisticInput from '../../../src/components/input-decoding/examples/futuristic-input.vue'
 </script>
 
 # 解碼輸入框 <Badge type="info" text="input" />
@@ -33,6 +34,16 @@ import CustomCharset from '../../../src/components/input-decoding/examples/custo
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/input-decoding/examples/custom-charset.vue
+:::
+
+### 科幻輸入框
+
+配合[科幻卡片](/components/card-futuristic/){target='_bank'}元件，打造未來感十足的輸入框。
+
+<futuristic-input/>
+
+::: details 查看範例原始碼
+<<< ../../../src/components/input-decoding/examples/futuristic-input.vue
 :::
 
 ## 原理
