@@ -66,36 +66,9 @@ defineSlots<Slots>()
 
 const activeEl = useActiveElement()
 
-const charList = shallowRef<ReturnType<typeof useChar>[]>(
-  props.modelValue.split(/.*?/u).map((char) => {
-    const charset = pipe(undefined, () => {
-      if (typeof props.charset === 'string') {
-        return props.charset
-      }
-
-      for (const getCharset of props.charset) {
-        const result = getCharset(char)
-        if (result) {
-          return result
-        }
-      }
-
-      return ''
-    })
-
-    return useChar(char, charset, {
-      interval: props.decodeInterval,
-      count: props.decodeTimes,
-    })
-  }),
-)
-
-let isComposing = false
-/** 紀錄 caret 位置 */
-let caretPosition = 0
-
 function getCharDataList(data: string) {
   return data
+    /** 確保 emoji 不會被拆分 */
     .split(/.*?/u)
     .map((char, i) => {
       const charset = pipe(undefined, () => {
@@ -122,6 +95,13 @@ function getCharDataList(data: string) {
       return result
     })
 }
+
+const charList = shallowRef(getCharDataList(props.modelValue))
+
+/** 處理中文拼字問題 */
+let isComposing = false
+/** 紀錄 caret 位置 */
+let caretPosition = 0
 
 /** 在 onInput 中取得之 selectionStart、selectionEnd 永遠相同
  *
