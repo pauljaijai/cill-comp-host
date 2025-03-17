@@ -119,6 +119,10 @@ const animeMap: PartAnimeFcnMap = {
     } = param ?? {}
 
     const svgDuration = duration / 4
+    const svgSize = {
+      width: svgRef.value?.clientWidth ?? 0,
+      height: svgRef.value?.clientHeight ?? 0,
+    }
 
     const tasks = [
       anime({

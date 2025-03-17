@@ -42,10 +42,10 @@
 <script setup lang="ts">
 import type { BgParam, BorderParam, ContentParam, CornerParam } from './param'
 import type { PartAnimeFcnMap, ProvideContent, State, TextAnimeFcnMap } from './type'
-import { promiseTimeout, useElementHover, useElementSize, useRefHistory } from '@vueuse/core'
+import { promiseTimeout, until, useElementHover, useElementSize, useMounted, useRefHistory } from '@vueuse/core'
 import { debounce, defaultsDeep } from 'lodash-es'
 import { clone, entries, find, firstBy, map, pick, pipe, prop as rprop } from 'remeda'
-import { computed, defineAsyncComponent, provide, reactive, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, provide, reactive, ref, watch } from 'vue'
 import { Part, PROVIDE_KEY } from './type'
 
 type AnimeSequence = Record<
@@ -76,6 +76,13 @@ interface Props {
   content?: ContentParam | null;
 }
 // #endregion Props
+
+// #region Slots
+interface Slots {
+  default?: () => unknown;
+}
+// #endregion Slots
+
 const props = withDefaults(defineProps<Props>(), {
   animeSequence: undefined,
 
@@ -93,15 +100,9 @@ const props = withDefaults(defineProps<Props>(), {
   ornament: null,
 })
 
-// #region Emits
-// const emit = defineEmits<{}>()
-// #endregion Emits
+defineSlots<Slots>()
 
-// #region Slots
-defineSlots<{
-  default?: () => unknown;
-}>()
-// #endregion Slots
+const isMounted = useMounted()
 
 const partList = Object.values(Part)
 // 引入所有 part 元件
@@ -162,6 +163,14 @@ const partMap = new Map<`${Part}`, PartAnimeFcnMap>()
 const initPart = debounce(async () => {
   const { visible } = props
 
+  /** 盡可能確保 DOM 綁定完成
+   *
+   * 因為有些元件動畫需要確定 DOM size
+   */
+  await until(isMounted).toBe(true)
+  await nextTick()
+  await promiseTimeout(100)
+
   // console.log(`🚀 ~ parts init Anime:`)
   await playPartsAnime(
     visible ? 'visible' : 'hidden',
@@ -172,7 +181,6 @@ const initPart = debounce(async () => {
    *
    * 使用 JS 控制，一樣有閃爍問題，暫時使用 Class 控制
    */
-  await promiseTimeout(100)
   cardRef.value?.classList.remove('opacity-0')
 }, 5)
 
