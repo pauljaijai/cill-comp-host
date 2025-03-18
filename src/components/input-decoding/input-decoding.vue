@@ -38,6 +38,18 @@ interface Props {
    * @default 10
    */
   decodeTimes?: number;
+
+  /** 每個字符的延遲毫秒數
+   *
+   * @default 20
+   */
+  perCharDecodeDelay?: number;
+
+  /** 最大延遲毫秒數
+   *
+   * @default 1000
+   */
+  maxDecodeDelay?: number;
 }
 // #endregion Props
 
@@ -58,6 +70,8 @@ const props = withDefaults(defineProps<Props>(), {
   charset: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
   decodeInterval: 20,
   decodeTimes: 10,
+  perCharDecodeDelay: 20,
+  maxDecodeDelay: 1000,
 })
 
 const emit = defineEmits<Emits>()
@@ -94,7 +108,7 @@ function getCharDataList(
         count: props.decodeTimes,
       })
       if (autoStart) {
-        result.start(i * 20)
+        result.start(Math.min(i * props.perCharDecodeDelay, props.maxDecodeDelay))
       }
 
       return result
