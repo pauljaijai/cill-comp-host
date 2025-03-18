@@ -5,7 +5,7 @@
       class="input-decoding px-3 py-2"
     />
 
-    <span class="border-b px-3 pb-1">
+    <span class="break-all border-b px-3 pb-1">
       {{ text }}
     </span>
   </div>
