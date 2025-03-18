@@ -23,7 +23,7 @@
         />
       </card-futuristic>
 
-      <div class="font-orbitron">
+      <div class="font-orbitron break-all">
         {{ text }}
       </div>
     </div>
