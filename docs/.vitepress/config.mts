@@ -159,6 +159,7 @@ export default defineConfig({
               { text: '螢火蟲', link: '/components/bg-firefly/' },
               { text: '櫻吹雪', link: '/components/bg-sakura-fubuki/' },
               { text: '落雪', link: '/components/bg-snow/' },
+              { text: '波浪線', link: '/components/bg-wavy-lines/' },
             ],
           },
           {
