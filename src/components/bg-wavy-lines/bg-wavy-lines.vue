@@ -17,19 +17,10 @@
 
 <script setup lang="ts">
 import { useElementSize, useRafFn } from '@vueuse/core'
+import { createNoise2D } from 'simplex-noise'
 import { computed, reactive, shallowRef, triggerRef, useTemplateRef, watch } from 'vue'
 
-type Point = [
-  /** x, y */
-  number,
-  number,
-  /** dx, dy */
-  number,
-  number,
-  /** vx, vy */
-  number,
-  number,
-]
+type Point = Record<'x' | 'y' | 'dx' | 'dy' | 'vx' | 'vy', number>
 
 // #region Props
 interface Props {
@@ -48,10 +39,12 @@ interface Props {
 // #endregion Props
 
 const props = withDefaults(defineProps<Props>(), {
-  lineGap: 5,
+  lineGap: 8,
   pointGap: 2,
   lineColor: '#444',
 })
+
+const noise = createNoise2D()
 
 const svgRef = useTemplateRef('svg')
 const svgSize = reactive(useElementSize(svgRef))
@@ -73,7 +66,7 @@ function initPointMatrix() {
     const points: Point[] = []
     for (let j = 0; j < pointCount; j++) {
       const y = j * pointGap
-      points.push([x, y, 0, 0, 0, 0])
+      points.push({ x, y, dx: 0, dy: 0, vx: 0, vy: 0 })
     }
     pointMatrix.value.push(points)
   }
@@ -87,23 +80,23 @@ watch(svgSize, () => {
 const pathList = computed(() =>
   pointMatrix.value.map((points) =>
     `M ${points.map(
-      ([x, y, dx, dy]) => `${x + dx} ${y + dy}`,
+      ({ x, y, dx, dy }) => `${x + dx} ${y + dy}`,
     ).join(' ')}`,
   ),
 )
 
 useRafFn(() => {
-  const now = Date.now() / 1000
+  const now = Date.now() / 5000
 
-  pointMatrix.value.forEach((points, i) => {
-    points.forEach((point, j) => {
-      /** 產生隨機力 */
-      // point[5] += Math.random() * 0.1 - 0.05
-      // point[4] += Math.random() * 0.1 - 0.05
+  pointMatrix.value.forEach((points) => {
+    points.forEach((point) => {
+      const value = noise(
+        point.x * 0.008 + now,
+        point.y * 0.008 + now,
+      )
 
-      /** 速度積分 */
-      point[2] += point[4]
-      point[3] += point[5]
+      point.dx = Math.sin(value) * props.lineGap * 2
+      point.dy = Math.sin(value) * props.lineGap * 2
     })
   })
 
