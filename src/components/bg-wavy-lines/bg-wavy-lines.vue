@@ -57,14 +57,14 @@ function initPointMatrix() {
   const { lineGap, pointGap } = props
   const { width, height } = boxSize
 
-  const lineCount = Math.ceil(width / lineGap)
-  const pointCount = Math.ceil(height / pointGap)
+  const lineCount = Math.ceil((width + maxOffset * 2) / lineGap)
+  const pointCount = Math.ceil((height + maxOffset * 2) / pointGap)
 
   for (let i = 0; i < lineCount; i++) {
-    const x = i * lineGap
+    const x = i * lineGap - maxOffset
     const points: Point[] = []
     for (let j = 0; j < pointCount; j++) {
-      const y = j * pointGap
+      const y = j * pointGap - maxOffset
       points.push({ x, y, dx: 0, dy: 0, vx: 0, vy: 0 })
     }
     pointMatrix.push(points)
