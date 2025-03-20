@@ -3,21 +3,6 @@
     ref="box"
     class="relative"
   >
-    <svg
-      :view-box
-      class="absolute inset-0 hidden h-full w-full"
-    >
-      <!-- 正中間垂直線 -->
-      <path
-        v-for="path, i in pathList"
-        :key="i"
-        :d="path"
-        :stroke="props.lineColor"
-        stroke-width="1"
-        fill="none"
-      />
-    </svg>
-
     <canvas
       ref="canvas"
       class="absolute inset-0 h-full w-full"
@@ -28,7 +13,7 @@
 <script setup lang="ts">
 import { useElementSize, useRafFn } from '@vueuse/core'
 import { createNoise2D } from 'simplex-noise'
-import { computed, onMounted, reactive, shallowRef, triggerRef, useTemplateRef, watch } from 'vue'
+import { computed, reactive, useTemplateRef, watch } from 'vue'
 
 type Point = Record<'x' | 'y' | 'dx' | 'dy' | 'vx' | 'vy', number>
 
@@ -51,7 +36,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   lineGap: 10,
   pointGap: 10,
-  lineColor: '#444',
+  lineColor: '#999',
 })
 
 const noise = createNoise2D()
@@ -59,10 +44,14 @@ const noise = createNoise2D()
 const boxRef = useTemplateRef('box')
 const boxSize = reactive(useElementSize(boxRef))
 
-const viewBox = computed(() => `0 0 ${boxSize.width} ${boxSize.height}`)
+const canvasRef = useTemplateRef('canvas')
+const ctx = computed(() => canvasRef.value?.getContext('2d'))
+
+/** 最大偏移量 */
+const maxOffset = props.lineGap * 2
 
 /** 偏移量 */
-const pointMatrix = shallowRef<Point[][]>([])
+const pointMatrix: Point[][] = []
 
 function initPointMatrix() {
   const { lineGap, pointGap } = props
@@ -78,55 +67,20 @@ function initPointMatrix() {
       const y = j * pointGap
       points.push({ x, y, dx: 0, dy: 0, vx: 0, vy: 0 })
     }
-    pointMatrix.value.push(points)
+    pointMatrix.push(points)
   }
-
-  triggerRef(pointMatrix)
 }
 watch(boxSize, () => {
   initPointMatrix()
-})
 
-const pathList = computed(() =>
-  pointMatrix.value.map((points) =>
-    `M ${points.map(
-      ({ x, y, dx, dy }) => `${x + dx} ${y + dy}`,
-    ).join(' ')}`,
-  ),
-)
-
-/** 更新 point */
-useRafFn(() => {
-  const now = performance.now() / 5000
-
-  pointMatrix.value.forEach((points) => {
-    points.forEach((point) => {
-      const value = noise(
-        point.x * 0.005 + now,
-        point.y * 0.005 + now,
-      )
-
-      point.dx = Math.sin(value) * props.lineGap * 2
-      point.dy = Math.sin(value) * props.lineGap * 2
-    })
-  })
-
-  triggerRef(pointMatrix)
-})
-
-const canvasRef = useTemplateRef('canvas')
-const ctx = computed(() => canvasRef.value?.getContext('2d'))
-
-onMounted(() => {
-  if (!canvasRef.value) {
-    return
+  if (canvasRef.value) {
+    canvasRef.value.width = boxSize.width
+    canvasRef.value.height = boxSize.height
   }
-
-  canvasRef.value.width = boxSize.width
-  canvasRef.value.height = boxSize.height
 })
 
-function draw() {
+/** 繪製與更新 */
+useRafFn(() => {
   if (!ctx.value)
     return
   const context = ctx.value
@@ -138,9 +92,21 @@ function draw() {
   context.strokeStyle = props.lineColor
   context.lineWidth = 1
 
-  pointMatrix.value.forEach((points) => {
+  const now = performance.now() / 5000
+
+  pointMatrix.forEach((points) => {
     context.beginPath()
     points.forEach((point, index) => {
+      /** 更新座標 */
+      const value = noise(
+        point.x * 0.005 + now,
+        point.y * 0.005 + now,
+      )
+
+      point.dx = Math.sin(value) * maxOffset
+      point.dy = Math.sin(value) * maxOffset
+
+      /** 繪製 */
       const x = point.x + point.dx
       const y = point.y + point.dy
       if (index === 0) {
@@ -152,10 +118,5 @@ function draw() {
     })
     context.stroke()
   })
-}
-
-useRafFn(draw)
+})
 </script>
-
-<style scoped lang="sass">
-</style>
