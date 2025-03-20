@@ -1,24 +1,34 @@
 <template>
-  <svg
-    ref="svg"
-    :view-box
+  <div
+    ref="box"
+    class="relative"
   >
-    <!-- 正中間垂直線 -->
-    <path
-      v-for="path, i in pathList"
-      :key="i"
-      :d="path"
-      :stroke="props.lineColor"
-      stroke-width="1"
-      fill="none"
+    <svg
+      :view-box
+      class="absolute inset-0 hidden h-full w-full"
+    >
+      <!-- 正中間垂直線 -->
+      <path
+        v-for="path, i in pathList"
+        :key="i"
+        :d="path"
+        :stroke="props.lineColor"
+        stroke-width="1"
+        fill="none"
+      />
+    </svg>
+
+    <canvas
+      ref="canvas"
+      class="absolute inset-0 h-full w-full"
     />
-  </svg>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useElementSize, useRafFn } from '@vueuse/core'
 import { createNoise2D } from 'simplex-noise'
-import { computed, reactive, shallowRef, triggerRef, useTemplateRef, watch } from 'vue'
+import { computed, onMounted, reactive, shallowRef, triggerRef, useTemplateRef, watch } from 'vue'
 
 type Point = Record<'x' | 'y' | 'dx' | 'dy' | 'vx' | 'vy', number>
 
@@ -39,24 +49,24 @@ interface Props {
 // #endregion Props
 
 const props = withDefaults(defineProps<Props>(), {
-  lineGap: 8,
-  pointGap: 2,
+  lineGap: 10,
+  pointGap: 10,
   lineColor: '#444',
 })
 
 const noise = createNoise2D()
 
-const svgRef = useTemplateRef('svg')
-const svgSize = reactive(useElementSize(svgRef))
+const boxRef = useTemplateRef('box')
+const boxSize = reactive(useElementSize(boxRef))
 
-const viewBox = computed(() => `0 0 ${svgSize.width} ${svgSize.height}`)
+const viewBox = computed(() => `0 0 ${boxSize.width} ${boxSize.height}`)
 
 /** 偏移量 */
 const pointMatrix = shallowRef<Point[][]>([])
 
 function initPointMatrix() {
   const { lineGap, pointGap } = props
-  const { width, height } = svgSize
+  const { width, height } = boxSize
 
   const lineCount = Math.ceil(width / lineGap)
   const pointCount = Math.ceil(height / pointGap)
@@ -73,7 +83,7 @@ function initPointMatrix() {
 
   triggerRef(pointMatrix)
 }
-watch(svgSize, () => {
+watch(boxSize, () => {
   initPointMatrix()
 })
 
@@ -85,14 +95,15 @@ const pathList = computed(() =>
   ),
 )
 
+/** 更新 point */
 useRafFn(() => {
-  const now = Date.now() / 5000
+  const now = performance.now() / 5000
 
   pointMatrix.value.forEach((points) => {
     points.forEach((point) => {
       const value = noise(
-        point.x * 0.008 + now,
-        point.y * 0.008 + now,
+        point.x * 0.005 + now,
+        point.y * 0.005 + now,
       )
 
       point.dx = Math.sin(value) * props.lineGap * 2
@@ -102,6 +113,48 @@ useRafFn(() => {
 
   triggerRef(pointMatrix)
 })
+
+const canvasRef = useTemplateRef('canvas')
+const ctx = computed(() => canvasRef.value?.getContext('2d'))
+
+onMounted(() => {
+  if (!canvasRef.value) {
+    return
+  }
+
+  canvasRef.value.width = boxSize.width
+  canvasRef.value.height = boxSize.height
+})
+
+function draw() {
+  if (!ctx.value)
+    return
+  const context = ctx.value
+
+  // 清除畫布
+  context.clearRect(0, 0, boxSize.width, boxSize.height)
+
+  // 繪製線條
+  context.strokeStyle = props.lineColor
+  context.lineWidth = 1
+
+  pointMatrix.value.forEach((points) => {
+    context.beginPath()
+    points.forEach((point, index) => {
+      const x = point.x + point.dx
+      const y = point.y + point.dy
+      if (index === 0) {
+        context.moveTo(x, y)
+      }
+      else {
+        context.lineTo(x, y)
+      }
+    })
+    context.stroke()
+  })
+}
+
+useRafFn(draw)
 </script>
 
 <style scoped lang="sass">
