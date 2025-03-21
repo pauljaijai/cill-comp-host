@@ -7,13 +7,15 @@
       ref="canvas"
       class="absolute inset-0 h-full w-full"
     />
+
+    <slot :fps />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useElementSize, useRafFn } from '@vueuse/core'
 import { createNoise2D } from 'simplex-noise'
-import { computed, reactive, useTemplateRef, watch } from 'vue'
+import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
 type Point = Record<'x' | 'y' | 'dx' | 'dy' | 'vx' | 'vy', number>
 
@@ -33,11 +35,20 @@ interface Props {
 }
 // #endregion Props
 
+// #region Slots
+interface Slots {
+  default?: (data: { fps: number }) => unknown;
+}
+// #endregion Slots
+
 const props = withDefaults(defineProps<Props>(), {
   lineGap: 10,
   pointGap: 10,
   lineColor: '#999',
 })
+defineSlots<Slots>()
+
+const fps = ref(0)
 
 const noise = createNoise2D()
 
@@ -80,10 +91,12 @@ watch(boxSize, () => {
 })
 
 /** 繪製與更新 */
-useRafFn(() => {
+useRafFn(({ delta }) => {
   if (!ctx.value)
     return
   const context = ctx.value
+
+  fps.value = Math.round(1000 / delta)
 
   // 清除畫布
   context.clearRect(0, 0, boxSize.width, boxSize.height)
@@ -118,5 +131,15 @@ useRafFn(() => {
     })
     context.stroke()
   })
+})
+
+// #region Methods
+interface Expose {
+  fps: typeof fps;
+}
+// #endregion Methods
+
+defineExpose<Expose>({
+  fps,
 })
 </script>

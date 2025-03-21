@@ -1,6 +1,13 @@
 <template>
   <div class="w-full flex flex-col gap-4 border border-gray-300">
-    <bg-wavy-lines class="h-full w-full" />
+    <bg-wavy-lines
+      v-slot="{ fps }"
+      class="h-full w-full"
+    >
+      <div class="absolute left-2 top-2 opacity-40">
+        {{ fps }}
+      </div>
+    </bg-wavy-lines>
   </div>
 </template>
 
