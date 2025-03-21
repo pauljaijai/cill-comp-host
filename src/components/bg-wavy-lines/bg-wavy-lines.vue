@@ -8,12 +8,12 @@
       class="absolute inset-0 h-full w-full"
     />
 
-    <slot :fps />
+    <slot :fps="throttledFps" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { throttleFilter, useElementSize, useMouse, useRafFn } from '@vueuse/core'
+import { refThrottled, throttleFilter, useElementSize, useMouse, useRafFn } from '@vueuse/core'
 import { createNoise2D } from 'simplex-noise'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
@@ -58,8 +58,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 defineSlots<Slots>()
 
-const fps = ref(0)
-
 const noise = createNoise2D()
 const mouse = reactive(useMouse({
   eventFilter: throttleFilter(30),
@@ -71,9 +69,6 @@ const boxSize = reactive(useElementSize(boxRef))
 const canvasRef = useTemplateRef('canvas')
 const ctx = computed(() => canvasRef.value?.getContext('2d'))
 
-/** 最大偏移量 */
-const maxOffset = props.lineGap * 3
-
 /** 偏移量 */
 const pointMatrix: Point[][] = []
 
@@ -81,14 +76,17 @@ function initPointMatrix() {
   const { lineGap, pointGap } = props
   const { width, height } = boxSize
 
-  const lineCount = Math.ceil((width + maxOffset * 2) / lineGap)
-  const pointCount = Math.ceil((height + maxOffset * 2) / pointGap)
+  /** 超出畫布範圍，避免露出白底 */
+  const offset = props.lineGap * 3
+
+  const lineCount = Math.ceil((width + offset * 2) / lineGap)
+  const pointCount = Math.ceil((height + offset * 2) / pointGap)
 
   for (let i = 0; i < lineCount; i++) {
-    const x = i * lineGap - maxOffset
+    const x = i * lineGap - offset
     const points: Point[] = []
     for (let j = 0; j < pointCount; j++) {
-      const y = j * pointGap - maxOffset
+      const y = j * pointGap - offset
       points.push({ x, y, dx: 0, dy: 0, vx: 0, vy: 0 })
     }
     pointMatrix.push(points)
@@ -108,8 +106,9 @@ interface UpdatePointParams {
   pointsIndex: number;
   point: Point;
   index: number;
+  delta: number;
 }
-const updatePointFcnMap = {
+const effectUpdatePointFcnMap = {
   wind: (params: UpdatePointParams) => {
     const {
       point,
@@ -122,10 +121,29 @@ const updatePointFcnMap = {
       point.y * 0.005 + now,
     )
 
-    point.dx = Math.sin(value) * maxOffset
-    point.dy = Math.sin(value) * maxOffset
+    point.vx = Math.sin(value) * 2.5
+    point.vy = Math.sin(value) * 2.5
   },
 }
+
+/** 更新 point */
+function updatePoint(params: UpdatePointParams) {
+  const { point, delta } = params
+
+  /** 阻力 */
+  point.vx = point.vx * 0.9
+  point.vy = point.vy * 0.9
+
+  /** 恢復力 */
+  point.vx = point.vx + point.dx * -0.1
+  point.vy = point.vy + point.dy * -0.1
+
+  point.dx = point.dx + point.vx
+  point.dy = point.dy + point.vy
+}
+
+const fps = ref(0)
+const throttledFps = refThrottled(fps, 20)
 
 /** 繪製與更新 */
 useRafFn(({ delta }) => {
@@ -133,7 +151,9 @@ useRafFn(({ delta }) => {
     return
   const context = ctx.value
 
-  fps.value = Math.round(1000 / delta)
+  if (delta !== 0) {
+    fps.value = Math.round(1000 / delta)
+  }
 
   // 清除畫布
   context.clearRect(0, 0, boxSize.width, boxSize.height)
@@ -145,17 +165,26 @@ useRafFn(({ delta }) => {
   pointMatrix.forEach((points, pointsIndex) => {
     context.beginPath()
     points.forEach((point, index) => {
-      /** 更新座標 */
-      updatePointFcnMap[props.effect]({
+      effectUpdatePointFcnMap[props.effect]({
         points,
         pointsIndex,
         point,
         index,
+        delta,
       })
 
-      /** 繪製 */
+      updatePoint({
+        points,
+        pointsIndex,
+        point,
+        index,
+        delta,
+      })
+
       const x = point.x + point.dx
       const y = point.y + point.dy
+
+      /** 繪製 */
       if (index === 0) {
         context.moveTo(x, y)
       }
@@ -174,6 +203,6 @@ interface Expose {
 // #endregion Methods
 
 defineExpose<Expose>({
-  fps,
+  fps: throttledFps,
 })
 </script>
