@@ -31,7 +31,14 @@ interface Props {
   lineColor?: string;
 
   /** 各種效果。例：風吹、波動等等 */
-  effect?: string;
+  effect?: 'wind';
+
+  /** 渲染器
+   *
+   * - `canvas`：使用 Canvas API
+   * - `glsl`：使用 GLSL
+   */
+  renderer?: 'canvas' | 'glsl';
 }
 // #endregion Props
 
@@ -45,6 +52,8 @@ const props = withDefaults(defineProps<Props>(), {
   lineGap: 10,
   pointGap: 10,
   lineColor: '#999',
+  effect: 'wind',
+  renderer: 'canvas',
 })
 defineSlots<Slots>()
 
@@ -90,6 +99,33 @@ watch(boxSize, () => {
   }
 })
 
+interface UpdatePointParams {
+  points: Point[];
+  pointsIndex: number;
+  point: Point;
+  index: number;
+}
+function updatePoint(params: UpdatePointParams) {
+  const {
+    points,
+    pointsIndex,
+    point,
+    index,
+  } = params
+
+  if (props.effect === 'wind') {
+    const now = performance.now() / 5000
+
+    const value = noise(
+      point.x * 0.005 + now,
+      point.y * 0.005 + now,
+    )
+
+    point.dx = Math.sin(value) * maxOffset
+    point.dy = Math.sin(value) * maxOffset
+  }
+}
+
 /** 繪製與更新 */
 useRafFn(({ delta }) => {
   if (!ctx.value)
@@ -105,19 +141,16 @@ useRafFn(({ delta }) => {
   context.strokeStyle = props.lineColor
   context.lineWidth = 1
 
-  const now = performance.now() / 5000
-
-  pointMatrix.forEach((points) => {
+  pointMatrix.forEach((points, pointsIndex) => {
     context.beginPath()
     points.forEach((point, index) => {
       /** 更新座標 */
-      const value = noise(
-        point.x * 0.005 + now,
-        point.y * 0.005 + now,
-      )
-
-      point.dx = Math.sin(value) * maxOffset
-      point.dy = Math.sin(value) * maxOffset
+      updatePoint({
+        points,
+        pointsIndex,
+        point,
+        index,
+      })
 
       /** 繪製 */
       const x = point.x + point.dx
