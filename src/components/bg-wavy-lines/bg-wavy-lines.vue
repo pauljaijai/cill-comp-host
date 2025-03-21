@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { refThrottled, throttleFilter, useElementSize, useMouse, useRafFn } from '@vueuse/core'
+import { refThrottled, throttleFilter, useElementSize, useMouseInElement, useRafFn } from '@vueuse/core'
 import { createNoise2D } from 'simplex-noise'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
@@ -59,12 +59,13 @@ const props = withDefaults(defineProps<Props>(), {
 defineSlots<Slots>()
 
 const noise = createNoise2D()
-const mouse = reactive(useMouse({
-  eventFilter: throttleFilter(30),
-}))
 
 const boxRef = useTemplateRef('box')
 const boxSize = reactive(useElementSize(boxRef))
+
+const mouse = reactive(useMouseInElement(boxRef, {
+  eventFilter: throttleFilter(20),
+}))
 
 const canvasRef = useTemplateRef('canvas')
 const ctx = computed(() => canvasRef.value?.getContext('2d'))
@@ -108,7 +109,10 @@ interface UpdatePointParams {
   index: number;
   delta: number;
 }
-const effectUpdatePointFcnMap = {
+const effectUpdatePointFcnMap: Record<
+  NonNullable<Props['effect']>,
+  (params: UpdatePointParams) => void
+> = {
   wind: (params: UpdatePointParams) => {
     const {
       point,
@@ -125,10 +129,31 @@ const effectUpdatePointFcnMap = {
     point.vy = Math.sin(value) * 2.5
   },
 }
+const mouseUpdatePointFcnMap: Record<
+  NonNullable<MouseEffect['type']>,
+  (params: UpdatePointParams) => void
+> = {
+  fingertip: (params: UpdatePointParams) => {
+    const {
+      point,
+    } = params
+
+    const distance = Math.sqrt(
+      (point.x - mouse.elementX) ** 2 + (point.y - mouse.elementY) ** 2,
+    )
+
+    if (distance > 50) {
+      return
+    }
+
+    point.vx += (point.x - mouse.elementX) * (50 - distance) / 400
+    point.vy += (point.y - mouse.elementY) * (50 - distance) / 400
+  },
+}
 
 /** 更新 point */
 function updatePoint(params: UpdatePointParams) {
-  const { point, delta } = params
+  const { point } = params
 
   /** 阻力 */
   point.vx = point.vx * 0.9
@@ -165,21 +190,19 @@ useRafFn(({ delta }) => {
   pointMatrix.forEach((points, pointsIndex) => {
     context.beginPath()
     points.forEach((point, index) => {
-      effectUpdatePointFcnMap[props.effect]({
+      const params = {
         points,
         pointsIndex,
         point,
         index,
         delta,
-      })
+      }
 
-      updatePoint({
-        points,
-        pointsIndex,
-        point,
-        index,
-        delta,
-      })
+      effectUpdatePointFcnMap[props.effect](params)
+      if (!mouse.isOutside) {
+        mouseUpdatePointFcnMap[props.mouseEffect.type](params)
+      }
+      updatePoint(params)
 
       const x = point.x + point.dx
       const y = point.y + point.dy
