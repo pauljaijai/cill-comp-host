@@ -13,13 +13,17 @@
 </template>
 
 <script setup lang="ts">
-import { useElementSize, useRafFn } from '@vueuse/core'
+import { throttleFilter, useElementSize, useMouse, useRafFn } from '@vueuse/core'
 import { createNoise2D } from 'simplex-noise'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
 type Point = Record<'x' | 'y' | 'dx' | 'dy' | 'vx' | 'vy', number>
 
 // #region Props
+interface MouseEffect {
+  type: 'fingertip';
+}
+
 interface Props {
   /** 線條間距 */
   lineGap?: number;
@@ -33,12 +37,7 @@ interface Props {
   /** 各種效果。例：風吹、波動等等 */
   effect?: 'wind';
 
-  /** 渲染器
-   *
-   * - `canvas`：使用 Canvas API
-   * - `glsl`：使用 GLSL
-   */
-  renderer?: 'canvas' | 'glsl';
+  mouseEffect?: MouseEffect;
 }
 // #endregion Props
 
@@ -53,13 +52,18 @@ const props = withDefaults(defineProps<Props>(), {
   pointGap: 10,
   lineColor: '#999',
   effect: 'wind',
-  renderer: 'canvas',
+  mouseEffect: () => ({
+    type: 'fingertip',
+  }),
 })
 defineSlots<Slots>()
 
 const fps = ref(0)
 
 const noise = createNoise2D()
+const mouse = reactive(useMouse({
+  eventFilter: throttleFilter(30),
+}))
 
 const boxRef = useTemplateRef('box')
 const boxSize = reactive(useElementSize(boxRef))
@@ -105,15 +109,12 @@ interface UpdatePointParams {
   point: Point;
   index: number;
 }
-function updatePoint(params: UpdatePointParams) {
-  const {
-    points,
-    pointsIndex,
-    point,
-    index,
-  } = params
+const updatePointFcnMap = {
+  wind: (params: UpdatePointParams) => {
+    const {
+      point,
+    } = params
 
-  if (props.effect === 'wind') {
     const now = performance.now() / 5000
 
     const value = noise(
@@ -123,7 +124,7 @@ function updatePoint(params: UpdatePointParams) {
 
     point.dx = Math.sin(value) * maxOffset
     point.dy = Math.sin(value) * maxOffset
-  }
+  },
 }
 
 /** 繪製與更新 */
@@ -145,7 +146,7 @@ useRafFn(({ delta }) => {
     context.beginPath()
     points.forEach((point, index) => {
       /** 更新座標 */
-      updatePoint({
+      updatePointFcnMap[props.effect]({
         points,
         pointsIndex,
         point,

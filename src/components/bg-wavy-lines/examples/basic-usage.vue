@@ -3,7 +3,6 @@
     <bg-wavy-lines
       v-slot="{ fps }"
       class="h-full w-full"
-      renderer="glsl"
     >
       <div class="absolute left-2 top-2 opacity-40">
         {{ fps }}
