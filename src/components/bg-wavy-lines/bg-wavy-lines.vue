@@ -72,7 +72,7 @@ const canvasRef = useTemplateRef('canvas')
 const ctx = computed(() => canvasRef.value?.getContext('2d'))
 
 /** 最大偏移量 */
-const maxOffset = props.lineGap * 2
+const maxOffset = props.lineGap * 3
 
 /** 偏移量 */
 const pointMatrix: Point[][] = []
@@ -115,7 +115,7 @@ const updatePointFcnMap = {
       point,
     } = params
 
-    const now = performance.now() / 5000
+    const now = performance.now() / 10000
 
     const value = noise(
       point.x * 0.005 + now,
