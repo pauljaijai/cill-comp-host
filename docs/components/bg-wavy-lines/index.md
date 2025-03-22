@@ -26,6 +26,12 @@ import BasicUsage from '../../../src/components/bg-wavy-lines/examples/basic-usa
 
 ## 原理
 
+嘗試直接使用 canvas API 繪製生成式藝術。
+
+原本想嘗試 GLSL，但是除了他本身很天書以外，要實現互動的限制也很多。
+
+最後還是回到 canvas API，順便比較一下與 `p5.js` 的性能差異。
+
 ## 原始碼
 
 <source-link-list name="bg-wavy-lines"/>
