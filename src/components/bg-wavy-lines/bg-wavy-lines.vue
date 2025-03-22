@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { refThrottled, throttleFilter, useElementSize, useMouseInElement, useRafFn } from '@vueuse/core'
+import { clamp } from 'remeda'
 import { createNoise2D } from 'simplex-noise'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
@@ -22,6 +23,8 @@ type Point = Record<'x' | 'y' | 'dx' | 'dy' | 'vx' | 'vy', number>
 // #region Props
 interface MouseEffect {
   type: 'fingertip';
+  radius: number;
+  force: number;
 }
 
 interface Props {
@@ -54,6 +57,8 @@ const props = withDefaults(defineProps<Props>(), {
   effect: 'wind',
   mouseEffect: () => ({
     type: 'fingertip',
+    radius: 80,
+    force: 6,
   }),
 })
 defineSlots<Slots>()
@@ -63,8 +68,11 @@ const noise = createNoise2D()
 const boxRef = useTemplateRef('box')
 const boxSize = reactive(useElementSize(boxRef))
 
+const pMouse = ref({ px: 0, py: 0 })
+const throttledPMouse = refThrottled(pMouse, 15)
 const mouse = reactive(useMouseInElement(boxRef, {
-  eventFilter: throttleFilter(20),
+  eventFilter: throttleFilter(15),
+  handleOutside: false,
 }))
 
 const canvasRef = useTemplateRef('canvas')
@@ -129,25 +137,34 @@ const effectUpdatePointFcnMap: Record<
     point.vy = Math.sin(value) * 2.5
   },
 }
+
 const mouseUpdatePointFcnMap: Record<
   NonNullable<MouseEffect['type']>,
-  (params: UpdatePointParams) => void
+  (params: UpdatePointParams, options: MouseEffect) => void
 > = {
-  fingertip: (params: UpdatePointParams) => {
-    const {
-      point,
-    } = params
+  fingertip: (
+    params: UpdatePointParams,
+    options: Extract<MouseEffect, { type: 'fingertip' }>,
+  ) => {
+    const { point } = params
+    const { elementX, elementY } = mouse
+
+    const { px, py } = throttledPMouse.value
 
     const distance = Math.sqrt(
-      (point.x - mouse.elementX) ** 2 + (point.y - mouse.elementY) ** 2,
+      (point.x - elementX) ** 2 + (point.y - elementY) ** 2,
     )
 
-    if (distance > 50) {
+    if (distance > options.radius) {
       return
     }
+    /** 比率，越遠越小 */
+    const ratio = 1 - distance / options.radius
 
-    point.vx += (point.x - mouse.elementX) * (50 - distance) / 400
-    point.vy += (point.y - mouse.elementY) * (50 - distance) / 400
+    point.vx += clamp((elementX - px) * ratio, { min: -options.force, max: options.force })
+    point.vy += clamp((elementY - py) * ratio, { min: -options.force, max: options.force })
+
+    pMouse.value = { px: elementX, py: elementY }
   },
 }
 
@@ -156,19 +173,19 @@ function updatePoint(params: UpdatePointParams) {
   const { point } = params
 
   /** 阻力 */
-  point.vx = point.vx * 0.9
-  point.vy = point.vy * 0.9
+  point.vx *= 0.9
+  point.vy *= 0.9
 
   /** 恢復力 */
-  point.vx = point.vx + point.dx * -0.1
-  point.vy = point.vy + point.dy * -0.1
+  point.vx += point.dx * -0.1
+  point.vy += point.dy * -0.1
 
-  point.dx = point.dx + point.vx
-  point.dy = point.dy + point.vy
+  point.dx += point.vx
+  point.dy += point.vy
 }
 
 const fps = ref(0)
-const throttledFps = refThrottled(fps, 20)
+const throttledFps = refThrottled(fps, 30)
 
 /** 繪製與更新 */
 useRafFn(({ delta }) => {
@@ -200,7 +217,10 @@ useRafFn(({ delta }) => {
 
       effectUpdatePointFcnMap[props.effect](params)
       if (!mouse.isOutside) {
-        mouseUpdatePointFcnMap[props.mouseEffect.type](params)
+        mouseUpdatePointFcnMap[props.mouseEffect.type](
+          params,
+          props.mouseEffect,
+        )
       }
       updatePoint(params)
 

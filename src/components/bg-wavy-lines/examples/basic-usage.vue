@@ -2,7 +2,7 @@
   <div class="w-full flex flex-col gap-4 border border-gray-300">
     <bg-wavy-lines
       v-slot="{ fps }"
-      class="h-full w-full"
+      class="h-full w-full touch-none"
     >
       <div class="absolute left-2 top-2 opacity-40">
         {{ fps }}
