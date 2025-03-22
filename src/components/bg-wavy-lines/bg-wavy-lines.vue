@@ -285,7 +285,7 @@ const mouseUpdatePointFcnMap: Record<
 
     const {
       speed = 0.001,
-      maxRadius = props.lineGap * 30,
+      maxRadius = Math.max(boxSize.width, boxSize.height),
       amplitude = 6,
     } = options
 
