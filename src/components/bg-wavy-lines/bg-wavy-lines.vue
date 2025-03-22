@@ -196,7 +196,7 @@ const effectUpdatePointFcnMap: Record<
       point.y * 0.008 + now,
     )
 
-    point.vx = value * -1 * amplitude
+    point.vx = value * -amplitude
     point.vy = value * 5 * amplitude
   },
 }
