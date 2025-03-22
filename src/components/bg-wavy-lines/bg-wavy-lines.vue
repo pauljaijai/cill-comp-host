@@ -47,8 +47,8 @@ interface Props {
 
   /** 各種效果。例：風吹、波動等等 */
   effect?: 'none' | 'wind';
-
-  mouseEffect?: MouseEffect;
+  /** 滑鼠互動效果 */
+  mouseInteraction?: MouseEffect;
 }
 // #endregion Props
 
@@ -63,7 +63,7 @@ const props = withDefaults(defineProps<Props>(), {
   pointGap: 10,
   lineColor: '#999',
   effect: 'none',
-  mouseEffect: () => ({ type: 'smear' }),
+  mouseInteraction: () => ({ type: 'smear' }),
 })
 defineSlots<Slots>()
 
@@ -287,9 +287,9 @@ useRafFn(({ delta }) => {
 
       effectUpdatePointFcnMap[props.effect](params)
       if (!mouse.isOutside) {
-        mouseUpdatePointFcnMap[props.mouseEffect.type](
+        mouseUpdatePointFcnMap[props.mouseInteraction.type](
           params,
-          props.mouseEffect,
+          props.mouseInteraction,
         )
       }
       updatePoint(params)
