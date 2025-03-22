@@ -3,7 +3,7 @@
     <bg-wavy-lines
       v-slot="{ fps }"
       class="h-full w-full touch-none"
-      :mouse-effect="{ type: 'white-hole' }"
+      :mouse-effect="{ type: 'black-hole' }"
     >
       <div class="absolute left-2 top-2 opacity-40">
         {{ fps }}

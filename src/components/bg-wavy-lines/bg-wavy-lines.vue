@@ -28,7 +28,7 @@ type MouseEffect = {
 } | {
   type: 'black-hole';
   radius?: number;
-  strengthRatio?: number;
+  gravity?: number;
 } | {
   type: 'white-hole';
   radius?: number;
@@ -188,7 +188,7 @@ const mouseUpdatePointFcnMap: Record<
 
     const {
       radius = props.lineGap * 10,
-      strengthRatio = 0.2,
+      gravity = 0.2,
     } = options
 
     const { point } = params
@@ -203,10 +203,10 @@ const mouseUpdatePointFcnMap: Record<
       return
 
     /** 衰減率 */
-    const ratio = 1 - distanceSq / radiusSq
+    const ratio = (1 - distanceSq / radiusSq) ** 2
 
-    point.vx += (elementX - point.x) * strengthRatio * ratio
-    point.vy += (elementY - point.y) * strengthRatio * ratio
+    point.vx += (elementX - point.x) * gravity * ratio
+    point.vy += (elementY - point.y) * gravity * ratio
   },
   'white-hole': (params, options) => {
     if (options.type !== 'white-hole') {
