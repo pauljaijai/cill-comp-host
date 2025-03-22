@@ -22,7 +22,7 @@ type Point = Record<'x' | 'y' | 'dx' | 'dy' | 'vx' | 'vy', number>
 
 // #region Props
 interface MouseEffect {
-  type: 'fingertip';
+  type: 'smear';
   radius: number;
   force: number;
 }
@@ -56,7 +56,7 @@ const props = withDefaults(defineProps<Props>(), {
   lineColor: '#999',
   effect: 'wind',
   mouseEffect: () => ({
-    type: 'fingertip',
+    type: 'smear',
     radius: 80,
     force: 6,
   }),
@@ -142,9 +142,9 @@ const mouseUpdatePointFcnMap: Record<
   NonNullable<MouseEffect['type']>,
   (params: UpdatePointParams, options: MouseEffect) => void
 > = {
-  fingertip: (
+  smear: (
     params: UpdatePointParams,
-    options: Extract<MouseEffect, { type: 'fingertip' }>,
+    options: Extract<MouseEffect, { type: 'smear' }>,
   ) => {
     const { point } = params
     const { elementX, elementY } = mouse
