@@ -37,12 +37,10 @@ type MouseEffect = {
 } | {
   type: 'ripple';
   speed?: number;
-  /** 波頻率 */
-  radius?: number;
+  /** 最大半徑 */
+  maxRadius?: number;
   /** 波強度 */
   amplitude?: number;
-  /** 衰減速度 */
-  damping?: number;
 }
 
 interface Props {
@@ -96,17 +94,21 @@ const ctx = computed(() => canvasRef.value?.getContext('2d'))
 /** 偏移量 */
 const pointMatrix: Point[][] = []
 
-/** 動畫實體物件 */
+// --- 各類動畫實體物件 ---
+
 interface Ripple {
   x: number;
   y: number;
-  time: number;
+  radius: number;
 }
-let ripples: Ripple[] = []
+const rippleMap = new Map<string, Ripple>()
 
 function handleClick() {
   const { elementX, elementY } = mouse
-  ripples.push({ x: elementX, y: elementY, time: performance.now() })
+  rippleMap.set(
+    crypto.randomUUID(),
+    { x: elementX, y: elementY, radius: 0 },
+  )
 }
 
 function initPointMatrix() {
@@ -267,34 +269,46 @@ const mouseUpdatePointFcnMap: Record<
     }
 
     const {
-      speed = 0.01,
-      radius = 100,
-      amplitude = 1,
-      damping = 0.02,
+      speed = 0.001,
+      maxRadius = props.lineGap * 30,
+      amplitude = 6,
     } = options
-    const now = performance.now()
 
     const { point } = params
-    ripples.forEach((ripple) => {
-      const elapsed = (now - ripple.time) / 1000
-      const waveRadius = elapsed / speed
+
+    /** 待刪除的漣漪 */
+    const deleteKeys: string[] = []
+
+    rippleMap.forEach((ripple, key) => {
+      const currentRadius = ripple.radius
 
       const dx = point.x - ripple.x
       /** 壓扁 y 軸，製造一點透視效果 */
       const dy = (point.y - ripple.y) * 1.5
       const distance = Math.sqrt(dx ** 2 + dy ** 2)
 
-      if (distance < waveRadius + 20 && distance > waveRadius - 20) {
+      const range = props.lineGap * 2
+
+      if (distance < currentRadius + range && distance > currentRadius - range) {
+        // 隨著半徑增加之衰減率
+        const damping = Math.abs(maxRadius - currentRadius) / maxRadius
+
         // 漣漪邊緣附近的點受到影響
-        const ratio = 1 - Math.abs(distance - waveRadius) / 20
-        const offset = Math.sin(elapsed) * amplitude * ratio
+        const ratio = 1 - Math.abs(distance - currentRadius) / range
+        const offset = amplitude * ratio * damping
 
         point.vy += -offset
       }
+
+      ripple.radius += speed
+
+      if (ripple.radius >= maxRadius) {
+        deleteKeys.push(key)
+      }
     })
 
-    // 清掉太久的 ripple
-    ripples = ripples.filter((r) => (now - r.time) < 2000)
+    // 清除大於最大半徑的漣漪
+    deleteKeys.forEach((key) => rippleMap.delete(key))
   },
 }
 
@@ -334,6 +348,8 @@ useRafFn(({ delta }) => {
   context.strokeStyle = props.lineColor
   context.lineWidth = 1
 
+  const canMouseUpdate = !mouse.isOutside || rippleMap.size > 0
+
   pointMatrix.forEach((points, pointsIndex) => {
     context.beginPath()
     points.forEach((point, index) => {
@@ -346,7 +362,7 @@ useRafFn(({ delta }) => {
       }
 
       effectUpdatePointFcnMap[props.effect](params)
-      if (!mouse.isOutside) {
+      if (canMouseUpdate) {
         mouseUpdatePointFcnMap[props.mouseInteraction.type](
           params,
           props.mouseInteraction,
