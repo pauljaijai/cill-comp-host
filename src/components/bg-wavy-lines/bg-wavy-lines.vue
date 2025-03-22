@@ -97,11 +97,11 @@ function initPointMatrix() {
   const pointCount = Math.ceil((height + offset * 2) / pointGap)
 
   pointMatrix.length = 0
-  for (let i = 0; i < lineCount; i++) {
-    const x = i * lineGap - offset
+  for (let j = 0; j < pointCount; j++) {
+    const y = j * pointGap - offset
     const points: Point[] = []
-    for (let j = 0; j < pointCount; j++) {
-      const y = j * pointGap - offset
+    for (let i = 0; i < lineCount; i++) {
+      const x = i * lineGap - offset
       points.push({ x, y, dx: 0, dy: 0, vx: 0, vy: 0 })
     }
     pointMatrix.push(points)
@@ -235,8 +235,8 @@ const mouseUpdatePointFcnMap: Record<
     /** 衰減率 */
     const ratio = (1 - distanceSq / radiusSq) ** 3
 
-    point.vx += sign(point.x - elementX) * force * ratio
-    point.vy += sign(point.y - elementY) * force * ratio * 0.1
+    point.vx += sign(point.x - elementX) * force * ratio * 0.1
+    point.vy += sign(point.y - elementY) * force * ratio
   },
 }
 
