@@ -177,11 +177,11 @@ const effectUpdatePointFcnMap: Record<
       point,
     } = params
 
-    const now = performance.now() / 10000
+    const now = performance.now() / 4000
 
     const value = noise(
       point.x * 0.01 + now,
-      point.y * 0.0005 + now,
+      point.y * 0.00005 + now / 10,
     )
 
     point.vx = value * 3
