@@ -21,10 +21,18 @@ import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 type Point = Record<'x' | 'y' | 'dx' | 'dy' | 'vx' | 'vy', number>
 
 // #region Props
-interface MouseEffect {
+type MouseEffect = {
   type: 'smear';
-  radius: number;
-  force: number;
+  radius?: number;
+  force?: number;
+} | {
+  type: 'black-hole';
+  radius?: number;
+  strengthRatio?: number;
+} | {
+  type: 'white-hole';
+  radius?: number;
+  force?: number;
 }
 
 interface Props {
@@ -55,11 +63,7 @@ const props = withDefaults(defineProps<Props>(), {
   pointGap: 10,
   lineColor: '#999',
   effect: 'wind',
-  mouseEffect: () => ({
-    type: 'smear',
-    radius: 80,
-    force: 6,
-  }),
+  mouseEffect: () => ({ type: 'smear' }),
 })
 defineSlots<Slots>()
 
@@ -110,6 +114,11 @@ watch(boxSize, () => {
   }
 })
 
+/** 取數值的正負號 */
+function sign(value: number) {
+  return value > 0 ? 1 : value < 0 ? -1 : 0
+}
+
 interface UpdatePointParams {
   points: Point[];
   pointsIndex: number;
@@ -139,32 +148,92 @@ const effectUpdatePointFcnMap: Record<
 }
 
 const mouseUpdatePointFcnMap: Record<
-  NonNullable<MouseEffect['type']>,
+  MouseEffect['type'],
   (params: UpdatePointParams, options: MouseEffect) => void
 > = {
-  smear: (
-    params: UpdatePointParams,
-    options: Extract<MouseEffect, { type: 'smear' }>,
-  ) => {
+  'smear': (params, options) => {
+    if (options.type !== 'smear') {
+      return
+    }
+    const {
+      radius = props.lineGap * 10,
+      force = 6,
+    } = options
+
     const { point } = params
     const { elementX, elementY } = mouse
 
     const { px, py } = throttledPMouse.value
 
-    const distance = Math.sqrt(
-      (point.x - elementX) ** 2 + (point.y - elementY) ** 2,
-    )
+    const dx = point.x - elementX
+    const dy = point.y - elementY
+    const distanceSq = dx ** 2 + dy ** 2
+    const radiusSq = radius ** 2
 
-    if (distance > options.radius) {
+    if (distanceSq > radiusSq)
       return
-    }
-    /** 比率，越遠越小 */
-    const ratio = 1 - distance / options.radius
 
-    point.vx += clamp((elementX - px) * ratio, { min: -options.force, max: options.force })
-    point.vy += clamp((elementY - py) * ratio, { min: -options.force, max: options.force })
+    /** 衰減率 */
+    const ratio = 1 - distanceSq / radiusSq
+
+    point.vx += clamp((elementX - px) * ratio, { min: -force, max: force })
+    point.vy += clamp((elementY - py) * ratio, { min: -force, max: force })
 
     pMouse.value = { px: elementX, py: elementY }
+  },
+  'black-hole': (params, options) => {
+    if (options.type !== 'black-hole') {
+      return
+    }
+
+    const {
+      radius = props.lineGap * 10,
+      strengthRatio = 0.2,
+    } = options
+
+    const { point } = params
+    const { elementX, elementY } = mouse
+
+    const dx = point.x - elementX
+    const dy = point.y - elementY
+    const distanceSq = dx ** 2 + dy ** 2
+    const radiusSq = radius ** 2
+
+    if (distanceSq > radiusSq)
+      return
+
+    /** 衰減率 */
+    const ratio = 1 - distanceSq / radiusSq
+
+    point.vx += (elementX - point.x) * strengthRatio * ratio
+    point.vy += (elementY - point.y) * strengthRatio * ratio
+  },
+  'white-hole': (params, options) => {
+    if (options.type !== 'white-hole') {
+      return
+    }
+
+    const {
+      radius = props.lineGap * 10,
+      force = 6,
+    } = options
+
+    const { point } = params
+    const { elementX, elementY } = mouse
+
+    const dx = point.x - elementX
+    const dy = point.y - elementY
+    const distanceSq = dx ** 2 + dy ** 2
+    const radiusSq = radius ** 2
+
+    if (distanceSq > radiusSq)
+      return
+
+    /** 衰減率 */
+    const ratio = (1 - distanceSq / radiusSq) ** 3
+
+    point.vx += sign(point.x - elementX) * force * ratio
+    point.vy += sign(point.y - elementY) * force * ratio * 0.1
   },
 }
 
