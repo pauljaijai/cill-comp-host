@@ -95,6 +95,7 @@ function initPointMatrix() {
   const lineCount = Math.ceil((width + offset * 2) / lineGap)
   const pointCount = Math.ceil((height + offset * 2) / pointGap)
 
+  pointMatrix.length = 0
   for (let i = 0; i < lineCount; i++) {
     const x = i * lineGap - offset
     const points: Point[] = []
