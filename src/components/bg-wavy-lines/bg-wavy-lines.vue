@@ -35,11 +35,10 @@ type MouseEffect = {
   radius?: number;
   force?: number;
 } | {
+  /** 點擊後會產生水波 */
   type: 'ripple';
   speed?: number;
-  /** 最大半徑 */
   maxRadius?: number;
-  /** 波強度 */
   amplitude?: number;
 }
 
@@ -277,7 +276,7 @@ const mouseUpdatePointFcnMap: Record<
     const { point } = params
 
     /** 待刪除的漣漪 */
-    const deleteKeys: string[] = []
+    const deletionKeys: string[] = []
 
     rippleMap.forEach((ripple, key) => {
       const currentRadius = ripple.radius
@@ -303,12 +302,12 @@ const mouseUpdatePointFcnMap: Record<
       ripple.radius += speed
 
       if (ripple.radius >= maxRadius) {
-        deleteKeys.push(key)
+        deletionKeys.push(key)
       }
     })
 
     // 清除大於最大半徑的漣漪
-    deleteKeys.forEach((key) => rippleMap.delete(key))
+    deletionKeys.forEach((key) => rippleMap.delete(key))
   },
 }
 
