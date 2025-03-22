@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { refThrottled, throttleFilter, useElementSize, useMouseInElement, useRafFn } from '@vueuse/core'
+import { noop, refThrottled, throttleFilter, useElementSize, useMouseInElement, useRafFn } from '@vueuse/core'
 import { clamp } from 'remeda'
 import { createNoise2D } from 'simplex-noise'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
@@ -46,7 +46,7 @@ interface Props {
   lineColor?: string;
 
   /** 各種效果。例：風吹、波動等等 */
-  effect?: 'wind';
+  effect?: 'none' | 'wind';
 
   mouseEffect?: MouseEffect;
 }
@@ -62,7 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
   lineGap: 10,
   pointGap: 10,
   lineColor: '#999',
-  effect: 'wind',
+  effect: 'none',
   mouseEffect: () => ({ type: 'smear' }),
 })
 defineSlots<Slots>()
@@ -130,6 +130,7 @@ const effectUpdatePointFcnMap: Record<
   NonNullable<Props['effect']>,
   (params: UpdatePointParams) => void
 > = {
+  none: noop,
   wind: (params: UpdatePointParams) => {
     const {
       point,
