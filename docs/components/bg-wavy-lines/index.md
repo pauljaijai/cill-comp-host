@@ -16,9 +16,9 @@ import BasicUsage from '../../../src/components/bg-wavy-lines/examples/basic-usa
 
 ### 基本用法
 
-會與滑鼠產生互動，隨著滑鼠移動而波動。
+除使自身效果，還可以與滑鼠產生互動。
 
-<basic-usage class="mt-2 h-[50vh]" />
+<basic-usage class="h-[60vh]" />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/bg-wavy-lines/examples/basic-usage.vue
