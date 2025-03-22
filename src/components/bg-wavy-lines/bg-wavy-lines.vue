@@ -53,7 +53,7 @@ interface Props {
   lineColor?: string;
 
   /** 各種效果。例：風吹、波動等等 */
-  effect?: 'none' | 'wind';
+  effect?: 'none' | 'wind' | 'waves';
 
   /** 滑鼠互動效果 */
   mouseInteraction?: MouseEffect;
@@ -169,9 +169,25 @@ const effectUpdatePointFcnMap: Record<
       point.y * 0.005 + now,
     )
 
-    point.vx = Math.sin(value) * 3
-    point.vy = Math.sin(value) * 3
+    point.vx = value * 3
+    point.vy = value * 3
   },
+  waves: (params: UpdatePointParams) => {
+    const {
+      point,
+    } = params
+
+    const now = performance.now() / 10000
+
+    const value = noise(
+      point.x * 0.01 + now,
+      point.y * 0.0005 + now,
+    )
+
+    point.vx = value * 3
+    point.vy = value * 3
+  },
+
 }
 
 const mouseUpdatePointFcnMap: Record<
