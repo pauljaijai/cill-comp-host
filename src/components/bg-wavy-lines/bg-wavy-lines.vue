@@ -2,6 +2,7 @@
   <div
     ref="box"
     class="relative"
+    @click="handleClick"
   >
     <canvas
       ref="canvas"
@@ -33,6 +34,15 @@ type MouseEffect = {
   type: 'white-hole';
   radius?: number;
   force?: number;
+} | {
+  type: 'ripple';
+  speed?: number;
+  /** 波頻率 */
+  radius?: number;
+  /** 波強度 */
+  amplitude?: number;
+  /** 衰減速度 */
+  damping?: number;
 }
 
 interface Props {
@@ -85,6 +95,19 @@ const ctx = computed(() => canvasRef.value?.getContext('2d'))
 
 /** 偏移量 */
 const pointMatrix: Point[][] = []
+
+/** 動畫實體物件 */
+interface Ripple {
+  x: number;
+  y: number;
+  time: number;
+}
+let ripples: Ripple[] = []
+
+function handleClick() {
+  const { elementX, elementY } = mouse
+  ripples.push({ x: elementX, y: elementY, time: performance.now() })
+}
 
 function initPointMatrix() {
   const { lineGap, pointGap } = props
@@ -237,6 +260,41 @@ const mouseUpdatePointFcnMap: Record<
 
     point.vx += sign(point.x - elementX) * force * ratio * 0.1
     point.vy += sign(point.y - elementY) * force * ratio
+  },
+  'ripple': (params, options) => {
+    if (options.type !== 'ripple') {
+      return
+    }
+
+    const {
+      speed = 0.01,
+      radius = 100,
+      amplitude = 1,
+      damping = 0.02,
+    } = options
+    const now = performance.now()
+
+    const { point } = params
+    ripples.forEach((ripple) => {
+      const elapsed = (now - ripple.time) / 1000
+      const waveRadius = elapsed / speed
+
+      const dx = point.x - ripple.x
+      /** 壓扁 y 軸，製造一點透視效果 */
+      const dy = (point.y - ripple.y) * 1.5
+      const distance = Math.sqrt(dx ** 2 + dy ** 2)
+
+      if (distance < waveRadius + 20 && distance > waveRadius - 20) {
+        // 漣漪邊緣附近的點受到影響
+        const ratio = 1 - Math.abs(distance - waveRadius) / 20
+        const offset = Math.sin(elapsed) * amplitude * ratio
+
+        point.vy += -offset
+      }
+    })
+
+    // 清掉太久的 ripple
+    ripples = ripples.filter((r) => (now - r.time) < 2000)
   },
 }
 
