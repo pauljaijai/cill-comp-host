@@ -53,7 +53,7 @@ interface Props {
   lineColor?: string;
 
   /** 各種效果。例：風吹、波動等等 */
-  effect?: 'none' | 'wind' | 'waves';
+  effect?: 'none' | 'wind' | 'waves' | 'orogeny';
 
   /** 滑鼠互動效果 */
   mouseInteraction?: MouseEffect;
@@ -140,11 +140,6 @@ watch(boxSize, () => {
   }
 })
 
-/** 取數值的正負號 */
-function sign(value: number) {
-  return value > 0 ? 1 : value < 0 ? -1 : 0
-}
-
 interface UpdatePointParams {
   points: Point[];
   pointsIndex: number;
@@ -187,7 +182,23 @@ const effectUpdatePointFcnMap: Record<
     point.vx = value * 3
     point.vy = value * 3
   },
+  orogeny: (params: UpdatePointParams) => {
+    const {
+      point,
+    } = params
 
+    const timing = 10000
+    const now = Math.floor(performance.now() / timing) * timing
+    const amplitude = (performance.now() % timing) / timing
+
+    const value = noise(
+      point.x * 0.008 + now,
+      point.y * 0.008 + now,
+    )
+
+    point.vx = value * -1 * amplitude
+    point.vy = value * 5 * amplitude
+  },
 }
 
 const mouseUpdatePointFcnMap: Record<
@@ -275,8 +286,8 @@ const mouseUpdatePointFcnMap: Record<
     /** 衰減率 */
     const ratio = (1 - distanceSq / radiusSq) ** 3
 
-    point.vx += sign(point.x - elementX) * force * ratio * 0.1
-    point.vy += sign(point.y - elementY) * force * ratio
+    point.vx += Math.sign(point.x - elementX) * force * ratio * 0.1
+    point.vy += Math.sign(point.y - elementY) * force * ratio
   },
   'ripple': (params, options) => {
     if (options.type !== 'ripple') {
