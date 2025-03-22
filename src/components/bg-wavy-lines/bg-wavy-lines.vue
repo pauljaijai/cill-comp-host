@@ -145,8 +145,8 @@ const effectUpdatePointFcnMap: Record<
       point.y * 0.005 + now,
     )
 
-    point.vx = Math.sin(value) * 2.5
-    point.vy = Math.sin(value) * 2.5
+    point.vx = Math.sin(value) * 3
+    point.vy = Math.sin(value) * 3
   },
 }
 
@@ -160,7 +160,7 @@ const mouseUpdatePointFcnMap: Record<
     }
     const {
       radius = props.lineGap * 10,
-      force = 6,
+      force = 20,
     } = options
 
     const { point } = params
@@ -191,7 +191,7 @@ const mouseUpdatePointFcnMap: Record<
 
     const {
       radius = props.lineGap * 10,
-      gravity = 0.2,
+      gravity = 0.3,
     } = options
 
     const { point } = params
@@ -245,8 +245,8 @@ function updatePoint(params: UpdatePointParams) {
   const { point } = params
 
   /** 阻力 */
-  point.vx *= 0.9
-  point.vy *= 0.9
+  point.vx *= 0.7
+  point.vy *= 0.7
 
   /** 恢復力 */
   point.vx += point.dx * -0.1
