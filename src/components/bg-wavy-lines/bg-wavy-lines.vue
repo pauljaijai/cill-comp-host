@@ -47,6 +47,7 @@ interface Props {
 
   /** 各種效果。例：風吹、波動等等 */
   effect?: 'none' | 'wind';
+
   /** 滑鼠互動效果 */
   mouseInteraction?: MouseEffect;
 }
