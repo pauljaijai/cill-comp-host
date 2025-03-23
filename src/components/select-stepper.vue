@@ -39,17 +39,16 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="ModelValue extends string">
 import { syncRef, useCycleList, useVModel } from '@vueuse/core'
 
 interface Props {
-  modelValue?: string;
+  modelValue?: ModelValue;
   label?: string;
   labelClass?: string;
-  options?: string[];
+  options?: ModelValue[];
 }
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
   label: '',
   labelClass: '',
   options: () => [],
