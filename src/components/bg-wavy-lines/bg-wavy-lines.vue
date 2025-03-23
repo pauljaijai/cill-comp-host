@@ -89,6 +89,7 @@ const mouse = reactive(useMouseInElement(boxRef, {
 
 const canvasRef = useTemplateRef('canvas')
 const ctx = computed(() => canvasRef.value?.getContext('2d'))
+const dpr = window.devicePixelRatio || 1
 
 /** 偏移量 */
 const pointMatrix: Point[][] = []
@@ -137,8 +138,6 @@ watch(boxSize, () => {
   initPointMatrix()
 
   if (canvasRef.value) {
-    const dpr = window.devicePixelRatio || 1
-
     canvasRef.value.width = boxSize.width * dpr
     canvasRef.value.height = boxSize.height * dpr
   }
@@ -360,7 +359,6 @@ function updatePoint(params: UpdatePointParams) {
 
 const fps = ref(0)
 const throttledFps = refThrottled(fps, 30)
-const dpr = window.devicePixelRatio || 1
 
 /** 繪製與更新 */
 useRafFn(({ delta }) => {
