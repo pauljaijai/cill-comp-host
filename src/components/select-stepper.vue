@@ -51,7 +51,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   labelClass: '',
-  options: () => [],
+  options: () => [] as ModelValue[],
 })
 
 const emit = defineEmits<{
@@ -68,7 +68,8 @@ const {
   initialValue: modelValue.value,
 })
 
-syncRef(modelValue, state)
+// FIX: 沒有異常，但暫時不知道怎麼解決型別問題
+syncRef(modelValue as any, state as any)
 </script>
 
 <style scoped lang="sass">
