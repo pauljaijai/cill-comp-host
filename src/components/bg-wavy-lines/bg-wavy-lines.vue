@@ -103,11 +103,13 @@ interface Ripple {
 const rippleMap = new Map<string, Ripple>()
 
 function handleClick() {
-  const { elementX, elementY } = mouse
-  rippleMap.set(
-    crypto.randomUUID(),
-    { x: elementX, y: elementY, radius: 0 },
-  )
+  if (props.mouseInteraction.type === 'ripple') {
+    const { elementX, elementY } = mouse
+    rippleMap.set(
+      crypto.randomUUID(),
+      { x: elementX, y: elementY, radius: 0 },
+    )
+  }
 }
 
 function initPointMatrix() {
@@ -135,8 +137,10 @@ watch(boxSize, () => {
   initPointMatrix()
 
   if (canvasRef.value) {
-    canvasRef.value.width = boxSize.width
-    canvasRef.value.height = boxSize.height
+    const dpr = window.devicePixelRatio || 1
+
+    canvasRef.value.width = boxSize.width * dpr
+    canvasRef.value.height = boxSize.height * dpr
   }
 })
 
@@ -356,12 +360,16 @@ function updatePoint(params: UpdatePointParams) {
 
 const fps = ref(0)
 const throttledFps = refThrottled(fps, 30)
+const dpr = window.devicePixelRatio || 1
 
 /** 繪製與更新 */
 useRafFn(({ delta }) => {
   if (!ctx.value)
     return
+
   const context = ctx.value
+  context.resetTransform()
+  context.scale(dpr, dpr)
 
   if (delta !== 0) {
     fps.value = Math.round(1000 / delta)
