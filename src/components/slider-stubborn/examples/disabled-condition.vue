@@ -1,18 +1,13 @@
 <template>
   <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
-    <base-checkbox
-      v-model="disabled"
-      class="w-full border rounded p-4"
-      label="停用"
-    />
-
     <div class="flex flex-col flex-1 justify-center">
-      目前數值：{{ Math.floor(value) }}
+      目前數值：{{ Math.floor(sliderValue) }}
 
       <slider-stubborn
-        v-model="value"
-        :disabled="disabled"
+        v-model="sliderValue"
+        :disabled="disabledCondition"
         :max-thumb-length="thumbLength"
+        :thumb-size="40"
         class="w-full"
       />
     </div>
@@ -20,15 +15,33 @@
 </template>
 
 <script setup lang="ts">
+import type { ExtractComponentProps } from '../../../types'
 import { useWindowSize } from '@vueuse/core'
 import { computed, ref } from 'vue'
-import BaseCheckbox from '../../base-checkbox.vue'
 import SliderStubborn from '../slider-stubborn.vue'
+
+type Props = ExtractComponentProps<typeof SliderStubborn>
 
 const { width, height } = useWindowSize()
 
-const disabled = ref(false)
-const value = ref(50)
+const sliderValue = ref(50)
+
+const disabledCondition: Props['disabled'] = ({
+  value,
+  direction,
+}) => {
+  if (value <= 20 && direction === 'decrease') {
+    sliderValue.value = 20
+    return true
+  }
+
+  if (value >= 80 && direction === 'increase') {
+    sliderValue.value = 80
+    return true
+  }
+
+  return false
+}
 
 const thumbLength = computed(() =>
   Math.min(width.value, height.value) / 3,

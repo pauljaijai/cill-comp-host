@@ -124,7 +124,10 @@ watch(() => [mouseRatio, isHeld], () => {
     return
 
   modelValue.value = (props.max - props.min) * mouseRatio.value / 100
-}, { deep: true })
+}, {
+  deep: true,
+  flush: 'post',
+})
 </script>
 
 <style scoped lang="sass">
