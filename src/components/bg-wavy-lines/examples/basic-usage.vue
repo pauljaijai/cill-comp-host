@@ -1,13 +1,12 @@
 <template>
   <div class="w-full flex flex-col gap-4">
     <bg-wavy-lines
-      v-slot="{ fps }"
       :effect
       :mouse-interaction="{ type: mouseInteractionType }"
       class="h-full w-full touch-none border border-gray-300"
     >
-      <div class="absolute left-2 top-2 opacity-40">
-        {{ fps }}
+      <div class="absolute left-2 top-2 opacity-10">
+        <!-- {{ fps }} -->
       </div>
     </bg-wavy-lines>
 
