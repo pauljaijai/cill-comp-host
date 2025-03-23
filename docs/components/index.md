@@ -33,6 +33,7 @@ import TransitionSpecialEffects from '../../src/components/transition-special-ef
 import BgFirefly from '../../src/components/bg-firefly/examples/full-background.vue';
 import BgSakuraFubuki from '../../src/components/bg-sakura-fubuki/examples/full-background.vue';
 import BgSnow from '../../src/components/bg-snow/examples/basic-usage.vue';
+import BgWavyLines from '../../src/components/bg-wavy-lines/examples/basic-usage.vue';
 
 import TextCharactersTransition from '../../src/components/text-characters-transition/examples/custom-transition.vue';
 import TextHateMouse from '../../src/components/text-hate-mouse/examples/basic-usage.vue';
@@ -277,6 +278,12 @@ const currentSection = ref('btn');
 讓網頁飄雪吧，還會積雪喔。( ´ ▽ ` )ﾉ
 
 <bg-snow class="h-[70vh]" />
+
+### [波浪線](./bg-wavy-lines/) <Badge type="info" text="bg" />
+
+一條條樸實無華的實線，於動靜之間，為網站添上一抹簡約的詩意。
+
+<bg-wavy-lines class="h-[70vh]" />
 
 </expansion-section>
 
