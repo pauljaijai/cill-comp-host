@@ -36,7 +36,7 @@ import BgWavyLines from '../bg-wavy-lines.vue'
 
 type Props = ExtractComponentProps<typeof BgWavyLines>
 
-const effect = ref<Props['effect']>('orogeny')
+const effect = ref<Props['effect']>('none')
 const options: NonNullable<Props['effect']>[] = [
   'none',
   'wind',

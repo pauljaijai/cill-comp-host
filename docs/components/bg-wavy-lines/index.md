@@ -18,7 +18,7 @@ import BasicUsage from '../../../src/components/bg-wavy-lines/examples/basic-usa
 
 ### 基本用法
 
-除使自身效果，還可以與滑鼠產生互動。
+除了自身整體效果，還可以與滑鼠產生互動。
 
 <basic-usage class="h-[70vh]" />
 
