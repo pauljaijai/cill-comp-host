@@ -1,5 +1,5 @@
 ---
-description: 一條條樸實無華的實線，在極簡的脈動中，為網站添上一抹簡約的詩意。
+description: 一條條樸實無華的實線，在極簡的脈動中，為網站添上一抹簡約的詩意
 ---
 
 <script setup>
@@ -10,7 +10,7 @@ import BasicUsage from '../../../src/components/bg-wavy-lines/examples/basic-usa
 
 # 波浪線 <Badge type="info" text="bg" />
 
-一條條樸實無華的實線，在極簡的脈動中，為網站添上一抹簡約的詩意。。
+一條條樸實無華的實線，在極簡的脈動中，為網站添上一抹簡約的詩意。
 
 [靈感來源](https://codepen.io/wodniack/pen/abeMZXQ?editors=1010)
 
