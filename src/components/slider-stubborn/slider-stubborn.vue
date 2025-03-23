@@ -18,6 +18,7 @@
       :ratio="ratio"
       :mouse-ratio="mouseRatio"
       :slider-size="sliderSize"
+      :disabled="disabledValue"
     />
   </div>
 </template>
@@ -30,14 +31,23 @@ import {
   useMousePressed,
   useVModel,
 } from '@vueuse/core'
-import { clamp, pipe } from 'remeda'
+import { clamp, pick, pipe } from 'remeda'
 import { computed, onBeforeMount, reactive, ref, watch } from 'vue'
 import SliderThumb from './slider-stubborn-thumb.vue'
 
 // #region Props
+export type DisabledCondition = (
+  params: {
+    value: number;
+    min?: number;
+    max?: number;
+    direction: 'increase' | 'decrease';
+  }
+) => boolean
+
 interface Props {
   modelValue: number;
-  disabled?: boolean;
+  disabled?: boolean | DisabledCondition;
   min?: number;
   max?: number;
   /** 握把被拉長的最大長度 */
@@ -97,8 +107,20 @@ const mouseRatio = computed(() => pipe(
   clamp({ min: 0, max: 100 }),
 ))
 
+const disabledValue = computed(() => {
+  if (typeof props.disabled === 'function') {
+    return props.disabled({
+      ...pick(props, ['min', 'max']),
+      value: modelValue.value,
+      direction: mouseRatio.value > ratio.value ? 'increase' : 'decrease',
+    })
+  }
+
+  return props.disabled
+})
+
 watch(() => [mouseRatio, isHeld], () => {
-  if (props.disabled || !isHeld.value)
+  if (disabledValue.value || !isHeld.value)
     return
 
   modelValue.value = (props.max - props.min) * mouseRatio.value / 100
