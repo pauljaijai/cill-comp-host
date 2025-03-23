@@ -47,7 +47,7 @@ const options: NonNullable<Props['effect']>[] = [
 
 type MouseInteractionType = NonNullable<Props['mouseInteraction']>['type']
 
-const mouseInteractionType = ref<MouseInteractionType>('ripple')
+const mouseInteractionType = ref<MouseInteractionType>('smear')
 const mouseInteractionTypeOptions: MouseInteractionType[] = [
   'smear',
   'black-hole',
