@@ -160,14 +160,14 @@ const effectUpdatePointFcnMap: Record<
       point,
     } = params
 
-    const now = performance.now() / 10000
+    const now = performance.now() / 8000
 
     const value = noise(
       point.x * 0.005 + now,
-      point.y * 0.005 + now,
+      point.y * 0.005 - now,
     )
 
-    point.vx = value * 3
+    point.vx = value * -3
     point.vy = value * 3
   },
   waves: (params: UpdatePointParams) => {
