@@ -79,7 +79,7 @@ const currentSection = ref('btn');
 
 ### [固執的滑動條](./slider-stubborn/) <Badge type="info" text="slider" />
 
-停用時絕不妥協的滑動條。( ・ิω・ิ)
+停用時絕不妥協的滑動條。(。-`ω´-)
 
 <slider-stubborn class="h-[60vh]" z-index="999"/>
 
@@ -180,7 +180,7 @@ const currentSection = ref('btn');
 
 <!-- <wrapper-minecraft-block  /> -->
 ::: warning 暫停展示
-由於在這裡展示會偏移，大家還是前往[元件頁面](./wrapper-minecraft-block/)看看吧。( ・ิω・ิ)
+由於在這裡展示會偏移，大家還是前往[元件頁面](./wrapper-minecraft-block/)看看吧。(。-`ω´-)
 :::
 
 ### [閃躲飄包裝器](./wrapper-dodging/) <Badge type="info" text="wrapper" />
