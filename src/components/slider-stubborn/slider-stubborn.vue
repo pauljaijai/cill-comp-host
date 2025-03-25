@@ -50,6 +50,7 @@ interface Props {
   disabled?: boolean | DisabledCondition;
   min?: number;
   max?: number;
+  step?: number;
   /** 握把被拉長的最大長度 */
   maxThumbLength?: number;
   thumbSize?: number;
@@ -61,6 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   min: 0,
   max: 100,
+  step: 1,
   maxThumbLength: 200,
   thumbSize: 20,
   thumbColor: '#34c6eb',
@@ -107,6 +109,15 @@ const mouseRatio = computed(() => pipe(
   clamp({ min: 0, max: 100 }),
 ))
 
+/** 拉動方向 */
+const draggingDirection = computed(() => {
+  if (mouseRatio.value > ratio.value) {
+    return 'increase'
+  }
+
+  return 'decrease'
+})
+
 const disabledValue = computed(() => {
   if (typeof props.disabled === 'function') {
     return props.disabled({
@@ -119,14 +130,23 @@ const disabledValue = computed(() => {
   return props.disabled
 })
 
+function getValue(ratio: number) {
+  return Math.round(
+    (ratio / 100) * (props.max - props.min) / props.step,
+  ) * props.step
+}
+
 watch(() => [mouseRatio, isHeld], () => {
-  if (disabledValue.value || !isHeld.value)
+  if (typeof props.disabled === 'function') {
+    return
+  }
+
+  if (props.disabled || !isHeld.value)
     return
 
-  modelValue.value = (props.max - props.min) * mouseRatio.value / 100
+  modelValue.value = getValue(mouseRatio.value)
 }, {
   deep: true,
-  flush: 'post',
 })
 </script>
 
