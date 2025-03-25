@@ -58,7 +58,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   min: 0,
   max: 100,
-  step: 0.1,
+  step: 1,
   maxThumbLength: 200,
   thumbSize: 20,
   thumbColor: '#34c6eb',
@@ -153,7 +153,6 @@ watch([mouseRatio, isHeld], () => {
     return
 
   const targetValue = getValue(mouseRatio.value)
-  console.log(`🚀 ~ targetValue:`, targetValue)
 
   let currentValue = modelValue.value
   if (targetValue === currentValue) {
@@ -161,35 +160,33 @@ watch([mouseRatio, isHeld], () => {
   }
 
   const isGt = targetValue > currentValue
+  const direction = draggingDirection.value
 
   while (true) {
-    const direction = draggingDirection.value
-
-    if (direction === -1 && currentValue < disabledRange.min) {
-      disabledValue.value = true
-      return
-    }
-    else if (direction === 1 && currentValue > disabledRange.max) {
+    if (
+      (direction === -1 && currentValue < disabledRange.min)
+      || (direction === 1 && currentValue > disabledRange.max)
+    ) {
       disabledValue.value = true
       return
     }
 
+    if (!disabledValue.value) {
+      modelValue.value = fixed(currentValue)
+    }
     disabledValue.value = false
 
     if (
       (isGt && currentValue >= targetValue)
       || (!isGt && currentValue <= targetValue)
     ) {
-      console.log(`🚀 ~ currentValue:`, currentValue)
-      modelValue.value = fixed(currentValue)
       return
     }
 
-    currentValue += props.step * direction
+    currentValue += fixed(props.step * direction)
   }
 }, {
   deep: true,
-  flush: 'post',
 })
 </script>
 
