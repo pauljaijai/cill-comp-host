@@ -18,13 +18,14 @@
       :ratio="ratio"
       :mouse-ratio="mouseRatio"
       :slider-size="sliderSize"
-      :disabled="disabledValue"
+      :disabled="isDisabled"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import {
+  reactiveComputed,
   throttleFilter,
   useElementSize,
   useMouseInElement,
@@ -36,18 +37,13 @@ import { computed, onBeforeMount, reactive, ref, watch } from 'vue'
 import SliderThumb from './slider-stubborn-thumb.vue'
 
 // #region Props
-export type DisabledCondition = (
-  params: {
-    value: number;
-    min?: number;
-    max?: number;
-    direction: 'increase' | 'decrease';
-  }
-) => boolean
-
 interface Props {
   modelValue: number;
-  disabled?: boolean | DisabledCondition;
+  disabled?: boolean;
+  /** 小於此數值也會有 disabled 效果 */
+  minDisabled?: number;
+  /** 大於此數值也會有 disabled 效果 */
+  maxDisabled?: number;
   min?: number;
   max?: number;
   step?: number;
@@ -62,7 +58,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   min: 0,
   max: 100,
-  step: 1,
+  step: 0.1,
   maxThumbLength: 200,
   thumbSize: 20,
   thumbColor: '#34c6eb',
@@ -109,13 +105,22 @@ const mouseRatio = computed(() => pipe(
   clamp({ min: 0, max: 100 }),
 ))
 
+const disabledRange = reactiveComputed(() => {
+  const { minDisabled, maxDisabled } = props
+
+  return {
+    min: minDisabled ?? props.min,
+    max: maxDisabled ?? props.max,
+  }
+})
+
 /** 拉動方向 */
 const draggingDirection = computed(() => {
   if (mouseRatio.value > ratio.value) {
-    return 'increase'
+    return 1
   }
 
-  return 'decrease'
+  return -1
 })
 
 const stepPrecision = computed(() => {
@@ -141,47 +146,47 @@ function getValue(ratio: number) {
 }
 
 const disabledValue = ref(false)
-watch(() => [mouseRatio, isHeld], () => {
-  if (!isHeld.value)
+const isDisabled = computed(() => props.disabled || disabledValue.value)
+
+watch([mouseRatio, isHeld], () => {
+  if (!isHeld.value || (props.disabled === true))
     return
 
-  if (typeof props.disabled === 'function') {
-    // 根據目前的 mouseRatio 與 step 產生連續數值，並依序放入 disabled 函式中判斷是否禁用
-    const targetValue = getValue(mouseRatio.value)
-    if (targetValue === modelValue.value) {
+  const targetValue = getValue(mouseRatio.value)
+  console.log(`🚀 ~ targetValue:`, targetValue)
+
+  let currentValue = modelValue.value
+  if (targetValue === currentValue) {
+    return
+  }
+
+  const isGt = targetValue > currentValue
+
+  while (true) {
+    const direction = draggingDirection.value
+
+    if (direction === -1 && currentValue < disabledRange.min) {
+      disabledValue.value = true
+      return
+    }
+    else if (direction === 1 && currentValue > disabledRange.max) {
+      disabledValue.value = true
       return
     }
 
-    const isGt = targetValue > modelValue.value
+    disabledValue.value = false
 
-    let currentValue = modelValue.value
-    do {
-      disabledValue.value = props.disabled({
-        min: props.min,
-        max: props.max,
-        value: currentValue,
-        direction: draggingDirection.value,
-      })
+    if (
+      (isGt && currentValue >= targetValue)
+      || (!isGt && currentValue <= targetValue)
+    ) {
+      console.log(`🚀 ~ currentValue:`, currentValue)
+      modelValue.value = fixed(currentValue)
+      return
+    }
 
-      if (!disabledValue.value) {
-        modelValue.value = fixed(currentValue)
-      }
-
-      currentValue += props.step * (draggingDirection.value === 'increase' ? 1 : -1)
-
-      if (isGt && currentValue > targetValue) {
-        return
-      }
-      else if (!isGt && currentValue < targetValue) {
-        return
-      }
-    } while (true)
+    currentValue += props.step * direction
   }
-
-  if (props.disabled)
-    return
-
-  modelValue.value = getValue(mouseRatio.value)
 }, {
   deep: true,
   flush: 'post',

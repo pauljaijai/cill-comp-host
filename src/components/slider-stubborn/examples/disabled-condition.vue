@@ -5,7 +5,7 @@
 
       <slider-stubborn
         v-model="sliderValue"
-        :disabled="disabledCondition"
+        v-bind="disabledParams"
         :max-thumb-length="thumbLength"
         :thumb-size="40"
         class="w-full"
@@ -26,20 +26,12 @@ const { width, height } = useWindowSize()
 
 const sliderValue = ref(50)
 
-const disabledCondition: Props['disabled'] = ({
-  value,
-  direction,
-}) => {
-  if (value <= 20 && direction === 'decrease') {
-    return true
-  }
-
-  if (value >= 80 && direction === 'increase') {
-    return true
-  }
-
-  return false
-}
+const disabledParams = computed<
+  Pick<Props, 'minDisabled' | 'maxDisabled'>
+>(() => ({
+  minDisabled: 20,
+  maxDisabled: 80,
+}))
 
 const thumbLength = computed(() =>
   Math.min(width.value, height.value) / 3,
