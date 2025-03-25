@@ -145,18 +145,17 @@ const disabledValue = ref(false)
 const isDisabled = computed(() => props.disabled || disabledValue.value)
 
 watch([mouseRatio, isHeld], () => {
-  if (!isHeld.value || (props.disabled === true))
+  if (!isHeld.value || props.disabled)
     return
 
   const targetValue = getValue(mouseRatio.value)
-
   let currentValue = modelValue.value
-  if (targetValue === currentValue) {
-    return
-  }
 
-  const isGt = targetValue > currentValue
+  if (targetValue === currentValue)
+    return
+
   const direction = draggingDirection.value
+  const step = props.step * direction
 
   while (true) {
     if (
@@ -167,23 +166,19 @@ watch([mouseRatio, isHeld], () => {
       return
     }
 
-    if (!disabledValue.value) {
-      modelValue.value = fixed(currentValue)
-    }
+    modelValue.value = fixed(currentValue)
     disabledValue.value = false
 
     if (
-      (isGt && currentValue >= targetValue)
-      || (!isGt && currentValue <= targetValue)
+      (direction === 1 && currentValue >= targetValue)
+      || (direction === -1 && currentValue <= targetValue)
     ) {
       return
     }
 
-    currentValue += fixed(props.step * direction)
+    currentValue += step
   }
-}, {
-  deep: true,
-})
+}, { deep: true })
 </script>
 
 <style scoped lang="sass">
