@@ -137,12 +137,8 @@ function fixed(value: number) {
 
 function getValue(ratio: number) {
   const { min, max, step } = props
-
-  const range = max - min
-  const rawValue = min + (ratio / 100) * range
-  const steppedValue = Math.round(rawValue / step) * step
-
-  return steppedValue
+  const rawValue = min + (ratio / 100) * (max - min)
+  return Math.round(rawValue / step) * step
 }
 
 const disabledValue = ref(false)
