@@ -113,6 +113,12 @@ const disabledRange = reactiveComputed(() => {
     max: maxDisabled ?? props.max,
   }
 })
+watch(disabledRange, () => {
+  modelValue.value = clamp(modelValue.value, {
+    min: disabledRange.min,
+    max: disabledRange.max,
+  })
+})
 
 /** 拉動方向 */
 const draggingDirection = computed(() => {
