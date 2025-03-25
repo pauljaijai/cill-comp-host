@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-col gap-4 border border-gray-300 p-6">
     <div class="flex flex-col flex-1 justify-center">
-      目前數值：{{ Math.floor(sliderValue) }}
+      目前數值：{{ sliderValue }}
 
       <slider-stubborn
         v-model="sliderValue"
@@ -31,12 +31,10 @@ const disabledCondition: Props['disabled'] = ({
   direction,
 }) => {
   if (value <= 20 && direction === 'decrease') {
-    sliderValue.value = 20
     return true
   }
 
   if (value >= 80 && direction === 'increase') {
-    sliderValue.value = 80
     return true
   }
 

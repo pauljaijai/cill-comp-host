@@ -55,6 +55,7 @@ const mouseInSvg = reactive(useMouseInElement(
   svgRef,
   { eventFilter: throttleFilter(15) },
 ))
+
 /** 以 svg 中心為 0 點 */
 const mousePosition = computed(() => ({
   x: mouseInSvg.elementX - mouseInSvg.elementWidth / 2,

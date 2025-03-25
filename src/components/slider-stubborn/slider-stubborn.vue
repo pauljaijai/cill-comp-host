@@ -31,7 +31,7 @@ import {
   useMousePressed,
   useVModel,
 } from '@vueuse/core'
-import { clamp, pick, pipe } from 'remeda'
+import { clamp, pipe } from 'remeda'
 import { computed, onBeforeMount, reactive, ref, watch } from 'vue'
 import SliderThumb from './slider-stubborn-thumb.vue'
 
@@ -118,35 +118,73 @@ const draggingDirection = computed(() => {
   return 'decrease'
 })
 
-const disabledValue = computed(() => {
-  if (typeof props.disabled === 'function') {
-    return props.disabled({
-      ...pick(props, ['min', 'max']),
-      value: modelValue.value,
-      direction: mouseRatio.value > ratio.value ? 'increase' : 'decrease',
-    })
+const stepPrecision = computed(() => {
+  const stepString = props.step.toString()
+  if (stepString.includes('.')) {
+    return stepString.split('.')[1]?.length ?? 0
   }
-
-  return props.disabled
+  return 0
 })
 
-function getValue(ratio: number) {
-  return Math.round(
-    (ratio / 100) * (props.max - props.min) / props.step,
-  ) * props.step
+function fixed(value: number) {
+  return Number(value.toFixed(stepPrecision.value))
 }
 
+function getValue(ratio: number) {
+  const { min, max, step } = props
+
+  const range = max - min
+  const rawValue = min + (ratio / 100) * range
+  const steppedValue = Math.round(rawValue / step) * step
+
+  return steppedValue
+}
+
+const disabledValue = ref(false)
 watch(() => [mouseRatio, isHeld], () => {
-  if (typeof props.disabled === 'function') {
+  if (!isHeld.value)
     return
+
+  if (typeof props.disabled === 'function') {
+    // 根據目前的 mouseRatio 與 step 產生連續數值，並依序放入 disabled 函式中判斷是否禁用
+    const targetValue = getValue(mouseRatio.value)
+    if (targetValue === modelValue.value) {
+      return
+    }
+
+    const isGt = targetValue > modelValue.value
+
+    let currentValue = modelValue.value
+    do {
+      disabledValue.value = props.disabled({
+        min: props.min,
+        max: props.max,
+        value: currentValue,
+        direction: draggingDirection.value,
+      })
+
+      if (!disabledValue.value) {
+        modelValue.value = fixed(currentValue)
+      }
+
+      currentValue += props.step * (draggingDirection.value === 'increase' ? 1 : -1)
+
+      if (isGt && currentValue > targetValue) {
+        return
+      }
+      else if (!isGt && currentValue < targetValue) {
+        return
+      }
+    } while (true)
   }
 
-  if (props.disabled || !isHeld.value)
+  if (props.disabled)
     return
 
   modelValue.value = getValue(mouseRatio.value)
 }, {
   deep: true,
+  flush: 'post',
 })
 </script>
 
