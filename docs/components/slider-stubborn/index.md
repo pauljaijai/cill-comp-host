@@ -1,5 +1,5 @@
 ---
-description: 停用時絕不妥協的滑動條。( ・ิω・ิ)
+description: 停用時絕不妥協的滑動條。(。-`ω´-)
 ---
 
 <script setup>
@@ -12,7 +12,7 @@ import DisabledCondition from '../../../src/components/slider-stubborn/examples/
 
 # 固執的滑動條 <Badge type="info" text="slider" />
 
-停用時絕不妥協的滑動條。( ・ิω・ิ)
+停用時絕不妥協的滑動條。(。-`ω´-)
 
 ## 使用範例
 
