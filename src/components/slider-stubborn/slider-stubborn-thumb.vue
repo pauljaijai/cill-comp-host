@@ -126,6 +126,7 @@ const svgStyle = computed<CSSProperties>(() => {
 
   return {
     left: `${leftValue}%`,
+    transitionDuration: props.isHeld ? '0s' : '0.1s',
   }
 })
 
