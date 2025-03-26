@@ -126,7 +126,7 @@ const svgStyle = computed<CSSProperties>(() => {
 
   return {
     left: `${leftValue}%`,
-    transitionDuration: props.isHeld ? '0s' : '0.1s',
+    transitionDuration: props.isHeld ? '0s' : '0.2s',
   }
 })
 
@@ -283,6 +283,7 @@ useIntervalFn(() => {
   top: 50%
   transform: translate(-50%, -50%)
   will-change: left width height view-box
+  transition-timing-function: cubic-bezier(0.85, 0, 0.15, 1)
 
 .track
   height: 8px
