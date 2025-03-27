@@ -7,7 +7,7 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-usage.vue'
 import CustomProp from '../../../src/components/slider-stubborn/examples/custom-prop.vue'
-import DisabledCondition from '../../../src/components/slider-stubborn/examples/disabled-condition.vue'
+import DisabledRange from '../../../src/components/slider-stubborn/examples/disabled-range.vue'
 </script>
 
 # 固執的滑動條 <Badge type="info" text="slider" />
@@ -36,14 +36,14 @@ import DisabledCondition from '../../../src/components/slider-stubborn/examples/
 <<< ../../../src/components/slider-stubborn/examples/custom-prop.vue
 :::
 
-### 停用條件
+### 選擇方案
 
-根據條件來決定是否停用滑動條
+特定範圍停用滑動條，強調停用效果。
 
-<disabled-condition />
+<disabled-range />
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/slider-stubborn/examples/disabled-condition.vue
+<<< ../../../src/components/slider-stubborn/examples/disabled-range.vue
 :::
 
 ## 原理
