@@ -154,8 +154,8 @@ const ctrlPointStiffness = computed(() => mapNumber(
   length.value,
   0,
   props.maxThumbLength,
-  3.5,
-  4.5,
+  2,
+  3,
 ))
 /** 速度衰減率，根據目前長度映射，模擬越短震動越快停止
  *
@@ -165,8 +165,8 @@ const ctrlPointDamping = computed(() => mapNumber(
   length.value,
   0,
   props.maxThumbLength,
-  0.85,
-  0.75,
+  0.7,
+  0.9,
 ))
 
 const pathD = computed(() => {
