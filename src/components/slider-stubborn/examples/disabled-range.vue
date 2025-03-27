@@ -6,9 +6,9 @@
       </div>
 
       <div class="mb-6 flex gap-4">
-        <button
-          class="card flex-1 transform rounded-lg from-gray-400 to-gray-500 bg-gradient-to-r text-white shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-          :class="{ ' -translate-y-1': plan === 'basic' }"
+        <div
+          class="card flex-center flex-col flex-1 transform rounded-lg from-gray-400 to-gray-500 bg-gradient-to-r text-white shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+          :class="{ ' border-[0.25rem]': plan === 'basic' }"
           @click="plan = 'basic'"
         >
           <div class="text-lg font-bold md:text-2xl">
@@ -18,11 +18,11 @@
           <div class="mt-1 text-xs opacity-90 md:text-sm">
             1 隻剛剛好
           </div>
-        </button>
+        </div>
 
-        <button
-          class="card flex-1 transform border-2 border-indigo-200 rounded-lg from-blue-400 to-indigo-500 bg-gradient-to-r text-white shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
-          :class="{ ' -translate-y-0.5': plan === 'premium' }"
+        <div
+          class="card flex-center flex-col flex-1 transform border-2 border-indigo-200 rounded-lg from-blue-400 to-indigo-500 bg-gradient-to-r text-white shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
+          :class="{ ' border-[0.25rem]': plan === 'premium' }"
           @click="plan = 'premium'"
         >
           <div class="text-lg font-bold md:text-2xl">
@@ -32,11 +32,11 @@
           <div class="mt-1 text-xs opacity-90 md:text-sm">
             2~6 隻吃飽飽
           </div>
-        </button>
+        </div>
 
-        <button
-          class="card flex-1 transform border-2 border-pink-200 rounded-lg from-purple-500 to-pink-500 bg-gradient-to-r text-white shadow-xl transition-all duration-200 hover:shadow-2xl hover:-translate-y-1.5"
-          :class="{ ' -translate-y-1': plan === 'luxury' }"
+        <div
+          class="card flex-center flex-col flex-1 transform border-2 border-pink-200 rounded-lg from-purple-500 to-pink-500 bg-gradient-to-r text-white shadow-xl transition-all duration-200 hover:shadow-2xl hover:-translate-y-1.5"
+          :class="{ ' border-[0.25rem]': plan === 'luxury' }"
           @click="plan = 'luxury'"
         >
           <div class="text-lg font-bold md:text-2xl">
@@ -46,7 +46,7 @@
           <div class="mt-1 text-xs opacity-90 md:text-sm">
             高達 8 隻以上！
           </div>
-        </button>
+        </div>
       </div>
 
       <div class="mb-4 text-lg font-bold opacity-90">
@@ -58,6 +58,7 @@
         v-bind="disabledParams"
         :min="0"
         :max="10"
+        :step="0.1"
         :max-thumb-length="thumbLength"
         :thumb-size="40"
         class="w-full py-4"
