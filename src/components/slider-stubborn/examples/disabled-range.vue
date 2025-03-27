@@ -30,7 +30,7 @@
           </div>
 
           <div class="mt-1 text-xs opacity-90 md:text-sm">
-            2~6 隻吃飽飽
+            3~6 隻吃飽飽
           </div>
 
           <div
@@ -50,7 +50,7 @@
           </div>
 
           <div class="mt-1 text-xs opacity-90 md:text-sm">
-            高達 8 隻以上！
+            任你選！
           </div>
         </div>
       </div>
@@ -91,8 +91,8 @@ const sliderValue = ref(5)
 
 const planRangleMap: Record<Plan, [number, number]> = {
   basic: [1, 1],
-  premium: [2, 6],
-  luxury: [8, 10],
+  premium: [3, 6],
+  luxury: [-1, 11],
 }
 const disabledParams = computed<
   Pick<Props, 'minDisabled' | 'maxDisabled'>
