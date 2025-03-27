@@ -55,6 +55,7 @@ const mouseInSvg = reactive(useMouseInElement(
   svgRef,
   { eventFilter: throttleFilter(15) },
 ))
+
 /** 以 svg 中心為 0 點 */
 const mousePosition = computed(() => ({
   x: mouseInSvg.elementX - mouseInSvg.elementWidth / 2,
@@ -125,6 +126,7 @@ const svgStyle = computed<CSSProperties>(() => {
 
   return {
     left: `${leftValue}%`,
+    transitionDuration: props.isHeld ? '0s' : '0.2s',
   }
 })
 
@@ -152,8 +154,8 @@ const ctrlPointStiffness = computed(() => mapNumber(
   length.value,
   0,
   props.maxThumbLength,
-  3.5,
-  4.5,
+  2,
+  3,
 ))
 /** 速度衰減率，根據目前長度映射，模擬越短震動越快停止
  *
@@ -163,8 +165,8 @@ const ctrlPointDamping = computed(() => mapNumber(
   length.value,
   0,
   props.maxThumbLength,
-  0.85,
-  0.75,
+  0.7,
+  0.9,
 ))
 
 const pathD = computed(() => {
@@ -281,6 +283,7 @@ useIntervalFn(() => {
   top: 50%
   transform: translate(-50%, -50%)
   will-change: left width height view-box
+  transition-timing-function: cubic-bezier(0.85, 0, 0.15, 1)
 
 .track
   height: 8px

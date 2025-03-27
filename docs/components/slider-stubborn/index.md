@@ -1,5 +1,5 @@
 ---
-description: 停用時絕不妥協的滑動條。( ・ิω・ิ)
+description: 停用時絕不妥協的滑動條。(。-`ω´-)
 ---
 
 <script setup>
@@ -7,11 +7,12 @@ import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/slider-stubborn/examples/basic-usage.vue'
 import CustomProp from '../../../src/components/slider-stubborn/examples/custom-prop.vue'
+import DisabledRange from '../../../src/components/slider-stubborn/examples/disabled-range.vue'
 </script>
 
 # 固執的滑動條 <Badge type="info" text="slider" />
 
-停用時絕不妥協的滑動條。( ・ิω・ิ)
+停用時絕不妥協的滑動條。(。-`ω´-)
 
 ## 使用範例
 
@@ -33,6 +34,16 @@ import CustomProp from '../../../src/components/slider-stubborn/examples/custom-
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/slider-stubborn/examples/custom-prop.vue
+:::
+
+### 選擇方案
+
+特定範圍停用滑動條，強調停用效果。
+
+<disabled-range />
+
+::: details 查看範例原始碼
+<<< ../../../src/components/slider-stubborn/examples/disabled-range.vue
 :::
 
 ## 原理

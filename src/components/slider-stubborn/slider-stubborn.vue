@@ -18,12 +18,14 @@
       :ratio="ratio"
       :mouse-ratio="mouseRatio"
       :slider-size="sliderSize"
+      :disabled="isDisabled"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import {
+  reactiveComputed,
   throttleFilter,
   useElementSize,
   useMouseInElement,
@@ -38,8 +40,13 @@ import SliderThumb from './slider-stubborn-thumb.vue'
 interface Props {
   modelValue: number;
   disabled?: boolean;
+  /** 小於此數值也會有 disabled 效果 */
+  minDisabled?: number;
+  /** 大於此數值也會有 disabled 效果 */
+  maxDisabled?: number;
   min?: number;
   max?: number;
+  step?: number;
   /** 握把被拉長的最大長度 */
   maxThumbLength?: number;
   thumbSize?: number;
@@ -51,6 +58,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   min: 0,
   max: 100,
+  step: 1,
   maxThumbLength: 200,
   thumbSize: 20,
   thumbColor: '#34c6eb',
@@ -97,11 +105,85 @@ const mouseRatio = computed(() => pipe(
   clamp({ min: 0, max: 100 }),
 ))
 
-watch(() => [mouseRatio, isHeld], () => {
-  if (props.disabled || !isHeld.value)
+const disabledRange = reactiveComputed(() => {
+  const { minDisabled, maxDisabled } = props
+
+  return {
+    min: minDisabled ?? props.min,
+    max: maxDisabled ?? props.max,
+  }
+})
+watch(disabledRange, () => {
+  modelValue.value = clamp(modelValue.value, {
+    min: disabledRange.min,
+    max: disabledRange.max,
+  })
+})
+
+/** 拉動方向 */
+const draggingDirection = computed(() => {
+  if (mouseRatio.value > ratio.value) {
+    return 1
+  }
+
+  return -1
+})
+
+const stepPrecision = computed(() => {
+  const stepString = props.step.toString()
+  if (stepString.includes('.')) {
+    return stepString.split('.')[1]?.length ?? 0
+  }
+  return 0
+})
+
+function fixed(value: number) {
+  return Number(value.toFixed(stepPrecision.value))
+}
+
+function getValue(ratio: number) {
+  const { min, max, step } = props
+  const rawValue = min + (ratio / 100) * (max - min)
+  return Math.round(rawValue / step) * step
+}
+
+const disabledValue = ref(false)
+const isDisabled = computed(() => props.disabled || disabledValue.value)
+
+watch([mouseRatio, isHeld], () => {
+  if (!isHeld.value || props.disabled)
     return
 
-  modelValue.value = (props.max - props.min) * mouseRatio.value / 100
+  const targetValue = getValue(mouseRatio.value)
+  let currentValue = modelValue.value
+
+  if (targetValue === currentValue)
+    return
+
+  const direction = draggingDirection.value
+  const step = props.step * direction
+
+  while (true) {
+    if (
+      (direction === -1 && currentValue < disabledRange.min)
+      || (direction === 1 && currentValue > disabledRange.max)
+    ) {
+      disabledValue.value = true
+      return
+    }
+
+    modelValue.value = fixed(currentValue)
+    disabledValue.value = false
+
+    if (
+      (direction === 1 && currentValue >= targetValue)
+      || (direction === -1 && currentValue <= targetValue)
+    ) {
+      return
+    }
+
+    currentValue += step
+  }
 }, { deep: true })
 </script>
 
