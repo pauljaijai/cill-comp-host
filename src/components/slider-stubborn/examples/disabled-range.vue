@@ -1,13 +1,13 @@
 <template>
-  <div class="w-full flex flex-col gap-4">
-    <div class="flex flex-col flex-1 justify-center">
-      <div class="mb-4 text-lg font-bold opacity-90">
+  <div class="w-full flex flex-col gap-4 py-10">
+    <div class="flex flex-col flex-1 justify-center gap-4">
+      <div class="text-lg font-bold opacity-90">
         選擇喜歡的方案
       </div>
 
-      <div class="mb-6 flex gap-4">
+      <div class="mb-10 flex gap-4">
         <div
-          class="h-[24vh] flex-center flex-col flex-1 transform cursor-pointer rounded-lg from-gray-400 to-gray-500 bg-gradient-to-bl p-1 text-white shadow-md transition-all duration-200 md:h-[28vh] hover:shadow-lg hover:-translate-y-0.5"
+          class="card transform rounded-lg from-gray-400 to-gray-500 bg-gradient-to-bl p-1 shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5"
           :class="{ ' border-[0.3rem]': plan === 'basic' }"
           @click="plan = 'basic'"
         >
@@ -21,7 +21,7 @@
         </div>
 
         <div
-          class="h-[24vh] flex-center flex-col flex-1 transform cursor-pointer border-2 border-indigo-200 rounded-lg from-blue-400 to-indigo-500 bg-gradient-to-bl p-1 text-white shadow-lg transition-all duration-200 md:h-[28vh] hover:shadow-xl hover:-translate-y-1"
+          class="card transform border-2 border-indigo-200 rounded-lg from-blue-400 to-indigo-500 bg-gradient-to-bl p-1 shadow-lg transition-all hover:shadow-xl hover:-translate-y-1"
           :class="{ ' border-[0.3rem]': plan === 'premium' }"
           @click="plan = 'premium'"
         >
@@ -43,7 +43,7 @@
         </div>
 
         <div
-          class="h-[24vh] flex-center flex-col flex-1 transform cursor-pointer border-2 border-pink-200 rounded-lg from-purple-500 to-pink-500 bg-gradient-to-bl p-1 text-white shadow-xl transition-all duration-200 md:h-[28vh] hover:shadow-2xl hover:-translate-y-1.5"
+          class="card transform border-2 border-pink-200 rounded-lg from-purple-500 to-pink-500 bg-gradient-to-bl p-1 shadow-xl transition-all hover:shadow-2xl hover:-translate-y-1.5"
           :class="{ ' border-[0.3rem]': plan === 'luxury' }"
           @click="plan = 'luxury'"
         >
@@ -57,7 +57,7 @@
         </div>
       </div>
 
-      <div class="mb-4 text-lg font-bold opacity-90">
+      <div class="text-lg font-bold opacity-90">
         可選鱈魚數：{{ Math.floor(sliderValue) }}
       </div>
 
@@ -112,4 +112,14 @@ const thumbLength = computed(() =>
 </script>
 
 <style lang="sass" scoped>
+.card
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  aspect-ratio: 1 / 1.3
+  flex: 1
+  transition-duration: 200ms
+  color: white
+  cursor: pointer
 </style>
