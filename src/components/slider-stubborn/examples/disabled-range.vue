@@ -32,6 +32,12 @@
           <div class="mt-1 text-xs opacity-90 md:text-sm">
             2~6 隻吃飽飽
           </div>
+
+          <div
+            class="absolute right-0 top-0 translate-x-2 transform rounded-bl-lg rounded-tr-lg bg-yellow-400 px-2 py-1 text-xs text-black font-bold shadow-sm -translate-y-2"
+          >
+            推薦方案
+          </div>
         </div>
 
         <div
@@ -50,7 +56,7 @@
       </div>
 
       <div class="mb-4 text-lg font-bold opacity-90">
-        可選鱈魚數：{{ sliderValue }}
+        可選鱈魚數：{{ Math.floor(sliderValue) }}
       </div>
 
       <slider-stubborn
@@ -80,7 +86,7 @@ type Plan = 'basic' | 'premium' | 'luxury'
 
 const { width, height } = useWindowSize()
 
-const plan = ref<Plan>('basic')
+const plan = ref<Plan>('premium')
 const sliderValue = ref(5)
 
 const planRangleMap: Record<Plan, [number, number]> = {
