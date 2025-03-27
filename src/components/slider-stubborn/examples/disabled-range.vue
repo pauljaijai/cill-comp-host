@@ -34,9 +34,11 @@
           </div>
 
           <div
-            class="absolute right-0 top-0 translate-x-2 transform rounded-bl-lg rounded-tr-lg bg-yellow-400 px-2 py-1 text-xs text-black font-bold shadow-sm -translate-y-2"
+            class="absolute right-0 top-0 translate-x-2 transform rounded-bl-lg rounded-tr-lg bg-yellow-400 px-2 py-1 shadow-sm -translate-y-2"
           >
-            推薦方案
+            <div class="text-sm text-red-900 font-semibold">
+              推薦方案
+            </div>
           </div>
         </div>
 
