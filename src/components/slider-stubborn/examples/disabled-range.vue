@@ -7,8 +7,8 @@
 
       <div class="mb-6 flex gap-4">
         <div
-          class="card flex-center flex-col flex-1 transform rounded-lg from-gray-400 to-gray-500 bg-gradient-to-r text-white shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-          :class="{ ' border-[0.25rem]': plan === 'basic' }"
+          class="h-[24vh] flex-center flex-col flex-1 transform rounded-lg from-gray-400 to-gray-500 bg-gradient-to-bl p-1 text-white shadow-md transition-all duration-200 md:h-[28vh] hover:shadow-lg hover:-translate-y-0.5"
+          :class="{ ' border-[0.3rem]': plan === 'basic' }"
           @click="plan = 'basic'"
         >
           <div class="text-lg font-bold md:text-2xl">
@@ -21,8 +21,8 @@
         </div>
 
         <div
-          class="card flex-center flex-col flex-1 transform border-2 border-indigo-200 rounded-lg from-blue-400 to-indigo-500 bg-gradient-to-r text-white shadow-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
-          :class="{ ' border-[0.25rem]': plan === 'premium' }"
+          class="h-[24vh] flex-center flex-col flex-1 transform border-2 border-indigo-200 rounded-lg from-blue-400 to-indigo-500 bg-gradient-to-bl p-1 text-white shadow-lg transition-all duration-200 md:h-[28vh] hover:shadow-xl hover:-translate-y-1"
+          :class="{ ' border-[0.3rem]': plan === 'premium' }"
           @click="plan = 'premium'"
         >
           <div class="text-lg font-bold md:text-2xl">
@@ -41,8 +41,8 @@
         </div>
 
         <div
-          class="card flex-center flex-col flex-1 transform border-2 border-pink-200 rounded-lg from-purple-500 to-pink-500 bg-gradient-to-r text-white shadow-xl transition-all duration-200 hover:shadow-2xl hover:-translate-y-1.5"
-          :class="{ ' border-[0.25rem]': plan === 'luxury' }"
+          class="h-[24vh] flex-center flex-col flex-1 transform border-2 border-pink-200 rounded-lg from-purple-500 to-pink-500 bg-gradient-to-bl p-1 text-white shadow-xl transition-all duration-200 md:h-[28vh] hover:shadow-2xl hover:-translate-y-1.5"
+          :class="{ ' border-[0.3rem]': plan === 'luxury' }"
           @click="plan = 'luxury'"
         >
           <div class="text-lg font-bold md:text-2xl">
@@ -110,7 +110,4 @@ const thumbLength = computed(() =>
 </script>
 
 <style lang="sass" scoped>
-.card
-  height: 20vh
-  padding: 0.5rem
 </style>
