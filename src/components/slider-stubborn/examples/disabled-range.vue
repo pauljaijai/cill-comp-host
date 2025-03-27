@@ -36,7 +36,7 @@
           <div
             class="absolute right-0 top-0 translate-x-2 transform rounded-bl-lg rounded-tr-lg bg-yellow-400 px-2 py-1 shadow-sm -translate-y-2"
           >
-            <div class="text-sm text-red-900 font-semibold">
+            <div class="text-xs text-red-900 font-semibold md:text-sm">
               推薦方案
             </div>
           </div>
