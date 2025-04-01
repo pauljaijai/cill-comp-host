@@ -1,19 +1,21 @@
 <template>
-  <input
-    ref="input"
-    v-model="modelValue"
-    v-bind="$attrs"
-    type="text"
-  >
-
   <eject-text
     v-for="item in textList"
     :key="item.id"
     v-bind="item"
     :style="textStyle"
     :start-position="centerPosition"
+    class="-z-10"
     @remove="removeText"
   />
+
+  <input
+    ref="input"
+    v-model="modelValue"
+    v-bind="$attrs"
+    type="text"
+    class="z-10"
+  >
 </template>
 
 <script setup lang="ts">
@@ -79,13 +81,13 @@ function startEjectAnimation() {
   })
 }
 
-/** 計算輸入框中心座標 */
+/** 輸入框中心上方座標 */
 const centerPosition = computed(() => {
   const { left, top, width, height } = inputBounding
 
   return {
     x: left + width / 2,
-    y: top + height / 2,
+    y: top,
   }
 })
 
