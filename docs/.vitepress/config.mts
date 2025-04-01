@@ -119,6 +119,7 @@ export default defineConfig({
             text: '輸入框',
             items: [
               { text: '解碼輸入框', link: '/components/input-decoding/' },
+              { text: '彈射輸入框', link: '/components/input-eject/' },
             ],
           },
           {
