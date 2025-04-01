@@ -1,7 +1,7 @@
 <template>
   <span
     ref="text"
-    class="fixed leading-none"
+    class="pointer-events-none fixed origin-center leading-none"
     :style
   >
     {{ props.text }}
@@ -45,7 +45,7 @@ const textData = ref({
   angle: 0,
   vx: Math.random() * 5 - 2.5,
   vy: -10 - Math.random() * 5,
-  va: Math.random() * 10 - 5,
+  va: -5 + Math.random() * 10,
 })
 
 /** 設定 fpsLimit 會很明顯不流暢 */
@@ -76,7 +76,7 @@ const style = computed(() => {
   return {
     left: `${x - textBounding.width / 2 + textData.value.x}px`,
     top: `${y - textBounding.height / 2 + textData.value.y}px`,
-    transform: `rotate(${textData.value.angle}deg)`,
+    rotate: `${textData.value.angle}deg`,
   }
 })
 
@@ -85,6 +85,3 @@ whenever(
   () => emit('remove', props.id),
 )
 </script>
-
-<style scoped lang="sass">
-</style>
