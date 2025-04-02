@@ -24,6 +24,7 @@ import TextCanvas from './text-canvas.vue'
 // #region Props
 interface Props {
   modelValue?: string;
+  validation?: (text: string) => string;
 }
 // #endregion Props
 
@@ -48,6 +49,12 @@ const emit = defineEmits<Emits>()
 defineSlots<Slots>()
 
 const modelValue = defineModel<string>()
+watch(modelValue, (value) => {
+  if (props.validation && value) {
+    modelValue.value = props.validation(value)
+  }
+})
+
 const inputRef = useTemplateRef('input')
 const inputBounding = reactive(useElementBounding(inputRef))
 
@@ -60,9 +67,9 @@ function startEjectAnimation() {
     targets: inputRef.value,
     scale: [
       {
-        value: 1.05,
+        value: 1.1,
         easing: 'easeOutQuad',
-        duration: 20,
+        duration: 50,
       },
       {
         value: 1,
