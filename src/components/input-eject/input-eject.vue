@@ -1,21 +1,16 @@
 <template>
-  <eject-text
-    v-for="item in textList"
-    :key="item.id"
-    v-bind="item"
-    :style="textStyle"
-    :start-position="centerPosition"
-    class="-z-10"
-    @remove="removeText"
-  />
-
   <input
     ref="input"
     v-model="modelValue"
     v-bind="$attrs"
     type="text"
-    class="z-10"
   >
+
+  <text-canvas
+    :list="textList"
+    :origin-position
+    :text-style
+  />
 </template>
 
 <script setup lang="ts">
@@ -23,7 +18,7 @@ import { useElementBounding } from '@vueuse/core'
 import anime from 'animejs'
 import { diffChars } from 'diff'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
-import EjectText from './eject-text.vue'
+import TextCanvas from './text-canvas.vue'
 
 interface TextItem {
   id: string;
@@ -82,7 +77,7 @@ function startEjectAnimation() {
 }
 
 /** 輸入框中心上方座標 */
-const centerPosition = computed(() => {
+const originPosition = computed(() => {
   const { left, top, width, height } = inputBounding
 
   return {
@@ -95,18 +90,20 @@ const centerPosition = computed(() => {
 const textStyle = computed(() => {
   const style = inputRef.value?.computedStyleMap()
   if (!style)
-    return {}
+    return undefined
 
-  const fontSize = style.get('font-size')
-  const fontFamily = style.get('font-family')
-  const fontWeight = style.get('font-weight')
-  const fontStyle = style.get('font-style')
+  const fontSize = style.get('font-size')?.toString() ?? ''
+  const fontFamily = style.get('font-family')?.toString() ?? ''
+  const fontWeight = style.get('font-weight')?.toString() ?? ''
+  const fontStyle = style.get('font-style')?.toString() ?? ''
+  const color = style.get('color')?.toString() ?? ''
 
   return {
     fontSize,
     fontFamily,
     fontWeight,
     fontStyle,
+    color,
   }
 })
 

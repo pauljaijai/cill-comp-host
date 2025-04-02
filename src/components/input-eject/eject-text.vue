@@ -45,7 +45,7 @@ const textData = ref({
   angle: 0,
   vx: Math.random() * 5 - 2.5,
   vy: -10 - Math.random() * 5,
-  va: -5 + Math.random() * 10,
+  va: Math.random() * 10 - 5,
 })
 
 /** 設定 fpsLimit 會很明顯不流暢 */
