@@ -16,6 +16,8 @@ interface TextItem {
   index: number;
   text: string;
   data: {
+    width: number;
+    height: number;
     x: number;
     y: number;
     a: number;
@@ -93,7 +95,7 @@ useRafFn(({ delta }) => {
       props.originPosition.y + item.data.y,
     )
     ctx.rotate(item.data.a)
-    ctx.fillText(item.text, 0, 0)
+    ctx.fillText(item.text, -item.data.width / 2, -item.data.height / 2)
 
     ctx.restore()
   })
@@ -106,11 +108,24 @@ useRafFn(({ delta }) => {
 
 defineExpose({
   addText(text: string, index: number) {
+    const ctx = context.value
+
+    if (!ctx) {
+      return
+    }
+    const { fontSize } = props.textStyle || {}
+
+    const textWidth = ctx.measureText(text).width
+    // 字高與字型大小相等
+    const textHeight = Number.parseInt(fontSize ?? '', 10)
+
     const item: TextItem = {
       id: crypto.randomUUID(),
       index,
       text,
       data: {
+        width: textWidth,
+        height: textHeight,
         x: 0,
         y: 0,
         a: 0,
