@@ -16,7 +16,7 @@ const text = ref('')
 
 function validation(text: string) {
   return text
-    .replaceAll('cod', '')
+    .replace(/c(o)+d/g, '')
     .replaceAll('fish', '')
     .replaceAll('鱈魚', '')
 }
