@@ -49,7 +49,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  gravity: 0.5,
+  gravity: 0.7,
 })
 
 const windowSize = reactive(useWindowSize())
@@ -69,6 +69,11 @@ useRafFn(({ delta }) => {
     return
   }
 
+  const {
+    x: originX,
+    y: originY,
+  } = props.originPosition
+
   ctx.clearRect(0, 0, windowSize.width, windowSize.height)
 
   const { fontSize, fontFamily, fontWeight, fontStyle, color } = props.textStyle || {}
@@ -80,12 +85,12 @@ useRafFn(({ delta }) => {
   /** 適度減慢動畫 */
   const dt = delta / 30
 
-  textMap.forEach((item) => {
+  textMap.forEach((item, key) => {
     ctx.save()
 
     ctx.translate(
-      props.originPosition.x + item.data.x,
-      props.originPosition.y + item.data.y,
+      originX + item.data.x,
+      originY + item.data.y,
     )
     ctx.rotate(item.data.a)
     ctx.fillText(item.text, -item.data.width / 2, -item.data.height / 2)
@@ -98,9 +103,9 @@ useRafFn(({ delta }) => {
     item.data.vy += props.gravity * dt
     item.data.a += item.data.va * dt
 
-    // 超出邊界則刪除
-    if (item.data.y + props.originPosition.y > windowSize.height) {
-      textMap.delete(item.id)
+    // 刪除超出邊界文字
+    if (item.data.y + originY > windowSize.height) {
+      textMap.delete(key)
     }
   })
 })
