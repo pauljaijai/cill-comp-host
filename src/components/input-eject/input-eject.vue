@@ -10,6 +10,7 @@
     ref="canvas"
     :origin-position
     :text-style
+    :input-size="inputBounding"
   />
 </template>
 

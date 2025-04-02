@@ -28,6 +28,10 @@ interface TextItem {
 }
 
 interface Props {
+  inputSize: {
+    width: number;
+    height: number;
+  };
   /** 原點座標 */
   originPosition: {
     x: number;
@@ -44,15 +48,9 @@ interface Props {
   gravity?: number;
 }
 
-interface Emits {
-  remove: [id: string];
-}
-
 const props = withDefaults(defineProps<Props>(), {
   gravity: 0.5,
 })
-
-const emit = defineEmits<Emits>()
 
 const windowSize = reactive(useWindowSize())
 
@@ -83,11 +81,6 @@ useRafFn(({ delta }) => {
   const dt = delta / 30
 
   textMap.forEach((item) => {
-    item.data.x += item.data.vx * dt
-    item.data.y += item.data.vy * dt
-    item.data.vy += props.gravity * dt
-    item.data.a += item.data.va * dt
-
     ctx.save()
 
     ctx.translate(
@@ -98,13 +91,19 @@ useRafFn(({ delta }) => {
     ctx.fillText(item.text, -item.data.width / 2, -item.data.height / 2)
 
     ctx.restore()
+
+    // 更新粒子
+    item.data.x += item.data.vx * dt
+    item.data.y += item.data.vy * dt
+    item.data.vy += props.gravity * dt
+    item.data.a += item.data.va * dt
+
+    // 超出邊界則刪除
+    if (item.data.y + props.originPosition.y > windowSize.height) {
+      textMap.delete(item.id)
+    }
   })
 })
-
-// whenever(
-//   () => textBounding.top > windowSize.height,
-//   () => emit('remove', props.id),
-// )
 
 defineExpose({
   addText(text: string, index: number) {
@@ -119,6 +118,8 @@ defineExpose({
     // 字高與字型大小相等
     const textHeight = Number.parseInt(fontSize ?? '', 10)
 
+    const inputWidth = props.inputSize.width * 0.8
+
     const item: TextItem = {
       id: crypto.randomUUID(),
       index,
@@ -126,7 +127,7 @@ defineExpose({
       data: {
         width: textWidth,
         height: textHeight,
-        x: 0,
+        x: Math.random() * inputWidth - inputWidth / 2,
         y: 0,
         a: 0,
         vx: Math.random() * 5 - 2.5,
