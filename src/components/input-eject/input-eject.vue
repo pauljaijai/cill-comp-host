@@ -7,7 +7,7 @@
   >
 
   <text-canvas
-    :list="textList"
+    ref="canvas"
     :origin-position
     :text-style
   />
@@ -17,14 +17,8 @@
 import { useElementBounding } from '@vueuse/core'
 import anime from 'animejs'
 import { diffChars } from 'diff'
-import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
+import { computed, reactive, useTemplateRef, watch } from 'vue'
 import TextCanvas from './text-canvas.vue'
-
-interface TextItem {
-  id: string;
-  index: number;
-  text: string;
-}
 
 // #region Props
 interface Props {
@@ -56,6 +50,8 @@ const modelValue = defineModel<string>()
 const inputRef = useTemplateRef('input')
 const inputBounding = reactive(useElementBounding(inputRef))
 
+const canvasRef = useTemplateRef('canvas')
+
 function startEjectAnimation() {
   anime.remove(inputRef.value)
 
@@ -65,12 +61,11 @@ function startEjectAnimation() {
       {
         value: 1.05,
         easing: 'easeOutQuad',
-        duration: 30,
+        duration: 20,
       },
       {
         value: 1,
-        easing: 'easeInOutQuad',
-        duration: 50,
+        duration: 600,
       },
     ],
   })
@@ -107,38 +102,22 @@ const textStyle = computed(() => {
   }
 })
 
-/** 被彈飛的文字 */
-const textMap = ref(new Map<string, TextItem>())
-const textList = computed(() => Array.from(textMap.value.values()))
-
-function removeText(id: string) {
-  textMap.value.delete(id)
-}
-
 watch(modelValue, (value = '', oldValue = '') => {
   let currentIndex = 0
+  let hasText = false
 
-  const list = diffChars(oldValue, value).reduce((acc, item) => {
+  diffChars(oldValue, value).forEach((item) => {
     if (item.removed) {
-      acc.push({
-        id: crypto.randomUUID(),
-        index: currentIndex,
-        text: item.value,
-      })
+      canvasRef.value?.addText(item.value, currentIndex)
+      hasText = true
     }
 
     currentIndex += item.count ?? 0
-
-    return acc
-  }, [] as TextItem[])
-
-  if (list.length === 0)
-    return
-
-  startEjectAnimation()
-  list.forEach((item) => {
-    textMap.value.set(item.id, item)
   })
+
+  if (hasText) {
+    startEjectAnimation()
+  }
 })
 
 // #region Methods
