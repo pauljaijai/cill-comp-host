@@ -27,7 +27,9 @@ import TextSanitization from '../../../src/components/input-eject/examples/text-
 
 ### 文字退散
 
-彈射不喜歡的文字 ( ´థ౪థ)
+也可以彈射不喜歡的文字 ( ´థ౪థ)
+
+（嘗試輸入 codfish、鱈魚看看）
 
 <text-sanitization class="h-[40vh] flex-center" />
 
@@ -37,13 +39,7 @@ import TextSanitization from '../../../src/components/input-eject/examples/text-
 
 ## 原理
 
-文字文字文字文字文字文字文字文字文字文字文字文字
-
-📚 [甚麼是 IntersectionObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver)
-
-::: danger 注意！Σ(ˊДˋ;)
-請不要將 overflow 設定為 hidden，否則按鈕一移動就會啪沒了，消失的無影無蹤。
-:::
+使用 canvas 繪製彈射文字，性能超棒棒
 
 ## 原始碼
 
@@ -62,7 +58,3 @@ import TextSanitization from '../../../src/components/input-eject/examples/text-
 ### Methods
 
 <<< ../../../src/components/input-eject/input-eject.vue/#Methods
-
-### Slots
-
-<<< ../../../src/components/input-eject/input-eject.vue/#Slots

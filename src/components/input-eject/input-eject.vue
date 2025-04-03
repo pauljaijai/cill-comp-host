@@ -34,19 +34,11 @@ interface Emits {
 }
 // #endregion Emits
 
-// #region Slots
-interface Slots {
-  default?: () => unknown;
-}
-// #endregion Slots
-
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
 })
 
 const emit = defineEmits<Emits>()
-
-defineSlots<Slots>()
 
 const modelValue = defineModel<string>()
 watch(modelValue, (value) => {
@@ -129,10 +121,18 @@ watch(modelValue, (value = '', oldValue = '') => {
 })
 
 // #region Methods
-interface Expose { }
+interface Expose {
+  /** 手動彈射字元 */
+  ejectText: (text: string) => void;
+}
 // #endregion Methods
 
-defineExpose<Expose>({})
+defineExpose<Expose>({
+  ejectText(text: string) {
+    canvasRef.value?.addText(text, 0)
+    startEjectAnimation()
+  },
+})
 </script>
 
 <style scoped lang="sass">
