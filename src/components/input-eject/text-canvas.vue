@@ -135,7 +135,7 @@ defineExpose({
         x: Math.random() * inputWidth - inputWidth / 2,
         y: 0,
         a: 0,
-        vx: Math.random() * 5 - 2.5,
+        vx: Math.random() * 10 - 5,
         vy: -10 - Math.random() * 5,
         va: (Math.random() * 2 - 1) / 10,
       },

@@ -19,7 +19,7 @@ import TextSanitization from '../../../src/components/input-eject/examples/text-
 
 被刪除的文字會被彈射 (´,,•ω•,,)
 
-<basic-usage/>
+<basic-usage  class="h-[40vh] flex-center" />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/input-eject/examples/basic-usage.vue
@@ -29,7 +29,7 @@ import TextSanitization from '../../../src/components/input-eject/examples/text-
 
 彈射不喜歡的文字 ( ´థ౪థ)
 
-<text-sanitization/>
+<text-sanitization class="h-[40vh] flex-center" />
 
 ::: details 查看範例原始碼
 <<< ../../../src/components/input-eject/examples/text-sanitization.vue
