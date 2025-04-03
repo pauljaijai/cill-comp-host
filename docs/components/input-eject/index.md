@@ -6,7 +6,7 @@ description: 一言不合就把字元彈射！─=≡Σ((( つ•̀ω•́)つ
 import SourceLinkList from '../../../src/components/source-link-list.vue'
 
 import BasicUsage from '../../../src/components/input-eject/examples/basic-usage.vue'
-import ValidationProp from '../../../src/components/input-eject/examples/validation-prop.vue'
+import TextSanitization from '../../../src/components/input-eject/examples/text-sanitization.vue'
 </script>
 
 # 彈射輸入框 <Badge type="info" text="input" />
@@ -17,7 +17,7 @@ import ValidationProp from '../../../src/components/input-eject/examples/validat
 
 ### 基本用法
 
-被刪除的文字會被彈射
+被刪除的文字會被彈射 (´,,•ω•,,)
 
 <basic-usage/>
 
@@ -27,12 +27,12 @@ import ValidationProp from '../../../src/components/input-eject/examples/validat
 
 ### 文字退散
 
-彈射不喜歡的文字
+彈射不喜歡的文字 ( ´థ౪థ)
 
-<validation-prop/>
+<text-sanitization/>
 
 ::: details 查看範例原始碼
-<<< ../../../src/components/input-eject/examples/validation-prop.vue
+<<< ../../../src/components/input-eject/examples/text-sanitization.vue
 :::
 
 ## 原理

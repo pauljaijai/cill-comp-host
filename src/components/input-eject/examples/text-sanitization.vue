@@ -3,7 +3,7 @@
     <input-eject
       v-model="text"
       class="input-eject p-3"
-      :validation
+      :sanitization
     />
   </div>
 </template>
@@ -14,7 +14,7 @@ import InputEject from '../input-eject.vue'
 
 const text = ref('')
 
-function validation(text: string) {
+function sanitization(text: string) {
   return text
     .replace(/c(o)+d/g, '')
     .replaceAll('fish', '')

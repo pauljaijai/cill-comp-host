@@ -24,7 +24,7 @@ import TextCanvas from './text-canvas.vue'
 // #region Props
 interface Props {
   modelValue?: string;
-  validation?: (text: string) => string;
+  sanitization?: (text: string) => string;
 }
 // #endregion Props
 
@@ -50,8 +50,8 @@ defineSlots<Slots>()
 
 const modelValue = defineModel<string>()
 watch(modelValue, (value) => {
-  if (props.validation && value) {
-    modelValue.value = props.validation(value)
+  if (props.sanitization && value) {
+    modelValue.value = props.sanitization(value)
   }
 })
 
