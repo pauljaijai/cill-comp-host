@@ -1,5 +1,5 @@
 ---
-description: 一言不合就把字元彈射！─=≡Σ((( つ•̀ω•́)つ
+description: 一言不合就彈射字元！─=≡Σ((( つ•̀ω•́)つ
 ---
 
 <script setup>
@@ -11,7 +11,7 @@ import TextSanitization from '../../../src/components/input-eject/examples/text-
 
 # 彈射輸入框 <Badge type="info" text="input" />
 
-一言不合就把字元彈射！─=≡Σ((( つ•̀ω•́)つ
+一言不合就彈射字元！─=≡Σ((( つ•̀ω•́)つ
 
 ## 使用範例
 
