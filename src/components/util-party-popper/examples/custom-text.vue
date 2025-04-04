@@ -31,6 +31,7 @@
 import type { ExtractArrayType } from '../../../types/main.type'
 import { Scalar } from '@babylonjs/core'
 import { useElementBounding, watchDebounced } from '@vueuse/core'
+import { nanoid } from 'nanoid'
 import { map, pipe } from 'remeda'
 import { computed, ref } from 'vue'
 import BaseInput from '../../base-input.vue'
@@ -41,9 +42,9 @@ const popperBounding = useElementBounding(popperRef)
 
 const text = ref('🎈✨🎉🍖🐟🎁💎')
 /** 用於強制更新元件 */
-const key = ref(crypto.randomUUID())
+const key = ref(nanoid())
 watchDebounced(text, () => {
-  key.value = crypto.randomUUID()
+  key.value = nanoid()
 }, { debounce: 1000 })
 
 type Confetti = ExtractArrayType<

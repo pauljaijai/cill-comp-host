@@ -1,13 +1,14 @@
 <template>
   <canvas
     ref="canvas"
-    class="pointer-events-none fixed left-0 top-0 h-full w-full"
+    class="pointer-events-none fixed left-0 top-0 w-dvw h-dvh"
   />
 </template>
 
 <script setup lang="ts">
-import { useRafFn, useWindowSize, whenever } from '@vueuse/core'
-import { onMounted, reactive, ref, useTemplateRef } from 'vue'
+import { useRafFn, useWindowSize } from '@vueuse/core'
+import { nanoid } from 'nanoid'
+import { computed, onMounted, reactive, useTemplateRef, watch } from 'vue'
 
 interface TextItem {
   id: string;
@@ -54,12 +55,16 @@ const windowSize = reactive(useWindowSize())
 
 const dpr = window.devicePixelRatio || 1
 const canvasRef = useTemplateRef('canvas')
-const context = ref<CanvasRenderingContext2D | null>()
-whenever(canvasRef, () => {
-  context.value = canvasRef.value?.getContext('2d')
-})
+const context = computed(() => canvasRef.value?.getContext('2d'))
 
 onMounted(() => {
+  if (canvasRef.value) {
+    canvasRef.value.width = windowSize.width * dpr
+    canvasRef.value.height = windowSize.height * dpr
+  }
+})
+
+watch(() => windowSize, () => {
   if (canvasRef.value) {
     canvasRef.value.width = windowSize.width * dpr
     canvasRef.value.height = windowSize.height * dpr
@@ -135,7 +140,7 @@ defineExpose({
     const inputWidth = props.inputSize.width * 0.8
 
     const item: TextItem = {
-      id: crypto.randomUUID(),
+      id: nanoid(),
       index,
       text,
       data: {
