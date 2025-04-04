@@ -1,15 +1,13 @@
 <template>
   <canvas
     ref="canvas"
-    class="pointer-events-none fixed left-0 top-0"
-    :width="windowSize.width"
-    :height="windowSize.height"
+    class="pointer-events-none fixed left-0 top-0 h-full w-full"
   />
 </template>
 
 <script setup lang="ts">
 import { useRafFn, useWindowSize, whenever } from '@vueuse/core'
-import { reactive, ref, useTemplateRef } from 'vue'
+import { onMounted, reactive, ref, useTemplateRef } from 'vue'
 
 interface TextItem {
   id: string;
@@ -54,10 +52,18 @@ const props = withDefaults(defineProps<Props>(), {
 
 const windowSize = reactive(useWindowSize())
 
+const dpr = window.devicePixelRatio || 1
 const canvasRef = useTemplateRef('canvas')
 const context = ref<CanvasRenderingContext2D | null>()
 whenever(canvasRef, () => {
   context.value = canvasRef.value?.getContext('2d')
+})
+
+onMounted(() => {
+  if (canvasRef.value) {
+    canvasRef.value.width = windowSize.width * dpr
+    canvasRef.value.height = windowSize.height * dpr
+  }
 })
 
 const textMap = new Map<string, TextItem>()
@@ -69,12 +75,15 @@ useRafFn(({ delta }) => {
     return
   }
 
+  ctx.resetTransform()
+  ctx.scale(dpr, dpr)
+
   const {
     x: originX,
     y: originY,
   } = props.originPosition
 
-  ctx.clearRect(0, 0, windowSize.width, windowSize.height)
+  ctx.clearRect(0, 0, windowSize.width * dpr, windowSize.height * dpr)
 
   const { fontSize, fontFamily, fontWeight, fontStyle, color } = props.textStyle || {}
 
