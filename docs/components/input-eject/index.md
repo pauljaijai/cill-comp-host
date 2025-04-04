@@ -25,7 +25,7 @@ import TextSanitization from '../../../src/components/input-eject/examples/text-
 <<< ../../../src/components/input-eject/examples/basic-usage.vue
 :::
 
-### 文字退散
+### 鱈魚退散
 
 也可以彈射不喜歡的文字 ( ´థ౪థ)
 
