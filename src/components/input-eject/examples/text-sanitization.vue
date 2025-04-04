@@ -16,7 +16,7 @@ const text = ref('')
 
 function sanitization(text: string) {
   return text
-    .replace(/c(o)+d/g, '')
+    .replace(/c(o)+d/gi, '')
     .replaceAll('fish', '')
     .replaceAll('鱈魚', '')
 }
