@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import { noop, refThrottled, throttleFilter, useElementSize, useMouseInElement, useRafFn } from '@vueuse/core'
+import { nanoid } from 'nanoid'
 import { clamp } from 'remeda'
 import { createNoise2D } from 'simplex-noise'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
@@ -107,7 +108,7 @@ function handleClick() {
   if (props.mouseInteraction.type === 'ripple') {
     const { elementX, elementY } = mouse
     rippleMap.set(
-      crypto.randomUUID(),
+      nanoid(),
       { x: elementX, y: elementY, radius: 0 },
     )
   }
