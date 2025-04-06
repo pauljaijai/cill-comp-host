@@ -10,7 +10,8 @@
     "blueprint": "vite-node scripts/create-blueprint.ts",
     "check": "vue-tsc --noEmit --skipLibCheck",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "dev": "vite"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.11.2",
@@ -72,5 +73,9 @@
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
     "vue-tsc": "^2.2.8"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.16.17",
+    "quasar": "^2.18.1"
   }
 }

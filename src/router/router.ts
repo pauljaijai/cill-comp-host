@@ -1,3 +1,5 @@
+
+import HomeVue from '@/views/Home.vue';
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -5,22 +7,18 @@ export interface RouteMeta {
   name: string;
 }
 
-export enum RouteName {
-  HOME = 'home',
-}
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: {
-      enterName: RouteName.HOME,
-    },
+    name: 'Home',
+    component: HomeVue,
   },
 
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: '/',
-  },
+  // {
+  //   path: '/:pathMatch(.*)*',
+  //   redirect: '/',
+  // },
 ]
 
 const router = createRouter({

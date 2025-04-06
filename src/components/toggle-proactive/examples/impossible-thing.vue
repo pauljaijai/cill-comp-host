@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex-center border border-gray-300 p-10">
+  
     <div class="flex flex-col gap-4">
       <label
         v-for="state in stateList"
@@ -18,7 +18,7 @@
         />
       </label>
     </div>
-  </div>
+
 </template>
 
 <script setup lang="ts">
