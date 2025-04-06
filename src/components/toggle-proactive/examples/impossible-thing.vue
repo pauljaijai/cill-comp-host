@@ -66,20 +66,22 @@ const {
   },
 ])
 
+
 const stateList = ref<State[]>([
   {
-    label: '要快',
+    label: 'Efficiency',
     value: false,
   },
   {
-    label: '要好',
+    label: 'Quality',
     value: false,
   },
   {
-    label: '要便宜',
+    label: 'Price',
     value: false,
   },
 ])
+
 const booleanList = computed(
   () => stateList.value.map((state) => state.value),
 )
