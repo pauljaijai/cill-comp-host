@@ -11,7 +11,7 @@
     "check": "vue-tsc --noEmit --skipLibCheck",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "dev": "vite"
+    "build": "vite build"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.11.2",
@@ -63,6 +63,7 @@
     "sass": "1.82.0",
     "simplex-noise": "^4.0.3",
     "tailwindcss": "^3.4.16",
+    "terser": "^5.39.0",
     "type-fest": "^4.30.0",
     "typescript": "~5.7.3",
     "unocss": "^0.65.4",
